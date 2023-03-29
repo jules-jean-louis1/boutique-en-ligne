@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mer. 29 mars 2023 à 07:45
+-- Généré le : mer. 29 mars 2023 à 08:54
 -- Version du serveur : 5.7.36
 -- Version de PHP : 7.4.26
 
@@ -60,12 +60,17 @@ CREATE TABLE IF NOT EXISTS `categories` (
 DROP TABLE IF EXISTS `client`;
 CREATE TABLE IF NOT EXISTS `client` (
   `id_client` int(11) NOT NULL AUTO_INCREMENT,
+  `login_client` varchar(255) NOT NULL,
+  `password_client` varchar(255) NOT NULL,
+  `type_compte` varchar(255) NOT NULL,
+  `avatar_client` varchar(300) NOT NULL,
   `prenom_client` varchar(255) NOT NULL,
   `nom_client` varchar(255) NOT NULL,
   `ville_client` varchar(255) NOT NULL,
   `code_postale_client` int(11) NOT NULL,
   `adresse_client` varchar(255) NOT NULL,
   `email_client` text NOT NULL,
+  `pays_client` int(11) NOT NULL,
   `created_at_client` timestamp NOT NULL,
   PRIMARY KEY (`id_client`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -83,23 +88,6 @@ CREATE TABLE IF NOT EXISTS `commande` (
   `date_commande` timestamp NOT NULL,
   `motant_commande` decimal(10,0) NOT NULL,
   PRIMARY KEY (`id_commande`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `compte_users`
---
-
-DROP TABLE IF EXISTS `compte_users`;
-CREATE TABLE IF NOT EXISTS `compte_users` (
-  `id_compte` int(11) NOT NULL AUTO_INCREMENT,
-  `client_id` int(11) NOT NULL,
-  `login_user` varchar(180) NOT NULL,
-  `password_user` varchar(255) NOT NULL,
-  `type_compte` varchar(200) NOT NULL,
-  `user_avatar` varchar(300) NOT NULL,
-  PRIMARY KEY (`id_compte`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -130,6 +118,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   `description_product` int(11) NOT NULL,
   `price_product` decimal(10,0) NOT NULL,
   `quantite_product` int(11) NOT NULL,
+  `img_product` varchar(300) NOT NULL,
   `id_categories` int(11) NOT NULL,
   PRIMARY KEY (`id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
