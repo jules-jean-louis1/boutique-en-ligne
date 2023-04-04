@@ -5,8 +5,8 @@ import { loginFormHeader} from './function/function.js';
 import {registerHeader} from './function/function.js';
 
 const btnRegister = document.querySelector('#buttonRegisterHeader');
+const btnLogin = document.querySelector('#buttonLoginHeader');
 
 
-
-
+loginFormHeader(btnLogin);
 registerHeader(btnRegister);

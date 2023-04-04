@@ -34,13 +34,14 @@ function formatDateSansh(timestamp) {
 // Fonction Login
 function loginFormHeader(BtnLogin) {
     BtnLogin.addEventListener('click', async (ev) => {
+        const body = document.querySelector('body');
         // Créer l'élément dialog
         const dialog = document.createElement('dialog');
         dialog.setAttribute('id', 'dialog');
         dialog.className = 'dialog_modal';
-        formDisplayer.appendChild(dialog);
+        body.appendChild(dialog);
         dialog.innerHTML = '';
-        await fetch('/../php/fetch/registerLogin/register.php')
+        await fetch('src/php/fetch/registerLogin/login.php')
             .then(response => response.text())
             .then(data => {
                 dialog.innerHTML = data;
@@ -56,7 +57,7 @@ function loginFormHeader(BtnLogin) {
         const formLogin = document.querySelector('#login-form');
         formLogin.addEventListener('submit', (ev) => {
             ev.preventDefault();
-            fetch('resources/assests/fetch/login.php', {
+            fetch('src/php/fetch/registerLogin/login.php', {
                 method: 'POST',
                 body: new FormData(formLogin)
             })
@@ -70,11 +71,7 @@ function loginFormHeader(BtnLogin) {
                             window.location.reload();
                         }, 1000);
                     }
-                    if (data.status === 'empty') {
-                        message.innerHTML = data.message;
-                        displayError(message);
-                    }
-                    if (data.status === 'loginFail') {
+                    if (data.status === 'error') {
                         message.innerHTML = data.message;
                         displayError(message);
                     }

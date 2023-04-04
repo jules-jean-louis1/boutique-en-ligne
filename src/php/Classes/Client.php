@@ -67,6 +67,27 @@ class Client
             "type_compte" => "client",
             "avatar" => "default_avatar.png"
         ));
-
+    }
+    public function login($loginOrEmail, $password)
+    {
+        $db = new Database();
+        $bdd = $db->getBdd();
+        $req = $bdd->prepare("SELECT * FROM users WHERE login_users = :loginOrEmail OR email_users = :loginOrEmail");
+        $req->execute(array(
+            "loginOrEmail" => $loginOrEmail
+        ));
+        $result = $req->fetch();
+        if ($result) {
+            if (password_verify($password, $result['password_users'])) {
+                $_SESSION['id'] = $result['id_users'];
+                $_SESSION['login'] = $result['login_users'];
+                $_SESSION['email'] = $result['email_users'];
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }
