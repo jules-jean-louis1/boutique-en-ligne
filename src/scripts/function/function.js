@@ -18,7 +18,7 @@ function formatDate(timestamp) {
     const day = date.getDate();
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${month} ${day}, ${year} à ${hours}:${minutes}`;
+    return `${day} ${month} ${year} à ${hours}:${minutes}`;
 }
 function formatDateSansh(timestamp) {
     const months = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jui', 'Jui', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -28,7 +28,7 @@ function formatDateSansh(timestamp) {
     const day = date.getDate();
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${month} ${day}, ${year}`;
+    return `${day} ${month} ${year}`;
 }
 
 // Fonction Login
@@ -40,7 +40,7 @@ function loginFormHeader(BtnLogin) {
         dialog.className = 'dialog_modal';
         formDisplayer.appendChild(dialog);
         dialog.innerHTML = '';
-        await fetch('resources/assests/fetch/login.php')
+        await fetch('/../php/fetch/registerLogin/register.php')
             .then(response => response.text())
             .then(data => {
                 dialog.innerHTML = data;
@@ -85,14 +85,15 @@ function loginFormHeader(BtnLogin) {
 // Fonction Register
 function registerHeader(BtnRegister) {
     BtnRegister.addEventListener('click', async (ev) => {
+        const body = document.querySelector('body');
         // Créer l'élément dialog
         const dialog = document.createElement('dialog');
         dialog.setAttribute('id', 'dialog');
         dialog.className = 'dialog_modal';
-        formDisplayer.appendChild(dialog);
+        body.appendChild(dialog);
         dialog.innerHTML = '';
         // Affichage du formulaire d'inscription
-        await fetch('resources/assests/fetch/register.php')
+        await fetch('src/php/fetch/registerLogin/register.php')
             .then(response => response.text())
             .then(data => {
                 // Insérer le contenu de la réponse dans l'élément dialog
@@ -109,7 +110,7 @@ function registerHeader(BtnRegister) {
         const formRegister = document.querySelector('#resgister-form');
         formRegister.addEventListener('submit', (ev) => {
             ev.preventDefault();
-            fetch('resources/assests/fetch/register.php', {
+            fetch('src/php/fetch/registerLogin/register.php', {
                 method: 'POST',
                 body: new FormData(formRegister)
             })
@@ -120,19 +121,7 @@ function registerHeader(BtnRegister) {
                         message.innerHTML = data.message;
                         displaySuccess(message);
                     }
-                    if (data.status === 'empty') {
-                        message.innerHTML = data.message;
-                        displayError(message);
-                    }
-                    if (data.status === 'loginExist') {
-                        message.innerHTML = data.message;
-                        displayError(message);
-                    }
-                    if (data.status === 'passwordInvalid') {
-                        message.innerHTML = data.message;
-                        displayError(message);
-                    }
-                    if (data.status === 'passwordConfirm') {
+                    if (data.status === 'error') {
                         message.innerHTML = data.message;
                         displayError(message);
                     }
@@ -146,3 +135,5 @@ function closeModalDialog() {
     dialog.close();
     dialog.remove();
 }
+
+export { displayError, displaySuccess, formatDate, formatDateSansh, loginFormHeader, registerHeader, closeModalDialog };

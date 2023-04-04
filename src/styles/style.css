@@ -1,0 +1,44 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Dialog */
+#dialog {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.alert-success {
+    border: 1px solid rgba(36, 241, 6, 0.46);
+    background-color: rgba(7, 149, 66, 0.12156862745098039);
+    box-shadow: 0px 0px 1px #259c08;
+    color: #0ad406;
+    cursor:pointer;
+    border-radius: 5px;
+    padding: 7px 5px;
+}
+.alert-success:hover {
+    background-color: rgba(7, 149, 66, 0.35);
+    transition:0.5s;
+}
+.alert-danger {
+    border: 1px solid rgba(241, 6, 6, 0.81);
+    background-color: rgba(220, 17, 1, 0.16);
+    box-shadow: 0px 0px 1px #ff0303;
+    color: #ff0303;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 7px 5px;
+}
+.alert-danger:hover {
+    background-color: rgba(220, 17, 1, 0.33);
+    transition:0.5s;
+}

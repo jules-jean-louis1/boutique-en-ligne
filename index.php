@@ -16,7 +16,7 @@ session_start();
     <title>Acceuil</title>
 </head>
 <body>
-    <header>
+    <header class="w-full">
        <?php require_once "src/import/header.php"; ?>
     </header>
     <main>

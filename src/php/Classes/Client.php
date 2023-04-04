@@ -5,15 +5,14 @@ class Client
 {
     public function __construct()
     {
-
     }
     public function checkLogin($login)
     {
         $db = new Database();
         $bdd = $db->getBdd();
-        $req = $bdd->prepare("SELECT login_user FROM compte_users WHERE login_user = :login");
+        $req = $bdd->prepare("SELECT COUNT(*) as total FROM users WHERE login_users = :login_users");
         $req->execute(array(
-            "login_user" => $login
+            "login_users" => $login
         ));
         $result = $req->fetch();
         if ($result['total'] > 0) {
@@ -26,9 +25,9 @@ class Client
     {
         $db = new Database();
         $bdd = $db->getBdd();
-        $req = $bdd->prepare("SELECT email_client FROM client WHERE email_client = :email");
+        $req = $bdd->prepare("SELECT COUNT(*) as total FROM users WHERE email_users = :email_users");
         $req->execute(array(
-            "email_client" => $email
+            "email_users" => $email
         ));
         $result = $req->fetch();
         if ($result['total'] > 0) {
@@ -39,6 +38,7 @@ class Client
     }
     public function validEmail($email)
     {
+        $email = filter_var($email, FILTER_SANITIZE_EMAIL);
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return true;
         } else {
@@ -48,7 +48,7 @@ class Client
     public function validPassword($password)
     {
         // 8 caractères minimum, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial
-        if (preg_match("/^(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z])(?=\D*\d)(?=[^!#%]*[!#%])[A-Za-z0-9!#%]{8,32}$/", $password)) {
+        if (preg_match("/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/", $password)) {
             return true;
         } else {
             return false;
@@ -58,8 +58,15 @@ class Client
     {
         $db = new Database();
         $bdd = $db->getBdd();
-        $req = $bdd->prepare("INSERT INTO ");
-
+        $req = $bdd->prepare("INSERT INTO users (login_users, password_users, email_users, type_compte_users, avatar_users, created_at_users) VALUES (:login, :password, :email, :type_compte, :avatar, NOW())");
         $password = password_hash($password, PASSWORD_DEFAULT);
+        $req->execute(array(
+            "login" => $login,
+            "password" => $password,
+            "email" => $email,
+            "type_compte" => "client",
+            "avatar" => "default_avatar.png"
+        ));
+
     }
 }
