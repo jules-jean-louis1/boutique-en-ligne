@@ -53,6 +53,13 @@ function loginFormHeader(BtnLogin) {
                         closeModalDialog();
                     }
                 });
+                // Gestion du bouton "S'inscrire" sur la page de connexion
+                const btnSignIn = document.querySelector('#btnSignIn')
+                btnSignIn.addEventListener('click', async (ev) => {
+                    registerHeader(btnSignIn);
+                    dialog.close();
+
+                });
             });
         const formLogin = document.querySelector('#login-form');
         formLogin.addEventListener('submit', (ev) => {
@@ -95,7 +102,6 @@ function registerHeader(BtnRegister) {
             .then(data => {
                 // Insérer le contenu de la réponse dans l'élément dialog
                 dialog.innerHTML = data;
-
                 // Afficher le dialog
                 dialog.showModal();
                 document.addEventListener('click', (ev) => {
@@ -103,6 +109,7 @@ function registerHeader(BtnRegister) {
                         closeModalDialog();
                     }
                 });
+
             });
         const formRegister = document.querySelector('#resgister-form');
         formRegister.addEventListener('submit', (ev) => {
@@ -124,6 +131,14 @@ function registerHeader(BtnRegister) {
                     }
                 });
         });
+    });
+}
+
+function addSignInClickHandler() {
+    const btnSignIn = document.querySelector('#btnSignIn')
+    btnSignIn.addEventListener('click', async (ev) => {
+        closeModalDialog();
+        registerHeader(btnSignIn);
     });
 }
 

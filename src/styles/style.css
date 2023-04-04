@@ -42,3 +42,6 @@
     background-color: rgba(220, 17, 1, 0.33);
     transition:0.5s;
 }
+.hidden {
+    display: none;
+}

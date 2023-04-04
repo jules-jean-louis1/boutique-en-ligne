@@ -1,7 +1,6 @@
 <?php
 session_start();
-
-?>
+if (isset($_SESSION['login']) != null) { ?>
 
 <html lang="fr">
 <head>
@@ -13,14 +12,20 @@ session_start();
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Script JS -->
     <script defer type="module" src="src/scripts/index.js"></script>
-    <title>Acceuil</title>
+    <title>Profil</title>
 </head>
 <body>
-    <header class="w-full">
-        <?php require_once "src/import/header.php"; ?>
-    </header>
-    <main>
-
-    </main>
+<header class="w-full">
+    <?php require_once "src/import/header.php"; ?>
+</header>
+<main>
+    <section id="containerFormCommandeInfo"></section>
+    <section id="containerFormProfilInfo"></section>
+    <section id="containerFormAvatarInfo"></section>
+    <section id="containerFormSupp"></section>
+</main>
 </body>
 </html>
+<?php } else {
+    header("Location: index.php");
+} ?>

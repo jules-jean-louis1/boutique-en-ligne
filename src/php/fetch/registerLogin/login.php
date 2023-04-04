@@ -46,4 +46,8 @@ if (isset($_POST['login'])) {
     <div id="containerSubmit">
         <button type="submit" name="submit" id="submit" class="p-2 rounded-lg bg-[#AC1DE4] font-semibold text-white">Connexion</button>
     </div>
+    <div id="notRegister" class="flex justify-center space-x-2 items-center">
+        <p class="text-sm">Vous n'êtes pas encore inscrit ?</p>
+        <button type="button" id="btnSignIn" class="">S'inscrire</button>
+    </div>
 </form>
