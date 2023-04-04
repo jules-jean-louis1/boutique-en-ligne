@@ -1,0 +1,47 @@
+Action:
+  -Combat
+  -Beat them All
+  -Plateformes
+  -Tir
+  -FPS
+  -Shoot them up
+  -Rail shooter
+  -TPS
+
+Aventure:
+  -Fiction interactive
+  -Aventure graphique
+  -Simulation de drague
+  -Visual novel
+  -Sound novel
+  
+Action-aventure:
+  -Infiltration
+  -Survival horror
+
+Jeu de rôle:
+  -Action-RPG
+  -Hack'n'slash
+  -Rogue-like
+  -MMORPG
+  -Tactical RPG
+
+Réflexion:
+  -Labyrinthe
+  -Puzzle
+
+Simulation:
+  -Gestion
+  -God Game
+  -SimRacing
+
+Stratégie:
+  -Stratégie au tour par tour
+  -Stratégie en temps réel
+  -Grande stratégie
+  -4X
+  -Wargame
+Sport:
+  -Course
+  -Football
+  -
