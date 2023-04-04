@@ -13,7 +13,7 @@ if (isset($_POST['login'])) {
             echo json_encode(['status' => 'success', 'message' => 'Vous êtes connecté']);
         } else {
             header("Content-Type: application/json");
-            echo json_encode(['status' => 'error', 'message' => 'Login ou mot de passe incorrect']);
+            echo json_encode(['status' => 'error', 'message' => 'Login / Email ou mot de passe incorrect']);
         }
     } else {
         header("Content-Type: application/json");
@@ -33,8 +33,8 @@ if (isset($_POST['login'])) {
         <button type="button" id="closeDialog" class="py-2 px-4 hover:bg-slate-200 rounded-full">&times;</button>
     </div>
     <div class="flex flex-col">
-        <label for="login" class="px-[4px] py-[3px]">Login / E-mail</label>
-        <input type="text" name="login" id="login" placeholder="Entrez votre login ou E-mail" class="p-2 bg-[#52586633] rounded-[8px] text-sm">
+        <label for="login" class="px-[4px] py-[3px]">Login / Email</label>
+        <input type="text" name="login" id="login" placeholder="Entrez votre login ou Email" class="p-2 bg-[#52586633] rounded-[8px] text-sm">
     </div>
     <div class="flex flex-col">
         <label for="password" class="px-[4px] py-[3px]">Mot de passe</label>
