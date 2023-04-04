@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : ven. 31 mars 2023 à 09:22
+-- Généré le : mar. 04 avr. 2023 à 07:37
 -- Version du serveur : 5.7.36
 -- Version de PHP : 7.4.26
 
@@ -67,10 +67,11 @@ CREATE TABLE IF NOT EXISTS `client` (
   `prenom_client` varchar(255) NOT NULL,
   `nom_client` varchar(255) NOT NULL,
   `ville_client` varchar(255) NOT NULL,
-  `code_postale_client` int(11) NOT NULL,
+  `code_postale_client` varchar(5) NOT NULL,
   `adresse_client` varchar(255) NOT NULL,
-  `email_client` text NOT NULL,
-  `pays_client` int(11) NOT NULL,
+  `email_client` varchar(319) NOT NULL,
+  `mobile_client` varchar(15) NOT NULL,
+  `pays_client` varchar(255) NOT NULL,
   `created_at_client` timestamp NOT NULL,
   PRIMARY KEY (`id_client`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -86,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `commande` (
   `id_commande` int(11) NOT NULL AUTO_INCREMENT,
   `id_client` int(11) NOT NULL,
   `date_commande` timestamp NOT NULL,
-  `motant_commande` decimal(10,0) NOT NULL,
+  `motant_commande` decimal(10,2) NOT NULL,
   `statue_commande` varchar(255) NOT NULL,
   PRIMARY KEY (`id_commande`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -133,10 +134,13 @@ CREATE TABLE IF NOT EXISTS `product` (
   `id_product` int(11) NOT NULL AUTO_INCREMENT,
   `name_product` int(11) NOT NULL,
   `description_product` int(11) NOT NULL,
-  `price_product` decimal(10,0) NOT NULL,
+  `price_product` decimal(10,2) NOT NULL,
   `quantite_product` int(11) NOT NULL,
+  `quantite_vendue` int(11) DEFAULT NULL,
   `img_product` varchar(300) NOT NULL,
-  `id_categories` int(11) NOT NULL,
+  `rating_product` decimal(3,2) NOT NULL,
+  `released_date_product` timestamp NOT NULL,
+  `id_subcategories` int(11) NOT NULL,
   PRIMARY KEY (`id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -152,6 +156,21 @@ CREATE TABLE IF NOT EXISTS `subcategories` (
   `name_subcategories` varchar(255) NOT NULL,
   `categories_id` int(11) NOT NULL,
   PRIMARY KEY (`id_subcategories`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `id_users` int(11) NOT NULL,
+  `login_users` varchar(255) NOT NULL,
+  `password_users` varchar(255) NOT NULL,
+  `type_compte_users` varchar(255) NOT NULL,
+  `avatar_users` varchar(255) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 COMMIT;
 
