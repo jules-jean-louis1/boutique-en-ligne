@@ -11,7 +11,7 @@ if (isset($_SESSION['login']) != null) { ?>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Script JS -->
-    <script defer type="module" src="src/scripts/index.js"></script>
+    <script defer type="module" src="src/scripts/profil.js"></script>
     <title>Profil</title>
 </head>
 <body>

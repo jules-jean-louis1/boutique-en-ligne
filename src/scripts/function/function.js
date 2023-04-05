@@ -57,8 +57,6 @@ function loginFormHeader(BtnLogin) {
                 const btnSignIn = document.querySelector('#btnSignIn')
                 btnSignIn.addEventListener('click', async (ev) => {
                     registerHeader(btnSignIn);
-                    dialog.close();
-
                 });
             });
         const formLogin = document.querySelector('#login-form');

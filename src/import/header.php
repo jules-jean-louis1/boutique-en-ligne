@@ -22,6 +22,7 @@
                 <span class="text-[#525866] font-semibold text-[0.8em]">Register</span>
             </button>
         </li>
+        <?php if (isset($_SESSION['id'])) { ?>
         <li>
             <button type="button" id="buttonLogoutHeader" class="py-[5px] px-2 rounded-lg bg-[#F5F8FC] flex items-center ease-in duration-300 border-[1px] border-[#52586633] hover:border-[#525866] hover:shadow-[0 0 10px 0 #525866]">
                 <a href="deconnexion.php" class="text-[#525866] font-semibold text-[0.8em]">Logout</a>
@@ -29,7 +30,8 @@
         </li>
         <li>
             <button type="button" id="buttonProfilHeader" class="py-[5px] px-2 rounded-lg bg-[#F5F8FC] flex items-center ease-in duration-300 border-[1px] border-[#52586633] hover:border-[#525866] hover:shadow-[0 0 10px 0 #525866]">
-                <a href="profil.php" class="text-[#525866] font-semibold text-[0.8em]">Profil</a>
+                <a href="profil.php" class="text-[#525866] font-semibold text-[0.8em]"><?=$_SESSION['login']?></a>
         </li>
+        <?php } ?>
     </ul>
 </nav>
