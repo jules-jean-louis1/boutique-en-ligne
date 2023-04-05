@@ -140,6 +140,7 @@ WHERE users.id_users = :id;");
             "email" => $email,
             "id" => $id
         ));
+        $_SESSION['email'] = $email;
     }
     public function modifyPassword($id, $password)
     {

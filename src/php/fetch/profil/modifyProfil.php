@@ -18,66 +18,68 @@ $pays = htmlspecialchars($_POST['country']);*/
 if (!empty($_POST['login'])) {
     $login = htmlspecialchars($_POST['login']);
     if ($login == $_SESSION['login']) {
-        header("Content-Type: application/json");
-        echo json_encode(['status' => 'error', 'message' => 'Vous utilisez déjà ce login']);
-    }
-    if ($login !== $_SESSION['login']) {
-        if (strlen($login) < 3) {
-            header("Content-Type: application/json");
-            echo json_encode(['status' => 'error', 'message' => 'Le login doit contenir au moins 3 caractères']);
-            die();
-        }
-        if (strlen($login) > 20) {
-            header("Content-Type: application/json");
-            echo json_encode(['status' => 'error', 'message' => 'Le login doit contenir au plus 20 caractères']);
-            die();
-        }
-        $client = new Client();
-        if ($client->checkLogin($login) === true) {
-            header("Content-Type: application/json");
-            echo json_encode(['status' => 'error', 'message' => 'Ce login est déjà utilisé']);
-            die();
-        } else {
-            $client->modifyLogin($_SESSION['id'], $login);
-            header("Content-Type: application/json");
-            echo json_encode(['status' => 'success', 'message' => 'Votre login a bien été modifié']);
-            die();
+        $valid = true;
+    } else {
+        if ($login !== $_SESSION['login']) {
+            $valid = false;
+            if (strlen($login) < 3) {
+                header("Content-Type: application/json");
+                echo json_encode(['status' => 'error', 'message' => 'Le login doit contenir au moins 3 caractères']);
+                die();
+            }
+            if (strlen($login) > 20) {
+                header("Content-Type: application/json");
+                echo json_encode(['status' => 'error', 'message' => 'Le login doit contenir au plus 20 caractères']);
+                die();
+            }
+            $client = new Client();
+            if ($client->checkLogin($login) === true) {
+                header("Content-Type: application/json");
+                echo json_encode(['status' => 'error', 'message' => 'Ce login est déjà utilisé']);
+                die();
+            } else {
+                $client->modifyLogin($_SESSION['id'], $login);
+                header("Content-Type: application/json");
+                echo json_encode(['status' => 'success', 'message' => 'Votre login a bien été modifié']);
+                die();
+            }
         }
     }
 }
 
 if (!empty($_POST['email'])) {
     $email = htmlspecialchars($_POST['email']);
-    if ($email !== $_SESSION['email']) {
-        $client = new Client();
-        if ($client->validEmail($email) === false) {
-            header("Content-Type: application/json");
-            echo json_encode(['status' => 'error', 'message' => 'Cette adresse email n\'est pas valide']);
-            die();
-        }
-        if ($client->lenghtEmail($email) === true) {
-            header("Content-Type: application/json");
-            echo json_encode(['status' => 'error', 'message' => 'Cette adresse email est trop longue']);
-            die();
-        }
-        if ($client->checkEmail($email) === true) {
-            header("Content-Type: application/json");
-            echo json_encode(['status' => 'error', 'message' => 'Cette adresse email est déjà utilisée']);
-            die();
-        } else {
-            $client->modifyEmail($email, $_SESSION['id']);
-            header("Content-Type: application/json");
-            echo json_encode(['status' => 'success', 'message' => 'Votre adresse email a bien été modifiée']);
-            die();
-        }
+    if ($email == $_SESSION['email']) {
+        $valid = true;
     } else {
-        header("Content-Type: application/json");
-        echo json_encode(['status' => 'error', 'message' => 'Vous utilisez déjà cette adresse email']);
-        die();
+        if ($email !== $_SESSION['email']) {
+            $valid = false;
+            $client = new Client();
+            if ($client->validEmail($email) === false) {
+                header("Content-Type: application/json");
+                echo json_encode(['status' => 'error', 'message' => 'Cette adresse email n\'est pas valide']);
+                die();
+            }
+            if ($client->lenghtEmail($email) === true) {
+                header("Content-Type: application/json");
+                echo json_encode(['status' => 'error', 'message' => 'Cette adresse email est trop longue']);
+                die();
+            }
+            if ($client->checkEmail($email) === true) {
+                header("Content-Type: application/json");
+                echo json_encode(['status' => 'error', 'message' => 'Cette adresse email est déjà utilisée']);
+                die();
+            } else {
+                $client->modifyEmail($_SESSION['id'], $email);
+                header("Content-Type: application/json");
+                echo json_encode(['status' => 'success', 'message' => 'Votre adresse email a bien été modifiée']);
+                die();
+            }
+        }
     }
 }
-/*
 if(!empty($password) && !empty($passwordConfirm)) {
+    $valid = false;
     if ($password !== $passwordConfirm) {
         header("Content-Type: application/json");
         echo json_encode(['status' => 'error', 'message' => 'Les mots de passe ne correspondent pas']);
@@ -95,7 +97,7 @@ if(!empty($password) && !empty($passwordConfirm)) {
     }
     $client = new Client();
     if ($client->validPassword($password) === true) {
-        $client->modifyPassword($password, $_SESSION['id']);
+        $client->modifyPassword($_SESSION['id'], $password);
         header("Content-Type: application/json");
         echo json_encode(['status' => 'success', 'message' => 'Votre mot de passe a bien été modifié']);
         die();
@@ -105,3 +107,9 @@ if(!empty($password) && !empty($passwordConfirm)) {
         die();
     }
 }
+if ($valid === true) {
+    header("Content-Type: application/json");
+    echo json_encode(['status' => 'error', 'message' => 'Aucune modification n\'a été effectuée']);
+    die();
+}
+

@@ -4,9 +4,9 @@ require_once "../../Classes/Client.php"; // On inclut la classe Client
 
 
 $client = new Client();
-$clients = $client->modifyLogin("Lionel", $_SESSION['id']);
+$clients = $client->validPassword("lion@gmail.com");
 if ($clients === true) {
-    echo "ok";
+    echo "true";
 } else {
-    echo "pas ok";
+    echo "false";
 }

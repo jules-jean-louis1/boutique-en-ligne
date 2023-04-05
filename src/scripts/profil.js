@@ -81,11 +81,13 @@ async function modifyProfil() {
                         console.log(data);
                         let message = document.querySelector('#errorMsg');
                         if (data.status === 'success') {
+                            console.log("ok")
                             message.innerHTML = data.message;
                             displaySuccess(message);
                             modifyProfil();
                         }
                         if (data.status === 'error') {
+                            console.log("error")
                             message.innerHTML = data.message;
                             displayError(message);
                         }
