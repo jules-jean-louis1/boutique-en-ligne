@@ -2,12 +2,22 @@
 function displayError(message) {
     message.classList.add('alert-danger');
     message.classList.remove('alert-success');
+    message.style.display = 'block';
+    // Effacer le message après 3 secondes
+    setTimeout(() => {
+        message.style.display = 'none';
+    }, 3000);
 }
 
 // Fonction pour la gestion des messages de success
 function displaySuccess(message) {
     message.classList.add('alert-success');
     message.classList.remove('alert-danger');
+    message.style.display = 'block';
+    // Effacer le message après 3 secondes
+    setTimeout(() => {
+        message.style.display = 'none';
+    }, 3000);
 }
 // Formatage de la date
 function formatDate(timestamp) {

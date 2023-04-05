@@ -5,19 +5,21 @@ import { displayError} from './function/function.js';
 import { displaySuccess} from './function/function.js';
 
 
+// Récupération des éléments du DOM
+const btnDisplayProfil = document.querySelector('#buttonFormProfilInfo');
+
 //Fonction de modifiacation du profil
 async function modifyProfil() {
     const containerProfile = document.querySelector('#containerFormProfilInfo');
     await fetch('src/php/fetch/profil/getClientInfo.php')
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             containerProfile.innerHTML = '';
             containerProfile.innerHTML = `
-            <div class="containerFormProfilInfo">
+            <div class="wapperFormProfilInfo">
                 <form action="" method="post" id="formModifyProfilInfo">
                 <div id="containerprofil">
-                    <label for="login">login</label>
+                    <label for="login">Nom d'utilisateur</label>
                     <input type="text" name="login" id="login" value="${data[0].login_users}" class="p-2 bg-slate-100">
                 </div>
                 <div id="containerprofil">
@@ -57,7 +59,7 @@ async function modifyProfil() {
                     <input type="text" name="zipcode" id="zipcode" value="${data[0].code_postal_client}" class="p-2 bg-slate-100">
                 </div>
                 <div id="containerprofil">
-                    <label for="pays">Pays</label>
+                    <label for="country">Pays</label>
                     <input type="text" name="country" id="country" value="${data[0].pays_client}" class="p-2 bg-slate-100">
                 </div>
                 <div id="containerMessageProfil" class="h-[65px] max-w-[330px]">
@@ -66,6 +68,22 @@ async function modifyProfil() {
                 <div id="containerprofil">
                     <button type="submit" id="btnModifyProfilInfo" class="bg-green-500 p-2 rounded-lg">Modifier</button>
                 </div>
+                </form>
+            </div>
+            <div id="wapperFormAvatarInfo">
+                <form action="" method="post" id="formModifyAvatarInfo">
+                    <div id="containerProfilAvatar">
+                        <img src="src/images/avatars/${data[0].avatar_users}" alt="avatar" class="w-24 h-24 rounded-full">
+                    </div>
+                    <div class="flex flex-col border-[1px] border-slate-300 p-2 rounded-lg">
+                        <input class="form-control" type="file" name="uploadfile" class="p-2 rounded-xl bg-[#E9E9E9] accept="image/png,image/jpeg"/>
+                    </div>
+                    <div id="containerMessageProfil" class="h-[65px] max-w-[330px]">
+                        <div id="errorMsgAvatar" class="w-full"></div>
+                    </div>
+                    <button type="submit" id="upload" name="upload" class="p-2 rounded-lg bg-[#9E15D9] text-white w-full">
+                        Update Avatar
+                    </button>
                 </form>
             </div>
             `;
@@ -78,7 +96,6 @@ async function modifyProfil() {
                 })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data);
                         let message = document.querySelector('#errorMsg');
                         if (data.status === 'success') {
                             console.log("ok")
@@ -87,12 +104,37 @@ async function modifyProfil() {
                             modifyProfil();
                         }
                         if (data.status === 'error') {
-                            console.log("error")
-                            message.innerHTML = data.message;
-                            displayError(message);
+                            for (let i = 0; i < data.message.length; i++) {
+                                message.innerHTML = data.message[i];
+                                displayError(message);
+                            }
                         }
                     })
             });
         });
+    const btnModifyAvatar = document.querySelector('#formModifyAvatarInfo');
+    btnModifyAvatar.addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        await fetch('src/php/fetch/profil/modifyAvatar.php', {
+            method: 'POST',
+            body: new FormData(btnModifyAvatar)
+        })
+            .then(response => response.json())
+            .then(data => {
+                let message = document.querySelector('#errorMsgAvatar');
+                if (data.status === 'avatarUp') {
+                    message.innerHTML = data.message;
+                    displaySuccess(message);
+                    modifyProfil();
+                }
+                if (data.status === 'error') {
+                    message.innerHTML = data.message;
+                    displayError(message);
+                }
+            })
+    })
+
 }
+
+// Fonction d'affichage du profil
 modifyProfil();

@@ -62,6 +62,22 @@ class Client
             return false;
         }
     }
+    public function validPhone($phone)
+    {
+        if (preg_match("/^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/", $phone)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function validZipCode($zipCode)
+    {
+        if (preg_match("/^\d{5}(?:[-\s]\d{4})?$/", $zipCode)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public function register($login, $password, $email)
     {
         $db = new Database();
@@ -117,6 +133,13 @@ WHERE users.id_users = :id;");
             "id" => $id
         ));
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        $_SESSION['prenom'] = $result[0]['prenom_client'];
+        $_SESSION['nom'] = $result[0]['nom_client'];
+        $_SESSION['ville'] = $result[0]['ville_client'];
+        $_SESSION['code_postal'] = $result[0]['code_postal_client'];
+        $_SESSION['adresse'] = $result[0]['adresse_client'];
+        $_SESSION['mobile'] = $result[0]['mobile_client'];
+        $_SESSION['pays'] = $result[0]['pays_client'];
         $result = json_encode($result);
         return $result;
     }
@@ -150,6 +173,27 @@ WHERE users.id_users = :id;");
         $password = password_hash($password, PASSWORD_DEFAULT);
         $req->execute(array(
             "password" => $password,
+            "id" => $id
+        ));
+    }
+    public function modifyClientField($id, $field, $client, $value)
+    {
+        $db = new Database();
+        $bdd = $db->getBdd();
+        $req = $bdd->prepare("UPDATE client SET {$client} = :value WHERE users_id = :id");
+        $req->execute(array(
+            "value" => $value,
+            "id" => $id
+        ));
+        $_SESSION[$field] = $value;
+    }
+    public function modifyAvatar($id, $filename)
+    {
+        $db = new Database();
+        $bdd = $db->getBdd();
+        $req = $bdd->prepare("UPDATE users SET avatar_users = :avatar, modified_at_users = NOW() WHERE id_users = :id");
+        $req->execute(array(
+            "avatar" => $filename,
             "id" => $id
         ));
     }

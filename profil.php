@@ -20,7 +20,10 @@ if (isset($_SESSION['login']) != null) { ?>
 </header>
 <main>
     <section id="containerFormCommandeInfo"></section>
-    <section id="containerFormProfilInfo"></section>
+    <div id="containerFormProfil">
+        <button type="button" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" id="buttonFormProfilInfo">Modifier mes informations</button>
+        <div id="containerFormProfilInfo"></div>
+    </div>
     <section id="containerFormAvatarInfo"></section>
     <section id="containerFormSupp"></section>
 </main>
