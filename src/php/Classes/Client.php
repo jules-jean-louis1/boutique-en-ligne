@@ -113,6 +113,7 @@ class Client
                 $_SESSION['id'] = $result['id_users'];
                 $_SESSION['login'] = $result['login_users'];
                 $_SESSION['email'] = $result['email_users'];
+                $_SESSION['type_compte'] = $result['type_compte_users'];
                 return true;
             } else {
                 return false;

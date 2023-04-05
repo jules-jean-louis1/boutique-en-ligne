@@ -33,7 +33,7 @@ if (isset($_POST['login'])) {
         <button type="button" id="closeDialog" class="py-2 px-4 hover:bg-slate-200 rounded-full">&times;</button>
     </div>
     <div class="flex flex-col">
-        <label for="login" class="px-[4px] py-[3px]">Login / Email</label>
+        <label for="login" class="px-[4px] py-[3px]">Nom d'utilisateur / Email</label>
         <input type="text" name="login" id="login" placeholder="Entrez votre login ou Email" class="p-2 bg-[#52586633] rounded-[8px] text-sm">
     </div>
     <div class="flex flex-col">
