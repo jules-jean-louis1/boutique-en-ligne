@@ -74,11 +74,13 @@ async function gestionProduit() {
 
 // Fonction gestion de catégorie
 async function gestionCategory() {
-    await fetch('src/php/fetch/category/displayCategories.php')
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(category => {
-                DisplayInfo.innerHTML += `
+    async function displayCategories() {
+        await fetch('src/php/fetch/category/displayCategories.php')
+            .then(response => response.json())
+            .then(data => {
+                DisplayInfo.innerHTML = '';
+                data.forEach(category => {
+                    DisplayInfo.innerHTML += `
                 <div id="containerCategoryProduct" class="flex space-x-2 py-2">
                     <form action="" method="post" class="flex space-x-2" id="update_${category.id_categories}"  data-id-cat="${category.id_categories}">
                         <input type="text" name="nom" id="nom" placeholder="${category.name_categories}" class="bg-[#E9E9E9] rounded-lg p-2">
@@ -93,28 +95,47 @@ async function gestionCategory() {
                     </form>
                 </div>
                 `;
-            })
-            data.forEach(category => {
-                const formUpdateCategory = document.querySelector(`#update_${category.id_categories}`);
-                formUpdateCategory.addEventListener('submit', async (ev) => {
-                    ev.preventDefault();
-                    let categoryId = ev.target.closest('form').getAttribute('data-id-cat');
-                    let name = ev.target.querySelector('#nom').value;
-                    await fetch(`src/php/fetch/category/updateCategory.php?id=${categoryId}&name=${name}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === 'success') {
-                                message.innerHTML = data.message;
-                                displaySuccess(message);
-                                gestionCategory();
-                            } else {
-                                message.innerHTML = data.message;
-                                displayError(message);
-                            }
-                        })
+                })
+                data.forEach(category => {
+                    const formUpdateCategory = document.querySelector(`#update_${category.id_categories}`);
+                    formUpdateCategory.addEventListener('submit', async (ev) => {
+                        ev.preventDefault();
+                        let categoryId = ev.target.closest('form').getAttribute('data-id-cat');
+                        let name = ev.target.querySelector('#nom').value;
+                        await fetch(`src/php/fetch/category/updateCategory.php?id=${categoryId}&name=${name}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    message.innerHTML = data.message;
+                                    displaySuccess(message);
+                                    displayCategories();
+                                } else {
+                                    message.innerHTML = data.message;
+                                    displayError(message);
+                                }
+                            })
+                    })
+                    const formDeleteCategory = document.querySelector(`#delete_${category.id_categories}`);
+                    formDeleteCategory.addEventListener('submit', async (ev) => {
+                        ev.preventDefault();
+                        let categoryId = ev.target.closest('form').getAttribute('data-id-cat');
+                        await fetch(`src/php/fetch/category/deleteCategory.php?id=${categoryId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    message.innerHTML = data.message;
+                                    displaySuccess(message);
+
+                                } else {
+                                    message.innerHTML = data.message;
+                                    displayError(message);
+                                }
+                            })
+                    })
                 })
             })
-        })
+    }
+    displayCategories();
     const btnAddCategory = document.querySelector('#btnAddCategory_');
     btnAddCategory.addEventListener('click', () => {
         const formAddCategory = document.querySelector('#formAddCategory');
@@ -147,7 +168,7 @@ async function gestionCategory() {
                     if (data.status === 'success') {
                         message.innerHTML = data.message;
                         displaySuccess(message);
-                        gestionCategory();
+                        displayCategories();
                     }
                     if (data.status === 'error') {
                         message.innerHTML = data.message;

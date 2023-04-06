@@ -56,4 +56,13 @@ class Product extends Database
             "name" => $name
         ));
     }
+    public function updateCategory($id, $name)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("UPDATE categories SET name_categories = :name WHERE id_categories = :id");
+        $req->execute(array(
+            "name" => $name,
+            "id" => $id
+        ));
+    }
 }
