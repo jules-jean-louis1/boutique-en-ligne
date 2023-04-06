@@ -1,6 +1,7 @@
 import { displayError} from './function/function.js';
 import { displaySuccess} from './function/function.js';
 const DisplayInfo = document.querySelector('#dislpayInfoProduct');
+const containerAddCategory = document.querySelector('#containerAddCategory');
 const buttonGestionProduct = document.querySelector('#buttonSeeProduct');
 const buttionGestionCategores = document.querySelector('#buttonSeeCategories');
 let message = document.querySelector('#message');
@@ -140,6 +141,12 @@ async function gestionCategory() {
             })
     }
     displayCategories();
+    const createBtnAddCategory = document.createElement('button');
+    createBtnAddCategory.setAttribute('id', 'btnAddCategory_');
+    createBtnAddCategory.setAttribute('class', 'bg-green-500 p-2 rounded-lg text-white');
+    createBtnAddCategory.textContent = 'Ajouter une catégorie';
+    containerAddCategory.appendChild(createBtnAddCategory);
+
     const btnAddCategory = document.querySelector('#btnAddCategory_');
     btnAddCategory.addEventListener('click', () => {
         const formAddCategory = document.querySelector('#formAddCategory');
@@ -181,8 +188,15 @@ async function gestionCategory() {
                 })
         })
     })
+    const formAddCategory = document.createElement('div');
+    formAddCategory.setAttribute('id', 'formAddCategory');
+    formAddCategory.setAttribute('class', 'flex space-x-2 block');
+    containerAddCategory.appendChild(formAddCategory);
 }
 
+async function gestionSubCategories() {
+
+}
 // fonction d'affichage des produits
 gestionProduit();
 
