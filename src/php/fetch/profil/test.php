@@ -1,12 +1,8 @@
 <?php
 session_start();
-require_once "../../Classes/Client.php"; // On inclut la classe Client
+require_once "../../Classes/Product.php"; // On inclut la classe Client
 
+$product = new Product();
+$displaySubCategories = $product->checkIfCategoryExist('Action');
 
-$client = new Client();
-$clients = $client->validPhone("0710256889");
-if ($clients === true) {
-    echo "true";
-} else {
-    echo "false";
-}
+var_dump($displaySubCategories);

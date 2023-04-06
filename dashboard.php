@@ -11,7 +11,7 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Script JS -->
     <script defer type="module" src="src/scripts/dashboard.js"></script>
-    <title>Profil</title>
+    <title>Dashboard</title>
 </head>
 <body>
 <header class="w-full">
@@ -20,7 +20,19 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
 <main>
     <div id="containerSeeProduct">
         <button type="button" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" id="buttonSeeProduct">Voir les produits</button>
-        <div id="displayProduct"></div>
+    </div>
+    <div id="containerSeeCategories">
+        <button type="button" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" id="buttonSeeCategories">Gérer les catégories</button>
+    </div>
+    <div id="containerMessage">
+        <div id="message"></div>
+    </div>
+    <div id="containerInfo">
+        <div id="dislpayInfoProduct"></div>
+        <div id="containerAddCategory">
+            <button class="bg-green-500 p-2 rounded-lg text-white" id="btnAddCategory_"> Ajouter une catégorie</button>
+            <div id="formAddCategory"></div>
+        </div>
     </div>
 </main>
 </body>

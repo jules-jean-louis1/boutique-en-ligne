@@ -1,10 +1,165 @@
+import { displayError} from './function/function.js';
+import { displaySuccess} from './function/function.js';
+const DisplayInfo = document.querySelector('#dislpayInfoProduct');
+const buttonGestionProduct = document.querySelector('#buttonSeeProduct');
+const buttionGestionCategores = document.querySelector('#buttonSeeCategories');
+let message = document.querySelector('#message');
 
+// Fonction d'affichage des catégories
+async function displayCategory(option) {
+    await fetch('src/php/fetch/category/displaySubCategory.php')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(category => {
+                option.innerHTML += `<option value="${category.id}">${category.name}</option>`;
+            });
+        });
+}
 // fonction de gestion des produits
 async function gestionProduit() {
     const buttonAddProduct = document.createElement('button');
     buttonAddProduct.classList.add('btn', 'btn-primary', 'btn-sm', 'm-2');
     buttonAddProduct.textContent = 'Ajouter un produit';
     buttonAddProduct.setAttribute('id', 'buttonAddProduct');
-    const containerButtonAddProduct = document.querySelector('#displayProduct');
+    const containerButtonAddProduct = document.querySelector('#dislpayInfoProduct');
     containerButtonAddProduct.appendChild(buttonAddProduct);
+
+    buttonAddProduct.addEventListener('click', () => {
+        const body = document.querySelector('body');
+        const dialog = document.createElement('dialog');
+        dialog.setAttribute('id', 'dialog');
+        dialog.className = 'dialog_modal';
+        body.appendChild(dialog);
+        dialog.innerHTML = `
+        <div>
+            <div id="modal-header" class="flex justify-around">
+                <h5 class="modal-title" id="exampleModalLabel">Ajouter un produit</h5>
+                <button type="button" id="btncloseDialog" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" id="formAddProduct" enctype="multipart/form-data">
+                    <div id="modalAddProduct">
+                        <label for="nameProduct">Nom du produit</label>
+                        <input type="text" name="nameProduct" id="nameProduct" required>
+                    </div>
+                    <div id="modalAddProduct">
+                        <label for="descriptionProduct">Description du produit</label>
+                        <textarea name="descriptionProduct" id="descriptionProduct" cols="30" rows="10" required></textarea>
+                    </div>
+                    <div id="modalAddProduct">
+                        <label for="priceProduct">Prix du produit</label>
+                        <input type="number" name="priceProduct" id="priceProduct" required>
+                    </div>
+                    <div id="modalAddProduct">
+                        <label for="imageProduct">Image du produit</label>
+                        <input type="file" name="imageProduct" id="imageProduct" required>
+                    </div>
+                    <div id="modalAddProduct">
+                        <label for="categoryProduct">Catégorie du produit</label>
+                        <select name="categoryProduct" id="categoryProduct" required>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+        dialog.showModal();
+        const btnClose = document.querySelector('#btncloseDialog');
+        btnClose.addEventListener('click', () => {
+            dialog.close();
+            dialog.remove();
+        });
+    });
 }
+
+// Fonction gestion de catégorie
+async function gestionCategory() {
+    await fetch('src/php/fetch/category/displayCategories.php')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(category => {
+                DisplayInfo.innerHTML += `
+                <div id="containerCategoryProduct" class="flex space-x-2 py-2">
+                    <form action="" method="post" class="flex space-x-2" id="update_${category.id_categories}"  data-id-cat="${category.id_categories}">
+                        <input type="text" name="nom" id="nom" placeholder="${category.name_categories}" class="bg-[#E9E9E9] rounded-lg p-2">
+                        <button type="submit" class="bg-green-500 p-2 rounded-lg text-white" name="btnUpdateCategory" id="btnUpdateCategory_${category.id_categories}">
+                            Modifier
+                        </button>
+                    </form>
+                    <form action="" method="post" class="flex space-x-2" id="delete_${category.id_categories}"  data-id-cat="${category.id_categories}">
+                        <button type="submit" class="bg-red-500 p-2 rounded-lg text-white" name="btnDeleteCategory" id="btnDeleteCategory_${category.id_categories}">
+                            Supprimer
+                        </button>
+                    </form>
+                </div>
+                `;
+            })
+            data.forEach(category => {
+                const formUpdateCategory = document.querySelector(`#update_${category.id_categories}`);
+                formUpdateCategory.addEventListener('submit', async (ev) => {
+                    ev.preventDefault();
+                    let categoryId = ev.target.closest('form').getAttribute('data-id-cat');
+                    let name = ev.target.querySelector('#nom').value;
+                    await fetch(`src/php/fetch/category/updateCategory.php?id=${categoryId}&name=${name}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                message.innerHTML = data.message;
+                                displaySuccess(message);
+                                gestionCategory();
+                            } else {
+                                message.innerHTML = data.message;
+                                displayError(message);
+                            }
+                        })
+                })
+            })
+        })
+    const btnAddCategory = document.querySelector('#btnAddCategory_');
+    btnAddCategory.addEventListener('click', () => {
+        const formAddCategory = document.querySelector('#formAddCategory');
+        formAddCategory.innerHTML = `
+                <form action="" method="post" class="flex space-x-2 block" id="addCategory">
+                    <input type="text" name="nom" id="nom" placeholder="Nom de la catégorie" class="bg-[#E9E9E9] rounded-lg p-2">
+                    <button type="submit" class="bg-green-500 p-2 rounded-lg text-white" name="btnAddCategory" id="btnAddCategory">
+                        Ajouter
+                    </button>
+                </form>
+                `;
+        // Si le formulaire est déjà affiché, on le masque
+        if (formAddCategory.style.display === 'block') {
+            formAddCategory.style.display = 'none';
+            btnAddCategory.textContent = 'Ajouter une catégorie';
+        } else {
+            // Sinon, on l'affiche
+            formAddCategory.style.display = 'block';
+            btnAddCategory.textContent = 'Annuler';
+        }
+        const FormAddCategorySubmit = document.querySelector('#addCategory');
+        FormAddCategorySubmit.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await fetch('src/php/fetch/category/addCategory.php', {
+                method: 'POST',
+                body: new FormData(FormAddCategorySubmit)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        message.innerHTML = data.message;
+                        displaySuccess(message);
+                        gestionCategory();
+                    }
+                    if (data.status === 'error') {
+                        message.innerHTML = data.message;
+                        displayError(message);
+                    }
+                })
+        })
+    })
+}
+
+// fonction d'affichage des produits
+gestionProduit();
+
+// fonction d'affichage des catégories
+gestionCategory();
