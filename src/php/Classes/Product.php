@@ -65,4 +65,16 @@ class Product extends Database
             "id" => $id
         ));
     }
+    public function deleteCategory($id_categories)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("DELETE categories, subcategories
+                                    FROM categories
+                                    LEFT JOIN subcategories ON categories.id_categories = subcategories.categories_id
+                                    WHERE categories.id_categories = :id_categories
+                                    ");
+        $req->execute(array(
+            "id_categories" => $id_categories
+        ));
+    }
 }

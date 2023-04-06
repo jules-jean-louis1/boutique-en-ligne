@@ -119,19 +119,23 @@ async function gestionCategory() {
                     formDeleteCategory.addEventListener('submit', async (ev) => {
                         ev.preventDefault();
                         let categoryId = ev.target.closest('form').getAttribute('data-id-cat');
-                        await fetch(`src/php/fetch/category/deleteCategory.php?id=${categoryId}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.status === 'success') {
-                                    message.innerHTML = data.message;
-                                    displaySuccess(message);
-
-                                } else {
-                                    message.innerHTML = data.message;
-                                    displayError(message);
-                                }
-                            })
+                        // Afficher une boîte de dialogue de confirmation avant la suppression
+                        if (confirm("Êtes-vous sûr de vouloir supprimer cette catégorie ? Cette action supprimera également toutes les sous-catégories associées.")) {
+                            await fetch(`src/php/fetch/category/supprCategory.php?id=${categoryId}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.status === 'success') {
+                                        message.innerHTML = data.message;
+                                        displaySuccess(message);
+                                        displayCategories();
+                                    } else {
+                                        message.innerHTML = data.message;
+                                        displayError(message);
+                                    }
+                                })
+                        }
                     })
+
                 })
             })
     }
