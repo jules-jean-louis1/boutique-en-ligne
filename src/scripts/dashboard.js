@@ -2,17 +2,18 @@ import { displayError} from './function/function.js';
 import { displaySuccess} from './function/function.js';
 const DisplayInfo = document.querySelector('#dislpayInfoProduct');
 const containerAddCategory = document.querySelector('#containerAddCategory');
+const containerAddSubCategory = document.querySelector('#containerAddSubCategory');
 const buttonGestionProduct = document.querySelector('#buttonSeeProduct');
 const buttionGestionCategores = document.querySelector('#buttonSeeCategories');
 let message = document.querySelector('#message');
 
 // Fonction d'affichage des catégories
 async function displayCategory(option) {
-    await fetch('src/php/fetch/category/displaySubCategory.php')
+    await fetch('src/php/fetch/category/displayCategories.php')
         .then(response => response.json())
         .then(data => {
             data.forEach(category => {
-                option.innerHTML += `<option value="${category.id}">${category.name}</option>`;
+                option.innerHTML += `<option value="${category.id_categories}">${category.name_categories}</option>`;
             });
         });
 }
@@ -195,6 +196,152 @@ async function gestionCategory() {
 }
 
 async function gestionSubCategories() {
+    containerAddSubCategory.innerHTML = '';
+    containerAddSubCategory.innerHTML = `
+        <div id="containerAddSubCategory" class="flex space-x-2">
+            <form id="formSubCategories" method="post">
+                <label for="category">Sélectionnez une catégorie :</label>
+                <select id="Categories" name="Categories">
+                    <!-- Les options du select seront générées en JS -->
+                </select>
+            </form>
+        </div>
+        <div id="containerDisplaySubCategory" class="flex space-x-2">
+            <!-- Les sous-catégories seront générées en JS -->
+            <div id="displayListSubCategory"></div>
+        </div>
+        <div id="containerAddSubCategory" class="flex space-x-2"></div>
+        `;
+    const Categories = document.querySelector('#Categories');
+    displayCategory(Categories);
+    displaySubCategories();
+    async function displaySubCategories() {
+        const formSubCategories = document.querySelector('#formSubCategories');
+        formSubCategories.addEventListener('change', async (ev) => {
+            ev.preventDefault();
+            await fetch(`src/php/fetch/category/displaySubCatFormCat.php?id=${Categories.value}`)
+                .then(response => response.json())
+                .then(data => {
+                    const displayListSubCategory = document.querySelector('#displayListSubCategory');
+                    displayListSubCategory.innerHTML = '';
+                    for (let subCategory of data.displaySubCategories) {
+                        displayListSubCategory.innerHTML = `
+                    <div id="wapperSubCategory" class="flex space-x-2">
+                        <form action="" method="post" id="formDisplaySubCategory">
+                            <input type="text" name="nom" id="nom" value="${subCategory.name_subcategories}" class="bg-[#E9E9E9] rounded-lg p-2">
+                            <button type="submit" class="bg-green-500 p-2 rounded-lg text-white" name="btnUpdateSubCategory" id="btnUpdateSubCategory_${subCategory.id_subcategories}">
+                                Modifier
+                            </button>
+                        </form>
+                        <form action="" method="post" class="flex space-x-2" id="delete_${subCategory.id_subcategories}"  data-id-cat="${subCategory.id_subcategories}">
+                            <button type="submit" class="bg-red-500 p-2 rounded-lg text-white" name="btnDeleteSubCategory" id="btnDeleteSubCategory${subCategory.id_subcategories}">
+                                Supprimer
+                            </button>
+                        </form>
+                    </div>
+                `;
+                    }
+                    for (let subCategory of data.displaySubCategories) {
+                        const btnDeleteSubCategory = document.querySelector(`#btnDeleteSubCategory${subCategory.id_subcategories}`);
+                        btnDeleteSubCategory.addEventListener('click', async (e) => {
+                            e.preventDefault();
+                            await fetch(`src/php/fetch/category/deleteSubCategory.php?id=${subCategory.id_subcategories}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.status === 'success') {
+                                        message.innerHTML = data.message;
+                                        displaySuccess(message);
+                                        displaySubCategories();
+                                    }
+                                    if (data.status === 'error') {
+                                        message.innerHTML = data.message;
+                                        displayError(message);
+                                    }
+                                })
+                        })
+                    }
+                    for (let subCategory of data.displaySubCategories) {
+                        const formModifySubCategory = document.querySelector(`#formDisplaySubCategory`);
+                        formModifySubCategory.addEventListener('submit', async (ev) => {
+                            ev.preventDefault();
+                            await fetch(`src/php/fetch/category/updateSubCategory.php?id=${subCategory.id_subcategories}`, {
+                                method: 'POST',
+                                body: new FormData(formModifySubCategory)
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.status === 'success') {
+                                        message.innerHTML = data.message;
+                                        displaySuccess(message);
+                                        displaySubCategories();
+                                    }
+                                    if (data.status === 'error') {
+                                        message.innerHTML = data.message;
+                                        displayError(message);
+                                    }
+                                })
+                        })
+                    }
+
+
+                })
+        })
+    }
+
+
+    const containerBtnAddSubCategory = document.querySelector('#containerAddSubCategory');
+    const createBtnAddSubCategory = document.createElement('button');
+    createBtnAddSubCategory.setAttribute('id', 'btnAddSubCategory_');
+    createBtnAddSubCategory.setAttribute('class', 'bg-green-500 p-2 rounded-lg text-white');
+    createBtnAddSubCategory.textContent = 'Ajouter une sous-catégorie';
+    containerBtnAddSubCategory.appendChild(createBtnAddSubCategory);
+
+    const formAddSubCategory = document.createElement('div');
+    formAddSubCategory.setAttribute('id', 'formAddSubCategory');
+    formAddSubCategory.setAttribute('class', 'flex space-x-2 block');
+    containerAddSubCategory.appendChild(formAddSubCategory);
+
+    const btnAddSubCategory = document.querySelector('#btnAddSubCategory_');
+    btnAddSubCategory.addEventListener('click', () => {
+        const formAddSubCategory = document.querySelector('#formAddSubCategory');
+        formAddSubCategory.innerHTML = `
+        <form action="" method="post" class="flex space-x-2 block" id="addSubCategory">
+            <input type="text" name="nom" id="nom" placeholder="Nom de la sous-catégorie" class="bg-[#E9E9E9] rounded-lg p-2">
+            <button type="submit" class="bg-green-500 p-2 rounded-lg text-white" name="btnAddSubCategory" id="btnAddSubCategory">
+                Ajouter
+            </button>
+        </form>
+        `;
+        // Si le formulaire est déjà affiché, on le masque
+        if (formAddSubCategory.style.display === 'block') {
+            formAddSubCategory.style.display = 'none';
+            btnAddSubCategory.textContent = 'Ajouter une catégorie';
+        } else {
+            // Sinon, on l'affiche
+            formAddSubCategory.style.display = 'block';
+            btnAddSubCategory.textContent = 'Annuler';
+        }
+        const FormAddSubCategorySubmit = document.querySelector('#addSubCategory');
+        FormAddSubCategorySubmit.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await fetch('src/php/fetch/category/addSubCategory.php', {
+                method: 'POST',
+                body: new FormData(FormAddSubCategorySubmit)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        message.innerHTML = data.message;
+                        displaySuccess(message);
+
+                    }
+                    if (data.status === 'error') {
+                        message.innerHTML = data.message;
+                        displayError(message);
+                    }
+                })
+        })
+    })
 
 }
 // fonction d'affichage des produits
@@ -202,3 +349,6 @@ gestionProduit();
 
 // fonction d'affichage des catégories
 gestionCategory();
+
+// fonction d'affichage des sous-catégories
+gestionSubCategories();

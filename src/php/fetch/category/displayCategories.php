@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once "../../Classes/Product.php";
+require_once "../../Classes/Categories.php";
 
-$product = new Product();
+$product = new Categories();
 $displaySubCategories = $product->displayCategories();
 print_r($displaySubCategories);

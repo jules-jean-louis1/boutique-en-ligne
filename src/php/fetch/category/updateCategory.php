@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once "../../Classes/Product.php";
+require_once "../../Classes/Categories.php";
 
 if (isset($_GET['name'])) {
     $id = intval($_GET['id']);
     $nom = htmlspecialchars($_GET['name']);
-    $product = new Product();
+    $product = new Categories();
     if ($product->checkIfCategoryExist($nom) === true) {
         header("Content-Type: application/json");
         echo json_encode(['status' => 'error', 'message' => 'Cette catégorie existe déjà']);
