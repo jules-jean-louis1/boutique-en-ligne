@@ -66,7 +66,7 @@ class Categories extends Database
             "name" => $name
         ));
     }
-    public function addSubCategory($name, $id)
+    public function addSubCategory($id, $name)
     {
         $bdd = $this->getBdd();
         $req = $bdd->prepare("INSERT INTO subcategories (name_subcategories, categories_id) VALUES (:name, :id)");

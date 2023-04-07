@@ -39,9 +39,7 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
             </div>
             <div id="containerSubCat">
                 <div id="containerAddSubCategory">
-                    <button class="bg-green-500 p-2 rounded-lg text-white" id="btnAddSubCategory_"> Ajouter une sous-catégorie
-                    </button>
-                    <div id="formAddSubCategory"></div>
+
                 </div>
             </div>
         </div>

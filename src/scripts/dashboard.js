@@ -202,6 +202,7 @@ async function gestionSubCategories() {
             <form id="formSubCategories" method="post">
                 <label for="category">Sélectionnez une catégorie :</label>
                 <select id="Categories" name="Categories">
+                    <option value="">Sélectionnez une catégorie</option>
                     <!-- Les options du select seront générées en JS -->
                 </select>
             </form>
@@ -214,6 +215,7 @@ async function gestionSubCategories() {
         `;
     const Categories = document.querySelector('#Categories');
     displayCategory(Categories);
+
     displaySubCategories();
     async function displaySubCategories() {
         const formSubCategories = document.querySelector('#formSubCategories');
@@ -225,9 +227,9 @@ async function gestionSubCategories() {
                     const displayListSubCategory = document.querySelector('#displayListSubCategory');
                     displayListSubCategory.innerHTML = '';
                     for (let subCategory of data.displaySubCategories) {
-                        displayListSubCategory.innerHTML = `
+                        displayListSubCategory.innerHTML += `
                     <div id="wapperSubCategory" class="flex space-x-2">
-                        <form action="" method="post" id="formDisplaySubCategory">
+                        <form action="" method="post" id="formDisplaySubCategory_${subCategory.id_subcategories}">
                             <input type="text" name="nom" id="nom" value="${subCategory.name_subcategories}" class="bg-[#E9E9E9] rounded-lg p-2">
                             <button type="submit" class="bg-green-500 p-2 rounded-lg text-white" name="btnUpdateSubCategory" id="btnUpdateSubCategory_${subCategory.id_subcategories}">
                                 Modifier
@@ -261,7 +263,7 @@ async function gestionSubCategories() {
                         })
                     }
                     for (let subCategory of data.displaySubCategories) {
-                        const formModifySubCategory = document.querySelector(`#formDisplaySubCategory`);
+                        const formModifySubCategory = document.querySelector(`#formDisplaySubCategory_${subCategory.id_subcategories}`);
                         formModifySubCategory.addEventListener('submit', async (ev) => {
                             ev.preventDefault();
                             await fetch(`src/php/fetch/category/updateSubCategory.php?id=${subCategory.id_subcategories}`, {
@@ -282,13 +284,9 @@ async function gestionSubCategories() {
                                 })
                         })
                     }
-
-
                 })
         })
     }
-
-
     const containerBtnAddSubCategory = document.querySelector('#containerAddSubCategory');
     const createBtnAddSubCategory = document.createElement('button');
     createBtnAddSubCategory.setAttribute('id', 'btnAddSubCategory_');
@@ -300,6 +298,8 @@ async function gestionSubCategories() {
     formAddSubCategory.setAttribute('id', 'formAddSubCategory');
     formAddSubCategory.setAttribute('class', 'flex space-x-2 block');
     containerAddSubCategory.appendChild(formAddSubCategory);
+
+
 
     const btnAddSubCategory = document.querySelector('#btnAddSubCategory_');
     btnAddSubCategory.addEventListener('click', () => {
@@ -322,9 +322,14 @@ async function gestionSubCategories() {
             btnAddSubCategory.textContent = 'Annuler';
         }
         const FormAddSubCategorySubmit = document.querySelector('#addSubCategory');
-        FormAddSubCategorySubmit.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await fetch('src/php/fetch/category/addSubCategory.php', {
+        FormAddSubCategorySubmit.addEventListener('submit', async (ev) => {
+            ev.preventDefault();
+            const categoryId = Categories.value;
+            if (!categoryId) {
+                console.error('Category ID is not defined');
+                return;
+            }
+            await fetch(`src/php/fetch/category/addSubCategory.php?id=${categoryId}`, {
                 method: 'POST',
                 body: new FormData(FormAddSubCategorySubmit)
             })
@@ -333,14 +338,15 @@ async function gestionSubCategories() {
                     if (data.status === 'success') {
                         message.innerHTML = data.message;
                         displaySuccess(message);
-
+                        displaySubCategories();
                     }
                     if (data.status === 'error') {
                         message.innerHTML = data.message;
                         displayError(message);
                     }
-                })
-        })
+                });
+        });
+
     })
 
 }
