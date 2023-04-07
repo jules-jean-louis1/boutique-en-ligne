@@ -27,6 +27,7 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
     <div id="containerMessage">
         <div id="message"></div>
     </div>
+    <div id="containerAddProduct"></div>
     <div id="containerInfo">
         <div id="containerCatAndSubCat">
             <div id="containerCat">
@@ -39,7 +40,6 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
             </div>
             <div id="containerSubCat">
                 <div id="containerAddSubCategory">
-
                 </div>
             </div>
         </div>

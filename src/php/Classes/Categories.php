@@ -39,13 +39,12 @@ class Categories extends Database
             return false;
         }
     }
-    public function displayCategoriesAndSub()
+    public function displayCategoriesAndSub($search)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT * FROM categories LEFT JOIN subcategories ON categories.id_categories = subcategories.categories_id;");
-        $req->execute();
+        $req = $bdd->prepare("SELECT * FROM categories LEFT JOIN subcategories ON categories.id_categories = subcategories.categories_id WHERE name_subcategories LIKE :search;");
+        $req->execute(['search' => '%' . $search . '%']);
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
-        $result = json_encode($result);
         return $result;
     }
     public function displaySubCategoriesByCat($id)

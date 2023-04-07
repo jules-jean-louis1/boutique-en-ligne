@@ -17,13 +17,24 @@ async function displayCategory(option) {
             });
         });
 }
+
+// Fonction d'affichage des sous-catégories
+async function displaySubCategory(option) {
+    await fetch('src/php/fetch/category/displaySubCategory.php')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(subCategory => {
+                option.innerHTML += `<option value="${subCategory.id_subcategories}">${subCategory.name_subcategories}</option>`;
+            });
+        });
+}
 // fonction de gestion des produits
 async function gestionProduit() {
     const buttonAddProduct = document.createElement('button');
     buttonAddProduct.classList.add('btn', 'btn-primary', 'btn-sm', 'm-2');
     buttonAddProduct.textContent = 'Ajouter un produit';
     buttonAddProduct.setAttribute('id', 'buttonAddProduct');
-    const containerButtonAddProduct = document.querySelector('#dislpayInfoProduct');
+    const containerButtonAddProduct = document.querySelector('#containerAddProduct');
     containerButtonAddProduct.appendChild(buttonAddProduct);
 
     buttonAddProduct.addEventListener('click', () => {
@@ -57,14 +68,31 @@ async function gestionProduit() {
                         <input type="file" name="imageProduct" id="imageProduct" required>
                     </div>
                     <div id="modalAddProduct">
-                        <label for="categoryProduct">Catégorie du produit</label>
-                        <select name="categoryProduct" id="categoryProduct" required>
-                        </select>
+                        <label for="categoryProduct">Catégorie du produit :</label>
+                        <input type="text" placeholder="Ajouter une catégorie" id="searchSubCategories" class="bg-slate-100 p-2 rounded-lg">
+                        <div id="displaySearchSubCategories"></div>
                     </div>
                 </form>
             </div>
         </div>
     `;
+        const searchSubCategories = document.querySelector('#searchSubCategories');
+        const displaySearchSubCategories = document.querySelector('#displaySearchSubCategories');
+        searchSubCategories.addEventListener('input', () => {
+            let query = searchSubCategories.value;
+            fetch(`src/php/fetch/category/searchSubCategories.php?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    displaySearchSubCategories.innerHTML = '';
+                    for (let content of data.displaySubCategories) {
+                        displaySearchSubCategories.innerHTML += `
+                            <option value="${content.id_subcategories}">${content.name_subcategories}</option>
+                    `;
+                    }
+                });
+        });
+
         dialog.showModal();
         const btnClose = document.querySelector('#btncloseDialog');
         btnClose.addEventListener('click', () => {
@@ -83,7 +111,7 @@ async function gestionCategory() {
                 DisplayInfo.innerHTML = '';
                 data.forEach(category => {
                     DisplayInfo.innerHTML += `
-                <div id="containerCategoryProduct" class="flex space-x-2 py-2">
+                <div id="containerCategoryProduct" class="flex space-x-2 py-0.5">
                     <form action="" method="post" class="flex space-x-2" id="update_${category.id_categories}"  data-id-cat="${category.id_categories}">
                         <input type="text" name="nom" id="nom" placeholder="${category.name_categories}" class="bg-[#E9E9E9] rounded-lg p-2">
                         <button type="submit" class="bg-green-500 p-2 rounded-lg text-white" name="btnUpdateCategory" id="btnUpdateCategory_${category.id_categories}">
@@ -201,7 +229,7 @@ async function gestionSubCategories() {
         <div id="containerAddSubCategory" class="flex space-x-2">
             <form id="formSubCategories" method="post">
                 <label for="category">Sélectionnez une catégorie :</label>
-                <select id="Categories" name="Categories">
+                <select id="Categories" name="Categories" class="p-2 rounded-lg">
                     <option value="">Sélectionnez une catégorie</option>
                     <!-- Les options du select seront générées en JS -->
                 </select>
@@ -228,7 +256,7 @@ async function gestionSubCategories() {
                     displayListSubCategory.innerHTML = '';
                     for (let subCategory of data.displaySubCategories) {
                         displayListSubCategory.innerHTML += `
-                    <div id="wapperSubCategory" class="flex space-x-2">
+                    <div id="wapperSubCategory" class="flex space-x-2 py-0.5">
                         <form action="" method="post" id="formDisplaySubCategory_${subCategory.id_subcategories}">
                             <input type="text" name="nom" id="nom" value="${subCategory.name_subcategories}" class="bg-[#E9E9E9] rounded-lg p-2">
                             <button type="submit" class="bg-green-500 p-2 rounded-lg text-white" name="btnUpdateSubCategory" id="btnUpdateSubCategory_${subCategory.id_subcategories}">
