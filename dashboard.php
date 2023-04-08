@@ -33,9 +33,6 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
             <div id="containerCat">
                 <div id="dislpayInfoProduct"></div>
                 <div id="containerAddCategory">
-                    <!--<button class="bg-green-500 p-2 rounded-lg text-white" id="btnAddCategory_"> Ajouter une catégorie
-                    </button>
-                    <div id="formAddCategory"></div>-->
                 </div>
             </div>
             <div id="containerSubCat">
