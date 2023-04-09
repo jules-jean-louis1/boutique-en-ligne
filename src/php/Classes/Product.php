@@ -23,4 +23,30 @@ class Product extends Database
             "subcategories_id" => $subcategories_id
         ));
     }
+    public function verfieNumber($number)
+    {
+        if (is_numeric($number)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function verifieIfImageProductExist($image)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT * FROM product WHERE img_product = :image");
+        $req->execute(array(
+            "image" => $image
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        if (count($result) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function verfieIfImage($image)
+    {
+
+    }
 }

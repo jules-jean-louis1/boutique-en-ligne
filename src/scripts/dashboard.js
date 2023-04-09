@@ -44,7 +44,7 @@ async function gestionProduit() {
         dialog.className = 'dialog_modal';
         body.appendChild(dialog);
         dialog.innerHTML = `
-        <div>
+        <div class="w-5/6 p-2">
             <div id="modal-header" class="flex justify-around">
                 <h5 class="modal-title" id="exampleModalLabel">Ajouter un produit</h5>
                 <button type="button" id="btncloseDialog" data-bs-dismiss="modal" aria-label="Close">&times;</button>
@@ -53,37 +53,46 @@ async function gestionProduit() {
                 <form action="" method="post" id="formAddProduct" enctype="multipart/form-data">
                     <div id="modalAddProduct">
                         <label for="nameProduct">Nom du produit</label>
-                        <input type="text" name="nameProduct" id="nameProduct" class="bg-slate-100 p-2 rounded-lg" required>
+                        <input type="text" name="nameProduct" id="nameProduct" class="bg-slate-100 p-2 rounded-lg" >
                     </div>
                     <div id="modalAddProduct">
                         <label for="descriptionProduct">Description du produit</label>
-                        <textarea name="descriptionProduct" id="descriptionProduct" cols="30" rows="10" class="bg-slate-100 p-2 rounded-lg" required></textarea>
+                        <textarea name="descriptionProduct" id="descriptionProduct" cols="30" rows="10" class="bg-slate-100 p-2 rounded-lg"></textarea>
                     </div>
                     <div id="modalAddProduct">
                         <label for="priceProduct">Prix du produit</label>
-                        <input type="number" name="priceProduct" id="priceProduct" placeholder="Prix en euro" class="bg-slate-100 p-2 rounded-lg" required>
+                        <input type="text" name="priceProduct" id="priceProduct" placeholder="Prix en euro" class="bg-slate-100 p-2 rounded-lg">
                     </div>
                     <div id="modalAddProduct">
                         <label for="stockProduct">Stock du produit</label>
-                        <input type="number" name="stockProduct" id="stockProduct" placeholder="Stock en nombre" class="bg-slate-100 p-2 rounded-lg" required>
+                        <input type="number" name="stockProduct" id="stockProduct" placeholder="Stock en nombre" class="bg-slate-100 p-2 rounded-lg">
                     </div>
                     <div id="modalAddProduct">
                         <label for="imageProduct">Image du produit</label>
-                        <input type="file" name="imageProduct" id="imageProduct" required>
+                        <input type="file" name="imageProduct" id="imageProduct" >
                     </div>
                     <div id="modalAddProduct">
                         <label for="releasedDate">Date de sortie :</label>
-                        <input type="date" name="releasedDate" id="releasedDate" class="bg-slate-100 p-2 rounded-lg" required>
+                        <input type="date" name="releasedDate" id="releasedDate" class="bg-slate-100 p-2 rounded-lg">
                     </div>
                     <div id="modalAddProduct">
                         <label for="categoryProduct">Catégorie du produit :</label>
+                        <input type="hidden" name="subCategoryId" id="subCategoryId">
                         <input type="text" placeholder="Ajouter une catégorie" id="searchSubCategories" class="bg-slate-100 p-2 rounded-lg">
                         <div id="displaySearchSubCategories"></div>
+                    </div>
+                    <div class="h-[45px]">
+                        <div id="errorMsg"></div>
+                    </div>
+                    <div id="modalAddProduct">
+                        <button type="submit" name="submitAddProduct" id="submitAddProduct" class="bg-green-500 p-2 rounded-lg text-white">Ajouter ce produit</button>
                     </div>
                 </form>
             </div>
         </div>
     `;
+        let selectedSubCategoryId = null;
+
         const searchSubCategories = document.querySelector('#searchSubCategories');
         const displaySearchSubCategories = document.querySelector('#displaySearchSubCategories');
         searchSubCategories.addEventListener('input', () => {
@@ -95,20 +104,21 @@ async function gestionProduit() {
                     displaySearchSubCategories.innerHTML = '';
                     for (let content of data.displaySubCategories) {
                         displaySearchSubCategories.innerHTML += `
-                    <div class="search-result p-0.5 bg-slate-100" data-id="${content.id_subcategories}">
-                        <p>${content.name_subcategories}</p>
-                        <small>${content.name_categories}</small>
-                    </div>
-                `;
+                        <div class="search-result p-0.5 bg-slate-100" data-id="${content.id_subcategories}">
+                            <p>${content.name_subcategories}</p>
+                            <small>${content.name_categories}</small>
+                        </div>
+                    `;
                     }
                     // Ajouter un événement de clic sur chaque résultat de recherche
                     const searchResults = document.querySelectorAll('.search-result');
                     for (let result of searchResults) {
                         result.addEventListener('click', () => {
-                            const subCategoryId = result.getAttribute('data-id');
+                            selectedSubCategoryId = result.getAttribute('data-id');
                             const subCategoryName = result.querySelector('p').textContent;
                             searchSubCategories.value = subCategoryName;
                             // Faites quelque chose avec l'ID de sous-catégorie sélectionné
+                            document.querySelector('#subCategoryId').value = selectedSubCategoryId; // Mettre l'id sélectionné comme valeur de l'input caché
                             displaySearchSubCategories.innerHTML = ''; // Cacher les résultats de recherche
                         });
                     }
@@ -126,10 +136,28 @@ async function gestionProduit() {
         const formAddProduct = document.querySelector('#formAddProduct');
         formAddProduct.addEventListener('submit', async (ev) => {
             ev.preventDefault();
-            await fetch('src/php/fetch/product/addProduct.php', {
+            await fetch('src/php/fetch/produit/addProduct.php', {
                 method: 'POST',
                 body: new FormData(formAddProduct)
             })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        message.innerHTML = data.message;
+                        displaySuccess(message);
+                        dialog.close();
+                        dialog.remove();
+
+                    }
+                    if (data.status === 'error') {
+                        let messageError = document.querySelector('#errorMsg');
+                        for (let error of data.message) {
+                            console.log(error);
+                            messageError.innerHTML += error;
+                            displayError(messageError);
+                        }
+                    }
+                });
         })
     });
 }
