@@ -15,7 +15,22 @@
     top: 50%;
     transform: translate(-50%, -50%);
 }
-
+#dialog_message {
+    position: absolute;
+    left: 50%;
+    top: 10%;
+    transform: translate(-50%, -50%);
+}
+.success_dialog_message {
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #259c08;
+    color: #fff;
+}
+.error_dialog_message {
+    background-color: #ff0303;
+    color: #fff;
+}
 .alert-success {
     border: 1px solid rgba(36, 241, 6, 0.46);
     background-color: rgba(7, 149, 66, 0.12156862745098039);

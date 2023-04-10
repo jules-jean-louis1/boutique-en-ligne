@@ -18,6 +18,25 @@ async function displayCategory(option) {
         });
 }
 
+// Fonction message popup
+function messagePopup(message, status) {
+    const body = document.querySelector('body');
+    const dialog = document.createElement('dialog');
+    dialog.setAttribute('id', 'dialog_message');
+    dialog.className = 'd_message';
+    body.appendChild(dialog);
+    dialog.innerHTML = message;
+    dialog.showModal();
+    setTimeout(() => {
+        dialog.close();
+    }, 3000);
+
+    if (status === 'success') {
+        dialog.classList.add('success_dialog_message');
+    } else if (status === 'error') {
+        dialog.classList.add('error_dialog_message');
+    }
+}
 // Fonction d'affichage des sous-catégories
 async function displaySubCategory(option) {
     await fetch('src/php/fetch/category/displaySubCategory.php')
@@ -143,11 +162,9 @@ async function gestionProduit() {
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        message.innerHTML = data.message;
-                        displaySuccess(message);
                         dialog.close();
                         dialog.remove();
-
+                        messagePopup(data.message, 'success');
                     }
                     if (data.status === 'error') {
                         let messageError = document.querySelector('#errorMsg');
