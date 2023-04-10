@@ -50,8 +50,14 @@ class Product extends Database
             return false;
         }
     }
-    public function verfieIfImage($image)
+    public function getProductFormSubCatId($id)
     {
-
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT * FROM product WHERE subcategories_id = :id");
+        $req->execute(array(
+            "id" => $id
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
 }

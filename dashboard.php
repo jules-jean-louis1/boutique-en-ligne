@@ -41,6 +41,8 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
             </div>
         </div>
     </div>
+    <div id="containerModifyProduct"></div>
+
 </main>
 </body>
 </html>

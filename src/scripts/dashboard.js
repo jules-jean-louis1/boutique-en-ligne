@@ -5,6 +5,7 @@ const containerAddCategory = document.querySelector('#containerAddCategory');
 const containerAddSubCategory = document.querySelector('#containerAddSubCategory');
 const buttonGestionProduct = document.querySelector('#buttonSeeProduct');
 const buttionGestionCategores = document.querySelector('#buttonSeeCategories');
+const containerAllDiv = document.querySelector('#containerModifyProduct');
 let message = document.querySelector('#message');
 
 // Fonction d'affichage des catégories
@@ -48,7 +49,7 @@ async function displaySubCategory(option) {
         });
 }
 // fonction de gestion des produits
-async function gestionProduit() {
+async function addProduct() {
     const buttonAddProduct = document.createElement('button');
     buttonAddProduct.classList.add('btn', 'btn-primary', 'btn-sm', 'm-2');
     buttonAddProduct.textContent = 'Ajouter un produit';
@@ -177,6 +178,136 @@ async function gestionProduit() {
                 });
         })
     });
+}
+
+// Fonction d'affichage et modifications des produits
+async function gestionProduct() {
+    const containerFormProductSearch = document.createElement('div');
+    const craftFormProductSearch = document.createElement('div');
+    craftFormProductSearch.innerHTML = `
+        <form action="" method="post" id="formProductSearch">
+            <div class="flex justify-between">
+                <div id="modalAddProduct">
+                    <label for="searchCategory">Sélectionner une catégorie</label>
+                    <select name="searchCategory" id="searchCategory" class="bg-slate-100 p-2 rounded-lg">
+                        <option value="0">Selectionner</option>
+                    </select>
+                </div>
+                <div id="modalAddProduct">
+                    <label for="searchSubCategory">Sélectionner une sous-catégorie</label>
+                    <select name="searchSubCategory" id="searchSubCategory" class="bg-slate-100 p-2 rounded-lg">
+                        <option value="0">Selectionner</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+                `;
+    containerFormProductSearch.appendChild(craftFormProductSearch);
+    containerAllDiv.appendChild(containerFormProductSearch);
+    const optionSearchCategory = document.querySelector('#searchCategory');
+    const optionSearchSubCategory = document.querySelector('#searchSubCategory');
+    displayCategory(optionSearchCategory);
+
+    function updateSubCategories(categoryId) {
+        const subCategorySelect = document.querySelector('#searchSubCategory');
+        subCategorySelect.innerHTML = '<option value="0">Selectionner</option>';
+
+        fetch(`src/php/fetch/category/displaySubCatFormCat.php?id=${categoryId}`)
+            .then(response => response.json())
+            .then(data => {
+                for (let subCategory of data.displaySubCategories) {
+                    const option = document.createElement('option');
+                    option.value = subCategory.id_subcategories;
+                    option.text = subCategory.name_subcategories;
+                    subCategorySelect.appendChild(option);
+                }
+            })
+            .catch(error => console.error(error));
+    }
+
+    optionSearchCategory.addEventListener('change', function(event) {
+        const categoryId = event.target.value;
+        updateSubCategories(categoryId);
+    });
+
+    function getProductsBySubCategoryId(subCategoryId) {
+        return fetch(`src/php/fetch/produit/displayProductFormSubCat.php?subcategories_id=${subCategoryId}`)
+            .then(response => response.json())
+            .then(data => {
+                return data.displayProducts;
+            })
+            .catch(error => console.error(error));
+    }
+    const subCategorySelect = document.querySelector('#searchSubCategory');
+    subCategorySelect.addEventListener('change', async function() {
+        const subCategoryId = subCategorySelect.value;
+        const ContainerDisplayProduct = document.createElement('div');
+        ContainerDisplayProduct.id = 'displayProduct';
+        ContainerDisplayProduct.innerHTML = '';
+
+        if (subCategoryId !== '0') {
+            const products = await getProductsBySubCategoryId(subCategoryId);
+
+                products.forEach(product => {
+                    ContainerDisplayProduct.innerHTML += `
+                    <div class="flex p-0.5">
+                        <div id="displayProductContainer">
+                            <img src="src/images/products/${product.img_product}" alt="${product.name_product}" class="w-20 h-20">
+                        </div>
+                        <div id="displayProductContainer">
+                            <div id="titre_produit" class="flex space-x-0.5">
+                                <h2 class="font-normal text-slate-700">Titre :</h2>
+                                <h2>${product.name_product}</h2>
+                            </div>
+                            <div id="description_produit" class="flex space-x-0.5">
+                                <h2 class="font-normal text-slate-700">Synopsis :</h2>
+                                <h2>${product.description_product}</h2>
+                            </div>
+                            <div id="prix_produit" class="flex space-x-0.5">
+                                <h2 class="font-normal text-slate-700">Prix :</h2>
+                                <h2>${product.price_product} €</h2>
+                            </div>
+                            <div id="stock_produit" class="flex space-x-0.5">
+                                <h2 class="font-normal text-slate-700">Stock :</h2>
+                                <h2>${product.quantite_product}</h2>
+                            </div> 
+                            <div id="date_sortie_produit" class="flex space-x-0.5"> 
+                                <h2 class="font-normal text-slate-700">Date de sortie :</h2>
+                                <h2>${product.released_date_product}</h2>
+                            </div>
+                        </div>
+                        <div id="wapperFormUpdateProduct">
+                            <form action="" method="post" id="formUpdateProduct" class="flex flex-col space-y-2" data-id-product="${product.id_product}">
+                                <button type="button" class="bg-green-500 p-2 rounded-lg" id="btnUpdateProduct">Modifier</button>
+                            </form>
+                        </div>
+                        <div id="wapperFormDeleteProduct">
+                            <form action="" method="post" id="formDeleteProduct" class="flex flex-col space-y-2" data-id-product="${product.id_product}">
+                                <button type="button" class="bg-red-100 p-2 rounded-lg" id="btnDeleteProduct">Supprimer</button>
+                            </form>
+                        </div>  
+                    </div>
+                    `;
+
+                    const btnUpdateProduct = document.querySelectorAll('#formUpdateProduct');
+                    btnUpdateProduct.forEach(btn => {
+                        btn.addEventListener('submit', async (ev) => {
+                            ev.preventDefault();
+                            const idProduct = btn.dataset.idProduct;
+                            await fetch(`src/php/fetch/produit/updateProduct.php?id=${idProduct}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(data);
+                                })
+                        })
+                    });
+                });
+            }
+            containerAllDiv.appendChild(ContainerDisplayProduct);
+
+    });
+
+
 }
 
 // Fonction gestion de catégorie
@@ -456,10 +587,13 @@ async function gestionSubCategories() {
 
 }
 // fonction d'affichage des produits
-gestionProduit();
+addProduct();
 
 // fonction d'affichage des catégories
 gestionCategory();
 
 // fonction d'affichage des sous-catégories
 gestionSubCategories();
+
+// fonction d'affichage des produits
+gestionProduct();
