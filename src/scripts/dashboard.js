@@ -5,7 +5,7 @@ const containerAddCategory = document.querySelector('#containerAddCategory');
 const containerAddSubCategory = document.querySelector('#containerAddSubCategory');
 const buttonGestionProduct = document.querySelector('#buttonSeeProduct');
 const buttionGestionCategores = document.querySelector('#buttonSeeCategories');
-const dialogUpdateProduct = document.querySelector('#containerDialogFormUpdateProduct');
+const containerdialogUpdateProduct = document.querySelector('#containerDialogFormUpdateProduct');
 const containerAllDiv = document.querySelector('#containerModifyProduct');
 let message = document.querySelector('#message');
 
@@ -296,7 +296,7 @@ async function gestionProduct() {
                     const btnUpdateProduct = document.querySelector(`#btnUpdateProduct_${product.id_product}`);
                     btnUpdateProduct.addEventListener('click',  (ev) => {
                         const dialogUpdateProduct = document.createElement('dialog');
-                        dialogUpdateProduct.setAttribute('open', 'true');
+
                         dialogUpdateProduct.setAttribute('id', 'dialog');
                         dialogUpdateProduct.className = 'bg-white p-2 rounded-lg';
                         dialogUpdateProduct.innerHTML = `
@@ -305,7 +305,7 @@ async function gestionProduct() {
                                         <h2 class="font-bold text-slate-700">Modifier un produit</h2>
                                         <button type="button" class="bg-red-500 text-white p-2 rounded-lg" id="btncloseDialogUpdate">&times;</button>
                                     </div>
-                                    <form action="" method="post" id="formUpdateProduct" class="flex flex-col space-y-2" data-id-product="${product.id_product}" onsubmit="return window.showModalDialog(this.action, this.target, 'dialogHeight: 500px; dialogWidth: 800px; center: Yes; resizable: Yes; scroll: No; status: No;');">
+                                    <form action="" method="post" id="formUpdateProduct" class="flex flex-col space-y-2" data-id-product="${product.id_product}">
                                         <div id="dialogUpdateProductForm">
                                             <label for="updateNameProduct" class="font-normal text-slate-600">Titre du produit</label>
                                             <input type="text" name="updateNameProduct" id="updateNameProduct" value="${product.name_product}" class="bg-slate-100 p-2 rounded-lg">
@@ -335,7 +335,7 @@ async function gestionProduct() {
                                         </div>
                                         <div id="dialogUpdateProductForm">
                                             <label for="updateSubCategory">Sous-catégorie</label>
-                                            <input type="hidden" id="subCategoryId">
+                                            <input type="hidden" id="subCategoryId" name="subCategoryId" value="${product.subcategories_id}">
                                             <input type="text" name="updateSubCategory" id="updateSubCategory" value="${product.name_subcategories}" class="bg-slate-100 p-2 rounded-lg">
                                             <div id="displaySearchSubCategories"></div>
                                         </div>
@@ -345,8 +345,10 @@ async function gestionProduct() {
                                     </form>
                                 </div>
                             `;
+                        containerdialogUpdateProduct.appendChild(dialogUpdateProduct);
 
-                        ContainerDisplayProduct.appendChild(dialogUpdateProduct);
+                        dialogUpdateProduct.showModal();
+
 
                         const BtnCloseDialogUpdateProduct = document.getElementById('btncloseDialogUpdate');
                         BtnCloseDialogUpdateProduct.addEventListener('click', () => {
@@ -390,7 +392,17 @@ async function gestionProduct() {
                         const formUpdateProduct = document.getElementById('formUpdateProduct');
                         formUpdateProduct.addEventListener('submit', async (e) => {
                             e.preventDefault();
+                            await fetch(`src/php/fetch/produit/updateProduct.php?id_produits=${product.id_product}`, {
+                                method: 'POST',
+                                body: new FormData(formUpdateProduct)
+                            }) .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+                                const nameInput = document.getElementById('updateNameProduct');
+                                if (data.status === 'EmptyFields') {
 
+                                }
+                            });
                         });
                     });
 
