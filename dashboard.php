@@ -18,6 +18,11 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
     <?php require_once "src/import/header.php"; ?>
 </header>
 <main>
+    <article>
+        <section>
+            <div id="containerDialogFormUpdateProduct"></div>
+        </section>
+    </article>
     <div id="containerSeeProduct">
         <button type="button" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" id="buttonSeeProduct">Voir les produits</button>
     </div>

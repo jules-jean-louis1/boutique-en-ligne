@@ -5,6 +5,7 @@ const containerAddCategory = document.querySelector('#containerAddCategory');
 const containerAddSubCategory = document.querySelector('#containerAddSubCategory');
 const buttonGestionProduct = document.querySelector('#buttonSeeProduct');
 const buttionGestionCategores = document.querySelector('#buttonSeeCategories');
+const dialogUpdateProduct = document.querySelector('#containerDialogFormUpdateProduct');
 const containerAllDiv = document.querySelector('#containerModifyProduct');
 let message = document.querySelector('#message');
 
@@ -182,11 +183,12 @@ async function addProduct() {
 
 // Fonction d'affichage et modifications des produits
 async function gestionProduct() {
+
     const containerFormProductSearch = document.createElement('div');
     const craftFormProductSearch = document.createElement('div');
     craftFormProductSearch.innerHTML = `
         <form action="" method="post" id="formProductSearch">
-            <div class="flex justify-between">
+            <div class="flex space-x-4">
                 <div id="modalAddProduct">
                     <label for="searchCategory">Sélectionner une catégorie</label>
                     <select name="searchCategory" id="searchCategory" class="bg-slate-100 p-2 rounded-lg">
@@ -277,33 +279,119 @@ async function gestionProduct() {
                             </div>
                         </div>
                         <div id="wapperFormUpdateProduct">
-                            <form action="" method="post" id="formUpdateProduct" class="flex flex-col space-y-2" data-id-product="${product.id_product}">
-                                <button type="button" class="bg-green-500 p-2 rounded-lg" id="btnUpdateProduct">Modifier</button>
-                            </form>
+                            <button type="button" class="bg-green-500 text-white p-2 rounded-lg" id="btnUpdateProduct_${product.id_product}" data-id-product="${product.id_product}">Modifier</button>
                         </div>
                         <div id="wapperFormDeleteProduct">
                             <form action="" method="post" id="formDeleteProduct" class="flex flex-col space-y-2" data-id-product="${product.id_product}">
-                                <button type="button" class="bg-red-100 p-2 rounded-lg" id="btnDeleteProduct">Supprimer</button>
+                                <button type="button" class="bg-red-500 text-white p-2 rounded-lg" id="btnDeleteProduct">Supprimer</button>
                             </form>
                         </div>  
                     </div>
                     `;
+                    containerAllDiv.appendChild(ContainerDisplayProduct);
+                    // Modifier un produit
+                });
+                for (let product of products) {
+                    console.log(product);
+                    const btnUpdateProduct = document.querySelector(`#btnUpdateProduct_${product.id_product}`);
+                    btnUpdateProduct.addEventListener('click',  (ev) => {
+                        const dialogUpdateProduct = document.createElement('dialog');
+                        dialogUpdateProduct.setAttribute('open', 'true');
+                        dialogUpdateProduct.setAttribute('id', 'dialog');
+                        dialogUpdateProduct.className = 'bg-white p-2 rounded-lg';
+                        dialogUpdateProduct.innerHTML = `
+                                <div class="flex flex-col space-y-2">
+                                    <div id="dialogUpdateProductForm" class="flex justify-between">
+                                        <h2 class="font-bold text-slate-700">Modifier un produit</h2>
+                                        <button type="button" class="bg-red-500 text-white p-2 rounded-lg" id="btncloseDialogUpdate">&times;</button>
+                                    </div>
+                                    <form action="" method="post" id="formUpdateProduct" class="flex flex-col space-y-2" data-id-product="${product.id_product}" onsubmit="return window.showModalDialog(this.action, this.target, 'dialogHeight: 500px; dialogWidth: 800px; center: Yes; resizable: Yes; scroll: No; status: No;');">
+                                        <div id="dialogUpdateProductForm">
+                                            <label for="updateNameProduct" class="font-normal text-slate-600">Titre du produit</label>
+                                            <input type="text" name="updateNameProduct" id="updateNameProduct" value="${product.name_product}" class="bg-slate-100 p-2 rounded-lg">
+                                        </div>
+                                        <div id="dialogUpdateProductForm">
+                                            <label for="updateDescriptionProduct">Description du produit</label>
+                                            <textarea name="updateDescriptionProduct" id="updateDescriptionProduct" cols="30" rows="10"  class="bg-slate-100 p-2 rounded-lg">${product.description_product}</textarea>
+                                        </div>
+                                        <div id="dialogUpdateProductForm">
+                                            <label for="updatePriceProduct">Prix du produit</label>
+                                            <input type="number" name="updatePriceProduct" id="updatePriceProduct" value="${product.price_product}" class="bg-slate-100 p-2 rounded-lg">
+                                        </div>
+                                        <div id="dialogUpdateProductForm">
+                                            <label for="updateQuantiteProduct">Quantité du produit</label>
+                                            <input type="number" name="updateQuantiteProduct" id="updateQuantiteProduct" value="${product.quantite_product}" class="bg-slate-100 p-2 rounded-lg">
+                                        </div>
+                                        <div id="dialogUpdateProductForm">
+                                            <label for="updateReleasedDateProduct">Date de sortie du produit</label>
+                                            <input type="date" name="updateReleasedDateProduct" id="updateReleasedDateProduct" value="${product.released_date_product}" class="bg-slate-100 p-2 rounded-lg">
+                                        </div>
+                                        <div id="dialogUpdateProductForm" class="flex justify-around">
+                                            <div id="dialogUpdateProductIMG">
+                                                <label for="updateImgProduct">Image du produit</label>
+                                                <img src="src/images/products/${product.img_product}" alt="Image du produit" class="w-20 h-20">
+                                            </div>
+                                            <input type="file" name="updateImgProduct" id="updateImgProduct" value="${product.img_product}" class="bg-slate-100 p-2 rounded-lg">
+                                        </div>
+                                        <div id="dialogUpdateProductForm">
+                                            <label for="updateSubCategory">Sous-catégorie</label>
+                                            <input type="text" name="updateSubCategory" id="updateSubCategory" value="${product.name_subcategories}" class="bg-slate-100 p-2 rounded-lg">
+                                            <div id="displaySearchSubCategories"></div>
+                                        </div>
+                                        <div id="dialogUpdateProductForm">
+                                            <button type="submit" class="bg-green-500 text-white p-2 rounded-lg" id="btnUpdateProduct">Modifier</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            `;
 
-                    const btnUpdateProduct = document.querySelectorAll('#formUpdateProduct');
-                    btnUpdateProduct.forEach(btn => {
-                        btn.addEventListener('submit', async (ev) => {
-                            ev.preventDefault();
-                            const idProduct = btn.dataset.idProduct;
-                            await fetch(`src/php/fetch/produit/updateProduct.php?id=${idProduct}`)
+                        ContainerDisplayProduct.appendChild(dialogUpdateProduct);
+
+                        const BtnCloseDialogUpdateProduct = document.getElementById('btncloseDialogUpdate');
+                        BtnCloseDialogUpdateProduct.addEventListener('click', () => {
+                            dialogUpdateProduct.close();
+                            dialogUpdateProduct.remove();
+                        });
+
+                        let selectedSubCategoryId = null;
+
+                        const searchSubCategories = document.querySelector('#updateSubCategory');
+                        const displaySearchSubCategories = document.querySelector('#displaySearchSubCategories');
+                        searchSubCategories.addEventListener('input', () => {
+                            let query = searchSubCategories.value;
+                            fetch(`src/php/fetch/category/searchSubCategories.php?query=${query}`)
                                 .then(response => response.json())
                                 .then(data => {
                                     console.log(data);
-                                })
-                        })
+                                    displaySearchSubCategories.innerHTML = '';
+                                    for (let content of data.displaySubCategories) {
+                                        displaySearchSubCategories.innerHTML += `
+                        <div class="search-result p-0.5 bg-slate-100" data-id="${content.id_subcategories}">
+                            <p>${content.name_subcategories}</p>
+                            <small>${content.name_categories}</small>
+                        </div>
+                    `;
+                                    }
+                                    // Ajouter un événement de clic sur chaque résultat de recherche
+                                    const searchResults = document.querySelectorAll('.search-result');
+                                    for (let result of searchResults) {
+                                        result.addEventListener('click', () => {
+                                            selectedSubCategoryId = result.getAttribute('data-id');
+                                            const subCategoryName = result.querySelector('p').textContent;
+                                            searchSubCategories.value = subCategoryName;
+                                            // Faites quelque chose avec l'ID de sous-catégorie sélectionné
+                                            document.querySelector('#subCategoryId').value = selectedSubCategoryId; // Mettre l'id sélectionné comme valeur de l'input caché
+                                            displaySearchSubCategories.innerHTML = ''; // Cacher les résultats de recherche
+                                        });
+                                    }
+                                });
+                        });
                     });
-                });
+
+                    }
+
             }
-            containerAllDiv.appendChild(ContainerDisplayProduct);
+
 
     });
 
