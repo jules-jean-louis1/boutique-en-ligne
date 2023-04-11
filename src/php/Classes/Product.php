@@ -53,7 +53,10 @@ class Product extends Database
     public function getProductFormSubCatId($id)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT * FROM product WHERE subcategories_id = :id");
+        $req = $bdd->prepare("SELECT p.*, s.name_subcategories
+                                    FROM product p
+                                    JOIN subcategories s ON p.subcategories_id = s.id_subcategories;
+                                    WHERE s.id_subcategories = :id");
         $req->execute(array(
             "id" => $id
         ));

@@ -387,6 +387,11 @@ async function gestionProduct() {
                                     }
                                 });
                         });
+                        const formUpdateProduct = document.getElementById('formUpdateProduct');
+                        formUpdateProduct.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+
+                        });
                     });
 
                     }
