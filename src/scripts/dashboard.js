@@ -454,12 +454,7 @@ async function gestionProduct() {
                                     releasedDateInput.classList.add('input_error');
                                     imgInput.classList.add('input_error');
                                     subCategoryInput.classList.add('input_error');
-                                    messageDialogUpdateProduct.innerHTML = `
-                                    <div class="flex items-center py-3 px-2 rounded-lg bg-[#DC110128] text-[#ff0303] border-l-[3px] border-[#ff0303]">
-                                        <img src="public/images/icones/danger-icones-red.svg" alt="" class="w-5 h-5">
-                                        <small class="text-lg">Veuillez remplir tous les champs</small>
-                                    </div>
-                                    `;
+                                    displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir tous les champs');
                                 } if (data.status === 'EmptyName') {
                                     nameInput.classList.add('input_error');
                                     const smallName = document.getElementById('errorUpdateNameProduct');
@@ -475,6 +470,26 @@ async function gestionProduct() {
                                     const smallPrice = document.getElementById('errorUpdatePriceProduct');
                                     displayErrorMessageInput(smallPrice, 'Champs Requis');
                                     displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs prix du produit');
+                                } if (data.status === 'EmptyQuantite') {
+                                    quantiteInput.classList.add('input_error');
+                                    const smallQuantite = document.getElementById('errorUpdateQuantiteProduct');
+                                    displayErrorMessageInput(smallQuantite, 'Champs Requis');
+                                    displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs quantité du produit');
+                                } if (data.status === 'EmptyDateReleased') {
+                                    releasedDateInput.classList.add('input_error');
+                                    const smallReleasedDate = document.getElementById('errorUpdateReleasedDateProduct');
+                                    displayErrorMessageInput(smallReleasedDate, 'Champs Requis');
+                                    displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs date de sortie du produit');
+                                } if (data.status === 'EmptyImg') {
+                                    imgInput.classList.add('input_error');
+                                    const smallImg = document.getElementById('errorUpdateImgProduct');
+                                    displayErrorMessageInput(smallImg, 'Champs Requis');
+                                    displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs image du produit');
+                                } if (data.status === 'EmptySubCategoryId') {
+                                    subCategoryInput.classList.add('input_error');
+                                    const smallSubCategory = document.getElementById('errorUpdateSubCategory');
+                                    displayErrorMessageInput(smallSubCategory, 'Champs Requis');
+                                    displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs sous-catégorie du produit');
                                 }
                             });
                         });
