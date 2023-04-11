@@ -63,4 +63,27 @@ class Product extends Database
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+    public function updateProduct($name, $description, $price, $stock, $image, $date, $subcategories_id, $id)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("UPDATE product SET name_product = :name, description_product = :description, price_product = :price, quantite_product = :stock, img_product = :image, released_date_product = :date, subcategories_id = :subcategories_id WHERE id_product = :id");
+        $req->execute(array(
+            "name" => $name,
+            "description" => $description,
+            "price" => $price,
+            "stock" => $stock,
+            "image" => $image,
+            "date" => $date,
+            "subcategories_id" => $subcategories_id,
+            "id" => $id
+        ));
+    }
+    public function supprProduct($id)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("DELETE FROM product WHERE id_product = :id");
+        $req->execute(array(
+            "id" => $id
+        ));
+    }
 }

@@ -322,7 +322,7 @@ async function gestionProduct() {
                                         <h2 class="font-bold text-slate-700">Modifier un produit</h2>
                                         <button type="button" class="bg-red-500 text-white p-2 rounded-lg" id="btncloseDialogUpdate">&times;</button>
                                     </div>
-                                    <form action="" method="post" id="formUpdateProduct" class="flex flex-col space-y-2" data-id-product="${product.id_product}">
+                                    <form action="" method="post" id="formUpdateProduct" class="flex flex-col space-y-2" enctype="multipart/form-data" data-id-product="${product.id_product}">
                                         <div id="dialogUpdateProductForm" class="flex flex-col">
                                             <label for="updateNameProduct" class="font-normal text-slate-600">Titre du produit</label>
                                             <input type="text" name="updateNameProduct" id="updateNameProduct" value="${product.name_product}" class="bg-slate-100 p-2 rounded-lg">
@@ -349,6 +349,7 @@ async function gestionProduct() {
                                             <label for="updateImgProduct">Image du produit</label>
                                             <div class="flex items-center justify-center">
                                                 <img src="src/images/products/${product.img_product}" alt="Image du produit" class="w-20 h-20">
+                                                <input type="hidden" name="updateImgProductName" id="updateImgProductName" value="${product.img_product}">
                                                 <input type="file" name="updateImgProduct" id="updateImgProduct" value="${product.img_product}" class="bg-slate-100 p-2 rounded-lg">
                                             </div>
                                             <small id="errorUpdateImageProduct" class="text-red-500 dummyClass"></small>
@@ -472,7 +473,7 @@ async function gestionProduct() {
                                     displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs prix du produit');
                                 } if (data.status === 'EmptyQuantite') {
                                     quantiteInput.classList.add('input_error');
-                                    const smallQuantite = document.getElementById('errorUpdateQuantiteProduct');
+                                    const smallQuantite = document.getElementById('errorUpdateStockProduct');
                                     displayErrorMessageInput(smallQuantite, 'Champs Requis');
                                     displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs quantité du produit');
                                 } if (data.status === 'EmptyDateReleased') {
