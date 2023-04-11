@@ -335,6 +335,7 @@ async function gestionProduct() {
                                         </div>
                                         <div id="dialogUpdateProductForm">
                                             <label for="updateSubCategory">Sous-catégorie</label>
+                                            <input type="hidden" id="subCategoryId">
                                             <input type="text" name="updateSubCategory" id="updateSubCategory" value="${product.name_subcategories}" class="bg-slate-100 p-2 rounded-lg">
                                             <div id="displaySearchSubCategories"></div>
                                         </div>
