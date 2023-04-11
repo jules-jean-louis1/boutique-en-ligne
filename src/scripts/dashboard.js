@@ -19,7 +19,25 @@ async function displayCategory(option) {
             });
         });
 }
-
+// Fonction pour affichage.des erreurs sous input
+function displayErrorMessageInput(ParentSelector, ContentMessage) {
+    const containerMessage = document.createElement('div');
+    containerMessage.className = 'flex items-center space-x-2';
+    containerMessage.innerHTML = `
+                                        <img src="public/images/icones/danger-icones-red.svg" alt="" class="w-5 h-5">
+                                        <small id="errorUpdateNameProduct" class="text-red-500">${ContentMessage}</small>`;
+    ParentSelector.appendChild(containerMessage);
+}
+// Fonction pour affichage des erreurs sous le formulaire d'update des produits
+function displayErrorMessageFormUpdateProduct(ParentSelector, ContentMessage) {
+    ParentSelector.innerHTML = '';
+    ParentSelector.innerHTML = `
+    <div class="flex items-center py-3 px-2 rounded-lg bg-[#DC110128] text-[#ff0303] border-l-[3px] border-[#ff0303]">
+        <img src="public/images/icones/danger-icones-red.svg" alt="" class="w-5 h-5">
+        <small class="text-lg">${ContentMessage}</small>
+    </div>
+    `;
+}
 // Fonction message popup
 function messagePopup(message, status) {
     const body = document.querySelector('body');
@@ -292,13 +310,12 @@ async function gestionProduct() {
                     // Modifier un produit
                 });
                 for (let product of products) {
-                    console.log(product);
                     const btnUpdateProduct = document.querySelector(`#btnUpdateProduct_${product.id_product}`);
                     btnUpdateProduct.addEventListener('click',  (ev) => {
                         const dialogUpdateProduct = document.createElement('dialog');
 
                         dialogUpdateProduct.setAttribute('id', 'dialog');
-                        dialogUpdateProduct.className = 'bg-white p-2 rounded-lg';
+                        dialogUpdateProduct.className = 'bg-white p-2 rounded-lg lg:w-9/12 w-3/4';
                         dialogUpdateProduct.innerHTML = `
                                 <div class="flex flex-col space-y-2">
                                     <div id="dialogUpdateProductForm" class="flex justify-between">
@@ -306,42 +323,55 @@ async function gestionProduct() {
                                         <button type="button" class="bg-red-500 text-white p-2 rounded-lg" id="btncloseDialogUpdate">&times;</button>
                                     </div>
                                     <form action="" method="post" id="formUpdateProduct" class="flex flex-col space-y-2" data-id-product="${product.id_product}">
-                                        <div id="dialogUpdateProductForm">
+                                        <div id="dialogUpdateProductForm" class="flex flex-col">
                                             <label for="updateNameProduct" class="font-normal text-slate-600">Titre du produit</label>
                                             <input type="text" name="updateNameProduct" id="updateNameProduct" value="${product.name_product}" class="bg-slate-100 p-2 rounded-lg">
+                                            <small id="errorUpdateNameProduct" class="text-red-500 dummyClass"></small>
                                         </div>
-                                        <div id="dialogUpdateProductForm">
+                                        <div id="dialogUpdateProductForm" class="flex flex-col">
                                             <label for="updateDescriptionProduct">Description du produit</label>
                                             <textarea name="updateDescriptionProduct" id="updateDescriptionProduct" cols="30" rows="10"  class="bg-slate-100 p-2 rounded-lg">${product.description_product}</textarea>
+                                            <small id="errorUpdateDescriptionProduct" class="text-red-500 dummyClass"></small>
                                         </div>
-                                        <div id="dialogUpdateProductForm">
-                                            <label for="updatePriceProduct">Prix du produit</label>
-                                            <input type="number" name="updatePriceProduct" id="updatePriceProduct" value="${product.price_product}" class="bg-slate-100 p-2 rounded-lg">
-                                        </div>
-                                        <div id="dialogUpdateProductForm">
-                                            <label for="updateQuantiteProduct">Quantité du produit</label>
-                                            <input type="number" name="updateQuantiteProduct" id="updateQuantiteProduct" value="${product.quantite_product}" class="bg-slate-100 p-2 rounded-lg">
-                                        </div>
-                                        <div id="dialogUpdateProductForm">
-                                            <label for="updateReleasedDateProduct">Date de sortie du produit</label>
-                                            <input type="date" name="updateReleasedDateProduct" id="updateReleasedDateProduct" value="${product.released_date_product}" class="bg-slate-100 p-2 rounded-lg">
-                                        </div>
-                                        <div id="dialogUpdateProductForm" class="flex justify-around">
-                                            <div id="dialogUpdateProductIMG">
-                                                <label for="updateImgProduct">Image du produit</label>
-                                                <img src="src/images/products/${product.img_product}" alt="Image du produit" class="w-20 h-20">
+                                        <div class="flex items-center justify-between">
+                                            <div id="dialogUpdateProductForm" class="flex flex-col">
+                                                <label for="updatePriceProduct">Prix du produit</label>
+                                                <input type="number" name="updatePriceProduct" id="updatePriceProduct" value="${product.price_product}" class="bg-slate-100 p-2 rounded-lg">
+                                                <small id="errorUpdatePriceProduct" class="text-red-500 dummyClass"></small>
                                             </div>
-                                            <input type="file" name="updateImgProduct" id="updateImgProduct" value="${product.img_product}" class="bg-slate-100 p-2 rounded-lg">
+                                            <div id="dialogUpdateProductForm" class="flex flex-col">
+                                                <label for="updateQuantiteProduct">Quantité du produit</label>
+                                                <input type="number" name="updateQuantiteProduct" id="updateQuantiteProduct" value="${product.quantite_product}" class="bg-slate-100 p-2 rounded-lg">
+                                                <small id="errorUpdateStockProduct" class="text-red-500 dummyClass"></small>
+                                            </div>
                                         </div>
-                                        <div id="dialogUpdateProductForm">
-                                            <label for="updateSubCategory">Sous-catégorie</label>
-                                            <input type="hidden" id="subCategoryId" name="subCategoryId" value="${product.subcategories_id}">
-                                            <input type="text" name="updateSubCategory" id="updateSubCategory" value="${product.name_subcategories}" class="bg-slate-100 p-2 rounded-lg">
-                                            <div id="displaySearchSubCategories"></div>
+                                        <div id="dialogUpdateProductForm" class="flex flex-col">
+                                            <label for="updateImgProduct">Image du produit</label>
+                                            <div class="flex items-center justify-center">
+                                                <img src="src/images/products/${product.img_product}" alt="Image du produit" class="w-20 h-20">
+                                                <input type="file" name="updateImgProduct" id="updateImgProduct" value="${product.img_product}" class="bg-slate-100 p-2 rounded-lg">
+                                            </div>
+                                            <small id="errorUpdateImageProduct" class="text-red-500 dummyClass"></small>
                                         </div>
+                                        <div class="flex items-center justify-between">
+                                            <div id="dialogUpdateProductForm" class="flex flex-col">
+                                                <label for="updateReleasedDateProduct">Date de sortie du produit</label>
+                                                <input type="date" name="updateReleasedDateProduct" id="updateReleasedDateProduct" value="${product.released_date_product}" class="bg-slate-100 p-2 rounded-lg">
+                                                <small id="errorUpdateReleaseProduct" class="text-red-500 dummyClass"></small>
+                                            </div>
+                                            <div id="dialogUpdateProductForm" class="flex flex-col">
+                                                <label for="updateSubCategory">Sous-catégorie</label>
+                                                <input type="hidden" id="subCategoryId" name="subCategoryId" value="${product.subcategories_id}">
+                                                <input type="text" name="updateSubCategory" id="updateSubCategory" value="${product.name_subcategories}" class="bg-slate-100 p-2 rounded-lg">
+                                                <small id="errorUpdateCategoryProduct" class="text-red-500 dummyClass"></small>
+                                                <div id="displaySearchSubCategories"></div>
+                                            </div>
+                                        </div>
+                                        <div id="messageDialogUpdateProduct" class="h-12"></div>
                                         <div id="dialogUpdateProductForm">
                                             <button type="submit" class="bg-green-500 text-white p-2 rounded-lg" id="btnUpdateProduct">Modifier</button>
                                         </div>
+                                        
                                     </form>
                                 </div>
                             `;
@@ -399,8 +429,52 @@ async function gestionProduct() {
                             .then(data => {
                                 console.log(data);
                                 const nameInput = document.getElementById('updateNameProduct');
-                                if (data.status === 'EmptyFields') {
+                                const descriptionInput = document.getElementById('updateDescriptionProduct');
+                                const priceInput = document.getElementById('updatePriceProduct');
+                                const quantiteInput = document.getElementById('updateQuantiteProduct');
+                                const releasedDateInput = document.getElementById('updateReleasedDateProduct');
+                                const imgInput = document.getElementById('updateImgProduct');
+                                const subCategoryInput = document.getElementById('updateSubCategory');
 
+                                const messageDialogUpdateProduct = document.getElementById('messageDialogUpdateProduct');
+                                const smallMessageDummy = document.querySelectorAll('.dummyClass');
+                                if (data.status === 'EmptyFields') {
+                                    smallMessageDummy.forEach(message => {
+                                        const containerMessage = document.createElement('div');
+                                        containerMessage.className = 'flex items-center space-x-2';
+                                        containerMessage.innerHTML = `
+                                        <img src="public/images/icones/danger-icones-red.svg" alt="" class="w-5 h-5">
+                                        <small id="errorUpdateNameProduct" class="text-red-500">Champs Requis</small>`;
+                                        message.appendChild(containerMessage);
+                                    });
+                                    nameInput.classList.add('input_error');
+                                    descriptionInput.classList.add('input_error');
+                                    priceInput.classList.add('input_error');
+                                    quantiteInput.classList.add('input_error');
+                                    releasedDateInput.classList.add('input_error');
+                                    imgInput.classList.add('input_error');
+                                    subCategoryInput.classList.add('input_error');
+                                    messageDialogUpdateProduct.innerHTML = `
+                                    <div class="flex items-center py-3 px-2 rounded-lg bg-[#DC110128] text-[#ff0303] border-l-[3px] border-[#ff0303]">
+                                        <img src="public/images/icones/danger-icones-red.svg" alt="" class="w-5 h-5">
+                                        <small class="text-lg">Veuillez remplir tous les champs</small>
+                                    </div>
+                                    `;
+                                } if (data.status === 'EmptyName') {
+                                    nameInput.classList.add('input_error');
+                                    const smallName = document.getElementById('errorUpdateNameProduct');
+                                    displayErrorMessageInput(smallName, 'Champs Requis');
+                                    displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs titre du produit');
+                                } if (data.status === 'EmptyDescription') {
+                                    descriptionInput.classList.add('input_error');
+                                    const smallDescription = document.getElementById('errorUpdateDescriptionProduct');
+                                    displayErrorMessageInput(smallDescription, 'Champs Requis');
+                                    displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs description du produit');
+                                } if (data.status === 'EmptyPrice') {
+                                    priceInput.classList.add('input_error');
+                                    const smallPrice = document.getElementById('errorUpdatePriceProduct');
+                                    displayErrorMessageInput(smallPrice, 'Champs Requis');
+                                    displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs prix du produit');
                                 }
                             });
                         });
