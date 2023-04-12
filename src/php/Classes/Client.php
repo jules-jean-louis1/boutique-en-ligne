@@ -207,4 +207,30 @@ WHERE users.id_users = :id;");
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+    public function deleteUser($id)
+    {
+        $db = new Database();
+        $bdd = $db->getBdd();
+        // Table users
+        $req1 = $bdd->prepare("DELETE FROM users WHERE id_users = :id");
+        $req1->execute(["id" => $id]);
+        // Table avis_client
+        $req2 = $bdd->prepare("DELETE FROM avis_client WHERE client_id = :id");
+        $req2->execute(["id" => $id]);
+        // Table client
+        $req3 = $bdd->prepare("DELETE FROM client WHERE users_id = :id");
+        $req3->execute(["id" => $id]);
+        // Table commande
+        $req4 = $bdd->prepare("DELETE FROM commande WHERE id_client = :id");
+        $req4->execute(["id" => $id]);
+        // Table comment_avis
+        $req5 = $bdd->prepare("DELETE FROM comment_avis WHERE client_id = :id");
+        $req5->execute(["id" => $id]);
+        // Table detail_commande
+        $req6 = $bdd->prepare("DELETE FROM detail_commande WHERE id_commande IN (SELECT id_commande FROM commande WHERE id_client = :id)");
+        $req6->execute(["id" => $id]);
+        // Table panier
+        $req7 = $bdd->prepare("DELETE FROM panier WHERE id_client = :id");
+        $req7->execute(["id" => $id]);
+    }
 }
