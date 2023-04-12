@@ -7,6 +7,7 @@ if (isset($_GET['id'])) {
 
     $product = new Product();
     $supprProduct = $product->supprProduct($id);
+    $supprAvis = $product->supprClientAvisProduct($id);
     header("Content-Type: application/json");
     echo json_encode(['status' => 'success', 'message' => 'Produit supprimé avec succès']);
 }

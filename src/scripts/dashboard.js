@@ -32,8 +32,17 @@ function displayErrorMessageInput(ParentSelector, ContentMessage) {
 function displayErrorMessageFormUpdateProduct(ParentSelector, ContentMessage) {
     ParentSelector.innerHTML = '';
     ParentSelector.innerHTML = `
-    <div class="flex items-center py-3 px-2 rounded-lg bg-[#DC110128] text-[#ff0303] border-l-[3px] border-[#ff0303]">
-        <img src="public/images/icones/danger-icones-red.svg" alt="" class="w-5 h-5">
+    <div class="flex items-center py-3 px-2 rounded-lg bg-[#FEEFB3] text-[#D8000C] border-l-[3px] border-[#FEEFB3]">
+        <img src="public/images/icones/danger-red-stroke-2.svg" alt="" class="w-5 h-5">
+        <small class="text-lg">${ContentMessage}</small>
+    </div>
+    `;
+}
+function displaySuccessMessageFormUpdateProduct(ParentSelector, ContentMessage) {
+    ParentSelector.innerHTML = '';
+    ParentSelector.innerHTML = `
+    <div class="flex items-center py-3 px-2 rounded-lg bg-[#DFF2BF] text-[#270] border-l-[3px] border-[#270]">
+        <img src="public/images/icones/succes-circle-green-stroke-2.svg" alt="" class="w-5 h-5">
         <small class="text-lg">${ContentMessage}</small>
     </div>
     `;
@@ -296,14 +305,19 @@ async function gestionProduct() {
                                 <h2>${product.released_date_product}</h2>
                             </div>
                         </div>
-                        <div id="wapperFormUpdateProduct">
-                            <button type="button" class="bg-green-500 text-white p-2 rounded-lg" id="btnUpdateProduct_${product.id_product}" data-id-product="${product.id_product}">Modifier</button>
+                        <div id="containerBtnUpdateProduct">
+                            <div id="wapperFormUpdateProduct">
+                                <button type="button" class="bg-green-500 text-white p-2 rounded-lg" id="btnUpdateProduct_${product.id_product}" data-id-product="${product.id_product}">Modifier</button>
+                            </div>
+                            <div id="wapperFormDeleteProduct">
+                                <button type="button" class="bg-orange-600 text-white p-2 rounded-lg" id="btnArchiverProduct_${product.id_product}" data-id-product="${product.id_product}">Archiver</button>
+                            </div>
+                            <div id="wapperFormDeleteProduct">
+                                <form action="" method="post" id="formDeleteProduct" class="flex flex-col space-y-2" data-id-product="${product.id_product}">
+                                    <button type="button" class="bg-red-500 text-white p-2 rounded-lg" id="btnDeleteProduct">Supprimer</button>
+                                </form>
+                            </div> 
                         </div>
-                        <div id="wapperFormDeleteProduct">
-                            <form action="" method="post" id="formDeleteProduct" class="flex flex-col space-y-2" data-id-product="${product.id_product}">
-                                <button type="button" class="bg-red-500 text-white p-2 rounded-lg" id="btnDeleteProduct">Supprimer</button>
-                            </form>
-                        </div>  
                     </div>
                     `;
                     containerAllDiv.appendChild(ContainerDisplayProduct);
@@ -336,7 +350,7 @@ async function gestionProduct() {
                                         <div class="flex items-center justify-between">
                                             <div id="dialogUpdateProductForm" class="flex flex-col">
                                                 <label for="updatePriceProduct">Prix du produit</label>
-                                                <input type="number" name="updatePriceProduct" id="updatePriceProduct" value="${product.price_product}" class="bg-slate-100 p-2 rounded-lg">
+                                                <input type="text" name="updatePriceProduct" id="updatePriceProduct" value="${product.price_product}" class="bg-slate-100 p-2 rounded-lg">
                                                 <small id="errorUpdatePriceProduct" class="text-red-500 dummyClass"></small>
                                             </div>
                                             <div id="dialogUpdateProductForm" class="flex flex-col">
@@ -491,11 +505,21 @@ async function gestionProduct() {
                                     const smallSubCategory = document.getElementById('errorUpdateSubCategory');
                                     displayErrorMessageInput(smallSubCategory, 'Champs Requis');
                                     displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs sous-catégorie du produit');
+                                } if (data.status === 'success') {
+                                    displaySuccessMessageFormUpdateProduct(messageDialogUpdateProduct, 'Produit modifié avec succès');
+                                    setTimeout(() => {
+                                        dialogUpdateProduct.close();
+                                        dialogUpdateProduct.remove();
+                                    }, 3000);
                                 }
                             });
                         });
                     });
-
+                    const btnArchiverProduct = document.querySelector(`#btnArchiverProduct_${product.id_product}`);
+                    btnArchiverProduct.addEventListener('click', async () => {
+                        await fetch(`src/php/fetch/produit/archiveProduct.php?id_produits=${product.id_product}`)
+                        .then(response => response.json())
+                    });
                     }
 
             }

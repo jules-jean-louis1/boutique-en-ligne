@@ -3,8 +3,6 @@ session_start();
 
 require_once "../../Classes/Product.php";
 
-var_dump($_POST);
-var_dump($_FILES);
 if (isset($_POST['updateNameProduct'])) {
 
     $id_product = intval($_GET['id_produits']);
@@ -12,7 +10,7 @@ if (isset($_POST['updateNameProduct'])) {
     $description = htmlspecialchars($_POST['updateDescriptionProduct']);
     $price = htmlspecialchars($_POST['updatePriceProduct']);
     $quantite = htmlspecialchars($_POST['updateQuantiteProduct']);
-    $date_released = intval($_POST['updateReleasedDateProduct']);
+    $date_released = htmlspecialchars($_POST['updateReleasedDateProduct']);
     $subCategoryId = intval($_POST['subCategoryId']);
 
     $imgIfEmpty = htmlspecialchars($_POST['updateImgProductName']);
@@ -49,7 +47,7 @@ if (isset($_POST['updateNameProduct'])) {
             echo json_encode(['status' => 'PriceFormat', 'message' => 'Le prix doit être au format 00.00']);
             exit();
         }
-        if (isset($_FILES['updateImgProduct']['name'])) {
+        if (!empty($_FILES['updateImgProduct']['name'])) {
             // Vérification du type et de la taille de l'image
             $allowedTypes = array(IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF);
             $detectedType = exif_imagetype($_FILES['updateImgProduct']['tmp_name']);

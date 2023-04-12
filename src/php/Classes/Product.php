@@ -10,8 +10,8 @@ class Product extends Database
     public function addProduct($name, $description, $price, $stock, $image, $date, $subcategories_id)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("INSERT INTO product (name_product, description_product, price_product, quantite_product, img_product, released_date_product, ajout_date_product, subcategories_id) 
-                                    VALUES (:name, :description, :price, :stock, :image, :date,  NOW(), :subcategories_id)");
+        $req = $bdd->prepare("INSERT INTO product (name_product, description_product, price_product, quantite_product, img_product, released_date_product, ajout_date_product, dispo_product, subcategories_id) 
+                                VALUES (:name, :description, :price, :stock, :image, :date,  NOW(), '1', :subcategories_id)");
         $req->execute(array(
             "name" => $name,
             "description" => $description,
@@ -81,8 +81,27 @@ class Product extends Database
     public function supprProduct($id)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("DELETE FROM product WHERE id_product = :id");
+        $req = $bdd->prepare("DELETE FROM product WHERE id_produit = :id;");
         $req->execute(array(
+            "id" => $id
+        ));
+    }
+    public function supprClientAvisProduct($id)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("DELETE FROM avis_client WHERE product_id = :id;");
+        $req->execute(array(
+            "id" => $id
+        ));
+    }
+    public function archiveProduct($id)
+    {
+        // Ne pas supprimer le produit mais mettre le quantité à 0
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("UPDATE product SET quantite_product = :stock, dispo_product = :dispo WHERE id_product = :id");
+        $req->execute(array(
+            "stock" => 0,
+            "dispo" => 0,
             "id" => $id
         ));
     }
