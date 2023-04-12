@@ -878,6 +878,10 @@ async function gestionUser() {
                 const btnDeleteUser = document.querySelector(`#btnDeleteUser_${user.id_users}`);
                 btnDeleteUser.addEventListener('click', async () => {
                     await fetch(`src/php/fetch/client/deleteUser.php?id=${user.id_users}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                        })
                 })
             }
         })
