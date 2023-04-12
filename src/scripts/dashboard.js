@@ -280,44 +280,58 @@ async function gestionProduct() {
                 products.forEach(product => {
                     ContainerDisplayProduct.innerHTML += `
                     <div class="flex p-0.5">
-                        <div id="displayProductContainer">
-                            <img src="src/images/products/${product.img_product}" alt="${product.name_product}" class="w-20 h-20">
+                        <div id="displayProductContainer" class="w-[12rem] flex flex-col">
+                            <h2 class="font-normal text-slate-700">Image du jeu :</h2>
+                            <img src="src/images/products/${product.img_product}" alt="${product.name_product}" class="max-w-fit">
                         </div>
                         <div id="displayProductContainer">
-                            <div id="titre_produit" class="flex space-x-0.5">
-                                <h2 class="font-normal text-slate-700">Titre :</h2>
-                                <h2>${product.name_product}</h2>
+                            <div class="flex flex-col space-y-1">
+                                <div id="titre_produit" class="flex space-x-1">
+                                    <h2 class="font-normal text-slate-700">Titre :</h2>
+                                    <h2>${product.name_product}</h2>
+                                </div>
+                                <div id="description_produit" class="flex flex-col space-x-1 w-8/12">
+                                    <h2 class="font-normal text-slate-700">Synopsis :</h2>
+                                    <h2>${product.description_product}</h2>
+                                </div>
                             </div>
-                            <div id="description_produit" class="flex space-x-0.5">
-                                <h2 class="font-normal text-slate-700">Synopsis :</h2>
-                                <h2>${product.description_product}</h2>
+                            <div id="containerProductInformation" class="flex justify-around">
+                                <div id="prix_produit" class="flex space-x-0.5">
+                                    <h2 class="font-normal text-slate-700">Prix :</h2>
+                                    <h2>${product.price_product} €</h2>
+                                </div>
+                                <div id="date_sortie_produit" class="flex space-x-0.5"> 
+                                    <h2 class="font-normal text-slate-700">Date de sortie :</h2>
+                                    <h2>${product.released_date_product}</h2>
+                                </div>
+                                <div id="categorie_produit" class="flex space-x-0.5">
+                                    <h2 class="font-normal text-slate-700">Genre :</h2>
+                                    <h2>${product.name_subcategories}</h2>
+                                </div>
                             </div>
-                            <div id="prix_produit" class="flex space-x-0.5">
-                                <h2 class="font-normal text-slate-700">Prix :</h2>
-                                <h2>${product.price_product} €</h2>
+                            <div id="containerProductInformation" class="flex justify-around">
+                                <div id="stock_produit" class="flex space-x-0.5">
+                                    <h2 class="font-normal text-slate-700">Stock :</h2>
+                                    <h2>${product.quantite_product}</h2>
+                                </div>
+                                <div class="flex space-x-0.5">
+                                    <h2 class="font-normal text-slate-700">Nombre de vente :</h2> 
+                                    <h2>${product.quantite_vendue}</h2>
+                                </div>
                             </div>
-                            <div id="stock_produit" class="flex space-x-0.5">
-                                <h2 class="font-normal text-slate-700">Stock :</h2>
-                                <h2>${product.quantite_product}</h2>
-                            </div> 
-                            <div id="date_sortie_produit" class="flex space-x-0.5"> 
-                                <h2 class="font-normal text-slate-700">Date de sortie :</h2>
-                                <h2>${product.released_date_product}</h2>
+                            <div id="containerBtnUpdateProduct" class="flex justify-around">
+                                <div id="wapperFormUpdateProduct">
+                                    <button type="button" class="bg-green-500 text-white p-2 rounded-lg" id="btnUpdateProduct_${product.id_product}" data-id-product="${product.id_product}">Modifier</button>
+                                </div>
+                                <div id="wapperFormDeleteProduct">
+                                    <button type="button" class="bg-orange-600 text-white p-2 rounded-lg" id="btnArchiverProduct_${product.id_product}" data-id-product="${product.id_product}">Archiver</button>
+                                </div>
+                                <div id="wapperFormDeleteProduct">
+                                    <form action="" method="post" id="formDeleteProduct" class="flex flex-col space-y-2" data-id-product="${product.id_product}">
+                                        <button type="button" class="bg-red-500 text-white p-2 rounded-lg" id="btnDeleteProduct">Supprimer</button>
+                                    </form>
+                                </div> 
                             </div>
-                        </div>
-                        <div id="containerBtnUpdateProduct">
-                            <div id="wapperFormUpdateProduct">
-                                <button type="button" class="bg-green-500 text-white p-2 rounded-lg" id="btnUpdateProduct_${product.id_product}" data-id-product="${product.id_product}">Modifier</button>
-                            </div>
-                            <div id="wapperFormDeleteProduct">
-                                <button type="button" class="bg-orange-600 text-white p-2 rounded-lg" id="btnArchiverProduct_${product.id_product}" data-id-product="${product.id_product}">Archiver</button>
-                            </div>
-                            <div id="wapperFormDeleteProduct">
-                                <form action="" method="post" id="formDeleteProduct" class="flex flex-col space-y-2" data-id-product="${product.id_product}">
-                                    <button type="button" class="bg-red-500 text-white p-2 rounded-lg" id="btnDeleteProduct">Supprimer</button>
-                                </form>
-                            </div> 
-                        </div>
                     </div>
                     `;
                     containerAllDiv.appendChild(ContainerDisplayProduct);
@@ -519,15 +533,20 @@ async function gestionProduct() {
                     btnArchiverProduct.addEventListener('click', async () => {
                         await fetch(`src/php/fetch/produit/archiveProduct.php?id_produits=${product.id_product}`)
                         .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'error') {
+                                displayErrorMessageFormUpdateProduct(containerdialogUpdateProduct, 'Une erreur est survenue');
+                            } if (data.status === 'success') {
+                                displaySuccessMessageFormUpdateProduct(containerdialogUpdateProduct, 'Produit archivé avec succès');
+                                setTimeout(() => {
+                                    containerdialogUpdateProduct.innerHTML = '';
+                                }, 3000);
+                            }
+                        });
                     });
                     }
-
             }
-
-
     });
-
-
 }
 
 // Fonction gestion de catégorie
@@ -804,8 +823,21 @@ async function gestionSubCategories() {
         });
 
     })
-
 }
+// Fonction de gestion des utilisateurs
+async function gestionUser() {
+    const containerUserInfo = document.createElement('div');
+    containerUserInfo.setAttribute('id', 'containerUserInfo');
+    containerUserInfo.setAttribute('class', 'flex flex-col space-y-2');
+    containerAllDiv.appendChild(containerUserInfo);
+    await fetch('src/php/fetch/client/displayUser.php')
+        .then(response => response.json())
+        .then(data => {
+
+        })
+}
+// Fonction d'affichage des utilisateurs
+gestionUser();
 // fonction d'affichage des produits
 addProduct();
 

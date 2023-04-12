@@ -63,6 +63,7 @@ if (isset($_POST['updateNameProduct'])) {
 
                 move_uploaded_file($tempname, $folder);
                 $product->updateProduct($name, $description, $price, $quantite, $filename, $date_released, $subCategoryId, $id_product);
+                unlink("../../../images/products/".$imgIfEmpty);
                 header("Content-Type: application/json");
                 echo json_encode(['status' => 'success', 'message' => 'Le produit a bien été modifié']);
                 exit();
