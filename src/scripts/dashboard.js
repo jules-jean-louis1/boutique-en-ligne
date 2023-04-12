@@ -832,10 +832,10 @@ async function gestionUser() {
     containerUserInfo.setAttribute('id', 'containerUserInfo');
     containerUserInfo.setAttribute('class', 'flex flex-col space-y-2');
     containerAllDiv.appendChild(containerUserInfo);
+    containerUserInfo.innerHTML = '';
     await fetch('src/php/fetch/client/displayUser.php')
         .then(response => response.json())
         .then(data => {
-            containerUserInfo.innerHTML = '';
             for (let user of data) {
                 let optionHtml = '';
                 if (user.type_compte_users === 'administrateur') {
@@ -881,6 +881,23 @@ async function gestionUser() {
                         .then(response => response.json())
                         .then(data => {
                             console.log(data);
+                        })
+                })
+                const btnUpdateDroits = document.querySelector(`#updateDroits_${user.id_users}`);
+                btnUpdateDroits.addEventListener('submit', async (ev) => {
+                    ev.preventDefault();
+                    const id = btnUpdateDroits.dataset.id;
+                    await fetch(`src/php/fetch/client/updateDroits.php?id=${id}`, {
+                        method: 'POST',
+                        body: new FormData(btnUpdateDroits)
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                message.innerHTML = data.message;
+                                displaySuccess(message);
+                                gestionUser();
+                            }
                         })
                 })
             }

@@ -233,4 +233,14 @@ WHERE users.id_users = :id;");
         $req7 = $bdd->prepare("DELETE FROM panier WHERE id_client = :id");
         $req7->execute(["id" => $id]);
     }
+    public function updateUserDroits($id, $droits)
+    {
+        $db = new Database();
+        $bdd = $db->getBdd();
+        $req = $bdd->prepare("UPDATE users SET type_compte_users = :droits WHERE id_users = :id");
+        $req->execute(array(
+            "droits" => $droits,
+            "id" => $id
+        ));
+    }
 }
