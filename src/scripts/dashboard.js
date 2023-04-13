@@ -861,25 +861,34 @@ async function gestionUser(page, search, order) {
     containerFormSearch.setAttribute('class', 'flex space-x-2');
     wapperUserInfos.appendChild(containerFormSearch);
 
+    const containerTableUser = document.createElement('div');
+    containerTableUser.setAttribute('id', 'containerTableUser');
+    containerTableUser.setAttribute('class', 'flex flex-col space-y-2 py-3');
+    wapperUserInfos.appendChild(containerTableUser);
+    containerTableUser.innerHTML = '';
+
     const containerUserInfo = document.createElement('div');
     containerUserInfo.setAttribute('id', 'containerUserInfo');
     containerUserInfo.setAttribute('class', 'flex flex-col space-y-2 py-3');
     wapperUserInfos.appendChild(containerUserInfo);
     containerUserInfo.innerHTML = '';
 
-
+    const containerPagination = document.createElement('div');
+    containerPagination.setAttribute('id', 'containerPagination');
+    containerPagination.setAttribute('class', 'flex justify-center');
+    wapperUserInfos.appendChild(containerPagination);
 
     containerFormSearch.innerHTML = `
-        <form action="" method="post" class="flex space-x-2" id="formSearchUser">
+        <form action="" method="post" class="flex items-center space-x-2" id="formSearchUser">
             <input type="text" name="search" id="search" placeholder="Rechercher un utilisateur" class="bg-[#E9E9E9] rounded-lg p-2">
-            <label for="order">Trier par ordre</label>
+            <label for="order">Date de création</label>
             <select name="order" id="order" class="bg-[#E9E9E9] rounded-lg p-2">
-                <option value="DESC">Ordre décroissant</option>
-                <option value="ASC">Ordre croissant</option>
+                <option value="DESC">Plus récent</option>
+                <option value="ASC">Plus ancien</option>
             </select>
         </form>
     `;
-
+    fetchUser(page, search, order);
     const searchInput = document.querySelector('#search');
     searchInput.addEventListener('keyup', (ev) => {
         search = ev.target.value;
@@ -891,6 +900,7 @@ async function gestionUser(page, search, order) {
         order = ev.target.value;
         fetchUser(page, search, order);
     });
+    paginationUser(search, order, containerPagination);
 }
 
 async function fetchUser(page, search, order) {
@@ -910,30 +920,59 @@ async function fetchUser(page, search, order) {
                         <option value="administrateur">administrateur</option>
                     `;
             }
-
-            containerUserInfo.innerHTML += `
+            containerTableUser.innerHTML = `
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th class="text-left">ID</th>
+                            <th class="text-left">Login</th>
+                            <th class="text-left">Email</th>
+                            <th class="text-left">Droits</th>
+                            <th class="text-left">Date de création</th>
+                            <th class="text-left">Actions</th>
+                        </tr>
+                    </thead> 
+            `;
+                containerUserInfo.innerHTML += `
                 <div class="flex items-center space-x-2">
-                    <p>${user.id_users}</p>
-                    <p>${user.login_users}</p>
-                    <p>${user.email_users}</p>
-                    <div id="containerUpdateDroits_${user.id_users}" class="flex space-x-2">
-                        <form action="resources/assests/fetch/updateDroits.php" method="post" id="updateDroits_${user.id_users}" data-id="${user.id_users}" class="flex justify-between">
-                            <select name="droits" id="droits" class="p-2 bg-[#E9E9E9] rounded-lg">
-                                <option value="${user.type_compte_users}">${user.type_compte_users}</option>
-                                ${optionHtml}
-                            </select>
-                            <div id="btnSubmit">
-                                <button type="submit" class="border-2 border-green-500 hover:bg-green-500 p-2 rounded-lg hover:text-white duration-100 ease-in"
-                                        name="btnUpdateDroits" id="btnUpdateDroits">
-                                        Modifier
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    <p>${formatDate(user.created_at_users)}</p>
-                    <div id="btnForDeleteUser">
-                        <button class="bg-red-500 p-2 rounded-lg text-white" id="btnDeleteUser_${user.id_users}">Supprimer</button>
-                    </div>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="p-1">
+                                    ${user.id_users}
+                                </div>
+                                </td>
+                            <td>
+                                <div class="p-1 flex items-center">
+                                    <img src="src/images/avatars/${user.avatar_users}" alt="" class="rounded-full w-6">
+                                    <p>${user.login_users}</p>
+                                </div>
+                            </td>
+                            <td>${user.email_users}</td>
+                            <td>
+                                <div id="containerUpdateDroits_${user.id_users}" class="flex space-x-2">
+                                    <form action="resources/assests/fetch/updateDroits.php" method="post" id="updateDroits_${user.id_users}" data-id="${user.id_users}" class="flex justify-between">
+                                        <select name="droits" id="droits" class="p-2 bg-[#E9E9E9] rounded-lg">
+                                            <option value="${user.type_compte_users}">${user.type_compte_users}</option>
+                                            ${optionHtml}
+                                        </select>
+                                        <div id="btnSubmit">
+                                            <button type="submit" class="border-2 border-green-500 hover:bg-green-500 p-2 rounded-lg hover:text-white duration-100 ease-in"
+                                                    name="btnUpdateDroits" id="btnUpdateDroits">
+                                                    Modifier
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </td>
+                            <td>${formatDate(user.created_at_users)}</td>
+                            <td>
+                                <div id="btnForDeleteUser">
+                                    <button class="bg-red-500 p-2 rounded-lg text-white" id="btnDeleteUser_${user.id_users}">Supprimer</button>
+                                </div>
+                            </td> 
+                        </tr>
+                    </tbody>
                 </div>
                 `;
 
@@ -966,6 +1005,7 @@ async function fetchUser(page, search, order) {
             })
         }
     } if (data.status === 'error') {
+        containerTableUser.innerHTML = '';
         containerUserInfo.innerHTML = 'Aucun utilisateur trouvé';
     }
 
