@@ -243,4 +243,52 @@ WHERE users.id_users = :id;");
             "id" => $id
         ));
     }
+    public function numberOfPagesForUser($searchUser, $order = 'DESC')
+    {
+        $db = new Database();
+        $bdd = $db->getBdd();
+        $Query = "SELECT COUNT(*) as nb FROM users";
+        if (!empty($searchUser)) {
+            $Query = "SELECT COUNT(*) as nb FROM users WHERE login_users LIKE '%{$searchUser}%'";
+        }
+        if ($order == 'ASC') {
+            $Query .= " ORDER BY `users`.`created_at_users` ASC";
+        } else {
+            $Query .= " ORDER BY `users`.`created_at_users` DESC";
+        }
+        $req = $bdd->prepare($Query);
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        $nb = $result[0]['nb'];
+        $nbPages = ceil($nb / 10);
+        return $nbPages;
+    }
+    public function getUserInfoByPages($page = 1, $searchUser = '', $order = 'DESC')
+    {
+        $db = new Database();
+        $bdd = $db->getBdd();
+
+        // Définir la page par défaut si elle est nulle ou inférieure à 0
+        $page = max(1, $page);
+
+        $query = "SELECT users.id_users, users.login_users, users.email_users, users.type_compte_users, users.avatar_users, users.created_at_users FROM users";
+
+        if (!empty($searchUser)) {
+            $query .= " WHERE login_users LIKE '%" . $searchUser . "%'";
+        }
+
+        if ($order == 'ASC') {
+            $query .= " ORDER BY `users`.`created_at_users` ASC";
+        } else {
+            $query .= " ORDER BY `users`.`created_at_users` DESC";
+        }
+
+        $query .= " LIMIT " . (($page - 1) * 10) . ", 10";
+
+        $req = $bdd->prepare($query);
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
 }

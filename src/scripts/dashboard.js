@@ -826,14 +826,171 @@ async function gestionSubCategories() {
 
     })
 }
+// Fonction pagination pour les utilisateurs
+async function paginationUser(search, order, parentSelector) {
+    await fetch(`src/php/fetch/dashboard/paginationUser.php?search=${search}&order=${order}`)
+        .then(response => response.json())
+        .then(data => {
+            let pageUser = '';
+            for (let i = 0; i < data.pages.length; i++) {
+                const page = data.pages[i];
+                if (page > 0) {
+                    pageUser += `
+                    <li class="flex space-x-1">
+                        <button class="page-link" id="pageUser${page}">${page}</button>
+                    </li>
+                `;
+                }
+                parentSelector.innerHTML = pageUser;
+            }
+        })
+}
+const params = new URLSearchParams(window.location.search);
+const page = params.get('page') || 1;
 // Fonction de gestion des utilisateurs
-async function gestionUser() {
+let search = '';
+let order = 'DESC';
+async function gestionUser(page, search, order) {
+
+    const wapperUserInfos = document.createElement('div');
+    wapperUserInfos.setAttribute('id', 'wapperUserInfos');
+    containerAllDiv.appendChild(wapperUserInfos);
+
+    const containerFormSearch = document.createElement('div');
+    containerFormSearch.setAttribute('id', 'containerFormSearch');
+    containerFormSearch.setAttribute('class', 'flex space-x-2');
+    wapperUserInfos.appendChild(containerFormSearch);
+
     const containerUserInfo = document.createElement('div');
     containerUserInfo.setAttribute('id', 'containerUserInfo');
-    containerUserInfo.setAttribute('class', 'flex flex-col space-y-2');
-    containerAllDiv.appendChild(containerUserInfo);
+    containerUserInfo.setAttribute('class', 'flex flex-col space-y-2 py-3');
+    wapperUserInfos.appendChild(containerUserInfo);
     containerUserInfo.innerHTML = '';
-    await fetch('src/php/fetch/client/displayUser.php')
+
+
+
+    containerFormSearch.innerHTML = `
+        <form action="" method="post" class="flex space-x-2" id="formSearchUser">
+            <input type="text" name="search" id="search" placeholder="Rechercher un utilisateur" class="bg-[#E9E9E9] rounded-lg p-2">
+            <label for="order">Trier par ordre</label>
+            <select name="order" id="order" class="bg-[#E9E9E9] rounded-lg p-2">
+                <option value="DESC">Ordre décroissant</option>
+                <option value="ASC">Ordre croissant</option>
+            </select>
+        </form>
+    `;
+
+    const searchInput = document.querySelector('#search');
+    searchInput.addEventListener('keyup', (ev) => {
+        search = ev.target.value;
+        fetchUser(page, search, order);
+    });
+
+    const orderSelect = document.querySelector('#order');
+    orderSelect.addEventListener('change', (ev) => {
+        order = ev.target.value;
+        fetchUser(page, search, order);
+    });
+}
+
+async function fetchUser(page, search, order) {
+    const response = await fetch(`src/php/fetch/dashboard/gestionUser.php?page=${page}&search=${search}&order=${order}`);
+    const data = await response.json();
+    if (data.status === 'success') {
+        const users = JSON.parse(data.users);
+        containerUserInfo.innerHTML = '';
+        for (let user of users) {
+            let optionHtml = '';
+            if (user.type_compte_users === 'administrateur') {
+                optionHtml = `
+                        <option value="utilisateur">client</option>
+                    `;
+            } else if (user.type_compte_users === 'client') {
+                optionHtml = `
+                        <option value="administrateur">administrateur</option>
+                    `;
+            }
+
+            containerUserInfo.innerHTML += `
+                <div class="flex items-center space-x-2">
+                    <p>${user.id_users}</p>
+                    <p>${user.login_users}</p>
+                    <p>${user.email_users}</p>
+                    <div id="containerUpdateDroits_${user.id_users}" class="flex space-x-2">
+                        <form action="resources/assests/fetch/updateDroits.php" method="post" id="updateDroits_${user.id_users}" data-id="${user.id_users}" class="flex justify-between">
+                            <select name="droits" id="droits" class="p-2 bg-[#E9E9E9] rounded-lg">
+                                <option value="${user.type_compte_users}">${user.type_compte_users}</option>
+                                ${optionHtml}
+                            </select>
+                            <div id="btnSubmit">
+                                <button type="submit" class="border-2 border-green-500 hover:bg-green-500 p-2 rounded-lg hover:text-white duration-100 ease-in"
+                                        name="btnUpdateDroits" id="btnUpdateDroits">
+                                        Modifier
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <p>${formatDate(user.created_at_users)}</p>
+                    <div id="btnForDeleteUser">
+                        <button class="bg-red-500 p-2 rounded-lg text-white" id="btnDeleteUser_${user.id_users}">Supprimer</button>
+                    </div>
+                </div>
+                `;
+
+        }
+        for (let user of users) {
+            const btnDeleteUser = document.querySelector(`#btnDeleteUser_${user.id_users}`);
+            btnDeleteUser.addEventListener('click', async () => {
+                await fetch(`src/php/fetch/client/deleteUser.php?id=${user.id_users}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                    })
+            })
+            const btnUpdateDroits = document.querySelector(`#updateDroits_${user.id_users}`);
+            btnUpdateDroits.addEventListener('submit', async (ev) => {
+                ev.preventDefault();
+                const id = btnUpdateDroits.dataset.id;
+                await fetch(`src/php/fetch/client/updateDroits.php?id=${id}`, {
+                    method: 'POST',
+                    body: new FormData(btnUpdateDroits)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            message.innerHTML = data.message;
+                            displaySuccess(message);
+                            gestionUser();
+                        }
+                    })
+            })
+        }
+    } if (data.status === 'error') {
+        containerUserInfo.innerHTML = 'Aucun utilisateur trouvé';
+    }
+
+    // Do something with the fetched data
+}
+
+
+// fonction d'affichage des produits
+addProduct();
+
+// fonction d'affichage des catégories
+gestionCategory();
+
+// fonction d'affichage des sous-catégories
+gestionSubCategories();
+
+// fonction d'affichage des produits
+gestionProduct();
+
+// Fonction d'affichage des utilisateurs
+gestionUser(page, search, order);
+
+
+
+/*await fetch('src/php/fetch/client/displayUser.php')
         .then(response => response.json())
         .then(data => {
             for (let user of data) {
@@ -901,20 +1058,4 @@ async function gestionUser() {
                         })
                 })
             }
-        })
-}
-
-// fonction d'affichage des produits
-addProduct();
-
-// fonction d'affichage des catégories
-gestionCategory();
-
-// fonction d'affichage des sous-catégories
-gestionSubCategories();
-
-// fonction d'affichage des produits
-gestionProduct();
-
-// Fonction d'affichage des utilisateurs
-gestionUser();
+        })*/
