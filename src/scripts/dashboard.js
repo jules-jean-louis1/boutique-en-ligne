@@ -5,8 +5,12 @@ import { formatDate } from "./function/function.js";
 const DisplayInfo = document.querySelector('#dislpayInfoProduct');
 const containerAddCategory = document.querySelector('#containerAddCategory');
 const containerAddSubCategory = document.querySelector('#containerAddSubCategory');
+// Declaration des variables pour les boutons
 const buttonGestionProduct = document.querySelector('#buttonSeeProduct');
 const buttionGestionCategores = document.querySelector('#buttonSeeCategories');
+const buttonGestionCommande = document.querySelector('#buttonSeeCommandes');
+const buttonGestionUser = document.querySelector('#buttonSeeUsers');
+
 const containerdialogUpdateProduct = document.querySelector('#containerDialogFormUpdateProduct');
 const containerAllDiv = document.querySelector('#containerModifyProduct');
 let message = document.querySelector('#message');
@@ -68,79 +72,72 @@ function messagePopup(message, status) {
         dialog.classList.add('error_dialog_message');
     }
 }
-// Fonction d'affichage des sous-catégories
-async function displaySubCategory(option) {
-    await fetch('src/php/fetch/category/displaySubCategory.php')
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(subCategory => {
-                option.innerHTML += `<option value="${subCategory.id_subcategories}">${subCategory.name_subcategories}</option>`;
-            });
-        });
-}
 // fonction de gestion des produits
 async function addProduct() {
-    const buttonAddProduct = document.createElement('button');
-    buttonAddProduct.classList.add('btn', 'btn-primary', 'btn-sm', 'm-2');
-    buttonAddProduct.textContent = 'Ajouter un produit';
-    buttonAddProduct.setAttribute('id', 'buttonAddProduct');
-    const containerButtonAddProduct = document.querySelector('#containerAddProduct');
-    containerButtonAddProduct.appendChild(buttonAddProduct);
+    const buttonAddProductContainer = document.createElement('div');
+    buttonAddProductContainer.className = 'flex justify-center';
+    buttonAddProductContainer.innerHTML = `
+            <button type="button" class="bg-[#D74CF6] px-3 py-2 flex space-x-2 items-center text-[#0E1217] font-bold rounded-lg" id="buttonAddProduct">
+            <svg width="32" height="32" viewBox="0 0 24 24" stroke="#0E1217" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M6.99999 12H12M12 12H17M12 12V6.99999M12 12V17M21.5 12C21.5 17.2467 17.2467 21.5 12 21.5C6.75329 21.5 2.5 17.2467 2.5 12C2.5 6.75329 6.75329 2.5 12 2.5C17.2467 2.5 21.5 6.75329 21.5 12Z"></path></svg>
+            Ajouter un produit
+            </button>
+                `;
+    containerAllDiv.appendChild(buttonAddProductContainer);
 
+    const buttonAddProduct = document.querySelector('#buttonAddProduct');
     buttonAddProduct.addEventListener('click', () => {
         const body = document.querySelector('body');
         const dialog = document.createElement('dialog');
         dialog.setAttribute('id', 'dialog');
-        dialog.className = 'dialog_modal';
+        dialog.className = 'dialog_modal w-10/12 bg-[#24272A] text-[#a8b3cf] rounded-lg shadow-lg';
         body.appendChild(dialog);
+        dialog.innerHTML = '';
         dialog.innerHTML = `
-        <div class="w-5/6 p-2">
-            <div id="modal-header" class="flex justify-around">
-                <h5 class="modal-title" id="exampleModalLabel">Ajouter un produit</h5>
-                <button type="button" id="btncloseDialog" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+        <div class="w-full p-2 flex flex-col space-y-2">
+            <div id="modal-header" class="flex justify-between items-center w-full px-3 py-1">
+                <h5 class="text-white font-semibold text-lg" id="exampleModalLabel">Ajouter un produit</h5>
+                <button type="button" id="btncloseDialog" data-bs-dismiss="modal" aria-label="Close" class="p-2 rounded-lg bg-[#41474c] text-[#A87EE6FF]">Fermer</button>
             </div>
-            <div class="modal-body">
-                <form action="" method="post" id="formAddProduct" enctype="multipart/form-data">
+            <div>
+                <form action="" method="post" id="formAddProduct" enctype="multipart/form-data" class="flex flex-col space-y-2">
                     <div id="modalAddProduct">
-                        <label for="nameProduct">Nom du produit</label>
-                        <input type="text" name="nameProduct" id="nameProduct" class="bg-slate-100 p-2 rounded-lg" >
+                        <input type="text" name="nameProduct" id="nameProduct" class="w-full p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]" placeholder="Nom du produit">
                     </div>
                     <div id="modalAddProduct">
-                        <label for="descriptionProduct">Description du produit</label>
-                        <textarea name="descriptionProduct" id="descriptionProduct" cols="30" rows="10" class="bg-slate-100 p-2 rounded-lg"></textarea>
+                        <textarea name="descriptionProduct" id="descriptionProduct" cols="30" rows="10" class="p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF] w-full" placeholder="Description du produit"></textarea>
                     </div>
-                    <div id="modalAddProduct">
-                        <label for="priceProduct">Prix du produit</label>
-                        <input type="text" name="priceProduct" id="priceProduct" placeholder="Prix en euro" class="bg-slate-100 p-2 rounded-lg">
+                    <div id="modalAddProduct" class="flex justify-between w-full space-x-2">
+                        <input type="text" name="priceProduct" id="priceProduct" placeholder="Prix du produit en euro" class="w-1/2 p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
+                        <input type="number" name="stockProduct" id="stockProduct" placeholder="Quantité disponible" class="w-1/2 p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
                     </div>
-                    <div id="modalAddProduct">
-                        <label for="stockProduct">Stock du produit</label>
-                        <input type="number" name="stockProduct" id="stockProduct" placeholder="Stock en nombre" class="bg-slate-100 p-2 rounded-lg">
+                    <div id="modalAddProduct" class="flex justify-between w-full space-x-2">
+                        <div class="w-1/2 flex flex-col p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
+                            <label for="releasedDate">Date de sortie </label>
+                            <input type="date" name="releasedDate" id="releasedDate" class="p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51]">
+                        </div>
+                        <div class="w-1/2 flex flex-col p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
+                            <label for="imageProduct">Image du produit</label>
+                            <input type="file" name="imageProduct" id="imageProduct" >
+                        </div>
                     </div>
-                    <div id="modalAddProduct">
-                        <label for="imageProduct">Image du produit</label>
-                        <input type="file" name="imageProduct" id="imageProduct" >
-                    </div>
-                    <div id="modalAddProduct">
-                        <label for="releasedDate">Date de sortie :</label>
-                        <input type="date" name="releasedDate" id="releasedDate" class="bg-slate-100 p-2 rounded-lg">
-                    </div>
-                    <div id="modalAddProduct">
-                        <label for="categoryProduct">Catégorie du produit :</label>
+                    <div id="modalAddProduct" class="w-full">
                         <input type="hidden" name="subCategoryId" id="subCategoryId">
-                        <input type="text" placeholder="Ajouter une catégorie" id="searchSubCategories" class="bg-slate-100 p-2 rounded-lg">
+                        <input type="text" placeholder="Ajouter une sous-catégorie" id="searchSubCategories" class="w-full flex p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
                         <div id="displaySearchSubCategories"></div>
                     </div>
                     <div class="h-[45px]">
                         <div id="errorMsg"></div>
                     </div>
                     <div id="modalAddProduct">
-                        <button type="submit" name="submitAddProduct" id="submitAddProduct" class="bg-green-500 p-2 rounded-lg text-white">Ajouter ce produit</button>
+                        <button type="submit" name="submitAddProduct" id="submitAddProduct" class="bg-[#A87EE6FF] p-2 rounded-lg text-[#fff] flex items-center">
+                            <svg width="32" height="32" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M6.99999 12H12M12 12H17M12 12V6.99999M12 12V17M21.5 12C21.5 17.2467 17.2467 21.5 12 21.5C6.75329 21.5 2.5 17.2467 2.5 12C2.5 6.75329 6.75329 2.5 12 2.5C17.2467 2.5 21.5 6.75329 21.5 12Z"></path></svg>
+                        Ajouter ce produit
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
-    `;
+            `;
         let selectedSubCategoryId = null;
 
         const searchSubCategories = document.querySelector('#searchSubCategories');
@@ -1013,6 +1010,11 @@ gestionUser(page, search, order);
 
 // Gestions de l'affichage grace au menu
 
+buttonGestionProduct.addEventListener('click', () => {
+    containerAllDiv.innerHTML = '';
+    addProduct();
+    gestionProduct();
+});
 buttionGestionCategores.addEventListener('click', () => {
     containerAllDiv.innerHTML = '';
     gestionCategory();
