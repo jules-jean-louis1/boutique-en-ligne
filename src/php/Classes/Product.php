@@ -105,4 +105,18 @@ class Product extends Database
             "id" => $id
         ));
     }
+    public function searchProduct($search)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT p.id_product, p.name_product, p.price_product, p.rating_product, p.img_product, p.subcategories_id, s.name_subcategories 
+                                FROM product p 
+                                JOIN subcategories s ON p.subcategories_id = s.id_subcategories 
+                                WHERE p.name_product LIKE :search
+                                OR s.name_subcategories LIKE :search");
+        $req->execute(array(
+            "search" => "%" . $search . "%"
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }

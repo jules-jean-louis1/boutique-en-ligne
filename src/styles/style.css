@@ -66,6 +66,10 @@
     border: 2px solid #ff0303;
     box-shadow: 0px 0px 1px #ff0303;
 }
+#search_bar_form:focus {
+    outline: none;
+    border: none;
+}
 
 /* SVG filter */
 .filter-green {
