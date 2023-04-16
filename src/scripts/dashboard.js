@@ -550,23 +550,33 @@ async function gestionProduct() {
 
 // Fonction gestion de catégorie
 async function gestionCategory() {
+    const wapperGestionCategory = document.createElement('div');
+    wapperGestionCategory.setAttribute('id', 'wapperGestionCategory');
+    containerAllDiv.appendChild(wapperGestionCategory);
+
+    const ContainerGestionCategory = document.createElement('div');
+    ContainerGestionCategory.setAttribute('id', 'ContainerGestionCategory');
+    ContainerGestionCategory.className = 'flex flex-col items-center p-3 border-1 border-gray-300 rounded-md';
+    wapperGestionCategory.appendChild(ContainerGestionCategory);
+
+
     async function displayCategories() {
         await fetch('src/php/fetch/category/displayCategories.php')
             .then(response => response.json())
             .then(data => {
-                DisplayInfo.innerHTML = '';
+                ContainerGestionCategory.innerHTML = '';
                 data.forEach(category => {
-                    DisplayInfo.innerHTML += `
+                    ContainerGestionCategory.innerHTML += `
                 <div id="containerCategoryProduct" class="flex space-x-2 py-0.5">
                     <form action="" method="post" class="flex space-x-2" id="update_${category.id_categories}"  data-id-cat="${category.id_categories}">
-                        <input type="text" name="nom" id="nom" placeholder="${category.name_categories}" class="bg-[#E9E9E9] rounded-lg p-2">
-                        <button type="submit" class="bg-green-500 p-2 rounded-lg text-white" name="btnUpdateCategory" id="btnUpdateCategory_${category.id_categories}">
-                            Modifier
+                        <input type="text" name="nom" id="nom" placeholder="${category.name_categories}" class="p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
+                        <button type="submit" class="p-2 rounded-lg" name="btnUpdateCategory" id="btnUpdateCategory_${category.id_categories}">
+                            <svg width="32" height="32" viewBox="0 0 24 24" stroke="#A87EE6FF" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M4.00037 20.9999H20.5M19.2372 3.91416L20.0861 4.76315C20.8672 5.5442 20.8672 6.81053 20.0861 7.59158L8.85031 18.8274C8.63076 19.0469 8.36311 19.2124 8.06856 19.3105L3.94902 20.6837C3.55814 20.814 3.18627 20.4421 3.31656 20.0513L4.68974 15.9317C4.78793 15.6372 4.95335 15.3695 5.1729 15.15L16.4087 3.91415C17.1898 3.13311 18.4561 3.13311 19.2372 3.91416Z"></path></svg>
                         </button>
                     </form>
                     <form action="" method="post" class="flex space-x-2" id="delete_${category.id_categories}"  data-id-cat="${category.id_categories}">
-                        <button type="submit" class="bg-red-500 p-2 rounded-lg text-white" name="btnDeleteCategory" id="btnDeleteCategory_${category.id_categories}">
-                            Supprimer
+                        <button type="submit" class="p-2" name="btnDeleteCategory" id="btnDeleteCategory_${category.id_categories}">
+                            <svg width="32" height="32" viewBox="0 0 24 24" stroke="#D74CF6" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M11.9999 14.5L14.4999 12M14.4999 12L16.9999 9.5M14.4999 12L16.9999 14.5M14.4999 12L11.9999 9.5M3.39862 12.7282L8.71112 17.7282C8.89662 17.9028 9.14175 18 9.39648 18H18.9999C20.1045 18 20.9999 17.1046 20.9999 16V8C20.9999 6.89543 20.1045 6 18.9999 6L9.39648 6C9.14175 6 8.89662 6.09721 8.71112 6.2718L3.39862 11.2718C2.97911 11.6666 2.97911 12.3334 3.39862 12.7282Z"></path></svg>
                         </button>
                     </form>
                 </div>

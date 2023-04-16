@@ -155,5 +155,10 @@ function closeModalDialog() {
     dialog.close();
     dialog.remove();
 }
+async function searchBarHeader() {
+
+}
+
+
 
 export { displayError, displaySuccess, formatDate, formatDateSansh, loginFormHeader, registerHeader, closeModalDialog };
