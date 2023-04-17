@@ -5,7 +5,29 @@ require_once "../../Classes/Product.php";
 
 // On vérifie si l'utilisateur est connecté
 if (isset($_SESSION['id'])) {
-    // code si connecté
+    $id = $_SESSION['id'];
+    // On vérifie si le panier existe pour l'utilisateur
+    $cart = new Cart();
+    $cartExist = $cart->verifyIfCartExist($id);
+    // Si FALSE, on crée un panier
+    if ($cartExist === true) {
+        $getCart = $cart->getCartByUserId($id);
+        $getNbProducts = $cart->countProductsInCart($id);
+        $total = $cart->countTotalPriceInCart($id);
+        header("Content-Type: application/json");
+        echo json_encode([
+            'status' => 'success',
+            'countProducts' => $getNbProducts,
+            'total' => $total,
+            'products' => $getCart,
+        ]);
+    } else {
+        header("Content-Type: application/json");
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Votre panier est vide'
+        ]);
+    }
 } else {
     // On vérifie si le cookie 'cart' existe et le décode en tableau associatif
     if (isset($_COOKIE['cart'])) {
@@ -13,6 +35,11 @@ if (isset($_SESSION['id'])) {
         // On vérifie si le panier est vide
         if (empty($cart)) {
             // Afficher message panier vide
+            header("Content-Type: application/json");
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Votre panier est vide'
+            ]);
         } else {
             // Afficher le panier
             $userCart = new Product();

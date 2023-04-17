@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once "../../Classes/Client.php"; // On inclut la classe Client
+require_once "../../Classes/Cart.php"; // On inclut la classe Cart
 
 if (isset($_POST['login'])) {
     $login = htmlspecialchars($_POST['login']);
@@ -9,6 +10,26 @@ if (isset($_POST['login'])) {
     if (!empty($login) && !empty($password)) {
         $client = new Client();
         if ($client->login($login, $password) === true) {
+            // On vérifie si le cookie 'cart' existe et le décode en tableau associatif
+            if (isset($_COOKIE['cart']) && !empty($_COOKIE['cart'])) {
+                // Vérifier si l'utilisateur a déjà un panier
+                $cart = new Cart();
+                $cartExist = $cart->verifyIfCartExist($_SESSION['id']);
+                $cart = json_decode($_COOKIE['cart'], true);
+                // Si FALSE, on crée un panier
+                if ($cartExist === false) {
+                    $cart->createCart($_SESSION['id']);
+                    // On ajoute le produit au panier
+                    foreach ($cart as $product) {
+                        $cart->AddProductToClientCart($_SESSION['id'], $product['id'], $product['quantity']);
+                    }
+                } else {
+                    // Si TRUE, on ajoute le produit au panier
+                    foreach ($cart as $product) {
+                        $cart->AddProductToClientCart($_SESSION['id'], $product['id'], $product['quantity']);
+                    }
+                }
+            }
             header("Content-Type: application/json");
             echo json_encode(['status' => 'success', 'message' => 'Vous êtes connecté']);
         } else {

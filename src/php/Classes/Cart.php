@@ -28,6 +28,53 @@ class Cart extends Database
             "id" => $id
         ));
     }
+    public function getCartByUserId($id)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT cp.quantity_product, p.name_product, p.img_product, p.price_product
+                                    FROM cart c
+                                    JOIN cart_product cp ON c.id_cart = cp.cart_id
+                                    JOIN product p ON cp.product_id = p.id_product
+                                    WHERE c.users_id = :user_id
+                                    AND c.status_cart = 'active'");
+        $req->execute(array(
+            "id" => $id
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+    public function countProductsInCart($id)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT SUM(cp.quantity_product) as total_products
+                                    FROM cart_product cp
+                                    JOIN cart c ON cp.cart_id = c.id_cart
+                                    WHERE c.users_id = :user_id
+                                    AND c.status_cart = 'active'");
+        $req->execute(array(
+            "id" => $id
+        ));
+        $result = $req->fetch();
+        return $result['total_products'];
+    }
+    public function countTotalPriceInCart($id)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT SUM(cp.price_product) as total_price
+                                    FROM cart_product cp
+                                    JOIN cart c ON cp.cart_id = c.id_cart
+                                    WHERE c.users_id = :user_id
+                                    AND c.status_cart = 'active'");
+        $req->execute(array(
+            "id" => $id
+        ));
+        $result = $req->fetch();
+        return $result['total_price'];
+    }
+    public function addCartToUser($cart, $user_id)
+    {
+
+    }
     public function AddProductToClientCart($userId, $productId, $quantityProduct)
     {
         $bdd = $this->getBdd();

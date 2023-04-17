@@ -214,7 +214,7 @@ async function cartHeader() {
                 const cartDivHeader = document.createElement("dialog");
                 cartDivHeader.setAttribute('class', 'absolute top-[17%] left-[57%] transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white w-80 rounded-lg shadow-lg');
 
-                cartButtonHeader.addEventListener('mouseover', () => {
+                cartButtonHeader.addEventListener('mouseenter', () => {
                     cartDivHeader.setAttribute('open', '');
                     cartDivHeader.innerHTML = `
                     <div class="flex flex-col items-around space-y-2">
@@ -245,10 +245,13 @@ async function cartHeader() {
 
                 });
                 cartButtonHeader.appendChild(cartDivHeader);
-                cartButtonHeader.addEventListener('mouseout', () => {
+                cartButtonHeader.addEventListener('mouseleave', () => {
                     cartDivHeader.removeAttribute('open');
                 });
 
+            }
+            if (data.status == 'error') {
+                notifCartHeader.innerHTML = '';
             }
         });
 }
