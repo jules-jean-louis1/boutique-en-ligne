@@ -1,6 +1,7 @@
 import { loginFormHeader} from './function/function.js';
 import {registerHeader} from './function/function.js';
 import {formatDateSansh} from "./function/function.js";
+import { displaySuccessMessageFormUpdateProduct } from './function/function.js';
 
 const btnRegister = document.querySelector('#buttonRegisterHeader');
 const btnLogin = document.querySelector('#buttonLoginHeader');
@@ -9,6 +10,7 @@ const menuProfilHeader = document.getElementById("menuProfilHeader");
 const profilInfoHeader = document.getElementById("infoUserNavBar");
 const SearchBarHeader = document.getElementById("search_bar_form");
 const FormSearchBarHeader = document.getElementById("searchBarFormHeader");
+const containerMessageCart = document.getElementById("containerMessageAddCart");
 
 // Ajout d'un écouteur d'événement sur le clic du bouton
 if (buttonProfilHeader) {
@@ -135,6 +137,7 @@ async function getProduct(URLid) {
                             <form action="" method="post" id="formAddToCart">
                                 <label for="quantity" class="text-[#a8b3cf] mt-5">Quantité :</label>
                                 <input type="hidden" name="id" value="${product.id_product}">
+                                <input type="hidden" name="name" value="${product.name_product}">
                                 <select name="quantity" id="quantity" class="bg-[#2D323C] text-white px-5 py-2 rounded-lg mt-5">
                                     ${options}
                                 </select>
@@ -159,16 +162,40 @@ async function getProduct(URLid) {
                     ev.preventDefault();
                     const id = formAddToCart.querySelector('[name="id"]').value;
                     const quantity = formAddToCart.querySelector('[name="quantity"]').value;
-                    addToCart(id, quantity);
+                    const name = formAddToCart.querySelector('[name="name"]').value;
+                    addToCart(id, quantity, name);
                 });
             }
-            async function addToCart(id, quantity) {
-                await fetch(`src/php/fetch/cart/addProductToCart.php?id=${id}&quantity=${quantity}`)
+            async function addToCart(id, quantity, name) {
+                await fetch(`src/php/fetch/cart/addProductToCart.php?id=${id}&quantity=${quantity}&name=${name}`)
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data);
+                        if (data.status == 'success') {
+                            /*Swal.fire({
+                                icon: 'success',
+                                title: 'Produit ajouté au panier',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });*/
+                            const diaog = document.createElement("dialog");
+                            diaog.setAttribute('class','fixed top-20 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-transparent');
+                            diaog.setAttribute('open', '');
+                            diaog.innerHTML = `
+                            <div class="flex items-center py-3 px-2 rounded-lg bg-[#DFF2BF] text-[#270] border-l-[3px] border-[#270]">
+                                <img src="public/images/icones/succes-circle-green-stroke-2.svg" alt="" class="w-5 h-5">
+                                <small class="text-lg">Produit ajouté au panier</small>
+                            </div>
+                            `;
+                            containerMessageCart.appendChild(diaog);
+                            setTimeout(() => {
+                                containerMessageCart.innerHTML = '';
+                            }, 2500);
+                        }
                     });
             }
         });
+}
+async function cartHeader() {
+    const cartHeader = document.getElementById("cartHeader");
 }
 getProduct(URLid);

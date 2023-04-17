@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 ?>
 
 <html lang="fr">
@@ -20,6 +19,7 @@ session_start();
         <?php require_once "src/import/header.php"; ?>
     </header>
     <main>
+        <section id="containerMessageAddCart"></section>
         <section id="containerInformationProduits"></section>
         <section id="containerAvisClients"></section>
     </main>

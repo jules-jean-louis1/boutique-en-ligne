@@ -19,6 +19,24 @@ function displaySuccess(message) {
         message.style.display = 'none';
     }, 3000);
 }
+function displayErrorMessageFormUpdateProduct(ParentSelector, ContentMessage) {
+    ParentSelector.innerHTML = '';
+    ParentSelector.innerHTML = `
+    <div class="flex items-center py-3 px-2 rounded-lg bg-[#FEEFB3] text-[#D8000C] border-l-[3px] border-[#FEEFB3]">
+        <img src="public/images/icones/danger-red-stroke-2.svg" alt="" class="w-5 h-5">
+        <small class="text-lg">${ContentMessage}</small>
+    </div>
+    `;
+}
+function displaySuccessMessageFormUpdateProduct(ParentSelector, ContentMessage) {
+    ParentSelector.innerHTML = '';
+    ParentSelector.innerHTML = `
+    <div class="flex items-center py-3 px-2 rounded-lg bg-[#DFF2BF] text-[#270] border-l-[3px] border-[#270]">
+        <img src="public/images/icones/succes-circle-green-stroke-2.svg" alt="" class="w-5 h-5">
+        <small class="text-lg">${ContentMessage}</small>
+    </div>
+    `;
+}
 // Formatage de la date
 function formatDate(timestamp) {
     const months = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jui', 'Jui', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -161,4 +179,4 @@ async function searchBarHeader() {
 
 
 
-export { displayError, displaySuccess, formatDate, formatDateSansh, loginFormHeader, registerHeader, closeModalDialog };
+export { displayError, displaySuccess, formatDate, formatDateSansh, loginFormHeader, registerHeader, closeModalDialog, displayErrorMessageFormUpdateProduct, displaySuccessMessageFormUpdateProduct, addSignInClickHandler, searchBarHeader};
