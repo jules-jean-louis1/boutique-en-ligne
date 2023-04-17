@@ -25,11 +25,11 @@ if (isset($_SESSION['id'])) {
                 $total += $productPrice * $productQuantity;
                 // Ajouter le produit au tableau
                 $tableProducts[] = [
-                    'id' => $productId,
-                    'name' => $productDetails[0]['name_product'],
-                    'quantity' => $productQuantity,
-                    'image' => $productDetails[0]['img_product'],
-                    'price' => $productPrice
+                    'id_product' => $productId,
+                    'name_product' => $productDetails[0]['name_product'],
+                    'quantity_product' => $productQuantity,
+                    'img_product' => $productDetails[0]['img_product'],
+                    'price_product' => $productPrice
                 ];
                 $CountProducts = count($tableProducts);
             }

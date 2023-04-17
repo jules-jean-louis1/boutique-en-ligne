@@ -232,12 +232,12 @@ async function cartHeader() {
                         containerCartHeader.innerHTML += `
                         <div class="flex flex-row justify-between px-5 py-3 border-b-[1px] border-[#e5e7eb]">
                             <div class="flex flex-row items-center">
-                                <img src="src/images/products/${product.image}" alt="${product.image}" class="h-12 rounded-lg">
-                                <p class="text-[#a8b3cf] ml-5">${product.name}</p>
+                                <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded-lg">
+                                <p class="text-[#a8b3cf] ml-5">${product.name_product}</p>
                             </div>
                             <div class="flex flex-col items-start">
-                                <p class="text-[#a8b3cf] text-2xl">${product.price} €</p>
-                                <p class="text-[#a8b3cf] text-sm">Quantité :${product.quantity}</p>
+                                <p class="text-[#a8b3cf] text-2xl">${product.price_product} €</p>
+                                <p class="text-[#a8b3cf] text-sm">Quantité :${product.quantity_product}</p>
                             </div>
                         </div>
                         `;
