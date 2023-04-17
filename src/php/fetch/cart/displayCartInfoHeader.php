@@ -31,10 +31,15 @@ if (isset($_SESSION['id'])) {
                     'image' => $productDetails[0]['img_product'],
                     'price' => $productPrice
                 ];
+                $CountProducts = count($tableProducts);
             }
-            echo json_encode($tableProducts);
-            // Afficher le total
-            echo "Total: " . $total . "€";
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Le panier a bien été récupéré',
+                'countProducts' => $CountProducts,
+                'total' => $total,
+                'products' => $tableProducts,
+            ]);
         }
     } else {
         // Afficher message panier vide
