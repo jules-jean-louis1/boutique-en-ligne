@@ -31,7 +31,5 @@ $price_product = '19.99';
         }
     }
 }*/
-$carts = new Cart();
-$cart = $carts->test($id, $id_product, $quantity_product, $price_product);
-echo $cart;
+
 
