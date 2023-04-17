@@ -33,6 +33,7 @@ if (isset($_SESSION['id'])) {
                 ];
                 $CountProducts = count($tableProducts);
             }
+            header("Content-Type: application/json");
             echo json_encode([
                 'status' => 'success',
                 'message' => 'Le panier a bien été récupéré',

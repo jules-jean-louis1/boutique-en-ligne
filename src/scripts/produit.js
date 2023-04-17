@@ -123,7 +123,7 @@ async function getProduct(URLid) {
             const containerProduct = document.getElementById("containerProduct");
             for (const product of data.data) {
                 containerProduct.innerHTML = `
-            <div class="bg-[#A87EE6FF] h-[150px] w-9/12">
+            <div class="bg-[#A87EE6FF] h-[50%] w-9/12">
                 <div class="flex flex-row justify-between px-16 py-6">
                     <div>
                         <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded-lg">
@@ -190,12 +190,67 @@ async function getProduct(URLid) {
                             setTimeout(() => {
                                 containerMessageCart.innerHTML = '';
                             }, 2500);
+                            cartHeader();
                         }
                     });
             }
         });
 }
 async function cartHeader() {
-    const cartHeader = document.getElementById("cartHeader");
+    const cartButtonHeader = document.getElementById("cartHeader");
+    const notifCartHeader = document.getElementById("notifCartHeader");
+    await fetch('src/php/fetch/cart/displayCartInfoHeader.php')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if (data.status == 'success') {
+                const total = data.total;
+                const nbProduits = data.countProducts;
+                notifCartHeader.innerHTML = `
+                    <p class="absolute rounded-full bg-[#A87EE6FF] px-1">
+                        <span class="text-white text-xs">${nbProduits}</span>
+                    </p>
+                `;
+                const cartDivHeader = document.createElement("dialog");
+                cartDivHeader.setAttribute('class', 'absolute top-[17%] left-[57%] transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white w-80 rounded-lg shadow-lg');
+
+                cartButtonHeader.addEventListener('mouseover', () => {
+                    cartDivHeader.setAttribute('open', '');
+                    cartDivHeader.innerHTML = `
+                    <div class="flex flex-col items-around space-y-2">
+                        <div class="mt-2">
+                            <p class="text-[#a8b3cf]">Total : ${total} €</p>
+                        </div>
+                        <div id="containerCartHeader"></div>
+                        <div class="h-10 flex items-center justify-center pb-2">
+                            <a href="cart.php" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg">Voir le panier</a>
+                        </div>
+                    </div>
+                    `;
+                    const containerCartHeader = document.getElementById("containerCartHeader");
+                    for (const product of data.products) {
+                        containerCartHeader.innerHTML += `
+                        <div class="flex flex-row justify-between px-5 py-3 border-b-[1px] border-[#e5e7eb]">
+                            <div class="flex flex-row items-center">
+                                <img src="src/images/products/${product.image}" alt="${product.image}" class="h-12 rounded-lg">
+                                <p class="text-[#a8b3cf] ml-5">${product.name}</p>
+                            </div>
+                            <div class="flex flex-col items-start">
+                                <p class="text-[#a8b3cf] text-2xl">${product.price} €</p>
+                                <p class="text-[#a8b3cf] text-sm">Quantité :${product.quantity}</p>
+                            </div>
+                        </div>
+                        `;
+                    }
+
+                });
+                cartButtonHeader.appendChild(cartDivHeader);
+                cartButtonHeader.addEventListener('mouseout', () => {
+                    cartDivHeader.removeAttribute('open');
+                });
+
+            }
+        });
 }
+cartHeader();
 getProduct(URLid);
