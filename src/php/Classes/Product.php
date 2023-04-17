@@ -119,4 +119,27 @@ class Product extends Database
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+    public function getProductById($id)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT p.*, s.name_subcategories 
+                                FROM product p 
+                                JOIN subcategories s ON p.subcategories_id = s.id_subcategories 
+                                WHERE id_product = :id");
+        $req->execute(array(
+            "id" => $id
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+    public function getProductPriceById($id)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT price_product FROM product WHERE id_product = :id");
+        $req->execute(array(
+            "id" => $id
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }

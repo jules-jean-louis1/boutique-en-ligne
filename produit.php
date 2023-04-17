@@ -12,15 +12,16 @@ session_start();
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Script JS -->
-    <script defer type="module" src="src/scripts/index.js"></script>
-    <title>Acceuil</title>
+    <script defer type="module" src="src/scripts/produit.js"></script>
+    <title></title>
 </head>
 <body>
     <header class="w-full">
         <?php require_once "src/import/header.php"; ?>
     </header>
     <main>
-
+        <section id="containerInformationProduits"></section>
+        <section id="containerAvisClients"></section>
     </main>
     <footer class="w-full">
         <?php require_once "src/import/footer.php"; ?>

@@ -7,7 +7,7 @@
                     <a href="index.php">Home</a>
                 </li>
                 <li>
-                    <a href="boutique.php">Produits</a>
+                    <a href="catalogue.php">Catalogue</a>
                 </li>
             </ul>
         </div>
@@ -96,18 +96,20 @@
                         </div>
                     </div>
                 <?php } else { ?>
-                <li>
-                    <button type="button" id="buttonLoginHeader"
-                            class="py-[5px] px-2 rounded-lg bg-[#F5F8FC] flex items-center ease-in duration-300 border-[1px] border-[#52586633] hover:border-[#525866] hover:shadow-[0 0 10px 0 #525866]">
-                        <span class="text-[#525866] font-semibold text-[0.8em]">Login</span>
-                    </button>
-                </li>
-                <li>
-                    <button type="button" id="buttonRegisterHeader"
-                            class="py-[5px] px-2 rounded-lg bg-[#F5F8FC] flex items-center ease-in duration-300 border-[1px] border-[#52586633] hover:border-[#525866] hover:shadow-[0 0 10px 0 #525866]">
-                        <span class="text-[#525866] font-semibold text-[0.8em]">Register</span>
-                    </button>
-                </li>
+                    <div class="flex items-center space-x-2">
+                        <li>
+                            <button type="button" id="buttonLoginHeader"
+                                    class="py-[5px] px-2 rounded-lg bg-[#1C1F26] flex items-center ease-in duration-300 border-[1px] border-[#a8b3cf33]">
+                                <span class="text-[#a8b3cf] font-meduim text-[0.8em]">Connexion</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" id="buttonRegisterHeader"
+                                    class="py-[5px] px-2 rounded-lg bg-[#A87EE6FF] flex items-center ease-in duration-300 border-[1px] border-[#52586633] hover:border-[#525866] hover:shadow-[0 0 10px 0 #525866]">
+                                <span class="text-[#fff] font-semibold text-[0.8em]">S'inscrire</span>
+                            </button>
+                        </li>
+                    </div>
             <?php } ?>
             </ul>
         </div>
