@@ -17,13 +17,13 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
 <header class="w-full">
     <?php require_once "src/import/header.php"; ?>
 </header>
-<main>
+<main class="">
     <article>
         <section>
             <div id="containerDialogFormUpdateProduct"></div>
         </section>
     </article>
-    <div id="containerButtonAction" class="flex justify-center space-x-5">
+    <div id="containerButtonAction" class="flex justify-center space-x-5 lg:pt-[6%] pt-[6%]">
         <button type="button" class="bg-[#A87EE6FF] hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center space-x-2" id="buttonSeeProduct">
             <svg width="24" height="24" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M3.67709 8.5L8.70966 3.47186C9.05795 3.17747 9.50825 3 10 3H19C20.1046 3 21 3.89543 21 5V14C21 14.5763 20.7563 15.0956 20.3663 15.4606L15.3229 20.5M15.3229 8.5L20.3229 3.5M5 21H14C15.1046 21 16 20.1046 16 19V10C16 8.89543 15.1046 8 14 8H5C3.89543 8 3 8.89543 3 10V19C3 20.1046 3.89543 21 5 21Z"></path></svg>
             <span>Produits</span>
@@ -50,10 +50,6 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
             <div id="containerCat">
                 <div id="dislpayInfoProduct"></div>
                 <div id="containerAddCategory">
-                </div>
-            </div>
-            <div id="containerSubCat">
-                <div id="containerAddSubCategory">
                 </div>
             </div>
         </div>

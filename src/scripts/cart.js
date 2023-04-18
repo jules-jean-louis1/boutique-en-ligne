@@ -24,7 +24,7 @@ if (buttonProfilHeader) {
 
 // Ajout d'un écouteur d'événement sur le document entier pour fermer le menu lors d'un clic à l'extérieur
 if (menuProfilHeader) {
-document.addEventListener("click", function(event) {
+    document.addEventListener("click", function(event) {
         // Si l'élément cliqué n'est ni le bouton de profil ni le menu
         if (!event.target.closest("#buttonProfilHeader") && !event.target.closest("#menuProfilHeader")) {
             // Ajout de la classe "hidden" sur la liste ul
@@ -77,6 +77,8 @@ async function displayUserInfoHeader() {
     await fetch('src/php/fetch/client/displayUserById.php')
         .then(response => response.json())
         .then(data => {
+            const titlePageCart = document.querySelector('title');
+            titlePageCart.innerHTML = `Panier - ${data[0].login_users}`;
             for (const user of data) {
                 profilInfoHeader.innerHTML = `
             <p>${user.login_users}</p>
@@ -100,104 +102,9 @@ if (btnLogin) {
 }
 
 
-// Produit.js
-// Récupérer les elements du DOM
-const containerDivProduct = document.getElementById("containerInformationProduits");
-// Récupérer l'ID à partir de la query string
-const searchParams = new URLSearchParams(window.location.search);
-const URLid = searchParams.get("id");
+// Cart.js
 
 // Récupérer les données du produit
-async function getProduct(URLid) {
-    const containerProduct = document.createElement("div");
-    containerProduct.classList.add("flex", "flex-col", "items-center", "justify-center");
-    containerProduct.setAttribute("id", "containerProduct");
-    containerDivProduct.appendChild(containerProduct);
-    await fetch(`src/php/fetch/produit/getProductById.php?id=${URLid}`)
-        .then(response => response.json())
-        .then(data => {
-            let options = '';
-            for (let i = 1; i <= 10; i++) {
-                options += `<option value="${i}">${i}</option>`;
-            }
-            const containerProduct = document.getElementById("containerProduct");
-            for (const product of data.data) {
-                containerProduct.innerHTML = `
-            <div class="lg:w-9/12 w-11/12 border-[1px] border-[#a8b3cf33] rounded-lg">
-                <div class="bg-[#A87EE6FF] h-96 absolute lg:w-9/12 lg:h-2/5 flex justify-center -z-50 rounded-t-lg"></div>
-                <div class="flex lg:flex-row sm:flex-col sm:items-center justify-between px-16 py-6">
-                    <div>
-                        <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="lg:h-[100vh] rounded-lg">
-                    </div>
-                    <div class="flex flex-col items-start lg:w-5/12 sm:w-[95%]">
-                        <p class="text-center text-white rounded-lg p-1 bg-[#00000038]">${product.name_subcategories}</p>
-                        <h1 class="text-6xl text-white mt-5 uppercase font-bold">${product.name_product}</h1>
-                        <p class="mt-5">Synopsis : ${product.description_product}</p>
-                        <div>
-                            <p class="text-[#A87EE6FF] mt-2 font-bold text-6xl">${product.price_product} €</p>
-                            <div id="containerFormAddProductToCart">
-                                <form action="" method="post" id="formAddToCart">
-                                    <input type="hidden" name="id" value="${product.id_product}">
-                                    <input type="hidden" name="name" value="${product.name_product}">
-                                    <select name="quantity" id="quantity" class="bg-[#2D323C] text-white px-5 py-2 rounded-lg mt-5">
-                                        ${options}
-                                    </select>
-                                    <button type="submit" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg mt-5" id="buttonAddToCart">Ajouter au panier</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-center justify-center">
-                        <div class="">
-                            <p class="text-[#a8b3cf]">Sortie le :</p>
-                            <p class="text-[#a8b3cf] mt-2">${formatDateSansh(product.released_date_product)}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            `;
-                let optionsDisponible = '';
-                if (data.data.dispo_product === '1') {
-                    optionsDisponible = `<button class="bg-[#A87EE6FF] text-white rounded-lg px-4 py-2" disabled>Ce produit n'est plus disponible</button>`;
-                    containerProduct.innerHTML = optionsDisponible;
-                }
-
-                const titlePageProduct = document.querySelector("title");
-                titlePageProduct.innerHTML = `${product.name_product}`;
-                // Ajouter au panier
-                const formAddToCart = document.getElementById("formAddToCart");
-                formAddToCart.addEventListener('submit', (ev) => {
-                    ev.preventDefault();
-                    const id = formAddToCart.querySelector('[name="id"]').value;
-                    const quantity = formAddToCart.querySelector('[name="quantity"]').value;
-                    const name = formAddToCart.querySelector('[name="name"]').value;
-                    addToCart(id, quantity, name);
-                });
-            }
-            async function addToCart(id, quantity, name) {
-                await fetch(`src/php/fetch/cart/addProductToCart.php?id=${id}&quantity=${quantity}&name=${name}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status == 'success') {
-                            const diaog = document.createElement("dialog");
-                            diaog.setAttribute('class','fixed top-20 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-transparent');
-                            diaog.setAttribute('open', '');
-                            diaog.innerHTML = `
-                            <div class="flex items-center py-3 px-2 rounded-lg bg-[#DFF2BF] text-[#270] border-l-[3px] border-[#270]">
-                                <img src="public/images/icones/succes-circle-green-stroke-2.svg" alt="" class="w-5 h-5">
-                                <small class="text-lg">Produit ajouté au panier</small>
-                            </div>
-                            `;
-                            containerMessageCart.appendChild(diaog);
-                            setTimeout(() => {
-                                containerMessageCart.innerHTML = '';
-                            }, 2500);
-                            cartHeader();
-                        }
-                    });
-            }
-        });
-}
 async function cartHeader() {
     const cartButtonHeader = document.getElementById("cartHeader");
     const notifCartHeader = document.getElementById("notifCartHeader");
@@ -317,5 +224,74 @@ async function cartHeader() {
             }
         });
 }
+
 cartHeader();
-getProduct(URLid);
+
+
+
+// Page cart.php
+
+async function getCart() {
+    const containerCart = document.getElementById("containerCart");
+
+    await fetch('src/php/fetch/cart/getCart.php')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            containerCart.innerHTML = '';
+            if (data.status == 'success_connected') {
+                let options = '';
+                for (let i = 1; i <= 10; i++) {
+                    options += `<option value="${i}">${i}</option>`;
+                }
+                const total = data.total;
+                const nbProduits = data.countProducts;
+                containerCart.innerHTML = `
+                    <div class="flex flex-col items-center space-y-2 w-full">
+                        <div class="flex flex-row items-center justify-between w-9/12">
+                            <div id="total_items_cart">
+                                <p class="text-[#a8b3cf]">Vous avez ${nbProduits} articles dans votre panier</p>
+                            </div>
+                            <div id="total_prix">
+                                <p class="text-[#a8b3cf]">Total : ${total} €</p>
+                            </div>
+                        </div>
+                        <div id="displayproductsInCart" class=" w-9/12"></div>
+                    </div>
+                `;
+                const displayproductsInCart = document.getElementById("displayproductsInCart");
+                for (const product of data.products) {
+                    displayproductsInCart.innerHTML += `
+                    <div class="flex flex-row justify-between px-5 py-3 border-b-[1px] border-[#e5e7eb]">
+                        <div class="flex flex-row items-center">
+                            <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded-lg">
+                            <p class="text-[#a8b3cf] ml-5">${product.name_product}</p>
+                        </div>
+                        <div class="flex flex-col items-start">
+                            <p class="text-[#a8b3cf] text-2xl">${product.price_product} €</p>
+                            <p class="text-[#a8b3cf] text-sm">Quantité :${product.quantity_product}</p>
+                        </div>
+                        <div id="actionOnProduct">
+                            <button class="bg-[#e04337] text-white px-5 py-2 rounded-lg font-extrabold" id="deleteProduct_${product.id_product}" data-id-cat="${product.id_product}">Supprimer</button>
+                            <form action="" method="POST">
+                                <input type="hidden" name="id_product" value="${product.id_product}">
+                                <select name="quantity_product" id="quantity_product" class="bg-[#000] text-white px-5 py-2 rounded-lg">
+                                    ${options}
+                                </select>
+                                <button class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold   " type="submit">Modifier</button>
+                            </form>
+                        </div>
+                    </div>
+                    `;
+                }
+                for ( const product of data.products) {
+                    const btnDeleteProduct = document.querySelector(`deleteProduct_${product.id_product}`);
+                    btnDeleteProduct.addEventListener('click', async (ev) => {
+                        ev.preventDefault();
+                        await fetch(`src/php/fetch/cart/deleteProduct.php?id_product=${product.id_product}`)
+                    });
+                }
+            }
+        });
+}
+getCart();

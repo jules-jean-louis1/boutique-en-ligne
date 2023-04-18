@@ -49,7 +49,7 @@ if (isset($_POST['updateNameProduct'])) {
         }
         if (!empty($_FILES['updateImgProduct']['name'])) {
             // Vérification du type et de la taille de l'image
-            $allowedTypes = array(IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF);
+            $allowedTypes = array(IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF, IMAGETYPE_WEBP);
             $detectedType = exif_imagetype($_FILES['updateImgProduct']['tmp_name']);
             $maxFileSize = 900 * 1024; // 900 ko
             if (!in_array($detectedType, $allowedTypes) || $_FILES['updateImgProduct']['size'] > $maxFileSize) {

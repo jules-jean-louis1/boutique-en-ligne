@@ -100,9 +100,7 @@ if (btnLogin) {
     loginFormHeader(btnLogin);
 }
 
-const DisplayInfo = document.querySelector('#dislpayInfoProduct');
-const containerAddCategory = document.querySelector('#containerAddCategory');
-const containerAddSubCategory = document.querySelector('#containerAddSubCategory');
+// Fonction Dashboard Admin
 // Declaration des variables pour les boutons
 const buttonGestionProduct = document.querySelector('#buttonSeeProduct');
 const buttionGestionCategores = document.querySelector('#buttonSeeCategories');
@@ -300,6 +298,9 @@ async function addProduct() {
                             messageError.innerHTML += error;
                             displayError(messageError);
                         }
+                        setTimeout(() => {
+                        messageError.innerHTML = '';
+                        }, 3000);
                     }
                 });
         })
@@ -400,7 +401,7 @@ async function gestionProduct() {
                                 </div>
                                 <div id="date_sortie_produit" class="flex space-x-0.5"> 
                                     <h2 class="font-normal text-slate-700">Date de sortie :</h2>
-                                    <h2>${product.released_date_product}</h2>
+                                    <h2>${formatDateSansh(product.released_date_product)}</h2>
                                 </div>
                                 <div id="categorie_produit" class="flex space-x-0.5">
                                     <h2 class="font-normal text-slate-700">Genre :</h2>
@@ -725,11 +726,16 @@ async function gestionCategory() {
             })
     }
     displayCategories();
-    const createBtnAddCategory = document.createElement('button');
-    createBtnAddCategory.setAttribute('id', 'btnAddCategory_');
-    createBtnAddCategory.setAttribute('class', 'bg-green-500 p-2 rounded-lg text-white');
-    createBtnAddCategory.textContent = 'Ajouter une catégorie';
-    containerAddCategory.appendChild(createBtnAddCategory);
+    const containerCreateBtnAddCategory = document.createElement('div');
+    containerCreateBtnAddCategory.setAttribute('class', 'flex flex-col items-center justify-center');
+
+    containerAllDiv.appendChild(containerCreateBtnAddCategory);
+    containerCreateBtnAddCategory.innerHTML = `
+        <button type="button" class="bg-green-500 p-2 rounded-lg text-white flex items-center " id="btnAddCategory_">
+            <svg width="32" height="32" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M6.99999 12H12M12 12H17M12 12V6.99999M12 12V17M21.5 12C21.5 17.2467 17.2467 21.5 12 21.5C6.75329 21.5 2.5 17.2467 2.5 12C2.5 6.75329 6.75329 2.5 12 2.5C17.2467 2.5 21.5 6.75329 21.5 12Z"></path></svg>
+            Ajouter une catégorie
+        </button>
+    `;
 
     const btnAddCategory = document.querySelector('#btnAddCategory_');
     btnAddCategory.addEventListener('click', () => {
@@ -775,12 +781,15 @@ async function gestionCategory() {
     const formAddCategory = document.createElement('div');
     formAddCategory.setAttribute('id', 'formAddCategory');
     formAddCategory.setAttribute('class', 'flex space-x-2 block');
-    containerAddCategory.appendChild(formAddCategory);
+    containerCreateBtnAddCategory.appendChild(formAddCategory);
 }
 
 async function gestionSubCategories() {
-    containerAddSubCategory.innerHTML = '';
-    containerAddSubCategory.innerHTML = `
+    const createContainerAddSubCategory = document.createElement('div');
+    createContainerAddSubCategory.setAttribute('id', '__containerAddSubCategory');
+    containerAllDiv.appendChild(createContainerAddSubCategory);
+    createContainerAddSubCategory.innerHTML = '';
+    createContainerAddSubCategory.innerHTML = `
         <div id="containerAddSubCategory" class="flex space-x-2">
             <form id="formSubCategories" method="post">
                 <label for="category">Sélectionnez une catégorie :</label>
@@ -880,7 +889,7 @@ async function gestionSubCategories() {
     const formAddSubCategory = document.createElement('div');
     formAddSubCategory.setAttribute('id', 'formAddSubCategory');
     formAddSubCategory.setAttribute('class', 'flex space-x-2 block');
-    containerAddSubCategory.appendChild(formAddSubCategory);
+    containerAllDiv.appendChild(formAddSubCategory);
 
 
 
@@ -1102,19 +1111,19 @@ async function fetchUser(page, search, order) {
 
 
 // fonction d'affichage des produits
-addProduct();
+// addProduct();
 
 // fonction d'affichage des catégories
-gestionCategory();
+// gestionCategory();
 
 // fonction d'affichage des sous-catégories
-gestionSubCategories();
+// gestionSubCategories();
 
 // fonction d'affichage des produits
-gestionProduct();
+// gestionProduct();
 
 // Fonction d'affichage des utilisateurs
-gestionUser(page, search, order);
+
 
 
 // Gestions de l'affichage grace au menu
@@ -1128,4 +1137,8 @@ buttionGestionCategores.addEventListener('click', () => {
     containerAllDiv.innerHTML = '';
     gestionCategory();
     gestionSubCategories();
+});
+buttonGestionUser.addEventListener('click', () => {
+    containerAllDiv.innerHTML = '';
+    gestionUser(page, search, order);
 });

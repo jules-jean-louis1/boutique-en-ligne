@@ -9,9 +9,10 @@ class Product extends Database
     }
     public function addProduct($name, $description, $price, $stock, $image, $date, $subcategories_id)
     {
+        // Si dispo_product = 1 alors le produit n'est disponible
         $bdd = $this->getBdd();
         $req = $bdd->prepare("INSERT INTO product (name_product, description_product, price_product, quantite_product, img_product, released_date_product, ajout_date_product, dispo_product, subcategories_id) 
-                                VALUES (:name, :description, :price, :stock, :image, :date,  NOW(), '1', :subcategories_id)");
+                                VALUES (:name, :description, :price, :stock, :image, :date,  NOW(), '0', :subcategories_id)");
         $req->execute(array(
             "name" => $name,
             "description" => $description,
