@@ -15,18 +15,36 @@ if (isset($_POST['login'])) {
                 // Vérifier si l'utilisateur a déjà un panier
                 $cart = new Cart();
                 $cartExist = $cart->verifyIfCartExist($_SESSION['id']);
-                $cart = json_decode($_COOKIE['cart'], true);
+                $cartData = json_decode($_COOKIE['cart'], true);
                 // Si FALSE, on crée un panier
                 if ($cartExist === false) {
                     $cart->createCart($_SESSION['id']);
-                    // On ajoute le produit au panier
-                    foreach ($cart as $product) {
-                        $cart->AddProductToClientCart($_SESSION['id'], $product['id'], $product['quantity']);
+                    if (isset($_COOKIE["cart"])) {
+                        $cartData = json_decode($_COOKIE["cart"], true);
+                        if (is_array($cartData) && count($cartData) > 0) {
+                            foreach ($cartData as $product) {
+                                $id = $product['id'];
+                                $quantity = $product['quantity'];
+                                $cart->AddProductToClientCart($_SESSION['id'], $id, $quantity);
+                            }
+                        }
+                        // Détruire la variable du cookie
+                        setcookie('cart', '', time() - 3600, '/');
+                        unset($_COOKIE["cart"]);
                     }
                 } else {
-                    // Si TRUE, on ajoute le produit au panier
-                    foreach ($cart as $product) {
-                        $cart->AddProductToClientCart($_SESSION['id'], $product['id'], $product['quantity']);
+                    if (isset($_COOKIE["cart"])) {
+                        $cartData = json_decode($_COOKIE["cart"], true);
+                        if (is_array($cartData) && count($cartData) > 0) {
+                            foreach ($cartData as $product) {
+                                $id = $product['id'];
+                                $quantity = $product['quantity'];
+                                $cart->AddProductToClientCart($_SESSION['id'], $id, $quantity);
+                            }
+                        }
+                        // Détruire la variable du cookie
+                        setcookie('cart', '', time() - 3600, '/');
+                        unset($_COOKIE["cart"]);
                     }
                 }
             }

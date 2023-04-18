@@ -38,12 +38,12 @@ class Cart extends Database
                                     WHERE c.users_id = :user_id
                                     AND c.status_cart = 'active'");
         $req->execute(array(
-            "id" => $id
+            "user_id" => $id
         ));
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
-    public function countProductsInCart($id)
+    public function countItemsInCart($id)
     {
         $bdd = $this->getBdd();
         $req = $bdd->prepare("SELECT SUM(cp.quantity_product) as total_products
@@ -52,24 +52,36 @@ class Cart extends Database
                                     WHERE c.users_id = :user_id
                                     AND c.status_cart = 'active'");
         $req->execute(array(
-            "id" => $id
+            "user_id" => $id
         ));
         $result = $req->fetch();
         return $result['total_products'];
     }
-    public function countTotalPriceInCart($id)
+    public function countProductsInCart($id)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT SUM(cp.price_product) as total_price
-                                    FROM cart_product cp
+        $req = $bdd->prepare("SELECT COUNT(*) FROM cart_product cp
                                     JOIN cart c ON cp.cart_id = c.id_cart
                                     WHERE c.users_id = :user_id
                                     AND c.status_cart = 'active'");
         $req->execute(array(
-            "id" => $id
+            "user_id" => $id
         ));
-        $result = $req->fetch();
-        return $result['total_price'];
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result[0]['COUNT(*)'];
+    }
+    public function countTotalPriceInCart($id)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT total_price_cart 
+                                    FROM cart
+                                    WHERE cart.users_id = :user_id 
+                                    AND cart.status_cart = 'active'");
+        $req->execute(array(
+            "user_id" => $id
+        ));
+        $result = $req->fetchall(PDO::FETCH_ASSOC);
+        return $result[0]['total_price_cart'];
     }
     public function addCartToUser($cart, $user_id)
     {

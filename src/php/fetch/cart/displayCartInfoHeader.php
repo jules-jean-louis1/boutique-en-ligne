@@ -16,7 +16,7 @@ if (isset($_SESSION['id'])) {
         $total = $cart->countTotalPriceInCart($id);
         header("Content-Type: application/json");
         echo json_encode([
-            'status' => 'success',
+            'status' => 'success_connected',
             'countProducts' => $getNbProducts,
             'total' => $total,
             'products' => $getCart,
@@ -62,7 +62,7 @@ if (isset($_SESSION['id'])) {
             }
             header("Content-Type: application/json");
             echo json_encode([
-                'status' => 'success',
+                'status' => 'success_not_connected',
                 'message' => 'Le panier a bien été récupéré',
                 'countProducts' => $CountProducts,
                 'total' => $total,
