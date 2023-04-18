@@ -5,7 +5,7 @@ require_once "../../Classes/Client.php"; // On inclut la classe Client
 if (isset($_FILES['uploadfile'])) {
     $filename = $_FILES['uploadfile']['name'];
     $tempname = $_FILES['uploadfile']['tmp_name'];
-    $folder = "src/images/avatars/".$filename;
+    $folder = "../../../images/avatars/".$filename;
     $id = $_SESSION['id'];
 
     // Vérifier la taille du fichier (max. 1 Mo)

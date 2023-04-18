@@ -25,6 +25,9 @@ session_start();
     <section>
         <div id="containerCart"></div>
     </section>
+    <section>
+        <div id="productSimilar"></div>
+    </section>
 </main>
 <footer class="w-full">
     <?php require_once "src/import/footer.php"; ?>

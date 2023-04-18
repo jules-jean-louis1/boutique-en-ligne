@@ -2,7 +2,7 @@
 session_start();
 require_once "../../Classes/Product.php";
 
-$errors = [];
+/*$errors = [];
 $success = [];
 
 $nameProduct = '';
@@ -11,16 +11,16 @@ $priceProduct = '';
 $quantityProduct = '';
 $realeaseDateProduct = '';
 $idSubCategory = '';
-$_FILES['imageProduct']['name'] = '';
+$_FILES['imageProduct']['name'] = '';*/
 
-if (isset($_POST['nameProduct'])) {
+/*if (isset($_POST['nameProduct'])) {
     /*$nameProduct = htmlspecialchars($_POST['nameProduct']);
     $descriptionProduct = htmlspecialchars($_POST['descriptionProduct']);
     $priceProduct = $_POST['priceProduct'];
     $quantityProduct = $_POST['stockProduct'];
     $realeaseDateProduct = htmlspecialchars($_POST['releasedDate']);
     $idSubCategory = intval($_POST['subCategoryId']);*/
-
+/*
     // Vérification des champs obligatoires
     if (empty($nameProduct) && empty($descriptionProduct) && empty($priceProduct) && empty($quantityProduct) && empty($realeaseDateProduct) && empty($_FILES['imageProduct']['name']) && empty($idSubCategory)) {
         $errors[] = "Veuillez remplir tous les champs.";
@@ -82,6 +82,11 @@ if (!empty($errors)) {
     $errors[] = "Le produit n'a pas été ajouté.";
     header("Content-Type: application/json");
     echo json_encode(['status' => 'error', 'message' => $errors]);
+}*/
+if (is_dir("../../../images/avatars/")) {
+    echo "Le dossier existe";
+} else {
+    echo "Le dossier n'existe pas";
 }
 
 

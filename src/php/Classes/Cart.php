@@ -31,7 +31,7 @@ class Cart extends Database
     public function getCartByUserId($id)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT cp.quantity_product, p.name_product, p.img_product, p.price_product
+        $req = $bdd->prepare("SELECT cp.quantity_product, p.id_product, p.quantite_product, p.name_product, p.img_product, p.price_product
                                     FROM cart c
                                     JOIN cart_product cp ON c.id_cart = cp.cart_id
                                     JOIN product p ON cp.product_id = p.id_product
@@ -82,6 +82,62 @@ class Cart extends Database
         ));
         $result = $req->fetchall(PDO::FETCH_ASSOC);
         return $result[0]['total_price_cart'];
+    }
+    public function getQuantityItems($id_product, $id_user)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT cp.quantity_product
+                                    FROM cart c
+                                    JOIN cart_product cp ON c.id_cart = cp.cart_id
+                                    JOIN product p ON cp.product_id = p.id_product
+                                    WHERE c.users_id = :user_id
+                                    AND c.status_cart = 'active'
+                                    AND p.id_product = :id_product");
+        $req->execute(array(
+            "user_id" => $id_user,
+            "id_product" => $id_product
+        ));
+        $result = $req->fetchall(PDO::FETCH_ASSOC);
+        return $result[0]['quantity_product'];
+    }
+    public function verifyIfStockIsAvailable($id_product, $quantity)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT quantite_product FROM product WHERE id_product = :id_product");
+        $req->execute(array(
+            "id_product" => $id_product
+        ));
+        $result = $req->fetchall(PDO::FETCH_ASSOC);
+        if ($result[0]['quantite_product'] >= $quantity) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function updateQuantityProduct($id_product, $quantity, $id_user)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("UPDATE cart_product SET quantity_product = :quantity WHERE cart_id = (SELECT id_cart FROM cart WHERE users_id = :user_id AND status_cart = 'active') AND product_id = :id_product");
+        $req->execute(array(
+            "quantity" => $quantity,
+            "user_id" => $id_user,
+            "id_product" => $id_product
+        ));
+        $req2 = $bdd->prepare("UPDATE cart SET total_price_cart = 0 WHERE users_id = :user_id AND status_cart = 'active'");
+        $req2->execute(array(
+            "user_id" => $id_user
+        ));
+        $req3 = $bdd->prepare("UPDATE cart 
+                                    SET total_price_cart = (
+                                        SELECT SUM(p.price_product * cp.quantity_product) 
+                                      FROM cart_product cp 
+                                      JOIN product p ON cp.product_id = p.id_product 
+                                      WHERE cp.cart_id = cart.id_cart
+                                    ) 
+                                    WHERE users_id = :user_id AND status_cart = 'active'");
+        $req3->execute(array(
+            "user_id" => $id_user
+        ));
     }
     public function addCartToUser($cart, $user_id)
     {

@@ -37,6 +37,43 @@ function displaySuccessMessageFormUpdateProduct(ParentSelector, ContentMessage) 
     </div>
     `;
 }
+// Fonction qui permet de modifier le style de l'input number
+function inputNumber(el) {
+    let min = el.getAttribute('min') || false;
+    let max = el.getAttribute('max') || false;
+
+    let els = {};
+
+    els.dec = el.previousElementSibling;
+    els.inc = el.nextElementSibling;
+
+    init(el);
+
+    function init(el) {
+        els.dec.addEventListener('click', decrement);
+        els.inc.addEventListener('click', increment);
+
+        function decrement() {
+            let value = parseInt(el.value);
+            value--;
+            if(!min || value >= min) {
+                el.value = value;
+            }
+        }
+
+        function increment() {
+            let value = parseInt(el.value);
+            value++;
+            if(!max || value <= max) {
+                el.value = value;
+            }
+        }
+    }
+}
+
+let inputNumbers = document.querySelectorAll('.input-number');
+inputNumbers.forEach(inputNumber);
+
 // Formatage de la date
 function formatDate(timestamp) {
     const months = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jui', 'Jui', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -176,7 +213,27 @@ function closeModalDialog() {
 async function searchBarHeader() {
 
 }
+function messagePopup(message, status) {
+    const body = document.querySelector('body');
+    const dialog = document.createElement('dialog');
+    dialog.setAttribute('id', 'dialog_message');
+    dialog.className = 'd_message';
+    body.appendChild(dialog);
+    dialog.innerHTML = message;
+    dialog.showModal();
+    setTimeout(() => {
+        dialog.close();
+    }, 3000);
+
+    if (status === 'success') {
+        dialog.classList.add('success_dialog_message');
+    } else if (status === 'error') {
+        dialog.classList.add('error_dialog_message');
+    }
+}
 
 
 
-export { displayError, displaySuccess, formatDate, formatDateSansh, loginFormHeader, registerHeader, closeModalDialog, displayErrorMessageFormUpdateProduct, displaySuccessMessageFormUpdateProduct, addSignInClickHandler, searchBarHeader};
+export { displayError, displaySuccess, formatDate, formatDateSansh, loginFormHeader, registerHeader,
+    closeModalDialog, displayErrorMessageFormUpdateProduct, displaySuccessMessageFormUpdateProduct,
+    addSignInClickHandler, searchBarHeader, messagePopup};
