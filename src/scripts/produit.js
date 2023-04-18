@@ -123,26 +123,28 @@ async function getProduct(URLid) {
             const containerProduct = document.getElementById("containerProduct");
             for (const product of data.data) {
                 containerProduct.innerHTML = `
-            <div class="bg-[#A87EE6FF] h-[50%] w-9/12">
-                <div class="flex flex-row justify-between px-16 py-6">
+            <div class="lg:w-9/12 w-11/12 border-[1px] border-[#a8b3cf33] rounded-lg">
+                <div class="bg-[#A87EE6FF] h-96 absolute lg:w-9/12 lg:h-2/5 flex justify-center -z-50 rounded-t-lg"></div>
+                <div class="flex lg:flex-row sm:flex-col sm:items-center justify-between px-16 py-6">
                     <div>
-                        <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded-lg">
+                        <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="lg:h-[100vh] rounded-lg">
                     </div>
-                    <div class="flex flex-col items-start w-5/12">
+                    <div class="flex flex-col items-start lg:w-5/12 sm:w-[95%]">
                         <p class="text-center text-white rounded-lg p-1 bg-[#00000038]">${product.name_subcategories}</p>
-                        <h1 class="text-6xl text-white mt-5 uppercase">${product.name_product}</h1>
-                        <p class="mt-5">${product.description_product}</p>
+                        <h1 class="text-6xl text-white mt-5 uppercase font-bold">${product.name_product}</h1>
+                        <p class="mt-5">Synopsis : ${product.description_product}</p>
                         <div>
-                            <p class="text-[#a8b3cf] mt-2">${product.price_product} €</p>
-                            <form action="" method="post" id="formAddToCart">
-                                <label for="quantity" class="text-[#a8b3cf] mt-5">Quantité :</label>
-                                <input type="hidden" name="id" value="${product.id_product}">
-                                <input type="hidden" name="name" value="${product.name_product}">
-                                <select name="quantity" id="quantity" class="bg-[#2D323C] text-white px-5 py-2 rounded-lg mt-5">
-                                    ${options}
-                                </select>
-                                <button type="submit" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg mt-5" id="buttonAddToCart">Ajouter au panier</button>
-                            </form>
+                            <p class="text-[#A87EE6FF] mt-2 font-bold text-6xl">${product.price_product} €</p>
+                            <div id="containerFormAddProductToCart">
+                                <form action="" method="post" id="formAddToCart">
+                                    <input type="hidden" name="id" value="${product.id_product}">
+                                    <input type="hidden" name="name" value="${product.name_product}">
+                                    <select name="quantity" id="quantity" class="bg-[#2D323C] text-white px-5 py-2 rounded-lg mt-5">
+                                        ${options}
+                                    </select>
+                                    <button type="submit" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg mt-5" id="buttonAddToCart">Ajouter au panier</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                     <div class="flex flex-col items-center justify-center">
@@ -154,6 +156,12 @@ async function getProduct(URLid) {
                 </div>
             </div>
             `;
+                let optionsDisponible = '';
+                if (data.data.dispo_product === '1') {
+                    optionsDisponible = `<button class="bg-[#A87EE6FF] text-white rounded-lg px-4 py-2" disabled>Ce produit n'est plus disponible</button>`;
+                    containerProduct.innerHTML = optionsDisponible;
+                }
+
                 const titlePageProduct = document.querySelector("title");
                 titlePageProduct.innerHTML = `${product.name_product}`;
                 // Ajouter au panier
@@ -288,7 +296,6 @@ async function cartHeader() {
                         </div>
                         `;
                     }
-
                 });
                 cartButtonHeader.appendChild(cartDivHeader);
                 cartButtonHeader.addEventListener('mouseleave', () => {

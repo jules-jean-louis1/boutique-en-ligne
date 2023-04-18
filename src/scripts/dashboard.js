@@ -128,10 +128,11 @@ function displayErrorMessageInput(ParentSelector, ContentMessage) {
     const containerMessage = document.createElement('div');
     containerMessage.className = 'flex items-center space-x-2';
     containerMessage.innerHTML = `
-                                        <img src="public/images/icones/danger-icones-red.svg" alt="" class="w-5 h-5">
-                                        <small id="errorUpdateNameProduct" class="text-red-500">${ContentMessage}</small>`;
+        <img src="public/images/icones/danger-icones-red.svg" alt="" class="w-5 h-5">
+        <small id="errorUpdateNameProduct" class="text-red-500">${ContentMessage}</small>`;
     ParentSelector.appendChild(containerMessage);
 }
+
 // Fonction pour affichage des erreurs sous le formulaire d'update des produits
 function displayErrorMessageFormUpdateProduct(ParentSelector, ContentMessage) {
     ParentSelector.innerHTML = '';
