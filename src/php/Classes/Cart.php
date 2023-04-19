@@ -43,6 +43,36 @@ class Cart extends Database
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+    public function verifyProductExistInCart($id_product, $id_user)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT * FROM cart_product cp
+                                    JOIN cart c ON cp.cart_id = c.id_cart
+                                    WHERE c.users_id = :user_id
+                                    AND cp.product_id = :product_id");
+        $req->execute(array(
+            "user_id" => $id_user,
+            "product_id" => $id_product
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        if (count($result) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function deleteProductFromCart($id_product, $id_user)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("DELETE cp FROM cart_product cp
+                                    JOIN cart c ON cp.cart_id = c.id_cart
+                                    WHERE c.users_id = :user_id
+                                    AND cp.product_id = :product_id");
+        $req->execute(array(
+            "user_id" => $id_user,
+            "product_id" => $id_product
+        ));
+    }
     public function countItemsInCart($id)
     {
         $bdd = $this->getBdd();

@@ -28,6 +28,8 @@
     color: #fff;
 }
 .error_dialog_message {
+    padding: 10px 20px;
+    border-radius: 8px;
     background-color: #ff0303;
     color: #fff;
 }

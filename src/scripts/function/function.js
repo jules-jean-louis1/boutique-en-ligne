@@ -223,7 +223,8 @@ function messagePopup(message, status) {
     dialog.showModal();
     setTimeout(() => {
         dialog.close();
-    }, 3000);
+        dialog.remove();
+    }, 2000);
 
     if (status === 'success') {
         dialog.classList.add('success_dialog_message');

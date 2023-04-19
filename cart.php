@@ -23,7 +23,7 @@ session_start();
         <div id="containerMessageCart"></div>
     </section>
     <section>
-        <div id="containerCart"></div>
+        <div id="containerCart" class="pt-[10%]"></div>
     </section>
     <section>
         <div id="productSimilar"></div>

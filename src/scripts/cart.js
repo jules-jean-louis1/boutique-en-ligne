@@ -112,6 +112,10 @@ async function cartHeader() {
     await fetch('src/php/fetch/cart/displayCartInfoHeader.php')
         .then(response => response.json())
         .then(data => {
+            const cartDivHeader = document.getElementById("cartDivHeader");
+            if (cartDivHeader) {
+                cartDivHeader.remove();
+            }
             if (data.status == 'success_not_connected') {
                 const total = data.total;
                 const nbProduits = data.countProducts;
@@ -120,12 +124,14 @@ async function cartHeader() {
                         <span class="text-white text-xs">${nbProduits}</span>
                     </p>
                 `;
+
                 const cartDivHeader = document.createElement("dialog");
                 cartDivHeader.setAttribute('class', 'absolute top-[17%] left-[57%] transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white w-80 rounded-lg shadow-lg');
+                cartDivHeader.setAttribute('id', 'cartDivHeader');
 
+                cartDivHeader.innerHTML = '';
                 cartButtonHeader.addEventListener('mouseenter', () => {
                     cartDivHeader.setAttribute('open', '');
-                    cartDivHeader.innerHTML = '';
                     cartDivHeader.innerHTML = `
                     <div class="flex flex-col items-around space-y-2">
                         <div class="mt-2">
@@ -137,6 +143,7 @@ async function cartHeader() {
                         </div>
                     </div>
                     `;
+
                     const containerCartHeader = document.getElementById("containerCartHeader");
                     for (const product of data.products) {
                         containerCartHeader.innerHTML += `
@@ -170,10 +177,10 @@ async function cartHeader() {
                 `;
                 const cartDivHeader = document.createElement("dialog");
                 cartDivHeader.setAttribute('class', 'absolute top-[17%] left-[57%] transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white w-80 rounded-lg shadow-lg');
+                cartDivHeader.setAttribute('id', 'cartDivHeader');
 
                 cartButtonHeader.addEventListener('mouseenter', () => {
                     cartDivHeader.setAttribute('open', '');
-                    cartDivHeader.innerHTML = '';
                     cartDivHeader.innerHTML = `
                     <div class="flex flex-col items-around space-y-2">
                         <div class="mt-2">
@@ -210,6 +217,7 @@ async function cartHeader() {
                 notifCartHeader.innerHTML = '';
                 const cartDivHeader = document.createElement("dialog");
                 cartDivHeader.setAttribute('class', 'absolute top-[17%] left-[57%] transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white w-80 rounded-lg shadow-lg');
+                cartDivHeader.setAttribute('id', 'cartDivHeader');
                 cartDivHeader.addEventListener('mouseenter', () => {
                     cartDivHeader.setAttribute('open', '');
                     cartDivHeader.innerHTML = `
@@ -229,6 +237,7 @@ async function cartHeader() {
 }
 
 cartHeader();
+
 
 
 
@@ -276,7 +285,7 @@ async function getCart() {
                         <div id="actionOnProduct" class="flex justify-end space-x-2">
                             <form action="" method="POST" id="formModifyProduct_${product.id_product}" class="flex flex-row items-center space-x-0.5">
                                 <input type="hidden" name="id_product" value="${product.id_product}">
-                                <input type="number" name="quantity_product" id="quantity_product" class="bg-[#000] text-white p-2 rounded-lg w-[55px]" value="${product.quantity_product}">
+                                <input type="number" name="quantity_product" id="quantity_product" class="bg-[#000] text-white p-2 rounded-lg w-[55px]" min="1" max="${product.quantite_product}" value="${product.quantity_product}">
                                 <button class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold" type="submit" id="modifyProduct_${product.id_product}" data-id-cat="${product.id_product}">
                                     Modifier
                                 </button>
@@ -290,12 +299,14 @@ async function getCart() {
                     const btnDeleteProduct = document.querySelector(`#deleteProduct_${product.id_product}`);
                     btnDeleteProduct.addEventListener('click', async (ev) => {
                         ev.preventDefault();
-                        await fetch(`src/php/fetch/cart/deleteProduct.php?id_product=${product.id_product}`)
+                        await fetch(`src/php/fetch/cart/deleteProductFormCart.php?id_product=${product.id_product}`)
                             .then(response => response.json())
                             .then(data => {
                                 console.log(data);
                                 if (data.status == 'success') {
                                     getCart();
+                                    cartHeader();
+                                    messagePopup('Votre produit a bien été supprimé', 'success');
                                 }
                             });
                     });
@@ -314,11 +325,31 @@ async function getCart() {
                                     messagePopup('Votre produit a bien été modifié', 'success');
                                 }
                                 if (data.status == 'error') {
-
+                                    messagePopup('Quantité invalide', 'error');
                                 }
                             });
                     });
                 }
+            }
+            if (data.status == 'success_not_connected') {
+
+            }
+            if (data.status == 'error') {
+                containerCart.innerHTML = `
+                    <div class="flex flex-col items-center space-y-2 w-full">
+                        <div class="flex flex-row items-center justify-between w-9/12">
+                            <div id="total_items_cart">
+                                <p class="text-[#a8b3cf]">Vous avez 0 articles dans votre panier</p>
+                            </div>
+                            <div id="total_prix">
+                                <p class="text-[#a8b3cf]">Total : 0 €</p>
+                            </div>
+                        </div>
+                        <div id="displayproductsInCart" class=" w-9/12">
+                            <p class="text-[#a8b3cf]">Votre panier est vide</p>
+                        </div>
+                    </div>
+                `;
             }
         });
 }

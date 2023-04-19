@@ -2,6 +2,8 @@
 session_start();
 require_once "../../Classes/Product.php";
 
+require_once "../../Classes/Cart.php";
+
 /*$errors = [];
 $success = [];
 
@@ -83,10 +85,13 @@ if (!empty($errors)) {
     header("Content-Type: application/json");
     echo json_encode(['status' => 'error', 'message' => $errors]);
 }*/
-if (is_dir("../../../images/avatars/")) {
-    echo "Le dossier existe";
+$userid = '1';
+$cart = new Cart();
+$displayCart = $cart->getCartByUserId($userid);
+if (count($displayCart) === 0) {
+    echo "Votre panier est vide";
 } else {
-    echo "Le dossier n'existe pas";
+    echo "Votre panier contient des produits";
 }
 
 
