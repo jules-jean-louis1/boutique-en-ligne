@@ -264,6 +264,7 @@ async function getCart() {
                         </div>
                         <div id="displayproductsInCart" class=" w-9/12"></div>
                     </div>
+                    <div id="containerBtnLoginSigin"></div>
                 `;
                 const displayproductsInCart = document.getElementById("displayproductsInCart");
                 for (const product of data.products) {
@@ -326,6 +327,94 @@ async function getCart() {
                     });
                 }
             }
+            if (data.status == 'success_not_connected') {
+                const total = data.total;
+                const nbProduits = data.countProducts;
+                containerCart.innerHTML = `
+                    <div class="flex flex-col items-center space-y-2 w-full">
+                        <div class="flex flex-row items-center justify-between w-9/12">
+                            <div id="total_items_cart">
+                                <p class="text-[#a8b3cf]">Vous avez ${nbProduits} articles dans votre panier</p>
+                            </div>
+                            <div id="total_prix">
+                                <p class="text-[#a8b3cf]">Total : ${total} €</p>
+                            </div>
+                        </div>
+                        <div id="displayproductsInCart" class="w-9/12"></div>
+                    </div>
+                    <div id="containerBtnLoginSigin"></div>
+                `;
+                const displayproductsInCart = document.getElementById("displayproductsInCart");
+                for (const product of data.products) {
+                    displayproductsInCart.innerHTML += `
+                    <div class="flex flex-row items-center justify-between px-5 py-3 border-b-[1px] border-[#e5e7eb]">
+                        <div class="flex flex-row items-center">
+                            <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded-lg">
+                            <p class="text-[#a8b3cf] ml-5">${product.name_product}</p>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <p class="text-[#a8b3cf] text-2xl">${product.price_product} €</p>
+                            <p class="text-[#a8b3cf] text-sm">Quantité :${product.quantity_product}</p>
+                        </div>
+                        <div id="actionOnProduct" class="flex justify-end space-x-2">
+                            <form action="" method="POST" id="formModifyProduct_${product.id_product}" class="flex flex-row items-center space-x-0.5">
+                                <input type="hidden" name="id_product" value="${product.id_product}">
+                                <input type="number" name="quantity_product" id="quantity_product" class="bg-[#000] text-white p-2 rounded-lg w-[55px]" min="1" max="${product.quantite_product}" value="${product.quantity_product}">
+                                <button class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold" type="submit" id="modifyProduct_${product.id_product}" data-id-cat="${product.id_product}">
+                                    Modifier
+                                </button>
+                            </form>
+                            <button class="bg-[#e04337] text-white px-5 py-2 rounded-lg font-extrabold" id="deleteProduct_${product.id_product}" data-id-cat="${product.id_product}">Supprimer</button>
+                        </div>
+                    </div>
+                    `;
+                }
+                for ( const product of data.products) {
+                    const btnDeleteProduct = document.querySelector(`#deleteProduct_${product.id_product}`);
+                    btnDeleteProduct.addEventListener('click', async (ev) => {
+                        ev.preventDefault();
+                        await fetch(`src/php/fetch/cart/deleteProductFormCart.php?id_product=${product.id_product}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+                                if (data.status == 'success') {
+                                    getCart();
+                                    cartHeader();
+                                    messagePopup('Votre produit a bien été supprimé', 'success');
+                                }
+                            });
+                    });
+                    const formModifyProduct = document.querySelector(`#formModifyProduct_${product.id_product}`);
+                    formModifyProduct.addEventListener('submit', async (ev) => {
+                        ev.preventDefault();
+                        const formData = new FormData(formModifyProduct);
+                        const quantity_product = formData.get('quantity_product');
+                        await fetch(`src/php/fetch/cart/modifyProduct.php?id_product=${product.id_product}&quantity_product=${quantity_product}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+                                if (data.status == 'success') {
+                                    getCart();
+                                    cartHeader();
+                                    messagePopup('Votre produit a bien été modifié', 'success');
+                                }
+                                if (data.status == 'error') {
+                                    messagePopup('Quantité invalide', 'error');
+                                }
+                            });
+                    });
+                }
+                const containerBtnLogin = document.getElementById("containerBtnLogin");
+                if (total > 0) {
+                    containerBtnLogin.innerHTML = `
+                        <a href="login.php" class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold">Se connecter pour commander</a>
+                    `;
+                } else {
+                    containerBtnLogin.innerHTML = `
+                        <a href="login.php" class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold">Se connecter</a>
+                    `;
+                }
+            }
             if (data.status == 'error') {
                 containerCart.innerHTML = `
                     <div class="flex flex-col items-center space-y-2 w-full">
@@ -341,7 +430,19 @@ async function getCart() {
                             <p class="text-[#a8b3cf]">Votre panier est vide</p>
                         </div>
                     </div>
+                    <div id="containerBtnLoginSigin" class="flex justify-center space-x-4">
+                        <button class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold" id="btnLoginCart">Se connecter</button>
+                        <button class="bg-[#e04337] text-white px-5 py-2 rounded-lg font-extrabold" id="btnSigninCart">S'inscrire</button>
+                    </div>
                 `;
+                const btnLoginCart = document.getElementById("btnLoginCart");
+                btnLoginCart.addEventListener('click', (ev) => {
+                    loginFormHeader(btnLoginCart);
+                });
+                const btnSigninCart = document.getElementById("btnSigninCart");
+                btnSigninCart.addEventListener('click', (ev) => {
+                    registerHeader(btnSigninCart);
+                });
             }
         });
 }
