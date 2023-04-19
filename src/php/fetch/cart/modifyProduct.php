@@ -32,7 +32,24 @@ if (isset($_GET['id_product'])) {
             }
         }
     } else {
-
+        $id_product = intval($_GET['id_product']);
+        $quantity = intval($_GET['quantity_product']);
+        $cookie = json_decode($_COOKIE['cart'], true);
+        if($quantity > 0) {
+            $cookie[$id_product]['quantity'] = $quantity;
+            setcookie('cart', json_encode($cookie), time() + 3600, '/');
+            header("Content-Type: application/json");
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Quantité modifiée',
+            ]);
+        } else {
+            header("Content-Type: application/json");
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Quantité invalide',
+            ]);
+        }
     }
 
 }

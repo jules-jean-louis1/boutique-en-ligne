@@ -112,10 +112,6 @@ async function cartHeader() {
     await fetch('src/php/fetch/cart/displayCartInfoHeader.php')
         .then(response => response.json())
         .then(data => {
-            const cartDivHeader = document.getElementById("cartDivHeader");
-            if (cartDivHeader) {
-                cartDivHeader.remove();
-            }
             if (data.status == 'success_not_connected') {
                 const total = data.total;
                 const nbProduits = data.countProducts;
@@ -164,6 +160,7 @@ async function cartHeader() {
                 cartButtonHeader.appendChild(cartDivHeader);
                 cartButtonHeader.addEventListener('mouseleave', () => {
                     cartDivHeader.removeAttribute('open');
+                    cartDivHeader.innerHTML = '';
                 });
 
             }
@@ -211,6 +208,7 @@ async function cartHeader() {
                 cartButtonHeader.appendChild(cartDivHeader);
                 cartButtonHeader.addEventListener('mouseleave', () => {
                     cartDivHeader.removeAttribute('open');
+                    cartDivHeader.innerHTML = '';
                 });
             }
             if (data.status == 'error') {
@@ -218,6 +216,7 @@ async function cartHeader() {
                 const cartDivHeader = document.createElement("dialog");
                 cartDivHeader.setAttribute('class', 'absolute top-[17%] left-[57%] transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white w-80 rounded-lg shadow-lg');
                 cartDivHeader.setAttribute('id', 'cartDivHeader');
+
                 cartDivHeader.addEventListener('mouseenter', () => {
                     cartDivHeader.setAttribute('open', '');
                     cartDivHeader.innerHTML = `
@@ -231,6 +230,7 @@ async function cartHeader() {
                 cartButtonHeader.appendChild(cartDivHeader);
                 cartButtonHeader.addEventListener('mouseleave', () => {
                     cartDivHeader.removeAttribute('open');
+                    cartDivHeader.innerHTML = '';
                 });
             }
         });
@@ -244,17 +244,12 @@ cartHeader();
 // Page cart.php
 async function getCart() {
     const containerCart = document.getElementById("containerCart");
-
     await fetch('src/php/fetch/cart/getCart.php')
         .then(response => response.json())
         .then(data => {
             console.log(data);
             containerCart.innerHTML = '';
             if (data.status == 'success_connected') {
-                let options = '';
-                for (let i = 1; i <= 10; i++) {
-                    options += `<option value="${i}">${i}</option>`;
-                }
                 const total = data.total;
                 const nbProduits = data.countProducts;
                 containerCart.innerHTML = `
@@ -332,7 +327,81 @@ async function getCart() {
                 }
             }
             if (data.status == 'success_not_connected') {
-
+                const total = data.total;
+                const nbProduits = data.countProducts;
+                containerCart.innerHTML = `
+                    <div class="flex flex-col items-center space-y-2 w-full">
+                        <div class="flex flex-row items-center justify-between w-9/12">
+                            <div id="total_items_cart">
+                                <p class="text-[#a8b3cf]">Vous avez ${nbProduits} articles dans votre panier</p>
+                            </div>
+                            <div id="total_prix">
+                                <p class="text-[#a8b3cf]">Total : ${total} €</p>
+                            </div>
+                        </div>
+                        <div id="displayproductsInCart" class=" w-9/12"></div>
+                    </div>
+                `;
+                const displayproductsInCart = document.getElementById("displayproductsInCart");
+                for (const product of data.products) {
+                    displayproductsInCart.innerHTML += `
+                    <div class="flex flex-row items-center justify-between px-5 py-3 border-b-[1px] border-[#e5e7eb]">
+                        <div class="flex flex-row items-center">
+                            <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded-lg">
+                            <p class="text-[#a8b3cf] ml-5">${product.name_product}</p>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <p class="text-[#a8b3cf] text-2xl">${product.price_product} €</p>
+                            <p class="text-[#a8b3cf] text-sm">Quantité :${product.quantity_product}</p>
+                        </div>
+                        <div id="actionOnProduct" class="flex justify-end space-x-2">
+                            <form action="" method="POST" id="formModifyProduct_${product.id_product}" class="flex flex-row items-center space-x-0.5">
+                                <input type="hidden" name="id_product" value="${product.id_product}">
+                                <input type="number" name="quantity_product" id="quantity_product" class="bg-[#000] text-white p-2 rounded-lg w-[55px]" min="1" max="${product.quantite_product}" value="${product.quantity_product}">
+                                <button class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold" type="submit" id="modifyProduct_${product.id_product}" data-id-cat="${product.id_product}">
+                                    Modifier
+                                </button>
+                            </form>
+                            <button class="bg-[#e04337] text-white px-5 py-2 rounded-lg font-extrabold" id="deleteProduct_${product.id_product}" data-id-cat="${product.id_product}">Supprimer</button>
+                        </div>
+                    </div>
+                    `;
+                }
+                for ( const product of data.products) {
+                    const btnDeleteProduct = document.querySelector(`#deleteProduct_${product.id_product}`);
+                    btnDeleteProduct.addEventListener('click', async (ev) => {
+                        ev.preventDefault();
+                        await fetch(`src/php/fetch/cart/deleteProductFormCart.php?id_product=${product.id_product}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+                                if (data.status == 'success') {
+                                    getCart();
+                                    cartHeader();
+                                    messagePopup('Votre produit a bien été supprimé', 'success');
+                                }
+                            });
+                    });
+                    const formModifyProduct = document.querySelector(`#formModifyProduct_${product.id_product}`);
+                    formModifyProduct.addEventListener('submit', async (ev) => {
+                        ev.preventDefault();
+                        const formData = new FormData(formModifyProduct);
+                        const quantity_product = formData.get('quantity_product');
+                        await fetch(`src/php/fetch/cart/modifyProduct.php?id_product=${product.id_product}&quantity_product=${quantity_product}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+                                if (data.status == 'success') {
+                                    getCart();
+                                    cartHeader();
+                                    messagePopup('Votre produit a bien été modifié', 'success');
+                                }
+                                if (data.status == 'error') {
+                                    messagePopup('Quantité invalide', 'error');
+                                }
+                            });
+                    });
+                }
             }
             if (data.status == 'error') {
                 containerCart.innerHTML = `

@@ -12,7 +12,7 @@ session_start();
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Script JS -->
     <script defer type="module" src="src/scripts/cart.js"></script>
-    <title></title>
+    <title>Guest - Panier</title>
 </head>
 <body>
 <header class="w-full">

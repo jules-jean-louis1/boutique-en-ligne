@@ -85,14 +85,7 @@ if (!empty($errors)) {
     header("Content-Type: application/json");
     echo json_encode(['status' => 'error', 'message' => $errors]);
 }*/
-$userid = '1';
-$cart = new Cart();
-$displayCart = $cart->getCartByUserId($userid);
-if (count($displayCart) === 0) {
-    echo "Votre panier est vide";
-} else {
-    echo "Votre panier contient des produits";
-}
+
 
 
 

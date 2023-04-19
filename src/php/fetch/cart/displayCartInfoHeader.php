@@ -30,7 +30,7 @@ if (isset($_SESSION['id'])) {
     }
 } else {
     // On vérifie si le cookie 'cart' existe et le décode en tableau associatif
-    if (isset($_COOKIE['cart'])) {
+    if (isset($_COOKIE) && isset($_COOKIE['cart']) && !empty($_COOKIE['cart'])) {
         $cart = json_decode($_COOKIE['cart'], true);
         // On vérifie si le panier est vide
         if (empty($cart)) {
@@ -71,6 +71,11 @@ if (isset($_SESSION['id'])) {
         }
     } else {
         // Afficher message panier vide
+        header("Content-Type: application/json");
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Votre panier est vide'
+        ]);
     }
 }
 

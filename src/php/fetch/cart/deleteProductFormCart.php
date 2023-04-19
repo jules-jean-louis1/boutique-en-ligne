@@ -4,6 +4,7 @@ require_once "../../Classes/Cart.php";
 
 if (isset($_GET['id_product'])) {
     $id_product = intval($_GET['id_product']);
+
     if (isset($_SESSION['id'])) {
         $id_user = $_SESSION['id'];
         $cart = new Cart();
@@ -22,9 +23,15 @@ if (isset($_GET['id_product'])) {
                 'message' => 'Ce produit n\'existe pas dans votre panier',
             ]);
         }
+    } else {
+        $cookie = json_decode($_COOKIE['cart'], true);
+        unset($cookie[$id_product]);
+        setcookie('cart', json_encode($cookie), time() + 3600, '/');
+        header("Content-Type: application/json");
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Produit supprimé',
+        ]);
     }
-} else {
-
 }
-?>
 
