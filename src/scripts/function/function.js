@@ -99,6 +99,7 @@ function formatDateSansh(timestamp) {
 // Fonction Login
 function loginFormHeader(BtnLogin) {
     BtnLogin.addEventListener('click', async (ev) => {
+        ev.preventDefault();
         const body = document.querySelector('body');
         // Créer l'élément dialog
         const dialog = document.createElement('dialog');
