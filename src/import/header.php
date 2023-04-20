@@ -15,7 +15,7 @@
             <div class="group hover:bg-[#464c51] rounded-lg">
                 <div id="serachBarFormHeaderContainer" class="flex items-center space-x-2 px-2 py-1 rounded-lg bg-[#2D323C] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
                     <div class="flex">
-                        <svg width="20" height="20" viewBox="0 0 24 24" stroke="#a8b3cf" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M15.9414 15.4585L20.0004 19.5M11 6.5C13.2091 6.5 15 8.29086 15 10.5M18 10.5C18 6.63401 14.866 3.5 11 3.5C7.13401 3.5 4 6.63401 4 10.5C4 14.366 7.13401 17.5 11 17.5C14.866 17.5 18 14.366 18 10.5Z"></path></svg>
+                        <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 pointer-events-none reply_svg"><path d="M10 3a7 7 0 016.068 10.492 2.813 2.813 0 012.076.67l.157.147 1.872 1.871a2.823 2.823 0 01-3.852 4.125l-.14-.132-1.872-1.872a2.817 2.817 0 01-.818-2.234A7 7 0 1110 3zm7.24 12.37a1.323 1.323 0 00-1.967 1.763l.096.108 1.872 1.871c.241.242.552.37.868.386h.135l.135-.014a1.324 1.324 0 00.83-2.136l-.097-.107-1.871-1.872zM10 4.5a5.5 5.5 0 00-.221 10.996L10 15.5l.221-.004A5.5 5.5 0 0010 4.5z" fill="currentcolor" fill-rule="evenodd"></path></svg>
                     </div>
                     <form action="" method="post" id="searchBarFormHeader" class="w-full">
                         <input type="text" name="search_bar_form" id="search_bar_form" placeholder="Rechercher un produit" class="w-full bg-[#2D323C] text-[#a8b3cf]">

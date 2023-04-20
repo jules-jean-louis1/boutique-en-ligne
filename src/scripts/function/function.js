@@ -86,15 +86,14 @@ function formatDate(timestamp) {
     return `${day} ${month} ${year} à ${hours}:${minutes}`;
 }
 function formatDateSansh(timestamp) {
-    const months = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jui', 'Jui', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
     const date = new Date(timestamp);
     const year = date.getFullYear();
     const month = months[date.getMonth()];
     const day = date.getDate();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${day} ${month} ${year}`;
 }
+// Input qui permet de faire la recherche
 
 // Fonction Login
 function loginFormHeader(BtnLogin) {
@@ -234,8 +233,60 @@ function messagePopup(message, status) {
     }
 }
 
+// Input qui permet de faire la recherche
+async function searchHeader() {
+    let query = SearchBarHeader.value;
+    if (query.length > 0) {
+        await fetch (`src/php/fetch/produit/searchBarProduct.php?query=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                const containerHeaderSearch = document.getElementById("containerSearchBarResultHeader");
+                if (data.status === 'error') {
+                    containerHeaderSearch.innerHTML = `
+                <div class="absolute top-14 transform -translate-y-1/2 w-[50%] mt-1.5 bg-[#2D323C] hover:border-[#A87EE6FF] border-[1px] border-[#a8b3cf33] z-10 rounded-lg">
+                    <p class="text-center text-[#a8b3cf] py-2">Aucun résultat</p>
+                </div>
+                `;
+                }
+                if (data.status === 'success') {
+                    containerHeaderSearch.innerHTML = '';
+                    for (const product of data.data) {
+                        containerHeaderSearch.innerHTML += `
+                    <div class="absolute top-16 transform -translate-y-1/2 w-[50%] mt-1.5 bg-[#2D323C] hover:border-[#A87EE6FF] border-[1px] border-[#a8b3cf33] z-10 rounded-lg">
+                        <a href="produit.php?id=${product.id_product}" class="flex flex-row items-center justify-between p-2 ">
+                            <div class="flex items-center">
+                                <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-10">
+                                <div class="flex flex-col items-start ml-2">
+                                    <p class="text-white">${product.name_product}</p>
+                                    <small class="text-[#a8b3cf]">${product.name_subcategories}</small>
+                                </div>
+                            </div>
+                            <p class="text-sm text-[#a8b3cf]">${product.price_product} €</p>
+                        </a>
+                    </div>
+                    `;
+                    }
+                }
+            });
+    } else {
+        const containerHeaderSearch = document.getElementById("containerSearchBarResultHeader");
+        containerHeaderSearch.innerHTML = '';
+    }
+}
+async function displayUserInfoHeader() {
+    await fetch('src/php/fetch/client/displayUserById.php')
+        .then(response => response.json())
+        .then(data => {
+            for (const user of data) {
+                profilInfoHeader.innerHTML = `
+            <p>${user.login_users}</p>
+            <img src="src/images/avatars/${user.avatar_users}" alt="${user.avatar_users}" class="h-6 rounded-full">
+            `;
+            }
+        });
+}
 
 
 export { displayError, displaySuccess, formatDate, formatDateSansh, loginFormHeader, registerHeader,
     closeModalDialog, displayErrorMessageFormUpdateProduct, displaySuccessMessageFormUpdateProduct,
-    addSignInClickHandler, searchBarHeader, messagePopup};
+    addSignInClickHandler, searchBarHeader, messagePopup, searchHeader, displayUserInfoHeader};

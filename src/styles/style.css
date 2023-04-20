@@ -90,3 +90,9 @@
 .filter-white {
     filter: invert(100%) sepia(0%) saturate(7462%) hue-rotate(6deg) brightness(109%) contrast(101%);
 }
+.reply_svg path {
+    fill: #a8b3cf;
+}
+.reply_svg:hover path {
+    fill: #39e58c;
+}
