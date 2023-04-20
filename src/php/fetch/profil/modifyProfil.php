@@ -122,8 +122,8 @@ if (!empty($_POST['address'])) {
     } else {
         if ($adresse !== $_SESSION['adresse']) {
             $valid = false;
-            if (strlen($adresse) < 2 && strlen($adresse) > 50) {
-                $errors[] = "L'adresse doit contenir entre 2 et 50 caractères";
+            if (strlen($adresse) < 2 && strlen($adresse) > 150) {
+                $errors[] = "L'adresse doit contenir entre 2 et 150 caractères";
             } else {
                 $client = new Client();
                 $client->modifyClientField($_SESSION['id'], 'adresse', 'adresse_client', $adresse);
@@ -183,7 +183,6 @@ if (!empty($_POST['country'])) {
         }
     }
 }
-//var_dump($errors);
 if (!empty($errors)) {
     header("Content-Type: application/json");
     echo json_encode(['status' => 'error', 'message' => $errors]);

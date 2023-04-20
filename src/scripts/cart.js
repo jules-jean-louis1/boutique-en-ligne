@@ -2,6 +2,7 @@ import { loginFormHeader} from './function/function.js';
 import {registerHeader} from './function/function.js';
 import {formatDateSansh} from "./function/function.js";
 import { displaySuccessMessageFormUpdateProduct } from './function/function.js';
+import { displayErrorMessageFormUpdateProduct } from './function/function.js';
 import { messagePopup } from "./function/function.js";
 
 const btnRegister = document.querySelector('#buttonRegisterHeader');
@@ -317,42 +318,47 @@ async function getCart() {
                                                 <div class="flex flex-row space-x-4">
                                                     <div>
                                                         <label for="nom_client">Nom</label>
-                                                        <input type="text" value="${info.nom_client}" name="nom_client" placeholder="Votre Nom" class="p-2 rounded-lg bg-slate-100">
+                                                        <input type="text" value="${info.nom_client}" name="nom_client" placeholder="Votre Nom" class="p-2 rounded-[14px] bg-slate-100">
                                                         <small id="errorSmall" class="text-red-500"></small>
                                                     </div>
                                                     <div>
                                                         <label for="prenom_client">Prénom</label>
-                                                        <input type="text" value="${info.prenom_client}" name="prenom_client" placeholder="Votre Prénom" class="p-2 rounded-lg bg-slate-100">
+                                                        <input type="text" value="${info.prenom_client}" name="prenom_client" placeholder="Votre Prénom" class="p-2 rounded-[14px] bg-slate-100">
                                                         <small id="errorSmall" class="text-red-500"></small>
                                                     </div>
                                                 </div>
                                                 <div class="flex flex-row space-x-4">
                                                     <div>
-                                                        <label for="mobile_client">Tel. mobile</label>
-                                                        <input type="text" value="${info.mobile_client}" placeholder="Votre mobile" name="mobile_client" class="p-2 rounded-lg bg-slate-100">
+                                                        <label for="mobile_client">Tel. mobile (optionel)</label>
+                                                        <input type="text" value="${info.mobile_client}" placeholder="Votre mobile" name="mobile_client" class="p-2 rounded-[14px] bg-slate-100">
                                                         <small id="errorSmall" class="text-red-500"></small>
                                                     </div>
                                                     <div>
                                                         <label for="pays_client">Pays</label>
-                                                        <input type="text" value="${info.pays_client}" placeholder="Votre Pays" name="pays_client" class="p-2 rounded-lg bg-slate-100">
+                                                        <input type="text" value="${info.pays_client}" placeholder="Votre Pays" name="pays_client" class="p-2 rounded-[14px] bg-slate-100">
                                                         <small id="errorSmall" class="text-red-500"></small>
                                                     </div>
                                                 </div>
+                                                <div class="flex flex-col w-full">
+                                                    <label for="adresse_client">Adresse</label>
+                                                    <input type="text" value="${info.adresse_client}" placeholder="Votre Adresse" name="adresse_client" class="p-2 rounded-[14px] bg-slate-100">
+                                                    <small id="errorSmall" class="text-red-500"></small>
+                                                </div>
                                                 <div class="flex flex-row space-x-4">
                                                     <div>
-                                                        <label for="adresse_client">Adresse</label>
-                                                        <input type="text" value="${info.adresse_client}" placeholder="Votre Adresse" name="adresse_client" class="p-2 rounded-lg bg-slate-100">
+                                                        <label for="ville_client">Ville</label>
+                                                        <input type="text" value="${info.ville_client}" placeholder="Votre Ville" name="ville_client" class="p-2 rounded-[14px] bg-slate-100">
                                                         <small id="errorSmall" class="text-red-500"></small>
                                                     </div>
                                                     <div>
                                                         <label for="code_postal_client">Code Postal</label>
-                                                        <input type="text" value="${info.code_postal_client}" placeholder="Votre Code Postal" name="code_postal_client" class="p-2 rounded-lg bg-slate-100">
+                                                        <input type="text" value="${info.code_postal_client}" placeholder="Votre Code Postal" name="code_postal_client" class="p-2 rounded-[14px] bg-slate-100">
                                                         <small id="errorSmall" class="text-red-500"></small>
                                                     </div>
                                                 </div>
-                                                <div id="errorMsg" class="w-9/12 h-6"></div>
+                                                <div id="errorMsg" class="w-full h-fit"></div>
                                                 <div class="flex flex-row items-center justify-start w-9/12 mt-6">
-                                                    <button id="btnUpdateInfo" type="submit" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg">Mettre à jour et passer la commande</button>
+                                                    <button id="btnUpdateInfo" type="submit" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-[14px]">Mettre à jour et passer la commande</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -363,32 +369,55 @@ async function getCart() {
 
                                     let nom_client_input = document.querySelector('[name="nom_client"]');
                                     let prenom_client_input = document.querySelector('[name="prenom_client"]');
-                                    let mobile_client_input = document.querySelector('[name="mobile_client"]');
                                     let pays_client_input = document.querySelector('[name="pays_client"]');
+                                    let ville_client_input = document.querySelector('[name="ville_client"]');
                                     let adresse_client_input = document.querySelector('[name="adresse_client"]');
                                     let code_postal_client_input = document.querySelector('[name="code_postal_client"]');
 
                                     nom_client_input.addEventListener('input', () => { checkInput(nom_client_input) });
                                     prenom_client_input.addEventListener('input', () => { checkInput(prenom_client_input) });
-                                    mobile_client_input.addEventListener('input', () => { checkInput(mobile_client_input) });
                                     pays_client_input.addEventListener('input', () => { checkInput(pays_client_input) });
+                                    ville_client_input.addEventListener('input', () => { checkInput(ville_client_input) });
                                     adresse_client_input.addEventListener('input', () => { checkInput(adresse_client_input) });
                                     code_postal_client_input.addEventListener('input', () => { checkInput(code_postal_client_input) });
 
                                     const btnUpdateInfo = document.getElementById("formCompleteInfo");
                                     btnUpdateInfo.addEventListener('submit', async (ev) => {
                                         ev.preventDefault();
+                                        const message = document.getElementById("errorMsg");
+                                        if (checkInput(nom_client_input) === false && checkInput(prenom_client_input)  === false && checkInput(pays_client_input) === false && checkInput(adresse_client_input) === false && checkInput(code_postal_client_input) === false && checkInput(ville_client_input) === false) {
+                                            message.innerHTML = `<p class="text-red-500">Veuillez remplir tous les champs</p>`;
+                                        } else {
+                                            await fetch('src/php/fetch/profil/updateInfoClient.php', {
+                                                method: 'POST',
+                                                body: new FormData(btnUpdateInfo)
+                                            })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                console.log(data);
+                                                if (data.status === 'success') {
+                                                    displaySuccessMessageFormUpdateProduct(message, data.message);
+                                                    setTimeout(() => {
+
+                                                    }, 2000);
+                                                }
+                                                if (data.status === 'error') {
+                                                    displayErrorMessageFormUpdateProduct(message, data.message);
+                                                }
+                                            });
+                                        }
 
                                     });
                                     const btnCloseDialog = document.getElementById("btnCloseDialog");
                                     btnCloseDialog.addEventListener('click', () => {
                                         dialogCompleteInfo.close();
-                                        dialogCompleteInfo.remove();
-                                        dilogCompleteInfo.innerHTML = '';
+                                        dialogCompleteInfo.innerHTML = '';
                                     });
 
                                 }
-
+                            }
+                            if (data.verify === false) {
+                                window.location.href = 'recapCart.php';
                             }
                         });
                 });

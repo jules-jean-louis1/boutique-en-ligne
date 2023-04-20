@@ -22,7 +22,7 @@ function displaySuccess(message) {
 function displayErrorMessageFormUpdateProduct(ParentSelector, ContentMessage) {
     ParentSelector.innerHTML = '';
     ParentSelector.innerHTML = `
-    <div class="flex items-center py-3 px-2 rounded-lg bg-[#FEEFB3] text-[#D8000C] border-l-[3px] border-[#FEEFB3]">
+    <div class="flex items-center py-3 px-2 rounded-[14px] bg-[#DC110154] text-[#D8000C] border-l-[3px] border-[#D8000C]">
         <img src="public/images/icones/danger-red-stroke-2.svg" alt="" class="w-5 h-5">
         <small class="text-lg">${ContentMessage}</small>
     </div>

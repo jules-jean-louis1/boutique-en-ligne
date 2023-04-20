@@ -89,6 +89,35 @@ if (!empty($errors)) {
 $users = new Client();
 $result = $users->verifyIfUsersInfoExists(1);
 var_dump($result);
+$valid = 0;
+if (empty(trim($result[0]['nom_client']))) {
+    $valid = 1;
+} elseif (empty(trim($result[0]['prenom_client']))) {
+    $valid = 1;
+} elseif (empty(trim($result[0]['adresse_client']))) {
+    $valid = 1;
+} elseif (empty(trim($result[0]['code_postal_client']))) {
+    $valid = 1;
+} elseif (empty(trim($result[0]['ville_client']))) {
+    $valid = 1;
+} elseif (empty(trim($result[0]['pays_client']))) {
+    $valid = 1;
+} else {
+    $valid = 0;
+}
+if ($valid == 1) {
+    echo "Veuillez remplir tous les champs.";
+} else {
+    echo "Tous les champs sont remplis.";
+}
+
+/*echo $result[0]['nom_client'];
+echo $result[0]['prenom_client'];
+echo $result[0]['adresse_client'];
+echo $result[0]['code_postal_client'];
+echo $result[0]['ville_client'];
+echo $result[0]['pays_client'];*/
+
 
 
 

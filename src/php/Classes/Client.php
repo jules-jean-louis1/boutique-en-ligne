@@ -310,10 +310,26 @@ WHERE users.id_users = :id;");
             "users_id" => $users_id
         ));
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
-        if (empty($result[0]['prenom_client']) && empty($result[0]['nom_client']) && empty($result[0]['ville_client']) && empty($result[0]['code_postal_client']) && empty($result[0]['adresse_client']) && empty($result[0]['mobile_client']) && empty($result[0]['pays_client'])) {
-            return false;
+        $valid = 0;
+        if (empty(trim($result[0]['nom_client']))) {
+            $valid = 1;
+        } elseif (empty(trim($result[0]['prenom_client']))) {
+            $valid = 1;
+        } elseif (empty(trim($result[0]['adresse_client']))) {
+            $valid = 1;
+        } elseif (empty(trim($result[0]['code_postal_client']))) {
+            $valid = 1;
+        } elseif (empty(trim($result[0]['ville_client']))) {
+            $valid = 1;
+        } elseif (empty(trim($result[0]['pays_client']))) {
+            $valid = 1;
         } else {
+            $valid = 0;
+        }
+        if ($valid == 1) {
             return true;
+        } else {
+            return false;
         }
     }
     public function getUserInfo($users_id)
