@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once "../../Classes/Product.php";
-
+require_once "../../Classes/Avis.php";
 require_once "../../Classes/Cart.php";
 
 /*$errors = [];
@@ -85,7 +85,14 @@ if (!empty($errors)) {
     header("Content-Type: application/json");
     echo json_encode(['status' => 'error', 'message' => $errors]);
 }*/
-
+$rating = new Avis();
+$r = $rating->getReplyById(4);
+header("Content-Type: application/json");
+echo json_encode([
+    'status' => 'success',
+    'message' => 'Avis récupérés',
+    'commentaire' => $r,
+]);
 
 
 

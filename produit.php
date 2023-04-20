@@ -20,9 +20,16 @@ session_start();
         <?php require_once "src/import/header.php"; ?>
     </header>
     <main>
+        <div id="containerDialogAvis"></div>
         <section id="containerMessageAddCart"></section>
         <section id="containerInformationProduits"></section>
-        <section id="containerAvisClients"></section>
+        <section id="containerSimilarProduct"></section>
+        <section class="mt-12">
+            <div id="containerAddAvis"></div>
+        </section>
+        <section class="my-6">
+            <div id="containerAvisClients" class="flex flex-col items-center"></div>
+        </section>
     </main>
     <footer class="w-full">
         <?php require_once "src/import/footer.php"; ?>

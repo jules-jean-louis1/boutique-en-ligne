@@ -143,4 +143,27 @@ class Product extends Database
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+    public function updateProductRating($id_product) {
+        $bdd = $this->getBdd();
+
+        // Sélectionnez tous les avis associés au produit
+        $req = $bdd->prepare("SELECT SUM(note_avis) as total_note, COUNT(*) as total_avis FROM avis_client WHERE produit_id = :id_product");
+        $req->execute([
+            "id_product" => $id_product
+        ]);
+        $result = $req->fetch();
+
+        $total_note = $result['total_note'];
+        $total_avis = $result['total_avis'];
+
+        // Calculez la moyenne des notes
+        $rating = $total_avis > 0 ? round($total_note / $total_avis, 1) : 0;
+
+        // Mettez à jour la colonne "rating_product" de la table "product"
+        $req = $bdd->prepare("UPDATE product SET rating_product = :rating WHERE id_product = :id_product");
+        $req->execute([
+            "id_product" => $id_product,
+            "rating" => $rating
+        ]);
+    }
 }
