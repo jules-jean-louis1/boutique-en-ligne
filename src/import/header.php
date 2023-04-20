@@ -2,9 +2,9 @@
 <nav class="py-2 bg-[#0E1217] border-b-[1px] border-b-[#a8b3cf33]">
     <div class="flex items-center justify-around">
         <div>
-            <ul class="flex space-x-4 text-white">
+            <ul class="flex space-x-4 items-center text-white">
                 <li>
-                    <a href="index.php">Home</a>
+                    <a href="index.php">Game<b class="text-lg text-[#A87EE6FF] ml-0.5">+</b></a>
                 </li>
                 <li>
                     <a href="catalogue.php">Catalogue</a>

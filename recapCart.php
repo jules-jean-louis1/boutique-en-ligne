@@ -11,13 +11,13 @@ session_start();
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Script JS -->
     <script defer type="module" src="src/scripts/recapCart.js"></script>
-    <title>Guest - Panier</title>
+    <title>Guest - Recap</title>
 </head>
 <body>
 <header class="w-full">
     <?php require_once "src/import/header.php"; ?>
 </header>
-<main>
+<main class="bg-[#262628]">
     <section>
         <div id="containerMessageCart"></div>
     </section>
