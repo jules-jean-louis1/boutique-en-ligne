@@ -105,6 +105,23 @@ if (btnLogin) {
 
 // Cart.js
 
+function checkInput(input) {
+    const small = input.nextElementSibling;
+    if (input.value.trim() === '') {
+        input.classList.add('input_error');
+        small.innerHTML = `
+    <div class="flex space-x-2">
+        <svg width="20" height="20" viewBox="0 0 24 24" stroke="#ff0303" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M10.2202 4.4703C10.9637 3.02048 13.036 3.02048 13.7795 4.4703L20.5062 17.5874C21.1887 18.9183 20.2223 20.5 18.7266 20.5H5.27316C3.77747 20.5 2.81101 18.9183 3.49352 17.5874L10.2202 4.4703Z"></path><path d="M11.5191 13.3173L10.5493 9.92306C10.274 8.95934 10.9976 8.00001 11.9999 8.00001C13.0021 8.00001 13.7258 8.95934 13.4504 9.92306L12.4806 13.3173C12.3425 13.8009 11.6573 13.8009 11.5191 13.3173Z"></path><path d="M12.9999 17C12.9999 17.5523 12.5522 18 11.9999 18C11.4476 18 10.9999 17.5523 10.9999 17C10.9999 16.4477 11.4476 16 11.9999 16C12.5522 16 12.9999 16.4477 12.9999 17Z"></path></svg>
+        <p class="text-red-500">Champ Requis</p>
+    </div>
+    `;
+        return false;
+    } else {
+        input.classList.remove('input_error');
+        small.innerHTML = '';
+        return true;
+    }
+}
 // Récupérer les données du produit
 async function cartHeader() {
     const cartButtonHeader = document.getElementById("cartHeader");
@@ -249,7 +266,7 @@ async function getCart() {
         .then(data => {
             console.log(data);
             containerCart.innerHTML = '';
-            if (data.status == 'success') {
+            if (data.status == 'success_connected') {
                 const total = data.total;
                 const nbProduits = data.countProducts;
                 containerCart.innerHTML = `
@@ -266,6 +283,115 @@ async function getCart() {
                     </div>
                     <div id="containerBtnLoginSigin"></div>
                 `;
+                const containerBtnLoginSigin = document.getElementById("containerBtnLoginSigin");
+                containerBtnLoginSigin.innerHTML = `
+                    <div class="flex flex-row items-center justify-center w-full mt-6">
+                        <button id="btnVerifyInfoUsers" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg">Passer la commande</button>
+                    </div>
+                    `;
+                const btnVerifyInfoUsers = document.getElementById("btnVerifyInfoUsers");
+                btnVerifyInfoUsers.addEventListener('click', async () => {
+                    await fetch('src/php/fetch/client/verifyInfoUsers.php')
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            if (data.verify === true) {
+                                const containerMessageCart = document.getElementById("containerMessageCart");
+                                const dialogCompleteInfo = document.createElement("dialog");
+                                dialogCompleteInfo.setAttribute('id', 'dialog');
+                                dialogCompleteInfo.className = 'bg-white w-[80%] rounded-lg shadow-lg p-2';
+                                containerMessageCart.appendChild(dialogCompleteInfo);
+                                dialogCompleteInfo.showModal();
+                                dialogCompleteInfo.innerHTML = '';
+                                for (let info of data.info) {
+                                    dialogCompleteInfo.innerHTML += `
+                                    <div class="flex flex-col items-center space-y-2">
+                                        <div class="mt-2 flex flex-row justify-between items-center w-full px-4">
+                                            <p class="text-[#a8b3cf]">Veuillez renseigner votre profil.</p>
+                                            <button id="btnCloseDialog" class="p-2 hover:bg-slate-100 rounded-lg">
+                                                <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none reply_svg"><path d="M16.804 6.147a.75.75 0 011.049 1.05l-.073.083L13.061 12l4.72 4.72a.75.75 0 01-.977 1.133l-.084-.073L12 13.061l-4.72 4.72-.084.072a.75.75 0 01-1.049-1.05l.073-.083L10.939 12l-4.72-4.72a.75.75 0 01.977-1.133l.084.073L12 10.939l4.72-4.72.084-.072z" fill="currentcolor" fill-rule="evenodd"></path></svg>
+                                            </button>
+                                        </div>
+                                        <div class="flex flex-row items-center justify-between w-9/12">
+                                            <form action="" method="post" id="formCompleteInfo" class="flex flex-col space-y-2">
+                                                <div class="flex flex-row space-x-4">
+                                                    <div>
+                                                        <label for="nom_client">Nom</label>
+                                                        <input type="text" value="${info.nom_client}" name="nom_client" placeholder="Votre Nom" class="p-2 rounded-lg bg-slate-100">
+                                                        <small id="errorSmall" class="text-red-500"></small>
+                                                    </div>
+                                                    <div>
+                                                        <label for="prenom_client">Prénom</label>
+                                                        <input type="text" value="${info.prenom_client}" name="prenom_client" placeholder="Votre Prénom" class="p-2 rounded-lg bg-slate-100">
+                                                        <small id="errorSmall" class="text-red-500"></small>
+                                                    </div>
+                                                </div>
+                                                <div class="flex flex-row space-x-4">
+                                                    <div>
+                                                        <label for="mobile_client">Tel. mobile</label>
+                                                        <input type="text" value="${info.mobile_client}" placeholder="Votre mobile" name="mobile_client" class="p-2 rounded-lg bg-slate-100">
+                                                        <small id="errorSmall" class="text-red-500"></small>
+                                                    </div>
+                                                    <div>
+                                                        <label for="pays_client">Pays</label>
+                                                        <input type="text" value="${info.pays_client}" placeholder="Votre Pays" name="pays_client" class="p-2 rounded-lg bg-slate-100">
+                                                        <small id="errorSmall" class="text-red-500"></small>
+                                                    </div>
+                                                </div>
+                                                <div class="flex flex-row space-x-4">
+                                                    <div>
+                                                        <label for="adresse_client">Adresse</label>
+                                                        <input type="text" value="${info.adresse_client}" placeholder="Votre Adresse" name="adresse_client" class="p-2 rounded-lg bg-slate-100">
+                                                        <small id="errorSmall" class="text-red-500"></small>
+                                                    </div>
+                                                    <div>
+                                                        <label for="code_postal_client">Code Postal</label>
+                                                        <input type="text" value="${info.code_postal_client}" placeholder="Votre Code Postal" name="code_postal_client" class="p-2 rounded-lg bg-slate-100">
+                                                        <small id="errorSmall" class="text-red-500"></small>
+                                                    </div>
+                                                </div>
+                                                <div id="errorMsg" class="w-9/12 h-6"></div>
+                                                <div class="flex flex-row items-center justify-start w-9/12 mt-6">
+                                                    <button id="btnUpdateInfo" type="submit" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg">Mettre à jour et passer la commande</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    `;
+
+
+
+                                    let nom_client_input = document.querySelector('[name="nom_client"]');
+                                    let prenom_client_input = document.querySelector('[name="prenom_client"]');
+                                    let mobile_client_input = document.querySelector('[name="mobile_client"]');
+                                    let pays_client_input = document.querySelector('[name="pays_client"]');
+                                    let adresse_client_input = document.querySelector('[name="adresse_client"]');
+                                    let code_postal_client_input = document.querySelector('[name="code_postal_client"]');
+
+                                    nom_client_input.addEventListener('input', () => { checkInput(nom_client_input) });
+                                    prenom_client_input.addEventListener('input', () => { checkInput(prenom_client_input) });
+                                    mobile_client_input.addEventListener('input', () => { checkInput(mobile_client_input) });
+                                    pays_client_input.addEventListener('input', () => { checkInput(pays_client_input) });
+                                    adresse_client_input.addEventListener('input', () => { checkInput(adresse_client_input) });
+                                    code_postal_client_input.addEventListener('input', () => { checkInput(code_postal_client_input) });
+
+                                    const btnUpdateInfo = document.getElementById("formCompleteInfo");
+                                    btnUpdateInfo.addEventListener('submit', async (ev) => {
+                                        ev.preventDefault();
+
+                                    });
+                                    const btnCloseDialog = document.getElementById("btnCloseDialog");
+                                    btnCloseDialog.addEventListener('click', () => {
+                                        dialogCompleteInfo.close();
+                                        dialogCompleteInfo.remove();
+                                        dilogCompleteInfo.innerHTML = '';
+                                    });
+
+                                }
+
+                            }
+                        });
+                });
                 const displayproductsInCart = document.getElementById("displayproductsInCart");
                 for (const product of data.products) {
                     displayproductsInCart.innerHTML += `
@@ -342,7 +468,7 @@ async function getCart() {
                         </div>
                         <div id="displayproductsInCart" class="w-9/12"></div>
                     </div>
-                    <div id="containerBtnLoginSigin"></div>
+                    <div id="containerBtnLoginSigin" class="flex justify-center mt-6"></div>
                 `;
                 const displayproductsInCart = document.getElementById("displayproductsInCart");
                 for (const product of data.products) {
@@ -404,11 +530,15 @@ async function getCart() {
                             });
                     });
                 }
-                const containerBtnLogin = document.getElementById("containerBtnLogin");
+                const containerBtnLogin = document.getElementById("containerBtnLoginSigin");
                 if (total > 0) {
                     containerBtnLogin.innerHTML = `
-                        <a href="login.php" class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold">Se connecter pour commander</a>
+                        <button class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold" id="btnLoginCart">Connectez-vous</button>
                     `;
+                    const btnLoginCart = document.getElementById("btnLoginCart");
+                    btnLoginCart.addEventListener('click', () => {
+                        loginFormHeader(btnLoginCart)
+                    });
                 } else {
                     containerBtnLogin.innerHTML = `
                         <a href="login.php" class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold">Se connecter</a>

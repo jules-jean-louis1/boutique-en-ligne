@@ -3,6 +3,7 @@ session_start();
 require_once "../../Classes/Product.php";
 require_once "../../Classes/Avis.php";
 require_once "../../Classes/Cart.php";
+require_once "../../Classes/Client.php";
 
 /*$errors = [];
 $success = [];
@@ -85,14 +86,10 @@ if (!empty($errors)) {
     header("Content-Type: application/json");
     echo json_encode(['status' => 'error', 'message' => $errors]);
 }*/
-$rating = new Avis();
-$r = $rating->getReplyById(4);
-header("Content-Type: application/json");
-echo json_encode([
-    'status' => 'success',
-    'message' => 'Avis récupérés',
-    'commentaire' => $r,
-]);
+$users = new Client();
+$result = $users->verifyIfUsersInfoExists(1);
+var_dump($result);
+
 
 
 

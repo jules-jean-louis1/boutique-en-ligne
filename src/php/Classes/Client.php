@@ -301,5 +301,30 @@ WHERE users.id_users = :id;");
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
-
+    public function verifyIfUsersInfoExists($users_id)
+    {
+        $db = new Database();
+        $bdd = $db->getBdd();
+        $req = $bdd->prepare("SELECT * FROM client WHERE users_id = :users_id");
+        $req->execute(array(
+            "users_id" => $users_id
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($result[0]['prenom_client']) && empty($result[0]['nom_client']) && empty($result[0]['ville_client']) && empty($result[0]['code_postal_client']) && empty($result[0]['adresse_client']) && empty($result[0]['mobile_client']) && empty($result[0]['pays_client'])) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    public function getUserInfo($users_id)
+    {
+        $db = new Database();
+        $bdd = $db->getBdd();
+        $req = $bdd->prepare("SELECT * FROM client WHERE users_id = :users_id");
+        $req->execute(array(
+            "users_id" => $users_id
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }
