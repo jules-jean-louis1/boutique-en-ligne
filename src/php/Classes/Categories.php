@@ -16,6 +16,14 @@ class Categories extends Database
         $result = json_encode($result);
         return $result;
     }
+    public function displaySubCategoriesForFilter()
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT * FROM subcategories");
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
     public function displayCategories()
     {
         $bdd = $this->getBdd();

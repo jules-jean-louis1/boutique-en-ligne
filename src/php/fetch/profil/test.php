@@ -88,12 +88,16 @@ if (!empty($errors)) {
 }*/
 require_once "../../Classes/Catalogue.php";
 
-$test = new Catalogue();
+
+/*$test = new Catalogue();
 $result = $test->test('', 'DESC_rating', '');
 //$p = $test->getPagesCatalogue('2022', 'DESC', '');
 var_dump($result);
-//var_dump($p);
+//var_dump($p);*/
 
+$p = new Product();
+$products = $p->getDateOfReleasedProduct();
+var_dump($products);
 
 
 

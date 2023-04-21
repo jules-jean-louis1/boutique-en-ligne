@@ -166,5 +166,15 @@ class Product extends Database
             "rating" => $rating
         ]);
     }
-
+    public function getDateOfReleasedProduct()
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT YEAR(released_date_product) AS annee, COUNT(*) AS count 
+                                    FROM product
+                                    GROUP BY YEAR(released_date_product)
+                                    ORDER BY YEAR(released_date_product) DESC");
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }
