@@ -117,7 +117,7 @@ async function displayCategory(option) {
         .then(response => response.json())
         .then(data => {
             data.forEach(category => {
-                option.innerHTML += `<option value="${category.id_categories}">${category.name_categories}</option>`;
+                option.innerHTML += `<option value="${category.id_categories}" class="bg-white bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100">${category.name_categories}</option>`;
             });
         });
 }
@@ -318,13 +318,13 @@ async function gestionProduct() {
                 <div id="modalAddProduct">
                     <label for="searchCategory">Sélectionner une catégorie</label>
                     <select name="searchCategory" id="searchCategory" class="bg-slate-100 p-2 rounded-lg">
-                        <option value="0">Selectionner</option>
+                        <option value="0" class="bg-white bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100">Selectionner</option>
                     </select>
                 </div>
                 <div id="modalAddProduct">
                     <label for="searchSubCategory">Sélectionner une sous-catégorie</label>
                     <select name="searchSubCategory" id="searchSubCategory" class="bg-slate-100 p-2 rounded-lg">
-                        <option value="0">Selectionner</option>
+                        <option value="0" class="bg-white bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100">Selectionner</option>
                     </select>
                 </div>
             </div>

@@ -107,6 +107,20 @@ const containerDivProduct = document.getElementById("containerInformationProduit
 const searchParams = new URLSearchParams(window.location.search);
 const URLid = searchParams.get("id");
 
+// Afficher les étoiles
+function afficherEtoiles(note) {
+    let nbEtoiles = 5;
+    let str = "";
+    for (let i = 1; i <= nbEtoiles; i++) {
+        if (i <= note) {
+            str += "<i class='fas fa-star'></i>"; // étoile pleine
+        } else {
+            str += "<i class='far fa-star'></i>"; // étoile vide
+        }
+    }
+    return str;
+}
+
 // Récupérer les données du produit
 async function getProduct(URLid) {
     const containerProduct = document.createElement("div");
@@ -127,11 +141,12 @@ async function getProduct(URLid) {
                 <div class="bg-[#A87EE6FF] h-96 absolute lg:w-9/12 lg:h-2/5 flex justify-center -z-50 rounded-t-lg"></div>
                 <div class="flex lg:flex-row sm:flex-col sm:items-center justify-between px-16 py-6">
                     <div>
-                        <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="lg:h-[100vh] rounded-lg">
+                        <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="lg:h-[30%] rounded-lg">
                     </div>
                     <div class="flex flex-col items-start lg:w-5/12 sm:w-[95%]">
                         <p class="text-center text-white rounded-lg p-1 bg-[#00000038]">${product.name_subcategories}</p>
                         <h1 class="text-6xl text-white mt-5 uppercase font-bold">${product.name_product}</h1>
+                        <p class="text-[#a8b3cf] mt-5">${afficherEtoiles(product.rating_product)}</p>
                         <p class="mt-5">Synopsis : ${product.description_product}</p>
                         <div>
                             <p class="text-[#A87EE6FF] mt-2 font-bold text-6xl">${product.price_product} €</p>

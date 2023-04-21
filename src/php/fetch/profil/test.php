@@ -86,30 +86,13 @@ if (!empty($errors)) {
     header("Content-Type: application/json");
     echo json_encode(['status' => 'error', 'message' => $errors]);
 }*/
-require_once "../../Classes/Cart.php";
+require_once "../../Classes/Catalogue.php";
 
-if (isset($_SESSION['id'])) {
-    $id_users = $_SESSION['id'];
-    $cart = new Cart();
-    $Panier = $cart->getCartByUserId($id_users);
-    $Total = $cart->countTotalPriceInCart($id_users);
-    $order = new Order();
-    var_dump($Panier);
-    foreach ($Panier as $panier) {
-        $id_product = $panier['id_product'];
-        $quantity = $panier['quantity'];
-        $price = $panier['price'];
-        $id_users = $panier['id_users'];
-        $id_order = $panier['id_order'];
-
-    }
-}
-/*echo $result[0]['nom_client'];
-echo $result[0]['prenom_client'];
-echo $result[0]['adresse_client'];
-echo $result[0]['code_postal_client'];
-echo $result[0]['ville_client'];
-echo $result[0]['pays_client'];*/
+$test = new Catalogue();
+$result = $test->test('', 'DESC_rating', '');
+//$p = $test->getPagesCatalogue('2022', 'DESC', '');
+var_dump($result);
+//var_dump($p);
 
 
 
