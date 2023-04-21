@@ -169,10 +169,6 @@ class Cart extends Database
             "user_id" => $id_user
         ));
     }
-    public function addCartToUser($cart, $user_id)
-    {
-
-    }
     public function AddProductToClientCart($userId, $productId, $quantityProduct)
     {
         $bdd = $this->getBdd();

@@ -38,7 +38,25 @@ class Order extends Database
                     "product_id" => $product_id,
                     "command_id" => $command_id
                 ]);
+                $req2 = $bdd->prepare("SELECT quantite_product, quantite_vendue FROM product WHERE id_product = :id_product");
+                $req2->execute(array(
+                    "id_product" => $product_id
+                ));
+                $result = $req->fetchAll(PDO::FETCH_ASSOC);
+                $stock = $result[0]['quantite_product'];
+                $sold = $result[0]['quantite_vendue'];
+
+                $newSold = $sold + $quantite_produit;
+                $newStock = $stock - $quantite_produit;
+
+                $req = $bdd->prepare("UPDATE product SET quantite_product = :newStock, quantite_vendue =:newSold  WHERE id_product = :id_product");
+                $req->execute(array(
+                    "id_product" => $product_id,
+                    "newStock" => $newStock,
+                    "newSold" => $newSold
+                ));
             }
+
 
             // Valider la transaction
             $bdd->commit();

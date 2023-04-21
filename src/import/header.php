@@ -4,10 +4,10 @@
         <div>
             <ul class="flex space-x-4 items-center text-white">
                 <li>
-                    <a href="index.php">Game<b class="text-lg text-[#A87EE6FF] ml-0.5">+</b></a>
+                    <a href="index.php" class="font-extrabold">Game<b class="text-lg text-[#A87EE6FF] font-black ml-0.5">+</b></a>
                 </li>
                 <li>
-                    <a href="catalogue.php">Catalogue</a>
+                    <a href="catalogue.php" class="font-semibold">Catalogue</a>
                 </li>
             </ul>
         </div>
