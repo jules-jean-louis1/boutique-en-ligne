@@ -166,4 +166,24 @@ class Product extends Database
             "rating" => $rating
         ]);
     }
+    public function updateProductStockWhenSold($id_product, $quantity_sold)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT quantite_product, quantite_vendue FROM product WHERE id_product = :id_product");
+        $req->execute(array(
+            "id_product" => $id_product
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        $stock = $result[0]['quantite_product'];
+        $sold = $result[0]['quantite_vendue'];
+
+        $newSold = $sold + $quantity_sold;
+        $newStock = $stock - $quantity_sold;
+        $req = $bdd->prepare("UPDATE product SET quantite_product = :newStock, quantite_vendue =:newSold  WHERE id_product = :id_product");
+        $req->execute(array(
+            "id_product" => $id_product,
+            "newStock" => $newStock,
+            "newSold" => $newSold
+        ));
+    }
 }

@@ -122,6 +122,20 @@ class Client
             return false;
         }
     }
+    public function getShippingInfo($id)
+    {
+        $db = new Database();
+        $bdd = $db->getBdd();
+        $req = $bdd->prepare("SELECT client.id_client, client.prenom_client, client.nom_client, client.ville_client, client.code_postal_client, client.adresse_client, client.mobile_client, client.pays_client, client.users_id, users.login_users, users.email_users, users.avatar_users
+                            FROM client
+                            INNER JOIN users ON client.users_id = users.id_users
+                            WHERE users.id_users = :id;");
+        $req->execute(array(
+            "id" => $id
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
     public function getClientInfo($id)
     {
         $db = new Database();

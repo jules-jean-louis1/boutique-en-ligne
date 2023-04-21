@@ -1,6 +1,7 @@
 <?php
 session_start();
 ?>
+<?php if (isset($_SESSION['id'])) { ?>
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
@@ -9,21 +10,26 @@ session_start();
     <link rel="stylesheet" href="src/styles/style.css">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.11.0/lottie.min.js" integrity="sha512-XCthc/WzPfa+oa49Z3TI6MUK/zlqd67KwyRL9/R19z6uMqBNuv8iEnJ8FWHUFAjC6srr8w3FMZA91Tfn60T/9Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Script JS -->
     <script defer type="module" src="src/scripts/recapCart.js"></script>
+
     <title>Guest - Recap</title>
 </head>
 <body>
 <header class="w-full">
     <?php require_once "src/import/header.php"; ?>
 </header>
-<main class="bg-[#262628]">
+<main class="bg-[#0E1217]">
     <section>
         <div id="containerMessageCart"></div>
     </section>
-    <section>
-        <div id="containerCart"></div>
-        <div id="containerPayment"></div>
+    <section class="flex justify-between items-start h-[90vh] lg:pt-[6%]">
+        <div id="cartPlusInfoShipping" class="ml-[8%] w-full lg:mr-10">
+            <div id="containerInfoShipping"></div>
+            <div id="containerCart" class="pt-[3%]"></div>
+        </div>
+        <div id="containerPayment" class="h-3/4"></div>
     </section>
 </main>
 <footer class="w-full">
@@ -31,3 +37,7 @@ session_start();
 </footer>
 </body>
 </html>
+
+<?php } else {
+header("Location: index.php");
+} ?>

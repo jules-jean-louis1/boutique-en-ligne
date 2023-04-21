@@ -95,3 +95,6 @@
 .reply_svg:hover path {
     fill: #39e58c;
 }
+.svg_card {
+    fill: #ffffff;
+}

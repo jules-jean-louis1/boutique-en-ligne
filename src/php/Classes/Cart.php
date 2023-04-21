@@ -233,4 +233,14 @@ class Cart extends Database
             return true;
         }
     }
+    public function deleteCartByUserId($userId)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("DELETE c, cp
+                                    FROM cart c
+                                    LEFT JOIN cart_product cp ON c.id_cart = cp.cart_id
+                                    WHERE c.users_id = :userId
+                                    AND c.status_cart = 'active'");
+        $req->execute(["userId" => $userId]);
+    }
 }
