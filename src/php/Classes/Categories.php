@@ -33,6 +33,14 @@ class Categories extends Database
         $result = json_encode($result);
         return $result;
     }
+    public function displayCategoriesForFilter()
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT * FROM categories");
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
     public function checkIfCategoryExist($name)
     {
         $bdd = $this->getBdd();

@@ -7,7 +7,7 @@ class Catalogue extends Database
     {
         parent::__construct();
     }
-    public function getPagesCatalogue($date = '', $Filtre = 'DESC_rating', $sousCategorie = '')
+    public function getPagesCatalogue($date = '', $Filtre = 'DESC_rating', $categorie = '', $sousCategorie = '')
     {
         $bdd = $this->getBdd();
         $req = "SELECT COUNT(product.id_product) AS total_count 
@@ -15,11 +15,17 @@ class Catalogue extends Database
                                 JOIN subcategories ON product.subcategories_id = subcategories.id_subcategories 
                                 JOIN categories ON categories.id_categories = subcategories.categories_id";
         if ($date != '') {
-            $req .= " AND YEAR(product.released_date_product) = :date";
+            $req .= " WHERE YEAR(product.released_date_product) = :date";
         }
-        if ($sousCategorie != '') {
-            $req .= " WHERE subcategories.id_subcategories = :sousCategorie";
+
+        if (isset($categorie) && !empty(trim($categorie)) && isset($sousCategorie) && !empty(trim($sousCategorie))) {
+            $req .= " AND subcategories.id_subcategories = :sousCategorie";
+        } elseif ($categorie != '') {
+            $req .= " AND categories.id_categories = :categorie";
+        } elseif ($sousCategorie != '') {
+            $req .= " AND subcategories.id_subcategories = :sousCategorie";
         }
+
         if ($Filtre === 'ASC_prix') {
             $req .= " ORDER BY product.price_product ASC";
         } elseif ($Filtre === 'DESC_prix') {
@@ -32,14 +38,26 @@ class Catalogue extends Database
             $req .= " ORDER BY product.rating_product ASC";
         } elseif ($Filtre === 'DESC_rating') {
             $req .= " ORDER BY product.rating_product DESC";
+        } elseif ($Filtre === 'ASC_date') {
+            $req .= " ORDER BY product.released_date_product ASC";
+        } elseif ($Filtre === 'DESC_date') {
+            $req .= " ORDER BY product.released_date_product DESC";
         }
+
         $stmt = $bdd->prepare($req);
+
         if ($date != '') {
             $stmt->bindParam(':date', $date, PDO::PARAM_INT);
         }
-        if ($sousCategorie != '') {
+
+        if (isset($categorie) && !empty(trim($categorie)) && isset($sousCategorie) && !empty(trim($sousCategorie))) {
+            $stmt->bindParam(':sousCategorie', $sousCategorie, PDO::PARAM_INT);
+        } elseif ($categorie != '') {
+            $stmt->bindParam(':categorie', $categorie, PDO::PARAM_INT);
+        } elseif ($sousCategorie != '') {
             $stmt->bindParam(':sousCategorie', $sousCategorie, PDO::PARAM_INT);
         }
+
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $count = $result['total_count'];
@@ -47,7 +65,7 @@ class Catalogue extends Database
         return $pages;
     }
 
-    public function test2($pages = '1', $date = '', $Filtre = 'DESC_rating', $sousCategorie = '')
+    public function getProductsCatalogue($pages = '1', $date = '', $Filtre = 'DESC_rating', $categorie = '', $sousCategorie = '')
     {
         // Nombre d'articles par page
         $limit = 9;
@@ -60,13 +78,20 @@ class Catalogue extends Database
         $bdd = $this->getBdd();
         $req = "SELECT product.id_product, product.name_product, product.price_product, product.img_product, product.rating_product, product.quantite_product, product.quantite_vendue, product.released_date_product, subcategories.name_subcategories, categories.name_categories 
                 FROM product JOIN subcategories ON product.subcategories_id = subcategories.id_subcategories 
-                JOIN categories ON categories.id_categories = subcategories.categories_id; ";
+                JOIN categories ON categories.id_categories = subcategories.categories_id";
+
         if ($date != '') {
-            $req .= " AND YEAR(product.released_date_product) = :date";
+            $req .= " WHERE YEAR(product.released_date_product) = :date";
         }
-        if ($sousCategorie != '') {
-            $req .= " WHERE subcategories.id_subcategories = :sousCategorie";
+
+        if (isset($categorie) && !empty(trim($categorie)) && isset($sousCategorie) && !empty(trim($sousCategorie))) {
+            $req .= " AND subcategories.id_subcategories = :sousCategorie";
+        } elseif ($categorie != '') {
+            $req .= " AND categories.id_categories = :categorie";
+        } elseif ($sousCategorie != '') {
+            $req .= " AND subcategories.id_subcategories = :sousCategorie";
         }
+
         if ($Filtre === 'ASC_prix') {
             $req .= " ORDER BY product.price_product ASC";
         } elseif ($Filtre === 'DESC_prix') {
@@ -79,14 +104,26 @@ class Catalogue extends Database
             $req .= " ORDER BY product.rating_product ASC";
         } elseif ($Filtre === 'DESC_rating') {
             $req .= " ORDER BY product.rating_product DESC";
+        } elseif ($Filtre === 'ASC_date') {
+            $req .= " ORDER BY product.released_date_product ASC";
+        } elseif ($Filtre === 'DESC_date') {
+            $req .= " ORDER BY product.released_date_product DESC";
         }
+
         $stmt = $bdd->prepare($req);
+
         if ($date != '') {
             $stmt->bindParam(':date', $date, PDO::PARAM_INT);
         }
-        if ($sousCategorie != '') {
+
+        if (isset($categorie) && !empty(trim($categorie)) && isset($sousCategorie) && !empty(trim($sousCategorie))) {
+            $stmt->bindParam(':sousCategorie', $sousCategorie, PDO::PARAM_INT);
+        } elseif ($categorie != '') {
+            $stmt->bindParam(':categorie', $categorie, PDO::PARAM_INT);
+        } elseif ($sousCategorie != '') {
             $stmt->bindParam(':sousCategorie', $sousCategorie, PDO::PARAM_INT);
         }
+
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;

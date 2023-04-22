@@ -20,9 +20,14 @@ session_start();
     <?php require_once "src/import/header.php"; ?>
 </header>
 <main>
-    <section>
+    <section class="flex">
         <div id="displayFilterCatalogue"></div>
-        <div id="displayFilterProduct"></div>
+        <div id="displayFiltreProduct">
+            <div id="displayProduct"></div>
+            <div id="displayPages">
+                <ul id="displayPagesCatalogue"></ul>
+            </div>
+        </div>
     </section>
 </main>
 <footer class="w-full">

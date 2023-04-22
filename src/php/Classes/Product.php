@@ -166,15 +166,36 @@ class Product extends Database
             "rating" => $rating
         ]);
     }
-    public function getDateOfReleasedProduct()
-    {
+    public function getDateOfReleasedProduct($categorie = '', $sousCategorie = '') {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT YEAR(released_date_product) AS annee, COUNT(*) AS count 
-                                    FROM product
-                                    GROUP BY YEAR(released_date_product)
-                                    ORDER BY YEAR(released_date_product) DESC");
-        $req->execute();
-        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        $req = "SELECT YEAR(p.released_date_product) AS annee, COUNT(*) AS count 
+            FROM product p
+            JOIN subcategories s ON p.subcategories_id = s.id_subcategories
+            JOIN categories c ON s.categories_id = c.id_categories";
+
+        if (!empty($categorie) && !empty($sousCategorie)) {
+            $req .= " WHERE s.id_subcategories = :sousCategorie";
+        } elseif (!empty($categorie)) {
+            $req .= " WHERE c.id_categories = :categorie";
+        } elseif (!empty($sousCategorie)) {
+            $req .= " WHERE s.id_subcategories = :sousCategorie";
+        }
+
+        $req .= " GROUP BY YEAR(p.released_date_product)
+            ORDER BY YEAR(p.released_date_product) DESC";
+
+        $stmt = $bdd->prepare($req);
+
+        if (!empty($categorie) && !empty($sousCategorie)) {
+            $stmt->bindParam(':sousCategorie', $sousCategorie, PDO::PARAM_INT);
+        } elseif (!empty($categorie)) {
+            $stmt->bindParam(':categorie', $categorie, PDO::PARAM_INT);
+        } elseif (!empty($sousCategorie)) {
+            $stmt->bindParam(':sousCategorie', $sousCategorie, PDO::PARAM_INT);
+        }
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+
 }

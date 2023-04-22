@@ -87,18 +87,30 @@ if (!empty($errors)) {
     echo json_encode(['status' => 'error', 'message' => $errors]);
 }*/
 require_once "../../Classes/Catalogue.php";
+require_once "../../Classes/Categories.php";
 
 
 /*$test = new Catalogue();
-$result = $test->test('', 'DESC_rating', '');
-//$p = $test->getPagesCatalogue('2022', 'DESC', '');
-var_dump($result);
-//var_dump($p);*/
+//$result = $test->test('', 'DESC_rating', '');
+$p = $test->getProductsCatalogue('1', '', '', '1', '6');
+//var_dump($result);
+var_dump($p);*/
 
-$p = new Product();
+/*$p = new Product();
 $products = $p->getDateOfReleasedProduct();
-var_dump($products);
+var_dump($products);*/
+/*$_GET['page'] = '';
+$_GET['Date'] = '1';
 
+if (isset($_GET['page']) && !empty(trim($_GET['page'])) || isset($_GET['Date']) && !empty(trim($_GET['Date']))) {
+    echo "isset";
+} else {
+    echo "not isset";
+}*/
+
+$product = new Product();
+$displaySubCategories = $product->getDateOfReleasedProduct('1', '');
+var_dump($displaySubCategories);
 
 
 
