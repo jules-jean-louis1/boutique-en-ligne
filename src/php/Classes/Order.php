@@ -68,5 +68,30 @@ class Order extends Database
             return false;
         }
     }
-
+    public function getCommandeByUserId($id)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT * FROM commande WHERE users_id = :id");
+        $req->execute(array(
+            "id" => $id
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+    public function getDetailCommandeById($id)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT p.img_product, p.name_product, p.price_product, dc.quantite_produit, s.name_subcategories 
+                                    FROM detail_commande dc 
+                                    JOIN product p ON p.id_product = dc.product_id 
+                                    JOIN subcategories s ON s.id_subcategories = p.subcategories_id 
+                                    JOIN commande c ON c.id_commande = dc.command_id 
+                                    JOIN client cl ON cl.id_client = c.users_id 
+                                    WHERE cl.users_id = :id");
+        $req->execute(array(
+            "id" => $id
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }

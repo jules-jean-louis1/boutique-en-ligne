@@ -47,6 +47,135 @@ async function displayUserInfoHeader() {
             }
         });
 }
+async function cartHeader() {
+    const cartButtonHeader = document.getElementById("cartHeader");
+    const notifCartHeader = document.getElementById("notifCartHeader");
+    await fetch('src/php/fetch/cart/displayCartInfoHeader.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status == 'success_not_connected') {
+                const total = data.total;
+                const nbProduits = data.countProducts;
+                notifCartHeader.innerHTML = `
+                    <p class="absolute flex items-center justify-center rounded-full h-4 w-4 bg-[#A87EE6FF]">
+                        <span class="text-white text-xs">${nbProduits}</span>
+                    </p>
+                `;
+
+                const cartDivHeader = document.createElement("dialog");
+                cartDivHeader.setAttribute('class', 'absolute top-[17%] left-[57%] transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white w-80 rounded-lg shadow-lg');
+                cartDivHeader.setAttribute('id', 'cartDivHeader');
+
+                cartDivHeader.innerHTML = '';
+                cartButtonHeader.addEventListener('mouseenter', () => {
+                    cartDivHeader.setAttribute('open', '');
+                    cartDivHeader.innerHTML = `
+                    <div class="absolute flex flex-col items-around space-y-2">
+                        <div class="mt-2">
+                            <p class="text-[#a8b3cf]">Total : ${total} €</p>
+                        </div>
+                        <div id="containerCartHeader"></div>
+                        <div class="h-10 flex items-center justify-center pb-2">
+                            <a href="cart.php" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg">Voir le panier</a>
+                        </div>
+                    </div>
+                    `;
+
+                    const containerCartHeader = document.getElementById("containerCartHeader");
+                    for (const product of data.products) {
+                        containerCartHeader.innerHTML += `
+                        <div class="flex flex-row justify-between px-5 py-3 border-b-[1px] border-[#e5e7eb]">
+                            <div class="flex flex-row items-center">
+                                <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded-lg">
+                                <p class="text-[#a8b3cf] ml-5">${product.name_product}</p>
+                            </div>
+                            <div class="flex flex-col items-start">
+                                <p class="text-[#a8b3cf] text-2xl">${product.price_product} €</p>
+                                <p class="text-[#a8b3cf] text-sm">Quantité :${product.quantity_product}</p>
+                            </div>
+                        </div>
+                        `;
+                    }
+
+                });
+                cartButtonHeader.appendChild(cartDivHeader);
+                cartButtonHeader.addEventListener('mouseleave', () => {
+                    cartDivHeader.removeAttribute('open');
+                    cartDivHeader.innerHTML = '';
+                });
+
+            }
+            if (data.status == 'success_connected') {
+                const total = data.total;
+                const nbProduits = data.countProducts;
+                notifCartHeader.innerHTML = `
+                    <p class="absolute flex items-center justify-center rounded-full h-4 w-4 bg-[#A87EE6FF]">
+                        <span class="text-white text-xs">${nbProduits}</span>
+                    </p>
+                `;
+                const cartDivHeader = document.createElement("dialog");
+                cartDivHeader.setAttribute('class', 'absolute top-[21vh] left-[78vw] transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white w-80 rounded-lg shadow-lg');
+                cartDivHeader.setAttribute('id', 'cartDivHeader');
+
+                cartButtonHeader.addEventListener('mouseenter', () => {
+                    cartDivHeader.setAttribute('open', '');
+                    cartDivHeader.innerHTML = `
+                    <div class="flex flex-col items-around space-y-2">
+                        <div class="mt-2">
+                            <p class="text-[#a8b3cf]">Total : ${total} €</p>
+                        </div>
+                        <div id="containerCartHeader"></div>
+                        <div class="h-10 flex items-center justify-center pb-2">
+                            <a href="cart.php" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg">Voir le panier</a>
+                        </div>
+                    </div>
+                    `;
+                    const containerCartHeader = document.getElementById("containerCartHeader");
+                    for (const product of data.products) {
+                        containerCartHeader.innerHTML += `
+                        <div class="flex flex-row justify-between px-5 py-3 border-b-[1px] border-[#e5e7eb]">
+                            <div class="flex flex-row items-center">
+                                <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded-lg">
+                                <p class="text-[#a8b3cf] ml-5">${product.name_product}</p>
+                            </div>
+                            <div class="flex flex-col items-start">
+                                <p class="text-[#a8b3cf] text-2xl">${product.price_product} €</p>
+                                <p class="text-[#a8b3cf] text-sm">Quantité :${product.quantity_product}</p>
+                            </div>
+                        </div>
+                        `;
+                    }
+                });
+                cartButtonHeader.appendChild(cartDivHeader);
+                cartButtonHeader.addEventListener('mouseleave', () => {
+                    cartDivHeader.removeAttribute('open');
+                    cartDivHeader.innerHTML = '';
+                });
+            }
+            if (data.status == 'error') {
+                notifCartHeader.innerHTML = '';
+                const cartDivHeader = document.createElement("dialog");
+                cartDivHeader.setAttribute('class', 'absolute top-[17%] left-[57%] transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white w-80 rounded-lg shadow-lg');
+                cartDivHeader.setAttribute('id', 'cartDivHeader');
+
+                cartDivHeader.addEventListener('mouseenter', () => {
+                    cartDivHeader.setAttribute('open', '');
+                    cartDivHeader.innerHTML = `
+                    <div class="flex flex-col items-center space-y-2">
+                        <div class="mt-2">
+                            <p class="text-[#a8b3cf]">Votre panier est vide</p>
+                        </div>
+                    </div>
+                    `;
+                });
+                cartButtonHeader.appendChild(cartDivHeader);
+                cartButtonHeader.addEventListener('mouseleave', () => {
+                    cartDivHeader.removeAttribute('open');
+                    cartDivHeader.innerHTML = '';
+                });
+            }
+        });
+}
 FormSearchBarHeader.addEventListener('keyup', (ev) => {
     ev.preventDefault();
     searchHeader();
@@ -62,7 +191,7 @@ if (btnLogin) {
 }
 
 // Catalogue.js
-
+const containerMessageAddCart = document.getElementById("containerMessageAddCart");
 const containerCatalogue = document.getElementById("containerCatalogue");
 const containerPage = document.getElementById("displayPagesCatalogue");
 async function getDateProduct(categorie, subCategorie) {
@@ -74,9 +203,9 @@ async function getDateProduct(categorie, subCategorie) {
     dateSortieProduit.innerHTML = '';
     for (const date of data.displayYear) {
         dateSortieProduit.innerHTML += `
-            <div class="flex items-center space-x-2">
-                <label for="dateSortie">${date.annee}</label>
+            <div class="flex justify-around w-2/3">
                 <input type="checkbox" name="dateSortie" id="dateSortie" value="${date.annee}">
+                <label for="dateSortie">${date.annee}</label>
                 <p class="text-[#A87EE6FF]"> ${date.count}</p>
             </div>
             `;
@@ -140,23 +269,23 @@ async function getPages(Date, order, categorie, subCategorie) {
 function createFormFilter() {
     const containerFilterForm = document.getElementById("displayFilterCatalogue");
     const filterFormC = document.createElement('div');
-    filterFormC.className = "filterFormC";
+    filterFormC.className = "h-full";
     containerFilterForm.appendChild(filterFormC);
 
     filterFormC.innerHTML = `
-    <form id="filtrageForm" method="POST" class="flex flex-col">
-        <div class="flex flex-col ">
-            <select name="categorie" id="categorie" class="p-4">
+    <form id="filtrageForm" method="POST" class="flex flex-col justify-between items-strech text-white h-full p-4">
+        <div class="flex flex-col">
+            <select name="categorie" id="categorie" class="p-4 bg-[#1c1f26] rounded-[14px] border-[1px] border-[#a8b3cf33]">
                 <option value="">Categorie</option>
             </select>
         </div>
         <div class="flex flex-col ">
-            <select name="subCategories" id="subCategories" class="p-4">
+            <select name="subCategories" id="subCategories" class="p-4 bg-[#1c1f26] rounded-[14px] border-[1px] border-[#a8b3cf33]">
                 <option value="">Genre...</option>
             </select>
         </div>
         <div id="filtreSelectC" class="flex flex-col ">
-            <select name="order" id="order" class="p-4">
+            <select name="order" id="order" class="p-4 bg-[#1c1f26] rounded-[14px] border-[1px] border-[#a8b3cf33]">
                 <option value="">Tirer par...</option>
                 <option value="ASC_prix">Prix : les moins chers</option>
                 <option value="DESC_prix">Prix : les plus chers</option>
@@ -168,7 +297,12 @@ function createFormFilter() {
                 <option value="DESC_rating">Note : Les moins bonnes</option>
             </select>
         </div>
-        <div id="dateSortieProduit" class="flex flex-col ">
+        <div id="containerDateSortieProduit" class="pb-8 pt-2 border-t-[1px] border-[#a8b3cf33]">
+            <div id="titreDateSortieProduit" class="flex items-center justify-between">
+                <h6 class="text-white font-light">Date de sortie</h6>
+                <svg width="38" height="24" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-linejoin="round" stroke-width="2.0526315789473686" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M7 12H17"></path></svg>
+            </div>
+            <div id="dateSortieProduit" class="flex flex-col items-stretch"></div>
         </div>
     </form>
     `;
@@ -212,11 +346,74 @@ async function filterForm(Page, Date, order, categorie, subCategorie) {
     await fetch(`src/php/fetch/catalogue/getProductByFilter.php?${params.toString()}`)
         .then(response => response.json())
         .then(data => {
+            const containerProduct = document.getElementById("displayProduct");
             if (data.status === 'success') {
-                // faire quelque chose avec les résultats
+                containerProduct.innerHTML = '';
+                for (let product of data.displayProducts) {
+                    containerProduct.innerHTML += `
+                        <div id="itemsProductContainer" class="w-60 flex justify-center mx-8">
+                            <a href="produit.php?id=${product.id_product}">
+                            <div id="wapperProduct" class="p-4">
+                                <div id="itemsImgProduct">
+                                    <div id="priceProduct" class="absolute mt-2 ml-2 rounded-full text-white bg-slate-900/90 w-fit p-1">
+                                        <p>${product.price_product}€</p>
+                                    </div>
+                                    <img src="src/images/products/${product.img_product}" alt="${product.name_product}" class="rounded-lg h-fit lg:h-72">
+                                </div>
+                                <div id="TitleProduct" class="flex items-center w-full justify-between">
+                                    <div id="containerTitleProduct" class="flex flex-col items-start">
+                                        <p class="font-bold text-white">${product.name_product}</p>
+                                        <p class="font-light text-[#a8b3cf]">${product.name_subcategories}</p>
+                                    </div>
+                                    <div id="containerButtonAddToCart">
+                                        <form action="" method="post" id="formAddToCart_${product.id_product}">
+                                            <input type="hidden" name="id_product" value="${product.id_product}">
+                                            <input type="hidden" name="name_product" value="${product.name_product}">
+                                            <button id="buttonAddToCart_${product.id_product}" class="text-white rounded-full" type="submit">
+                                                <svg width="40" height="40" viewBox="0 0 24 24" stroke="#a87ee6" fill="none" stroke-linejoin="round" stroke-width="1.105263157894737" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M6.99999 12H12M12 12H17M12 12V6.99999M12 12V17M21.5 12C21.5 17.2467 17.2467 21.5 12 21.5C6.75329 21.5 2.5 17.2467 2.5 12C2.5 6.75329 6.75329 2.5 12 2.5C17.2467 2.5 21.5 6.75329 21.5 12Z"></path></svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                        </div>
+                        `;
+
+                }
+                for (let product of data.displayProducts) {
+                    const formAddToCart = document.getElementById(`formAddToCart_${product.id_product}`);
+                    formAddToCart.addEventListener('click', async (ev) => {
+                        ev.preventDefault();
+                        await fetch(`src/php/fetch/cart/addProductToCart.php?id=${product.id_product}&name=${product.name_product}&quantity=1`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status == 'success') {
+                                    const diaog = document.createElement("dialog");
+                                    diaog.setAttribute('class','fixed top-20 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-transparent');
+                                    diaog.setAttribute('open', '');
+                                    diaog.innerHTML = `
+                                        <div class="w-full flex items-center py-3 px-2 space-x-3 bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100 rounded-[14px] bg-[#cbf4f0] text-[#000] border-l-[3px] border-[#23a094]">
+                                            <svg width="25" height="25" viewBox="0 0 24 24" stroke="#23a094" fill="#fff" class="p-0.5 bg-white rounded-full" stroke-linejoin="round" stroke-width="1.736842105263158" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M16.253 10.1109L11.8891 14.4749C11.4986 14.8654 10.8654 14.8654 10.4749 14.4749L7.99999 12M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"></path></svg>
+                                            <small class="text-lg">Produit ajouté au panier</small>
+                                        </div>
+                                        `;
+                                    containerMessageCart.appendChild(diaog);
+                                    setTimeout(() => {
+                                        containerMessageCart.innerHTML = '';
+                                    }, 2500);
+                                    cartHeader();
+                                }
+                            });
+                    });
+                }
             }
             if (data.status === 'error') {
-                console.log(data.message);
+                containerProduct.innerHTML = `
+                    <div id="errorProduct" class="flex flex-col items-center justify-center h-full">
+                        <p class="text-white font-light text-2xl">Aucun produit ne correspond à votre recherche</p>
+                    </div>
+                    `;
             }
         });
 }
@@ -236,6 +433,7 @@ let subCategorie = '';
 createFormFilter();
 getPages(Date, order, categorie, subCategorie);
 filterForm(Page, Date, order, categorie, subCategorie);
+cartHeader();
 
 const filtrageForm = document.getElementById("filtrageForm");
 filtrageForm.addEventListener('change', async (ev) => {

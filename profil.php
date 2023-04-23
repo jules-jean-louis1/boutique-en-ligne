@@ -18,14 +18,18 @@ if (isset($_SESSION['login']) != null) { ?>
 <header class="w-full">
     <?php require_once "src/import/header.php"; ?>
 </header>
-<main>
+<main class="bg-[#0E1217]">
     <section id="containerFormCommandeInfo"></section>
     <div id="containerFormProfil">
         <button type="button" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" id="buttonFormProfilInfo">Modifier mes informations</button>
-        <div id="containerFormProfilInfo"></div>
+        <button type="button" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" id="buttonFormCommandeInfo">Mes commandes</button>
     </div>
-    <section id="containerFormAvatarInfo"></section>
-    <section id="containerFormSupp"></section>
+    <section id="itemsModifProfil" class="flex justify-center">
+        <div id="containerFormProfilInfo" class="flex justify-between w-[70%]"></div>
+    </section>
+    <section>
+        <div id="containerCommande"></div>
+    </section>
 </main>
 </body>
 </html>
