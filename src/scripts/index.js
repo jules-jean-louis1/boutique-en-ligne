@@ -103,6 +103,8 @@ if (btnLogin) {
 
 const sectionHeader = document.querySelector('#background_img_banner');
 const sectionProduct = document.querySelector('#containerProduits');
+const sectionCategories = document.querySelector('#displayCategories');
+const sectionAvis = document.querySelector('#lastAvisClient');
 async function displayBanner() {
     await fetch('src/php/fetch/produit/displayLastProduct.php')
         .then(response => response.json())
@@ -161,4 +163,30 @@ async function displayBanner() {
             }
         });
 }
+async function displayCategories() {
+    await fetch('src/php/fetch/category/categoriesIndex.php')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            for (let category of data.cat) {
+                sectionCategories.innerHTML += `
+                <div id="itemsCatContainer" class="card w-60 flex justify-center m-2 rounded-[14px]">  
+                    <div class="card-content flex items-center">  
+                        <a href="catalogue.php?categorie=${category.id_categories}">  
+                        <div id="wapperCat" class="p-4">  
+                            <h2 class="card-title font-bold text-white">${category.name_categories}</h2>  
+                            <h4 class="card-subtitle"></h4>  
+                        </div>  
+                        </a>  
+                    </div>  
+                </div>
+                `;
+            }
+        });
+}
+async function displayAvis() {
+    await fetch('src/php/fetch/avis/displayLastAvis.php')
+}
+
 displayBanner();
+displayCategories();

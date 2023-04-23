@@ -128,4 +128,14 @@ class Categories extends Database
             "id_subcategories" => $id_subcategories
         ));
     }
+    public function displayCategoriesIndex()
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT * FROM categories
+                                    LEFT JOIN subcategories ON categories.id_categories = subcategories.categories_id
+                                    GROUP BY categories.id_categories LIMIT 6");
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }
