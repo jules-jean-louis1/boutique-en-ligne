@@ -19,17 +19,23 @@ if (isset($_SESSION['login']) != null) { ?>
     <?php require_once "src/import/header.php"; ?>
 </header>
 <main class="bg-[#0E1217]">
-    <section id="containerFormCommandeInfo"></section>
-    <div id="containerFormProfil">
-        <button type="button" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" id="buttonFormProfilInfo">Modifier mes informations</button>
-        <button type="button" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" id="buttonFormCommandeInfo">Mes commandes</button>
-    </div>
-    <section id="itemsModifProfil" class="flex justify-center">
-        <div id="containerFormProfilInfo" class="flex justify-between w-[70%]"></div>
-    </section>
-    <section>
-        <div id="containerCommande"></div>
-    </section>
+    <article class="flex flex-col items-center">
+        <section id="containerFormCommandeInfo"></section>
+        <div id="containerFormProfil">
+            <button type="button" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
+                    id="buttonFormProfilInfo">Modifier mes informations
+            </button>
+            <button type="button" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
+                    id="buttonFormCommandeInfo">Mes commandes
+            </button>
+        </div>
+        <section id="itemsModifProfil" class="flex justify-center w-full hidden">
+            <div id="containerFormProfilInfo" class="flex justify-between"></div>
+        </section>
+        <section class="flex justify-center w-full">
+            <div id="containerCommande" class="hidden w-[80%]"></div>
+        </section>
+    </article>
 </main>
 </body>
 </html>

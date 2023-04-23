@@ -85,11 +85,27 @@ class Avis extends Database
                                     FROM comment_avis c
                                     JOIN users u ON c.users_id = u.id_users
                                     WHERE c.avis_parent_id = :id_avis
-                                    ORDER BY `content_comment` DESC");
+                                    OR c.comment_parent_id IN (
+                                      SELECT id_comment
+                                      FROM comment_avis
+                                      WHERE avis_parent_id = :id_avis
+                                    )ORDER BY c.created_at ASC");
         $req->execute([
             "id_avis" => $id_avis
         ]);
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
+    }
+    public function addReplyToComment($content, $id_comment, $id_users, $id_product)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("INSERT INTO comment_avis (comment_parent_id, content_comment, created_at, users_id, product_id)
+                                    VALUES (:id_comment, :content, NOW(), :id_users, :id_product)");
+        $req->execute([
+            "id_comment" => $id_comment,
+            "content" => $content,
+            "id_users" => $id_users,
+            "id_product" => $id_product
+        ]);
     }
 }

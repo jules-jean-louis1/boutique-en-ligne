@@ -20,12 +20,13 @@ session_start();
     <header class="w-full">
         <?php require_once "src/import/header.php"; ?>
     </header>
-    <main>
+    <main class="bg-[#0e1217]">
         <div id="containerDialogAvis"></div>
         <section id="containerMessageAddCart"></section>
-        <section id="containerInformationProduits"></section>
+        <section id="containerInformationProduits" class="pt-12"></section>
         <section id="containerSimilarProduct"></section>
         <section class="mt-12">
+            <h2 class="text-center text-2xl text-white">Ajouter un avis sur ce produit</h2>
             <div id="containerAddAvis"></div>
         </section>
         <section class="my-6">

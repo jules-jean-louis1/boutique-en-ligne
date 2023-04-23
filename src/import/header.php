@@ -1,5 +1,6 @@
 
 <nav class="py-2 bg-[#0E1217] border-b-[1px] border-b-[#a8b3cf33]">
+<!--    <div class="bg-transparent filter blur-lg saturate-100"></div>-->
     <div class="flex items-center justify-around">
         <div>
             <ul class="flex space-x-4 items-center text-white">

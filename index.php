@@ -19,8 +19,25 @@ session_start();
     <header class="w-full">
         <?php require_once "src/import/header.php"; ?>
     </header>
-    <main>
-
+    <main class="bg-[#0E1217]">
+        <section>
+            <div id="background_img_banner" class="max-h-[500px]"></div>
+        </section>
+        <section class="flex flex-col justify-center items-center">
+            <div class="flex flex-col justify-center lg:w-7/12 w-11/12">
+                <div id="containerTitleProduct" class="flex items-center justify-between w-full py-4">
+                    <h2 class="text-center text-2xl text-white">Tendances</h2>
+                    <button type="button"
+                            class="bg-slate-600/40 hover:bg-slate-800/40 text-white font-bold py-2 px-4 rounded-[14px] border-[1px] border-[#a8b3cf33]"
+                            id="buttonTendances">Voir plus
+                    </button>
+                </div>
+                <div id="containerProduits" class="flex flex-wrap justify-between w-full h-full"></div>
+            </div>
+        </section>
+        <section>
+            <div id="displayCategories"></div>
+        </section>
     </main>
     <footer class="w-full">
         <?php require_once "src/import/footer.php"; ?>

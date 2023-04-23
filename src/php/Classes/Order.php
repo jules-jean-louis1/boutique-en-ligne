@@ -78,6 +78,21 @@ class Order extends Database
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+    public function numberItemsInOrder($id)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT SUM(quantite_produit) AS total_articles
+                                    FROM commande c
+                                    JOIN detail_commande d ON c.id_commande = d.command_id
+                                    WHERE c.users_id = :id
+                                    GROUP BY c.id_commande");
+        $req->execute(array(
+            "id" => $id
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        $total = $result[0]['total_articles'];
+        return $total;
+    }
     public function getDetailCommandeById($id)
     {
         $bdd = $this->getBdd();

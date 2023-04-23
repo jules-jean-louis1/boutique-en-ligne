@@ -235,7 +235,7 @@ cartHeader();
 
 // Récupération des éléments du DOM
 const btnDisplayProfil = document.querySelector('#buttonFormProfilInfo');
-const btnCommandeProfil = document.querySelector('#buttonFormCommandeInfo');
+const btnDisplayCommande = document.querySelector('#buttonFormCommandeInfo');
 
 //Fonction de modifiacation du profil
 async function modifyProfil() {
@@ -245,7 +245,7 @@ async function modifyProfil() {
         .then(data => {
             containerProfile.innerHTML = '';
             containerProfile.innerHTML = `
-            <div id="wapperFormProfilInfo" class="w-fit h-[50%]">
+            <div id="wapperFormProfilInfo" class="w-fit h-fit">
                 <form action="" method="post" id="formModifyProfilInfo" class="flex flex-col space-y-2">
                     <div class="flex items-center justify-between space-x-2">
                         <div id="containerprofil" class="relative">
@@ -397,12 +397,67 @@ async function commandeClient() {
     await fetch('src/php/fetch/profil/commandeClient.php')
         .then(response => response.json())
         .then(data => {
-
+            sectionCommande.innerHTML = '';
+            if (data.status === 'error') {
+                sectionCommande.innerHTML = `
+                    <div class="flex flex-col items-center justify-center w-full h-[300px]">
+                        <p class="text-white text-xl font-bold">${data.message}</p>
+                    </div>
+                    `;
+            }
+            if (data.status === 'success') {
+                let TotalItem = data.totalItems;
+                for (let commande of data.Commande) {
+                    sectionCommande.innerHTML += `
+                        <div class="flex flex-col items-center rounded-[14px] border-[1px] border-[#a8b3cf33] bg-[#1c1f26]">
+                            <div class="flex items-center justify-between text-white w-full bg-[#a87ee6] rounded-t-[14px] p-4">
+                                <p>Date de la commande: ${formatDateSansh(commande.date_commande)}</p>
+                                <p>Nombre d'article: ${TotalItem}</p>
+                                <p>Statut: ${commande.statue_commande}</p>
+                                <p>Montant: ${commande.motant_commande} €</p>
+                            </div>
+                            <div id="containerItemCommande" class="w-full p-2"></div>
+                        </div>
+                        `;
+                    const containerItemCommande = document.querySelector('#containerItemCommande');
+                    for (let item of data.DetailCommande) {
+                        containerItemCommande.innerHTML += `
+                        <div class="flex items-center justify-between text-white w-full rounded-[14px] bg-[#0e1217] my-2 px-4 py-2">
+                            <div class="flex items-center space-x-4">
+                                <img src="src/images/products/${item.img_product}" alt="image produit" class="h-16">
+                                <div class="flex flex-col items-start">
+                                    <p class="font-semibold text-xl">${item.name_product}</p>
+                                    <p class="text-[#a8b3cf] text-sm">${item.name_subcategories}</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <p class="font-semibold text-xl">${item.price_product} €</p>
+                                <p class="text-[#a8b3cf] text-sm">Quantité :${item.quantite_produit}</p>
+                            </div>
+                        </div>
+                        `;
+                    }
+                }
+            }
         });
 }
 
 // Fonction d'affichage du profil
+const sectionCommande = document.querySelector('#containerCommande');
 const sectionProfil = document.querySelector('#itemsModifProfil');
+modifyProfil();
+commandeClient();
 btnDisplayProfil.addEventListener('click', () => {
-    modifyProfil();
+    if (sectionProfil.classList.contains('hidden')) {
+        sectionProfil.classList.remove('hidden');
+    } else {
+        sectionProfil.classList.add('hidden');
+    }
+});
+btnDisplayCommande.addEventListener('click', () => {
+    if (sectionCommande.classList.contains('hidden')) {
+        sectionCommande.classList.remove('hidden');
+    } else {
+        sectionCommande.classList.add('hidden');
+    }
 });

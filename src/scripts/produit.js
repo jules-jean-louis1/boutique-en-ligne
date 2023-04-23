@@ -1,5 +1,6 @@
 import {displayErrorMessageFormUpdateProduct, loginFormHeader} from './function/function.js';
 import {registerHeader} from './function/function.js';
+import {formatDate} from './function/function.js';
 import {formatDateSansh} from "./function/function.js";
 import { displaySuccessMessageFormUpdateProduct } from './function/function.js';
 
@@ -137,17 +138,18 @@ async function getProduct(URLid) {
             const containerProduct = document.getElementById("containerProduct");
             for (const product of data.data) {
                 containerProduct.innerHTML = `
-            <div class="lg:w-9/12 w-11/12 border-[1px] border-[#a8b3cf33] rounded-lg">
-                <div class="bg-[#A87EE6FF] h-96 absolute lg:w-9/12 lg:h-2/5 flex justify-center -z-50 rounded-t-lg"></div>
-                <div class="flex lg:flex-row sm:flex-col sm:items-center justify-between px-16 py-6">
-                    <div>
-                        <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="lg:h-[30%] rounded-lg">
+            <div class="lg:w-8/12 w-11/12 border-[1px] border-[#a8b3cf33] rounded-lg">
+                <div class="bg-[#A87EE6FF] h-72 lg:h-2/5 flex justify-center rounded-t-lg w-full">
+                <div class="relative flex lg:flex-row sm:flex-col sm:items-center justify-between px-16 py-6">
+                    <div class="h-fit">
+                        <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="lg:h-96 rounded-lg">
                     </div>
                     <div class="flex flex-col items-start lg:w-5/12 sm:w-[95%]">
                         <p class="text-center text-white rounded-lg p-1 bg-[#00000038]">${product.name_subcategories}</p>
                         <h1 class="text-6xl text-white mt-5 uppercase font-bold">${product.name_product}</h1>
                         <p class="text-[#a8b3cf] mt-5">${afficherEtoiles(product.rating_product)}</p>
-                        <p class="mt-5">Synopsis : ${product.description_product}</p>
+                        <p class="mt-5 text-white font-xl">À propos du jeu</p>
+                        <p class="text-[#a8b3cf]">${product.description_product}</p>
                         <div>
                             <p class="text-[#A87EE6FF] mt-2 font-bold text-6xl">${product.price_product} €</p>
                             <div id="containerFormAddProductToCart">
@@ -169,6 +171,8 @@ async function getProduct(URLid) {
                         </div>
                     </div>
                 </div>
+            </div>
+                
             </div>
             `;
                 let optionsDisponible = '';
@@ -362,11 +366,11 @@ async function Avis(){
         if (data.status == 'success') {
             containerAddAvis.innerHTML = `
             <div class="flex flex-col items-center justify-center space-y-2 w-full">
-                <form action="" method="post" id="formAddAvisClient" class="flex flex-col space-y-3">
+                <form action="" method="post" id="formAddAvisClient" class="flex flex-col space-y-3 ">
                     <input type="hidden" name="id_product" value="${URLid}">
-                    <input type="text" name="title_avis" id="title_avis" placeholder="Titre de l'avis" class="bg-slate-100 p-2 rounded-lg w-full">
-                    <textarea name="content_avis" id="content_avis" cols="65" rows="6" placeholder="Contenu de l'avis" class="bg-slate-100 p-2 rounded-lg w-full"></textarea>
-                    <select name="note_avis" id="note_avis" class="bg-slate-100 p-2 rounded-lg">
+                    <input type="text" name="title_avis" id="title_avis" placeholder="Titre de l'avis" class="text-white hover:bg-[#21262D] bg-[#2d323c] border-[1px] border-[#a8b3cf33] p-2 rounded-[14px] w-full">
+                    <textarea name="content_avis" id="content_avis" cols="65" rows="6" placeholder="Contenu de l'avis" class="text-white hover:bg-[#21262D] bg-[#2d323c] border-[1px] border-[#a8b3cf33] p-2 rounded-[14px] w-full"></textarea>
+                    <select name="note_avis" id="note_avis" class="hover:bg-[#21262D] bg-[#2d323c] border-[1px] border-[#a8b3cf33]  p-2 rounded-[14px] text-[#a8b3cf]">
                         <option value="" selected>Note du produit</option>
                         <option value="0">0/5</option>
                         <option value="1">1/5</option>
@@ -401,9 +405,9 @@ async function Avis(){
                     }
                     if (data.status == 'success') {
                         msg.innerHTML = `
-                        <div class="flex items-center py-3 px-2 rounded-lg bg-[#DFF2BF] text-[#270] border-l-[3px] border-[#270]">
-                            <img src="public/images/icones/succes-circle-green-stroke-2.svg" alt="" class="w-5 h-5">
-                            <small class="text-lg">${data.message}</small>
+                        <div class="w-full flex items-center py-3 px-2 space-x-3 bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100 rounded-[14px] bg-[#cbf4f0] text-[#000] border-l-[3px] border-[#23a094]">
+                            <svg width="25" height="25" viewBox="0 0 24 24" stroke="#23a094" fill="#fff" class="p-0.5 bg-white items-center rounded-full" stroke-linejoin="round" stroke-width="1.736842105263158" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M16.253 10.1109L11.8891 14.4749C11.4986 14.8654 10.8654 14.8654 10.4749 14.4749L7.99999 12M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"></path></svg>
+                            <small class="text-lg">Produit ajouté au panier</small>
                         </div>
                         `;
                     }
@@ -424,22 +428,25 @@ async function displayAvis() {
             .then(response => response.json())
             .then(data => {
                 if (data.status == 'success') {
+                    if (data.avis.length == 0) {
+                        containerAvisClient.innerHTML = `<p class="text-[#a8b3cf]">Aucun avis pour ce produit</p>`;
+                    } else {
                     containerAvisClient.innerHTML = '';
                     for (let avis of data.avis) {
                         const avisContainer = document.createElement('div');
-                        avisContainer.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'space-y-2', 'border-[1px]', 'border-[#a8b3cf33]', 'rounded-lg', 'w-[80%]', 'p-4', 'mb-2');
+                        avisContainer.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'space-y-2', 'border-[1px]', 'border-[#a8b3cf33]', 'rounded-[14px]', 'w-8/12', 'p-4', 'mb-2');
                         avisContainer.innerHTML = `
                             <div class="flex flex-row justify-between w-full">
-                                <p class="text-[#000] font-semibold">${avis.titre_avis}</p>
+                                <p class="text-[#fff] font-semibold">${avis.titre_avis}</p>
                                 <p class="text-[#a8b3cf]">${formatDateSansh(avis.created_at)}</p>
                             </div>
                             <div class="w-full flex flex-row justify-between">
                                 <div class="flex flex-row space-x-2">
                                     <img src="src/images/avatars/${avis.avatar_users}" alt="" class="w-6 h-6 rounded-full">
-                                    <p class="text-[#a8b3cf]">${avis.login_users}</p>
+                                    <p class="font-semibold text-white">${avis.login_users}</p>
                                 </div>
                                 <div class="flex flex-row justify-end w-full">
-                                    <p class="text-[#a8b3cf]">${avis.note_avis}/5</p>
+                                    <p class="text-[#a8b3cf]">${afficherEtoiles(avis.note_avis)}</p>
                                 </div>
                             </div>
                             <div class="w-full flex flex-row justify-start">
@@ -454,7 +461,7 @@ async function displayAvis() {
                                 <div class="callToAction flex space-x-2"></div>
                                 
                             </div>
-                            <div id="replyAvisClient" class="w-full ml-6 p-4 mr-2"></div>
+                            <div id="replyAvisClient" class="w-full"></div>
                         `;
                         const callToAction = avisContainer.querySelector('.callToAction');
                         if (avis.users_id === Users_id) {
@@ -470,30 +477,139 @@ async function displayAvis() {
                             `;
                         }
                         containerAvisClient.appendChild(avisContainer);
-                        fetch ('src/php/fetch/avis/getReplyAvis.php?id_avis='+avis.id_avis)
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data);
-                            const replyAvisClient = document.getElementById('replyAvisClient');
-                            if (data.commentaire && data.commentaire.length > 0) {
-                                for (let commentaire of data.commentaire) {
-                                    replyAvisClient.innerHTML += `
-                                    <div class="flex flex-row justify-between w-full border-l-2 border-slate-200">
-                                        <div class="flex flex-col py-4 px-2">
-                                        <div class="flex flex-row py-1 space-x-2">
-                                            <img src="src/images/avatars/${commentaire.avatar_users}" alt="" class="w-6 h-6 rounded-full">
-                                            <p class="font-semibold">Par ${commentaire.login_users}</p>
+                        fetch('src/php/fetch/avis/getReplyAvis.php?id_avis=' + avis.id_avis)
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+                                const replyAvisClient = document.getElementById('replyAvisClient');
+                                if (data.commentaire && data.commentaire.length > 0) {
+                                    for (let commentaire of data.commentaire) {
+                                        if (commentaire.avis_parent_id === avis.id_avis) {
+                                            replyAvisClient.innerHTML += `
+                                    <div class="flex flex-col w-full ml-6 p-4 mr-2">
+                                        <div class="flex flex-row justify-between bg-[#0e1217] hover:bg-[#21262D] w-full border-l-2 border-[#a8b3cf33]">
+                                            <div class="flex flex-col py-4 px-2">
+                                            <div class="flex flex-row py-1 space-x-2">
+                                                <img src="src/images/avatars/${commentaire.avatar_users}" alt="" class="w-6 h-6 rounded-full">
+                                                <div class="flex flex-col items-start">
+                                                    <p class="font-semibold text-white">${commentaire.login_users}</p>
+                                                    <p class="text-[#a8b3cf] text-xs">${formatDate(commentaire.created_at)}</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-row">
+                                                <span class="text-[#a8b3cf]"><b class="bg-[#A87EE6AE] p-0.5 w-fit rounded-lg text-white">@${avis.login_users}</b> ${commentaire.content_comment}</span>
+                                            </div>
+                                            </div>
+                                            <div class="flex flex-row justify-between">
+                                                <button class="bg-[#A87EE6FF] text-white px-5 py-2 mx-2 rounded-lg bg-transparent" id="buttonRepondreAvis_${commentaire.id_comment}">
+                                            <svg width="1em" height="1em" viewBox="0 0 24 24" stroke="#39e58c" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 pointer-events-none"><path d="M8.084 3.217a35.447 35.447 0 017.05-.078l.782.078.279.031c1.089.121 1.885.372 2.606.828a4.516 4.516 0 011.664 1.86c.336.69.5 1.423.53 2.361l.005.321v3.975a4.493 4.493 0 01-3.545 4.392l-.207.04-2.089.346-2.86 2.992-.147.135c-.986.789-2.399.623-3.205-.324-.532-.625-.616-1.34-.51-2.29l.029-.224.038-.254.033-.187-1.332-.189a5.011 5.011 0 01-1.677-.55l-.253-.146-.243-.16a4.777 4.777 0 01-1.491-1.721 4.935 4.935 0 01-.532-1.972l-.009-.3V8.618c0-1.096.162-1.915.535-2.683.375-.77.94-1.4 1.664-1.859.649-.41 1.359-.655 2.288-.788l.318-.04.28-.031zm7.666 1.491a33.948 33.948 0 00-6.752-.075l-.748.075-.28.031c-.915.102-1.481.297-1.97.606a3.016 3.016 0 00-1.116 1.247c-.228.468-.357.989-.38 1.76l-.004.266v3.563c0 .577.134 1.116.375 1.587.242.471.592.874 1.024 1.18.37.263.801.453 1.276.554l.242.043 1.98.283c.339.048.457.096.575.175.119.078.262.187.27.386l-.002.024-.013.08-.164.741-.064.333c-.111.63-.167 1.332.09 1.634.263.309.7.39 1.037.187l.089-.062 2.998-3.135.13-.101.092-.063.077-.04.08-.03.035-.01.087-.02L17 15.545a2.993 2.993 0 002.495-2.77l.005-.182V8.618c0-.921-.13-1.506-.384-2.026A3.016 3.016 0 0018 5.345c-.44-.278-.943-.464-1.706-.572l-.265-.034-.279-.03zm-.55 6.294l.093.005c.398.044.707.36.707.746 0 .38-.301.693-.691.743l-.109.007H8.8l-.093-.005c-.398-.044-.707-.36-.707-.745 0-.38.301-.694.691-.744l.109-.007h6.4zm0-3.5l.093.004c.398.044.707.36.707.746 0 .38-.301.693-.691.743l-.109.007H8.8l-.093-.005C8.309 8.953 8 8.637 8 8.252c0-.38.301-.694.691-.744l.109-.007h6.4z" fill="currentcolor" fill-rule="evenodd"></path></svg>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <p class="flex flex-row">
-                                            <span>${commentaire.content_comment}</span>
-                                        </p>
-                                        </div>
-                                        
+                                        <div id="containerReplyCommentaire" class="ml-4"></div>
                                     </div>
                                     `;
+                                        }
+                                    }
+                                    for (let commentaire of data.commentaire) {
+                                        if (commentaire.comment_parent_id) { // Vérifie d'abord si le commentaire a un parent
+                                            for (let parentCommentaire of data.commentaire) {
+                                                if (parentCommentaire.id_comment === commentaire.comment_parent_id) {
+                                                    const containerDisplayCom = document.getElementById('containerReplyCommentaire');
+                                                    containerDisplayCom.innerHTML += `
+                                                        <div class="flex flex-col">
+                                                            <div class="flex flex-row justify-between bg-[#0e1217] hover:bg-[#21262D] w-full border-l-2 border-slate-200">
+                                                                <div class="flex flex-col py-4 px-2">
+                                                                <div class="flex flex-row py-1 space-x-2">
+                                                                    <img src="src/images/avatars/${commentaire.avatar_users}" alt="" class="w-6 h-6 rounded-full">
+                                                                    <div class="flex flex-col items-start">
+                                                                        <p class="font-semibold text-white">${commentaire.login_users}</p>
+                                                                        <p class="text-[#a8b3cf] text-xs">${formatDate(commentaire.created_at)}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex flex-row">
+                                                                    <span class="text-[#a8b3cf]"><b class="bg-[#A87EE6AE] p-0.5 w-fit rounded-lg text-white">@${parentCommentaire.login_users}</b> ${commentaire.content_comment}</span>
+                                                                </div>
+                                                                </div>
+                                                                <div class="flex flex-row justify-between">
+                                                                    <button class="bg-[#A87EE6FF] text-white px-5 py-2 mx-2 rounded-lg bg-transparent" id="buttonRepondreAvis_${commentaire.id_comment}">
+                                                                <svg width="1em" height="1em" viewBox="0 0 24 24" stroke="#39e58c" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 pointer-events-none"><path d="M8.084 3.217a35.447 35.447 0 017.05-.078l.782.078.279.031c1.089.121 1.885.372 2.606.828a4.516 4.516 0 011.664 1.86c.336.69.5 1.423.53 2.361l.005.321v3.975a4.493 4.493 0 01-3.545 4.392l-.207.04-2.089.346-2.86 2.992-.147.135c-.986.789-2.399.623-3.205-.324-.532-.625-.616-1.34-.51-2.29l.029-.224.038-.254.033-.187-1.332-.189a5.011 5.011 0 01-1.677-.55l-.253-.146-.243-.16a4.777 4.777 0 01-1.491-1.721 4.935 4.935 0 01-.532-1.972l-.009-.3V8.618c0-1.096.162-1.915.535-2.683.375-.77.94-1.4 1.664-1.859.649-.41 1.359-.655 2.288-.788l.318-.04.28-.031zm7.666 1.491a33.948 33.948 0 00-6.752-.075l-.748.075-.28.031c-.915.102-1.481.297-1.97.606a3.016 3.016 0 00-1.116 1.247c-.228.468-.357.989-.38 1.76l-.004.266v3.563c0 .577.134 1.116.375 1.587.242.471.592.874 1.024 1.18.37.263.801.453 1.276.554l.242.043 1.98.283c.339.048.457.096.575.175.119.078.262.187.27.386l-.002.024-.013.08-.164.741-.064.333c-.111.63-.167 1.332.09 1.634.263.309.7.39 1.037.187l.089-.062 2.998-3.135.13-.101.092-.063.077-.04.08-.03.035-.01.087-.02L17 15.545a2.993 2.993 0 002.495-2.77l.005-.182V8.618c0-.921-.13-1.506-.384-2.026A3.016 3.016 0 0018 5.345c-.44-.278-.943-.464-1.706-.572l-.265-.034-.279-.03zm-.55 6.294l.093.005c.398.044.707.36.707.746 0 .38-.301.693-.691.743l-.109.007H8.8l-.093-.005c-.398-.044-.707-.36-.707-.745 0-.38.301-.694.691-.744l.109-.007h6.4zm0-3.5l.093.004c.398.044.707.36.707.746 0 .38-.301.693-.691.743l-.109.007H8.8l-.093-.005C8.309 8.953 8 8.637 8 8.252c0-.38.301-.694.691-.744l.109-.007h6.4z" fill="currentcolor" fill-rule="evenodd"></path></svg>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div id="containerReplyCommentaire" class="ml-4"></div>
+                                                        </div>
+                                                        `;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    for ( let commentaire of data.commentaire) {
+                                        const buttonRepondreCom = document.querySelector(`#buttonRepondreAvis_${commentaire.id_comment}`);
+                                        if (buttonRepondreCom) {
+                                            buttonRepondreCom.addEventListener('click', async (ev) => {
+                                                ev.preventDefault();
+                                                const containerDialogAvis = document.getElementById('containerDialogAvis');
+                                                const dialogAvis = document.createElement('dialog');
+                                                dialogAvis.setAttribute('id', 'dialog_fixed');
+                                                dialogAvis.className = 'dialog_modal w-10/12 bg-[#24272A] text-[#a8b3cf] rounded-lg shadow-lg';
+                                                containerDialogAvis.appendChild(dialogAvis);
+                                                dialogAvis.innerHTML = `
+                                                    <div class="p-2">
+                                                        <div class="flex flex-row justify-between">
+                                                                <h3>Votre commentaire</h3>
+                                                                <button class="close" id="closeDialogAvis">&times;</button>
+                                                            </div>
+                                                        <div>
+                                                        <div>
+                                                            <img src="src/images/avatars/${commentaire.avatar_users}" alt="" class="w-6 h-6 rounded-full">
+                                                            <p class="text-[#a8b3cf]">${commentaire.login_users}</p>
+                                                        </div>
+                                                        <div>
+                                                            <p>Réponse à ${commentaire.login_users}</p>
+                                                        </div>
+                                                        </div>
+                                                        <form action="" method="post" id="formAddReplyComment" class="flex flex-col items-center justify-center space-y-2">
+                                                            <input type="hidden" name="id_product" value="${URLid}">
+                                                            <input type="hidden" name="parent_comment" value="${commentaire.id_comment}">
+                                                            <textarea name="content_avis" id="content_avis" cols="30" rows="10" placeholder="Contenu de l'avis" class="bg-slate-100 p-2 rounded-lg"></textarea>
+                                                            <div id="errorMsg" class="h-12"></div>
+                                                            <button type="submit" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg" id="buttonAddAvis">Répondre</button>
+                                                        </form>
+                                                    </div>
+                                                `;
+                                                const formAddReplyComment = document.getElementById('formAddReplyComment');
+                                                formAddReplyComment.addEventListener('submit', async (ev) => {
+                                                    ev.preventDefault();
+                                                    await fetch(`src/php/fetch/avis/replyComment.php?id_product=${URLid}&parent_comment=${commentaire.id_comment}`, {
+                                                        method: 'POST',
+                                                        body: new FormData(formAddReplyComment)
+                                                    })
+                                                        .then(response => response.json())
+                                                        .then(data => {
+                                                            if (data.status == 'error') {
+                                                                const errorMsg = document.getElementById('errorMsg');
+                                                                displayErrorMessageFormUpdateProduct(errorMsg, data.message);
+                                                            }
+                                                            if (data.status == 'success') {
+                                                                dialogAvis.close();
+                                                                dialogAvis.remove();
+                                                                displayAvis();
+                                                            }
+                                                        });
+                                                });
+                                                dialogAvis.showModal();
+                                                const closeDialogAvis = document.getElementById('closeDialogAvis');
+                                                closeDialogAvis.addEventListener('click', (ev) => {
+                                                    ev.preventDefault();
+                                                    dialogAvis.close();
+                                                    dialogAvis.remove();
+                                                });
+                                            });
+                                        }
+                                    }
                                 }
-                            }
-                        });
+                            });
                     }
                     for (let avis of data.avis) {
                         const buttonEditAvis = document.querySelector(`#buttonEditAvis_${avis.id_avis}`);
@@ -537,18 +653,18 @@ async function displayAvis() {
                                         method: 'POST',
                                         body: new FormData(formEditAvisClient)
                                     })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        if (data.status == 'error') {
-                                            const errorMsg = document.getElementById('errorMsg');
-                                            displayErrorMessageFormUpdateProduct(errorMsg, data.message);
-                                        }
-                                        if (data.status == 'success') {
-                                            dialogAvis.close();
-                                            dialogAvis.remove();
-                                            displayAvis();
-                                        }
-                                    });
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.status == 'error') {
+                                                const errorMsg = document.getElementById('errorMsg');
+                                                displayErrorMessageFormUpdateProduct(errorMsg, data.message);
+                                            }
+                                            if (data.status == 'success') {
+                                                dialogAvis.close();
+                                                dialogAvis.remove();
+                                                displayAvis();
+                                            }
+                                        });
                                 });
                                 dialogAvis.showModal();
                                 const closeDialogAvis = document.getElementById('closeDialogAvis');
@@ -564,12 +680,12 @@ async function displayAvis() {
                             buttonDeleteAvis.addEventListener('click', async (ev) => {
                                 ev.preventDefault();
                                 await fetch(`src/php/fetch/avis/deleteAvis.php?id_avis=${avis.id_avis}`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.status == 'success') {
-                                        displayAvis();
-                                    }
-                                });
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.status == 'success') {
+                                            displayAvis();
+                                        }
+                                    });
                             });
                         }
                         const buttonRepondreAvis = document.querySelector(`#buttonRepondreAvis_${avis.id_avis}`);
@@ -623,21 +739,22 @@ async function displayAvis() {
                                         method: 'POST',
                                         body: new FormData(formAddReplyAvisClient)
                                     })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        if (data.status == 'error') {
-                                            const errorMsg = document.getElementById('errorMsg');
-                                            displayErrorMessageFormUpdateProduct(errorMsg, data.message);
-                                        }
-                                        if (data.status == 'success') {
-                                            dialogAvis.close();
-                                            dialogAvis.remove();
-                                            displayAvis();
-                                        }
-                                    });
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.status == 'error') {
+                                                const errorMsg = document.getElementById('errorMsg');
+                                                displayErrorMessageFormUpdateProduct(errorMsg, data.message);
+                                            }
+                                            if (data.status == 'success') {
+                                                dialogAvis.close();
+                                                dialogAvis.remove();
+                                                displayAvis();
+                                            }
+                                        });
                                 });
                             });
                         }
+                    }
                     }
                 }
             });

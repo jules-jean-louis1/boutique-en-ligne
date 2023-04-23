@@ -9,8 +9,9 @@ if(isset($_SESSION['id'])) {
     $orderUser = $order->getCommandeByUserId($id);
     if(count($orderUser) > 0) {
         $orderDetails = $order->getDetailCommandeById($id);
+        $totalItems = $order->numberItemsInOrder($id);
         header("Content-Type: application/json");
-        echo json_encode(array("status" => "success", "Commande" => $orderUser, "DetailCommande" => $orderDetails));
+        echo json_encode(array("status" => "success", "Commande" => $orderUser, "DetailCommande" => $orderDetails, "totalItems" => $totalItems));
     } else {
         header("Content-Type: application/json");
         echo json_encode(array("status" => "error", "message" => "Aucune commande trouvée"));
