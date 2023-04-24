@@ -21,6 +21,7 @@ session_start();
     <?php require_once "src/import/header.php"; ?>
 </header>
 <main class="bg-[#0E1217]">
+    <div id="containerLoginRegisterForm"></div>
     <section>
         <div id="containerMessageCart"></div>
     </section>

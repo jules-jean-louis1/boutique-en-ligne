@@ -20,6 +20,7 @@ session_start();
         <?php require_once "src/import/header.php"; ?>
     </header>
     <main class="bg-[#242629] mb-10">
+        <div id="containerLoginRegisterForm"></div>
         <section>
             <div id="background_img_banner" class="max-h-[500px]"></div>
         </section>

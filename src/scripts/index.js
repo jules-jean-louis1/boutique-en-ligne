@@ -1,6 +1,6 @@
 import { displayError} from './function/function.js';
 import { displaySuccess} from './function/function.js';
-import { closeModalDialog} from './function/function.js';
+import {Login} from './function/function.js';
 import { loginFormHeader} from './function/function.js';
 import {registerHeader} from './function/function.js';
 import {cartHeader} from './function/function.js';
@@ -96,7 +96,7 @@ if (btnRegister) {
     registerHeader(btnRegister);
 }
 if (btnLogin) {
-    loginFormHeader(btnLogin);
+    Login(btnLogin);
 }
 
 // Index.js

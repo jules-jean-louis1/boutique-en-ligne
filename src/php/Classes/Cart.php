@@ -63,6 +63,7 @@ class Cart extends Database
     }
     public function deleteProductFromCart($id_product, $id_user)
     {
+
         $bdd = $this->getBdd();
         $req = $bdd->prepare("DELETE cp FROM cart_product cp
                                     JOIN cart c ON cp.cart_id = c.id_cart
@@ -71,6 +72,25 @@ class Cart extends Database
         $req->execute(array(
             "user_id" => $id_user,
             "product_id" => $id_product
+        ));
+    }
+    public function updatePriceCartDelete($id_product, $id_user)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT price_product,quantity_product 
+                                FROM cart_product
+                                WHERE product_id = :product_id");
+        $req->execute(array(
+            "product_id" => $id_product
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        $price = $result[0]['price_product'];
+        $quantity = $result[0]['quantity_product'];
+        $total_price = $price * $quantity; // calculer le prix total pour l'article
+        $req2 = $bdd->prepare("UPDATE cart SET total_price_cart = total_price_cart - :total_price WHERE users_id = :user_id");
+        $req2->execute(array(
+            "total_price" => $total_price,
+            "user_id" => $id_user
         ));
     }
     public function countItemsInCart($id)
@@ -174,7 +194,7 @@ class Cart extends Database
         $bdd = $this->getBdd();
         // On récupère le prix du produit lors de l'ajout au panier
         $req = $bdd->prepare("SELECT price_product FROM product WHERE id_product = :id");
-        $req->execute(["id" => $userId]);
+        $req->execute(["id" => $productId]);
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         $priceProduct = $result[0]['price_product'];
 

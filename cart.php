@@ -19,11 +19,12 @@ session_start();
     <?php require_once "src/import/header.php"; ?>
 </header>
 <main>
+    <div id="containerLoginRegisterForm"></div>
     <section>
         <div id="containerMessageCart"></div>
     </section>
     <section>
-        <div id="containerCart" class="pt-[10%]"></div>
+        <div id="containerCart" class="pt-[10%] h-screen"></div>
     </section>
     <section>
         <div id="productSimilar"></div>
