@@ -101,26 +101,27 @@ function loginFormHeader(BtnLogin) {
         ev.preventDefault();
         const body = document.querySelector('body');
         // Créer l'élément dialog
-        const dialog = document.createElement('dialog');
-        dialog.setAttribute('id', 'dialog');
-        dialog.className = 'dialog_modal';
-        body.appendChild(dialog);
-        dialog.innerHTML = '';
+        const dialogLogin = document.createElement('dialog');
+        dialogLogin.setAttribute('id', 'dialog_fixed');
+        dialogLogin.className = 'dialog_modal border-[1px] border-[#a8b3cf33] rounded-[14px] p-2 bg-[#242629] bg-overlay bg-overlay-primary';
+        body.appendChild(dialogLogin);
+        dialogLogin.innerHTML = '';
         await fetch('src/php/fetch/registerLogin/login.php')
             .then(response => response.text())
             .then(data => {
-                dialog.innerHTML = data;
-
+                dialogLogin.innerHTML = data;
                 // Afficher le dialog
-                dialog.showModal();
-                document.addEventListener('click', (ev) => {
-                    if (ev.target.id === 'closeDialog') {
-                        closeModalDialog();
-                    }
+                dialogLogin.showModal();
+                // Fermer le dialog
+                const closeDialog = document.querySelector('#closeDialog');
+                closeDialog.addEventListener('click', (ev) => {
+                    ev.preventDefault();
+                    dialogLogin.close();
                 });
                 // Gestion du bouton "S'inscrire" sur la page de connexion
                 const btnSignIn = document.querySelector('#btnSignIn')
                 btnSignIn.addEventListener('click', async (ev) => {
+                    ev.preventDefault();
                     registerHeader(btnSignIn);
                 });
             });
@@ -156,7 +157,7 @@ function registerHeader(BtnRegister) {
         // Créer l'élément dialog
         const dialog = document.createElement('dialog');
         dialog.setAttribute('id', 'dialog');
-        dialog.className = 'dialog_modal';
+        dialog.className = 'dialog_modal dialog_modal border-[1px] border-[#a8b3cf33] rounded-[14px] p-2 bg-[#242629] bg-overlay bg-overlay-primary';
         body.appendChild(dialog);
         dialog.innerHTML = '';
         // Affichage du formulaire d'inscription

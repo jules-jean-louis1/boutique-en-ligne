@@ -311,20 +311,22 @@ async function addProduct() {
 async function gestionProduct() {
 
     const containerFormProductSearch = document.createElement('div');
+    containerFormProductSearch.className = 'flex justify-center text-white'
     const craftFormProductSearch = document.createElement('div');
+    craftFormProductSearch.className = 'flex justify-center w-8/12 pt-6 pb-4 overflow-y-auto border-b-2 border-[#a8b3cfa3]';
     craftFormProductSearch.innerHTML = `
-        <form action="" method="post" id="formProductSearch">
-            <div class="flex space-x-4">
-                <div id="modalAddProduct">
+        <form action="" method="post" id="formProductSearch" class="w-full">
+            <div class="flex justify-between w-full">
+                <div id="modalAddProduct" class="flex flex-col">
                     <label for="searchCategory">Sélectionner une catégorie</label>
-                    <select name="searchCategory" id="searchCategory" class="bg-slate-100 p-2 rounded-lg">
-                        <option value="0" class="bg-white bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100">Selectionner</option>
+                    <select name="searchCategory" id="searchCategory" class="p-4 bg-[#1c1f26] rounded-[14px] border-[1px] border-[#a8b3cf33]">
+                        <option value="0" class="bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100">Selectionner</option>
                     </select>
                 </div>
-                <div id="modalAddProduct">
+                <div id="modalAddProduct"  class="flex flex-col">
                     <label for="searchSubCategory">Sélectionner une sous-catégorie</label>
-                    <select name="searchSubCategory" id="searchSubCategory" class="bg-slate-100 p-2 rounded-lg">
-                        <option value="0" class="bg-white bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100">Selectionner</option>
+                    <select name="searchSubCategory" id="searchSubCategory" class="p-4 bg-[#1c1f26] rounded-[14px] border-[1px] border-[#a8b3cf33]">
+                        <option value="0" class="bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100">Selectionner</option>
                     </select>
                 </div>
             </div>
@@ -378,19 +380,18 @@ async function gestionProduct() {
 
                 products.forEach(product => {
                     ContainerDisplayProduct.innerHTML += `
-                    <div class="flex p-0.5">
+                    <div class="flex m-1 p-2 bg-[#43464c] rounded-[14px] border-[1px] border-[#a8b3cf33] text-white">
                         <div id="displayProductContainer" class="w-[12rem] flex flex-col">
-                            <h2 class="font-normal text-slate-700">Image du jeu :</h2>
                             <img src="src/images/products/${product.img_product}" alt="${product.name_product}" class="max-w-fit">
                         </div>
                         <div id="displayProductContainer">
                             <div class="flex flex-col space-y-1">
                                 <div id="titre_produit" class="flex space-x-1">
-                                    <h2 class="font-normal text-slate-700">Titre :</h2>
+                                    <h2 class="font-normal">Titre :</h2>
                                     <h2>${product.name_product}</h2>
                                 </div>
                                 <div id="description_produit" class="flex flex-col space-x-1 w-8/12">
-                                    <h2 class="font-normal text-slate-700">Synopsis :</h2>
+                                    <h2 class="font-normal">A propos du jeu</h2>
                                     <h2>${product.description_product}</h2>
                                 </div>
                             </div>
@@ -966,14 +967,16 @@ const page = params.get('page') || 1;
 let search = '';
 let order = 'DESC';
 async function gestionUser(page, search, order) {
-
+    const modiyprofil = document.querySelector('#containerModifyProduct');
+    modiyprofil.className = 'flex justify-center';
     const wapperUserInfos = document.createElement('div');
     wapperUserInfos.setAttribute('id', 'wapperUserInfos');
+    wapperUserInfos.className = 'flex flex-col justify-center items-around space-y-2 w-8/12';
     containerAllDiv.appendChild(wapperUserInfos);
 
     const containerFormSearch = document.createElement('div');
     containerFormSearch.setAttribute('id', 'containerFormSearch');
-    containerFormSearch.setAttribute('class', 'flex space-x-2');
+    containerFormSearch.setAttribute('class', 'flex justify-between items-center');
     wapperUserInfos.appendChild(containerFormSearch);
 
     const containerUserInfo = document.createElement('div');
@@ -988,10 +991,10 @@ async function gestionUser(page, search, order) {
     wapperUserInfos.appendChild(containerPagination);
 
     containerFormSearch.innerHTML = `
-        <form action="" method="post" class="flex items-center space-x-2" id="formSearchUser">
-            <input type="text" name="search" id="search" placeholder="Rechercher un utilisateur" class="bg-[#E9E9E9] rounded-lg p-2">
+        <form action="" method="post" class="flex justify-between items-center space-x-2 m-2 bg-[#242629] text-white w-full" id="formSearchUser">
+            <input type="text" name="search" id="search" placeholder="Rechercher un utilisateur" class="p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
             <label for="order">Date de création</label>
-            <select name="order" id="order" class="bg-[#E9E9E9] rounded-lg p-2">
+            <select name="order" id="order" class="p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
                 <option value="DESC">Plus récent</option>
                 <option value="ASC">Plus ancien</option>
             </select>
@@ -1030,7 +1033,7 @@ async function fetchUser(page, search, order) {
                     `;
             }
                 containerUserInfo.innerHTML += `
-                <div class="flex items-center w-[90%] justify-between">
+                <div class="flex items-center justify-between bg-[#43464c] p-2 text-white w-full">
                     <tbody>
                         <tr>
                             <td>
@@ -1048,7 +1051,7 @@ async function fetchUser(page, search, order) {
                             <td>
                                 <div id="containerUpdateDroits_${user.id_users}" class="flex">
                                     <form action="resources/assests/fetch/updateDroits.php" method="post" id="updateDroits_${user.id_users}" data-id="${user.id_users}" class="flex space-x-2">
-                                        <select name="droits" id="droits" class="p-2 bg-[#E9E9E9] rounded-lg">
+                                        <select name="droits" id="droits" class="p-4 bg-[#1c1f26] rounded-[14px] border-[1px] border-[#a8b3cf33]">
                                             <option value="${user.type_compte_users}">${user.type_compte_users}</option>
                                             ${optionHtml}
                                         </select>
@@ -1130,11 +1133,15 @@ async function fetchUser(page, search, order) {
 
 buttonGestionProduct.addEventListener('click', () => {
     containerAllDiv.innerHTML = '';
+    const containerAddProduct = document.querySelector('#containerModifyProduct');
+    containerAddProduct.classList.remove('flex');
     addProduct();
     gestionProduct();
 });
 buttionGestionCategores.addEventListener('click', () => {
     containerAllDiv.innerHTML = '';
+    const containerAddProduct = document.querySelector('#containerModifyProduct');
+    containerAddProduct.classList.remove('flex');
     gestionCategory();
     gestionSubCategories();
 });
@@ -1142,3 +1149,4 @@ buttonGestionUser.addEventListener('click', () => {
     containerAllDiv.innerHTML = '';
     gestionUser(page, search, order);
 });
+gestionUser(page, search, order);

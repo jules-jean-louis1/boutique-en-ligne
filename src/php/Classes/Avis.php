@@ -108,4 +108,14 @@ class Avis extends Database
             "id_product" => $id_product
         ]);
     }
+    public function getReplyByProduct($id_product)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT * FROM comment_avis WHERE product_id = :id ORDER BY `comment_avis`.`created_at` DESC ");
+        $req->execute([
+            "id" => $id_product
+        ]);
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }

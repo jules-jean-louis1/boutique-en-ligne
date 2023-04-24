@@ -291,8 +291,8 @@ function createFormFilter() {
                 <option value="DESC_prix">Prix : les plus chers</option>
                 <option value="ASC_vente">Meilleures ventes</option>
                 <option value="DESC_vente">Moins bonnes ventes</option>
-                <option value="ASC_date">Date : les plus récents</option>
-                <option value="DESC_date">Date : les plus anciens</option>
+                <option value="DESC_date">Date : les plus récents</option>
+                <option value="ASC_date">Date : les plus anciens</option>
                 <option value="ASC_rating">Note : Les meilleurs</option>
                 <option value="DESC_rating">Note : Les moins bonnes</option>
             </select>
@@ -427,12 +427,14 @@ async function filterForm(Page, Date, order, categorie, subCategorie) {
 
 let Page = 1;
 let Date = '';
-let order = '';
+let order = 'ASC_date';
 let categorie = '';
 let subCategorie = '';
 createFormFilter();
 getPages(Date, order, categorie, subCategorie);
-filterForm(Page, Date, order, categorie, subCategorie);
+
+filterForm(Page, order, categorie, subCategorie);
+
 cartHeader();
 
 const filtrageForm = document.getElementById("filtrageForm");

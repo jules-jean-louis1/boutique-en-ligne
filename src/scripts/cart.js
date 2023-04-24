@@ -265,7 +265,6 @@ async function getCart() {
     await fetch('src/php/fetch/cart/getCart.php')
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             containerCart.innerHTML = '';
             if (data.status == 'success_connected') {
                 const total = data.total;
@@ -413,7 +412,6 @@ async function getCart() {
                                         dialogCompleteInfo.close();
                                         dialogCompleteInfo.innerHTML = '';
                                     });
-
                                 }
                             }
                             if (data.verify === false) {
@@ -589,19 +587,37 @@ async function getCart() {
                             <p class="text-[#a8b3cf]">Votre panier est vide</p>
                         </div>
                     </div>
-                    <div id="containerBtnLoginSigin" class="flex justify-center space-x-4">
-                        <button class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold" id="btnLoginCart">Se connecter</button>
-                        <button class="bg-[#e04337] text-white px-5 py-2 rounded-lg font-extrabold" id="btnSigninCart">S'inscrire</button>
-                    </div>
+                    <div id="containerBtnLoginSigin" class="flex justify-center space-x-4"></div>
                 `;
+                fetch ('src/php/fetch/client/isConnected.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status == 'success') {
+                            const containerBtnLogin = document.getElementById("containerBtnLoginSigin");
+                            containerBtnLogin.innerHTML = `
+                                <a href="catalogue.php" class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold">Ajouter des produits</a>
+                            `;
+                        }
+                        if (data.status == 'error') {
+                            const containerBtnLogin = document.getElementById("containerBtnLoginSigin");
+                            containerBtnLogin.innerHTML = `
+                                <button class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold" id="btnLoginCart">Se connecter</button>
+                                <button class="bg-[#e04337] text-white px-5 py-2 rounded-lg font-extrabold" id="btnSigninCart">S'inscrire</button>
+                            `;
+                        }
+                    });
                 const btnLoginCart = document.getElementById("btnLoginCart");
-                btnLoginCart.addEventListener('click', (ev) => {
-                    loginFormHeader(btnLoginCart);
-                });
+                if (btnLoginCart) {
+                    btnLoginCart.addEventListener('click', (ev) => {
+                        loginFormHeader(btnLoginCart);
+                    });
+                }
                 const btnSigninCart = document.getElementById("btnSigninCart");
-                btnSigninCart.addEventListener('click', (ev) => {
-                    registerHeader(btnSigninCart);
-                });
+                if (btnSigninCart) {
+                    btnSigninCart.addEventListener('click', (ev) => {
+                        registerHeader(btnSigninCart);
+                    });
+                }
             }
         });
 }

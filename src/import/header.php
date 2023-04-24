@@ -79,6 +79,7 @@
                                         </a>
                                     </button>
                                 </li>
+                                <?php if ($_SESSION['type_compte'] === 'administrateur') { ?>
                                 <li>
                                     <button type="button" id="buttonLogoutHeader"
                                             class="block hover:bg-[#2D323C] hover:rounded-b-lg flex w-full">
@@ -96,6 +97,7 @@
                                         </a>
                                     </button>
                                 </li>
+                                <?php } ?>
                             </ul>
                         </div>
                     </div>

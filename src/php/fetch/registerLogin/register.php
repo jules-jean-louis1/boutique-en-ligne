@@ -52,7 +52,7 @@ if(isset($_POST['login'])) {
                 w-[26.25rem] px-4 py-5 flex flex-col space-y-2">
     <div id="containerCloseDialog" class="flex flex-row justify-between items-center">
         <p>
-            <span class="text-lg font-bold">Inscrivez-vous sur E-commerce</span>
+            <span class="text-lg font-bold">Inscrivez-vous sur Game+</span>
         </p>
         <button type="button" id="closeDialog" class="py-2 px-4 hover:bg-slate-200 rounded-full">&times;</button>
     </div>

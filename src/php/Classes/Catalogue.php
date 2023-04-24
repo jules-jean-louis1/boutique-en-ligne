@@ -7,7 +7,7 @@ class Catalogue extends Database
     {
         parent::__construct();
     }
-    public function getPagesCatalogue($date = '', $Filtre = 'DESC_rating', $categorie = '', $sousCategorie = '')
+    public function getPagesCatalogue($date = '', $Filtre = 'ASC_date', $categorie = '', $sousCategorie = '')
     {
         $bdd = $this->getBdd();
         $req = "SELECT COUNT(product.id_product) AS total_count 
@@ -65,7 +65,7 @@ class Catalogue extends Database
         return $pages;
     }
 
-    public function getProductsCatalogue($pages = '1', $date = '', $Filtre = 'DESC_rating', $categorie = '', $sousCategorie = '')
+    public function getProductsCatalogue($pages = '1', $date = '', $Filtre = 'ASC_date', $categorie = '', $sousCategorie = '')
     {
         // Nombre d'articles par page
         $limit = 9;

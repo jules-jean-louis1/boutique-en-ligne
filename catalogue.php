@@ -19,10 +19,10 @@ session_start();
 <header class="w-full">
     <?php require_once "src/import/header.php"; ?>
 </header>
-<main class="bg-[#0E1217]">
+<main class="bg-[#242629]">
     <section id="containerMessageAddCart"></section>
     <section class="flex justify-between lg:pt-6 lg:mx-[4%]">
-        <div id="displayFilterCatalogue" class="bg-[#0E1217] p-2 lg:h-[35rem] border-[1px] border-[#a8b3cf33]"></div>
+        <div id="displayFilterCatalogue" class="bg-[#1e1e1f] p-2 lg:h-[35rem]"></div>
         <div id="displayFiltreProduct" class="flex flex-col w-full justify-center">
             <div id="displayProduct" class="flex flex-wrap justify-center w-full h-full"></div>
             <div id="displayPages" class="flex justify-center">

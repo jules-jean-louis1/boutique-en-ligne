@@ -19,7 +19,7 @@ session_start();
     <header class="w-full">
         <?php require_once "src/import/header.php"; ?>
     </header>
-    <main class="bg-[#0E1217] mb-10">
+    <main class="bg-[#242629] mb-10">
         <section>
             <div id="background_img_banner" class="max-h-[500px]"></div>
         </section>

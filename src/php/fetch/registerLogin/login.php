@@ -64,10 +64,10 @@ if (isset($_POST['login'])) {
 
 <form action="" method="post" id="login-form" class="rounded-lg h-full max-h-[calc(100vh-2.5rem)]
                 mobileL:h-[40rem] mobileL:max-h-[calc(100vh-5rem)]
-                w-[26.25rem] px-4 py-5 flex flex-col space-y-2">
+                w-[26.25rem] px-4 py-5 flex flex-col space-y-2 text-white">
     <div id="containerCloseDialog" class="flex flex-row justify-between items-center">
         <p>
-            <span class="text-lg font-bold">Connectez-vous sur Blog</span>
+            <span class="text-lg font-bold">Connectez-vous sur Game+</span>
         </p>
         <button type="button" id="closeDialog" class="py-2 px-4 hover:bg-slate-200 rounded-full">&times;</button>
     </div>
@@ -82,8 +82,8 @@ if (isset($_POST['login'])) {
     <div id="containerMessageProfil" class="h-[65px] w-full">
         <div id="errorMsg" class="w-full"></div>
     </div>
-    <div id="containerSubmit">
-        <button type="submit" name="submit" id="submit" class="p-2 rounded-lg bg-[#AC1DE4] font-semibold text-white">Connexion</button>
+    <div id="containerSubmit" class="w-full">
+        <button type="submit" name="submit" id="submit" class="p-2 rounded-[14px] bg-[#a87ee6] font-semibold text-white w-full">Connexion</button>
     </div>
     <div id="notRegister" class="flex justify-center space-x-2 items-center">
         <p class="text-sm">Vous n'êtes pas encore inscrit ?</p>
