@@ -18,7 +18,7 @@ if (isset($_SESSION['login']) != null) { ?>
 <header class="w-full">
     <?php require_once "src/import/header.php"; ?>
 </header>
-<main class="bg-[#0E1217]">
+<main class="bg-[#242629]">
     <article class="flex flex-col items-center">
         <section id="containerFormCommandeInfo"></section>
         <div id="containerFormProfil">

@@ -261,9 +261,6 @@ async function getPages(Date, order, categorie, subCategorie, currentPage) {
 
     const response = await fetch(`src/php/fetch/catalogue/getPages.php?${params.toString()}`);
     const data = await response.json();
-    console.log(data);
-
-    // Affichage du bouton "Page précédente" si la page actuelle n'est pas la première
     if (currentPage > 1) {
         containerPage.innerHTML += `
       <li class="page-item">
@@ -275,13 +272,11 @@ async function getPages(Date, order, categorie, subCategorie, currentPage) {
       </li>
     `;
     }
-
     containerPage.innerHTML += `
     <li class="page-item">
     <p class="px-4 py-2 rounded-[14px] border-2 border-[#a87ee6] text-white">${currentPage}</p>
     </li>
     `;
-
     // Affichage du bouton "Page suivante" si la page actuelle n'est pas la dernière
     if (currentPage < data.displayPages) {
         containerPage.innerHTML += `

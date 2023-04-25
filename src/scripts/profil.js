@@ -245,102 +245,105 @@ async function modifyProfil() {
         .then(data => {
             containerProfile.innerHTML = '';
             containerProfile.innerHTML = `
-        <div class="flex flex-col">
-            <div id="wapperFormProfilInfo" class="w-fit h-fit">
-                <form action="" method="post" id="formModifyProfilInfo" class="flex flex-col space-y-2">
-                    <div class="flex items-center justify-between space-x-2">
-                        <div id="containerprofil" class="relative">
-                            <input type="text" name="login" id="login" value="${data[0].login_users}" class="px-2.5 pt-4 pb-1 text-white bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
-                            <label for="login" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Nom d'utilisateur</label>
+        <div class="flex flex-col pt-12">
+            <div class="flex flex-row justify-between items-center">
+                <div id="wapperFormProfilInfo" class="w-fit h-fit">
+                    <form action="" method="post" id="formModifyProfilInfo" class="flex flex-col space-y-2">
+                        <div class="flex items-center justify-between space-x-2">
+                            <div id="containerprofil" class="relative">
+                                <input type="text" name="login" id="login" value="${data[0].login_users}" class="px-2.5 pt-4 pb-1 text-white bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
+                                <label for="login" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Nom d'utilisateur</label>
+                            </div>
+                            <div class="relative">
+                                <input type="email" name="email" id="email" value="${data[0].email_users}" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
+                                <label for="email" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Email</label>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="relative">
+                                <input type="password" name="password" id="password" value="" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
+                                <label for="password" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Password</label>
+                            </div>
+                            <div class="relative">
+                                <input type="password" name="passwordConfirm" id="passwordConfirm" value="" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
+                                <label for="passwordConfirm" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Confirm Password</label>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="relative">
+                                <input type="text" name="surname" id="surname" value="${data[0].nom_client}" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
+                                <label for="surname" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Nom</label>
+                            </div>
+                            <div class="relative">
+                                <input type="text" name="firstname" id="firstname" value="${data[0].prenom_client}" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
+                                <label for="firstname" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Prénom</label>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="relative">
+                                <input type="tel" name="phone" id="phone" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" value="${data[0].mobile_client}" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
+                                <label for="phone" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Téléphone</label>
+                            </div>
+                            <div class="relative">
+                                <input type="text" name="zipcode" id="zipcode" value="${data[0].code_postal_client}" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
+                                <label for="zipcode" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Code postal</label>
+                            </div>
                         </div>
                         <div class="relative">
-                            <input type="email" name="email" id="email" value="${data[0].email_users}" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
-                            <label for="email" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Email</label>
+                            <input type="text" name="address" id="address" value="${data[0].adresse_client}" class=" w-full text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
+                            <label for="address" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Adresse</label>
                         </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="relative">
-                            <input type="password" name="password" id="password" value="" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
-                            <label for="password" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Password</label>
+                        <div class="flex items-center justify-between">
+                            <div class="relative">
+                                <input type="text" name="country" id="country" value="${data[0].pays_client}" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
+                                <label for="country" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Pays</label>
+                            </div>
+                            <div class="relative">
+                                <input type="text" name="city" id="city" value="${data[0].ville_client}" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
+                                <label for="city" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Ville</label>
+                            </div>
                         </div>
-                        <div class="relative">
-                            <input type="password" name="passwordConfirm" id="passwordConfirm" value="" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
-                            <label for="passwordConfirm" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Confirm Password</label>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="relative">
-                            <input type="text" name="surname" id="surname" value="${data[0].nom_client}" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
-                            <label for="surname" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Nom</label>
-                        </div>
-                        <div class="relative">
-                            <input type="text" name="firstname" id="firstname" value="${data[0].prenom_client}" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
-                            <label for="firstname" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Prénom</label>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="relative">
-                            <input type="tel" name="phone" id="phone" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" value="${data[0].mobile_client}" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
-                            <label for="phone" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Téléphone</label>
-                        </div>
-                        <div class="relative">
-                            <input type="text" name="zipcode" id="zipcode" value="${data[0].code_postal_client}" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
-                            <label for="zipcode" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Code postal</label>
-                        </div>
-                    </div>
-                    <div class="relative">
-                        <input type="text" name="address" id="address" value="${data[0].adresse_client}" class=" w-full text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
-                        <label for="address" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Adresse</label>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="relative">
-                            <input type="text" name="country" id="country" value="${data[0].pays_client}" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
-                            <label for="country" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Pays</label>
-                        </div>
-                        <div class="relative">
-                            <input type="text" name="city" id="city" value="${data[0].ville_client}" class="text-white px-2.5 pt-4 pb-1 bg-[#1a1f25] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6]">
-                            <label for="city" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Ville</label>
-                        </div>
-                    </div>
-                <div id="containerMessageProfil" class="h-[65px] max-w-[330px]">
-                    <div id="errorMsg" class="w-full"></div>
-                </div>
-                <div id="containerprofil">
-                    <button type="submit" id="btnModifyProfilInfo" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-[14px]">Modifier vos informations</button>
-                </div>
-                </form>
-            </div>
-            <div id="wapperFormAvatarInfo">
-                <div class="">
-                    <h2 class="text-white font-bold text-xl">Modifier votre avatar</h2>
-                    <p class="text-gray-500 text-sm">Votre avatar doit être au format .png ou .jpg</p>
-                </div>
-                <form action="" method="post" id="formModifyAvatarInfo" class="flex flex-col items-center">
-                    <div id="containerProfilAvatar" class="p-2">
-                        <img src="src/images/avatars/${data[0].avatar_users}" alt="avatar" class="w-24 h-24 rounded-full">
-                    </div>
-                    <div class="flex flex-col border border-gray-300 p-2 rounded-lg">
-                      <label for="uploadfile" class="mb-1 text-gray-500 font-medium">Sélectionner un fichier</label>
-                      <div class="relative">
-                        <input class="sr-only" type="file" name="uploadfile" id="uploadfile" accept="image/png,image/jpeg">
-                        <label for="uploadfile" class="inline-block w-full px-4 py-2 text-white font-bold tracking-wide bg-[#0E1217] border-2 border-white rounded-lg cursor-pointer hover:bg-[#21262D] transition duration-200 ease-in-out">
-                          Choisir un fichier
-                        </label>
-                        <span class="filename text-gray-500"></span>
-                      </div>
-                    </div>
                     <div id="containerMessageProfil" class="h-[65px] max-w-[330px]">
-                        <div id="errorMsgAvatar" class="w-full"></div>
+                        <div id="errorMsg" class="w-full"></div>
                     </div>
-                    <button type="submit" id="upload" name="upload" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-[14px]">
-                        Modifier votre avatar
-                    </button>
-                </form>
+                    <div id="containerprofil">
+                        <button type="submit" id="btnModifyProfilInfo" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-[14px]">Modifier vos informations</button>
+                    </div>
+                    </form>
+                </div>
+                <div id="wapperFormAvatarInfo">
+                    <div class="">
+                        <h2 class="text-white font-bold text-xl">Modifier votre avatar</h2>
+                        <p class="text-gray-500 text-sm">Votre avatar doit être au format .png ou .jpg</p>
+                    </div>
+                    <form action="" method="post" id="formModifyAvatarInfo" class="flex flex-col items-center" enctype="multipart/form-data">
+                        <div id="containerProfilAvatar" class="p-2">
+                            <img src="src/images/avatars/${data[0].avatar_users}" alt="avatar" class="w-24 h-24 rounded-full">
+                        </div>
+                        <div class="flex flex-col border border-gray-300 p-2 rounded-lg">
+                          <label for="uploadfile" class="mb-1 text-gray-500 font-medium">Sélectionner un fichier</label>
+                          <div class="relative">
+                            <input class="sr-only" type="file" name="uploadfile" id="uploadfile" accept="image/png,image/jpeg">
+                            <label for="uploadfile" class="inline-block w-full px-4 py-2 text-white font-bold tracking-wide bg-[#0E1217] border-2 border-white rounded-lg cursor-pointer hover:bg-[#21262D] transition duration-200 ease-in-out">
+                              Choisir un fichier
+                            </label>
+                            <span class="filename text-gray-500"></span>
+                          </div>
+                        </div>
+                        <div id="containerMessageProfil" class="h-[65px] max-w-[330px]">
+                            <div id="errorMsgAvatar" class="w-full"></div>
+                        </div>
+                        <button type="submit" id="upload" name="upload" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-[14px]">
+                            Modifier votre avatar
+                        </button>
+                    </form>
+                </div>
             </div>
             <div id="wapperFormPasswordInfo">
-            <form action="" method="post" id="formDeleteUser" class="flex flex-col items-center">
-                <button type="submit" id="btnModifyPasswordInfo" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-[14px]">Modifier votre mot de passe</button>
-            </form>
+                <form action="" method="post" id="formDeleteUser" class="flex flex-col items-center">
+                    <button type="submit" id="btnModifyPasswordInfo" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-[14px]">Supprimer votre compte</button>
+                </form>
+            </div>
         </div>
             `;
             const formDeleteUser = document.querySelector('#formDeleteUser');
@@ -382,6 +385,7 @@ async function modifyProfil() {
                             message.innerHTML = data.message;
                             displaySuccess(message);
                             modifyProfil();
+                            displayUserInfoHeader();
                         }
                         if (data.status === 'error') {
                             for (let i = 0; i < data.message.length; i++) {

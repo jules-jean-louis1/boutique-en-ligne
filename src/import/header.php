@@ -124,12 +124,6 @@
                                 <span class="text-[#a8b3cf] font-meduim text-[0.8em]">Connexion</span>
                             </button>
                         </li>
-                        <li>
-                            <button type="button" id="buttonRegisterHeader"
-                                    class="py-[5px] px-2 rounded-lg bg-[#A87EE6FF] flex items-center ease-in duration-300 border-[1px] border-[#52586633] hover:border-[#525866] hover:shadow-[0 0 10px 0 #525866]">
-                                <span class="text-[#fff] font-semibold text-[0.8em]">S'inscrire</span>
-                            </button>
-                        </li>
                     </div>
             <?php } ?>
             </ul>
