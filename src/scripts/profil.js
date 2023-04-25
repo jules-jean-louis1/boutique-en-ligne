@@ -245,6 +245,7 @@ async function modifyProfil() {
         .then(data => {
             containerProfile.innerHTML = '';
             containerProfile.innerHTML = `
+        <div class="flex flex-col">
             <div id="wapperFormProfilInfo" class="w-fit h-fit">
                 <form action="" method="post" id="formModifyProfilInfo" class="flex flex-col space-y-2">
                     <div class="flex items-center justify-between space-x-2">
@@ -336,7 +337,30 @@ async function modifyProfil() {
                     </button>
                 </form>
             </div>
+            <div id="wapperFormPasswordInfo">
+            <form action="" method="post" id="formDeleteUser" class="flex flex-col items-center">
+                <button type="submit" id="btnModifyPasswordInfo" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-[14px]">Modifier votre mot de passe</button>
+            </form>
+        </div>
             `;
+            const formDeleteUser = document.querySelector('#formDeleteUser');
+            formDeleteUser.addEventListener('submit', async (ev) => {
+                ev.preventDefault();
+                await fetch('src/php/fetch/client/deleteUser.php', {
+                    method: 'POST',
+                    body: new FormData(formDeleteUser)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            window.location.href = 'index.php';
+                        } else {
+                            let message = document.querySelector('#errorMsg');
+                            message.innerHTML = data.message;
+                            displayError(message);
+                        }
+                    });
+            });
             const input = document.querySelector('input[name="uploadfile"]');
             const filenameSpan = document.querySelector('.filename');
 
@@ -389,9 +413,7 @@ async function modifyProfil() {
                 }
             })
     })
-
 }
-
 async function commandeClient() {
     const sectionCommande = document.querySelector('#containerCommande');
     await fetch('src/php/fetch/profil/commandeClient.php')

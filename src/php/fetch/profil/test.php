@@ -112,9 +112,9 @@ if (isset($_GET['page']) && !empty(trim($_GET['page'])) || isset($_GET['Date']) 
 $displaySubCategories = $product->getDateOfReleasedProduct('1', '');
 var_dump($displaySubCategories);*/
 
-$clients = new Client();
-$displayClients = $clients->login('Jules', 'gr3at@3wd');
-var_dump($displayClients);
+$cart = new Cart();
+$test = $cart->test('4');
+var_dump($test);
 
 
 

@@ -35,6 +35,9 @@ if (isset($_SESSION['login']) != null) { ?>
         <section class="flex justify-center w-full">
             <div id="containerCommande" class="hidden w-[80%]"></div>
         </section>
+        <section>
+            <div id="containerDeleteProfil"></div>
+        </section>
     </article>
 </main>
 </body>

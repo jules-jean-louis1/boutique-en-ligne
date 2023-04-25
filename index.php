@@ -21,6 +21,7 @@ session_start();
     </header>
     <main class="bg-[#242629] mb-10">
         <div id="containerLoginRegisterForm"></div>
+        <section id="containerMessageCart"></section>
         <section>
             <div id="background_img_banner" class="max-h-[500px]"></div>
         </section>

@@ -63,7 +63,6 @@ class Cart extends Database
     }
     public function deleteProductFromCart($id_product, $id_user)
     {
-
         $bdd = $this->getBdd();
         $req = $bdd->prepare("DELETE cp FROM cart_product cp
                                     JOIN cart c ON cp.cart_id = c.id_cart
@@ -87,11 +86,47 @@ class Cart extends Database
         $price = $result[0]['price_product'];
         $quantity = $result[0]['quantity_product'];
         $total_price = $price * $quantity; // calculer le prix total pour l'article
-        $req2 = $bdd->prepare("UPDATE cart SET total_price_cart = total_price_cart - :total_price WHERE users_id = :user_id");
-        $req2->execute(array(
-            "total_price" => $total_price,
+
+        $req3 = $bdd->prepare("SELECT id FROM cart_product
+                                    INNER JOIN cart ON cart.id_cart = cart_product.cart_id
+                                    WHERE cart.users_id = :user_id");
+        $req3->execute(array(
             "user_id" => $id_user
         ));
+        $result2 = $req3->fetchAll();
+        if (count($result2) == 0) {
+            $req4 = $bdd->prepare("UPDATE cart SET total_price_cart = 0 WHERE users_id = :user_id");
+            $req4->execute(array(
+                "user_id" => $id_user
+            ));
+        } else{
+            $req2 = $bdd->prepare("UPDATE cart SET total_price_cart = total_price_cart - :total_price WHERE users_id = :user_id");
+            $req2->execute(array(
+                "total_price" => $total_price,
+                "user_id" => $id_user
+            ));
+        }
+    }
+    public function test($id_user)
+    {
+        $bdd = $this->getBdd();
+
+        $req3 = $bdd->prepare("SELECT id FROM cart_product
+                                    INNER JOIN cart ON cart.id_cart = cart_product.cart_id
+                                    WHERE cart.users_id = :user_id");
+        $req3->execute(array(
+            "user_id" => $id_user
+        ));
+        $result2 = $req3->fetchAll();
+        if (count($result2) == 0) {
+            $req4 = $bdd->prepare("UPDATE cart SET total_price_cart = 0 WHERE users_id = :user_id");
+            $req4->execute(array(
+                "user_id" => $id_user
+            ));
+            return false;
+        } else{
+            return true;
+        }
     }
     public function countItemsInCart($id)
     {
@@ -199,7 +234,10 @@ class Cart extends Database
         $priceProduct = $result[0]['price_product'];
 
         // Vérifie si le produit existe déjà dans la table cart_product
-        $req2 = $bdd->prepare("SELECT * FROM cart_product WHERE cart_id = (SELECT id_cart FROM cart WHERE users_id = :userId AND status_cart = 'active') AND product_id = :productId");
+        $req2 = $bdd->prepare("SELECT quantity_product, price_product, cart_id, product_id
+                                    FROM cart_product
+                                    INNER JOIN cart ON cart_product.cart_id = cart.id_cart
+                                    WHERE users_id = :userId AND product_id = :productId");
         $req2->execute(["userId" => $userId, "productId" => $productId]);
         $result2 = $req2->fetchAll(PDO::FETCH_ASSOC);
         if (count($result2) > 0) {
@@ -209,8 +247,7 @@ class Cart extends Database
             $result4 = $req4->fetchAll(PDO::FETCH_ASSOC);
 
             $UpdateQuantityProduct = $result4[0]['quantity_product'] + $quantityProduct;
-            $UpdatePriceProduct = $result4[0]['price_product'] * $quantityProduct;
-
+            $UpdatePriceProduct = $quantityProduct * $priceProduct;
             // Si le produit existe déjà dans la table cart_product, on met à jour la quantité et le prix
             $req3 = $bdd->prepare("UPDATE cart_product SET quantity_product = :quantity, price_product = :price WHERE cart_id = (SELECT id_cart FROM cart WHERE users_id = :userId AND status_cart = 'active') AND product_id = :productId");
             $req3->execute(["quantity" => $UpdateQuantityProduct, "price" => $priceProduct, "userId" => $userId, "productId" => $productId]);
