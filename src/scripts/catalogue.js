@@ -260,7 +260,9 @@ async function getPages(Date, order, categorie, subCategorie) {
     for (let i = 1; i <= data.displayPages; i++) {
         containerPage.innerHTML += `
             <li class="page-item">
-                <button class="px-4 py-2 rounded-[14px] bg-slate-100" id="pageButton${i}" value="${i}">${i}</button>
+                <button type="button" class="px-4 py-2 rounded-[14px] bg-slate-100" id="pageButton${i}" value="${i}">
+                    <a class="page-link" href="catalogue.php?page=${i}">${i}</a>
+                </button>
             </li>
             `;
     }
@@ -416,22 +418,20 @@ async function filterForm(Page, Date, order, categorie, subCategorie) {
                     `;
             }
         });
+    getPages(Date, order, categorie, subCategorie);
 }
 
 
 
 
 
-
-
-
-let Page = 1;
+const searchParams = new URLSearchParams(window.location.search);
+let Page = searchParams.get("page");
 let Date = '';
 let order = 'ASC_date';
 let categorie = '';
 let subCategorie = '';
 createFormFilter();
-getPages(Date, order, categorie, subCategorie);
 
 filterForm(Page, order, categorie, subCategorie);
 

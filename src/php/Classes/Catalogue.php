@@ -67,11 +67,11 @@ class Catalogue extends Database
 
     public function getProductsCatalogue($pages = '1', $date = '', $Filtre = 'ASC_date', $categorie = '', $sousCategorie = '')
     {
-        // Nombre d'articles par page
-        $limit = 9;
-        // Calcul de l'offset en fonction de la page demandée
+        if (!$pages || $pages < 1) {
+            $pages = 1;
+        }
+        $limit = 12;
         $offset = ($pages - 1) * $limit;
-        // Définir l'offset à 0 si le numéro de page est inférieur à 1
         if ($offset < 0) {
             $offset = 0;
         }
@@ -109,7 +109,7 @@ class Catalogue extends Database
         } elseif ($Filtre === 'DESC_date') {
             $req .= " ORDER BY product.released_date_product DESC";
         }
-
+        $req .= " LIMIT :perPage OFFSET :offset";
         $stmt = $bdd->prepare($req);
 
         if ($date != '') {
@@ -123,6 +123,8 @@ class Catalogue extends Database
         } elseif ($sousCategorie != '') {
             $stmt->bindParam(':sousCategorie', $sousCategorie, PDO::PARAM_INT);
         }
+        $stmt->bindParam(':perPage', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
 
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);

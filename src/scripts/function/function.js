@@ -203,7 +203,7 @@ async function Login(btnLogin) {
     function createDialog() {
         const dialog = document.createElement("dialog");
         dialog.setAttribute("id", "dialog");
-        dialog.setAttribute("class", "w-[45%] h-[55%] bg-[#202225] border-[1px] border-[#a8b3cf33] rounded-[14px] shadow-lg");
+        dialog.setAttribute("class", "md:w-[45%] lg:max-w-[25%] h-[55%] bg-[#202225] border-[1px] border-[#a8b3cf33] rounded-[14px] shadow-lg");
 
         const divBottom = document.createElement("div");
         divBottom.setAttribute("id", "divBottom");

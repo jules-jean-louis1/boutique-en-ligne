@@ -103,17 +103,17 @@ class Client
     {
         $db = new Database();
         $bdd = $db->getBdd();
-        $req = $bdd->prepare("SELECT * FROM users WHERE login_users = :loginOrEmail OR email_users = :loginOrEmail");
+        $req = $bdd->prepare("SELECT id_users, login_users, email_users, password_users, type_compte_users FROM users WHERE login_users = :loginOrEmail OR email_users = :loginOrEmail");
         $req->execute(array(
             "loginOrEmail" => $loginOrEmail
         ));
-        $result = $req->fetch();
-        if ($result) {
-            if (password_verify($password, $result['password_users'])) {
-                $_SESSION['id'] = $result['id_users'];
-                $_SESSION['login'] = $result['login_users'];
-                $_SESSION['email'] = $result['email_users'];
-                $_SESSION['type_compte'] = $result['type_compte_users'];
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        if ($result > 0) {
+            if (password_verify($password, $result[0]['password_users'])) {
+                $_SESSION['id'] = $result[0]['id_users'];
+                $_SESSION['login'] = $result[0]['login_users'];
+                $_SESSION['email'] = $result[0]['email_users'];
+                $_SESSION['type_compte'] = $result[0]['type_compte_users'];
                 return true;
             } else {
                 return false;
