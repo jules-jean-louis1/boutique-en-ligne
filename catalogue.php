@@ -23,11 +23,11 @@ session_start();
     <div id="containerLoginRegisterForm"></div>
     <section id="containerMessageAddCart"></section>
     <section class="flex justify-between lg:pt-6 lg:mx-[4%]">
-        <div id="displayFilterCatalogue" class="bg-[#1e1e1f] p-2 lg:h-[35rem]"></div>
-        <div id="displayFiltreProduct" class="flex flex-col w-full justify-center">
+        <div id="displayFilterCatalogue" class="bg-[#1e1e1f] p-2 lg:h-[35rem] h-[70vh] fixed"></div>
+        <div id="displayFiltreProduct" class="flex flex-col w-full justify-center ml-60">
             <div id="displayProduct" class="flex flex-wrap justify-center w-full h-full"></div>
             <div id="displayPages" class="flex justify-center">
-                <ul id="displayPagesCatalogue"></ul>
+                <ul id="displayPagesCatalogue" class="flex justify-center space-x-2"></ul>
             </div>
         </div>
     </section>

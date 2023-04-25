@@ -3,6 +3,7 @@ import {registerHeader} from './function/function.js';
 import {formatDate} from './function/function.js';
 import {formatDateSansh} from "./function/function.js";
 import { displaySuccessMessageFormUpdateProduct } from './function/function.js';
+import {Login} from "./function/function.js";
 
 const btnRegister = document.querySelector('#buttonRegisterHeader');
 const btnLogin = document.querySelector('#buttonLoginHeader');
@@ -97,7 +98,7 @@ if (btnRegister) {
     registerHeader(btnRegister);
 }
 if (btnLogin) {
-    loginFormHeader(btnLogin);
+    Login(btnLogin);
 }
 
 
