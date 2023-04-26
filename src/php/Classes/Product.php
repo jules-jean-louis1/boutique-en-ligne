@@ -82,18 +82,21 @@ class Product extends Database
     public function supprProduct($id)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("DELETE FROM product WHERE id_produit = :id;");
-        $req->execute(array(
-            "id" => $id
-        ));
+        $req = $bdd->prepare("DELETE product, avis_client, comment_avis 
+                                    FROM product 
+                                    LEFT JOIN avis_client ON product.id_product = avis_client.produit_id 
+                                    LEFT JOIN comment_avis ON avis_client.id_avis = comment_avis.avis_parent_id 
+                                    WHERE product.id_product = :id");
+        $req->execute(array("id" => $id));
     }
     public function supprClientAvisProduct($id)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("DELETE FROM avis_client WHERE product_id = :id;");
-        $req->execute(array(
-            "id" => $id
-        ));
+        $req = $bdd->prepare("DELETE ac, cc
+                                    FROM avis_client ac
+                                    LEFT JOIN comment_avis cc ON ac.id_avis = cc.avis_parent_id
+                                    WHERE ac.id_avis = :idAvis;");
+        $req->execute(array("id" => $id));
     }
     public function archiveProduct($id)
     {

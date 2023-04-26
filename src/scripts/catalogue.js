@@ -236,15 +236,15 @@ async function getCategorie() {
         if (selectedCategoryId === '') {
             getSubCategorie();
         } else {
-        const subCategoriesSelect = document.getElementById("subCategories");
-        subCategoriesSelect.innerHTML = '<option value="">Genre...</option>';
-        const response = await fetch(`src/php/fetch/catalogue/getSubCatByCat.php?categoryId=${selectedCategoryId}`);
-        const data = await response.json();
-        for (const subCategory of data.displaySubCategories) {
-            subCategoriesSelect.innerHTML += `
+            const subCategoriesSelect = document.getElementById("subCategories");
+            subCategoriesSelect.innerHTML = '<option value="">Genre...</option>';
+            const response = await fetch(`src/php/fetch/catalogue/getSubCatByCat.php?categoryId=${selectedCategoryId}`);
+            const data = await response.json();
+            for (const subCategory of data.displaySubCategories) {
+                subCategoriesSelect.innerHTML += `
                 <option value="${subCategory.id_subcategories}">${subCategory.name_subcategories}</option>
             `;
-        }
+            }
         }
     });
 }

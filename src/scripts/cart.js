@@ -358,14 +358,16 @@ async function getCart() {
                 const displayproductsInCart = document.getElementById("displayproductsInCart");
                 for (const product of data.products) {
                     displayproductsInCart.innerHTML += `
-                    <div class="flex flex-row items-center justify-between px-5 py-3 border-b-[1px] border-[#e5e7eb]">
-                        <div class="flex flex-row items-center">
-                            <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded-lg">
-                            <p class="text-[#a8b3cf] ml-5">${product.name_product}</p>
-                        </div>
-                        <div class="flex flex-col items-center">
-                            <p class="text-[#a8b3cf] text-2xl">${product.price_product} €</p>
-                            <p class="text-[#a8b3cf] text-sm">Quantité :${product.quantity_product}</p>
+                    <div class="flex xl:flex-row flex-col items-center justify-between px-5 py-3 border-b-[1px] border-[#e5e7eb]">
+                        <div class="flex xl:flex-row items-center">
+                            <div class="flex flex-row items-center">
+                                <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded-lg">
+                                <p class="text-[#a8b3cf] ml-5">${product.name_product}</p>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <p class="text-[#a8b3cf] text-2xl">${product.price_product} €</p>
+                                <p class="text-[#a8b3cf] text-sm">Quantité :${product.quantity_product}</p>
+                            </div>
                         </div>
                         <div id="actionOnProduct" class="flex justify-end space-x-2">
                             <form action="" method="POST" id="formModifyProduct_${product.id_product}" class="flex flex-row items-center space-x-0.5">
@@ -429,7 +431,7 @@ async function getCart() {
                                 <p class="text-[#a8b3cf]">Total : ${total} €</p>
                             </div>
                         </div>
-                        <div id="displayproductsInCart" class="w-9/12"></div>
+                        <div id="displayproductsInCart" class="w-full xl:w-9/12"></div>
                     </div>
                     <div id="containerBtnLoginSigin" class="flex justify-center mt-6"></div>
                 `;

@@ -1108,28 +1108,8 @@ async function fetchUser(page, search, order) {
     } if (data.status === 'error') {
         containerUserInfo.innerHTML = 'Aucun utilisateur trouvé';
     }
-
-    // Do something with the fetched data
 }
 
-
-// fonction d'affichage des produits
-// addProduct();
-
-// fonction d'affichage des catégories
-// gestionCategory();
-
-// fonction d'affichage des sous-catégories
-// gestionSubCategories();
-
-// fonction d'affichage des produits
-// gestionProduct();
-
-// Fonction d'affichage des utilisateurs
-
-
-
-// Gestions de l'affichage grace au menu
 
 buttonGestionProduct.addEventListener('click', () => {
     containerAllDiv.innerHTML = '';

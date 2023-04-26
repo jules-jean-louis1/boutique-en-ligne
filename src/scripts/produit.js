@@ -139,20 +139,19 @@ async function getProduct(URLid) {
             const containerProduct = document.getElementById("containerProduct");
             for (const product of data.data) {
                 containerProduct.innerHTML = `
-            <div class="lg:w-8/12 w-11/12 border-[1px] border-[#a8b3cf33] rounded-lg">
-                <div class="bg-[#A87EE6FF] h-72 lg:h-2/5 flex justify-center rounded-t-lg w-full">
-                <div class="relative flex lg:flex-row sm:flex-col sm:items-center justify-between px-16 py-6">
+            <div class="lg:w-full xl:w-11/12 border-[1px] border-[#a8b3cf33] rounded-lg">
+                <div class="bg-[#A87EE6FF] flex xl:flex-row flex-col items-center xl:justify-between justify-center rounded-[14px]  xl:px-16 xl:py-6 p-1">
                     <div class="h-fit">
-                        <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="lg:h-96 rounded-lg">
+                        <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="xl:h-96 rounded-[14px] h-80">
                     </div>
-                    <div class="flex flex-col items-start lg:w-5/12 sm:w-[95%]">
-                        <p class="text-center text-white rounded-lg p-1 bg-[#00000038]">${product.name_subcategories}</p>
-                        <h1 class="text-6xl text-white mt-5 uppercase font-bold">${product.name_product}</h1>
+                    <div class="flex flex-col xl:items-start items-center lg:w-5/12 sm:w-[95%]">
+                        <p class="text-center text-white rounded-lg p-1 bg-[#00000038] xl:block hidden">${product.name_subcategories}</p>
+                        <h1 class="text-6xl text-white xl:mt-5 mt-1 uppercase font-bold">${product.name_product}</h1>
                         <p class="text-[#a8b3cf] mt-5">${afficherEtoiles(product.rating_product)}</p>
-                        <p class="mt-5 text-white font-xl">À propos du jeu</p>
-                        <p class="text-[#a8b3cf]">${product.description_product}</p>
+                        <p class="mt-5 text-black font-xl">À propos du jeu</p>
+                        <p class="text-white xl:text-start text-center">${product.description_product}</p>
                         <div>
-                            <p class="text-[#A87EE6FF] mt-2 font-bold text-6xl">${product.price_product} €</p>
+                            <p class="text-white mt-2 font-bold text-6xl  xl:text-start text-center">${product.price_product} €</p>
                             <div id="containerFormAddProductToCart">
                                 <form action="" method="post" id="formAddToCart">
                                     <input type="hidden" name="id" value="${product.id_product}">
@@ -160,21 +159,20 @@ async function getProduct(URLid) {
                                     <select name="quantity" id="quantity" class="bg-[#2D323C] text-white px-5 py-2 rounded-lg mt-5">
                                         ${options}
                                     </select>
-                                    <button type="submit" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg mt-5" id="buttonAddToCart">Ajouter au panier</button>
+                                    <button type="submit" class="text-[#A87EE6FF] bg-white px-5 py-2 rounded-lg mt-5" id="buttonAddToCart">Ajouter au panier</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                     <div class="flex flex-col items-center justify-center">
-                        <div class="">
-                            <p class="text-[#a8b3cf]">Sortie le :</p>
-                            <p class="text-[#a8b3cf] mt-2">${formatDateSansh(product.released_date_product)}</p>
+                        <div class="xl:block hidden">
+                            <p class="text-black">Sortie le :</p>
+                            <p class="text-black mt-2">${formatDateSansh(product.released_date_product)}</p>
                         </div>
                     </div>
                 </div>
             </div>
-                
-            </div>
+            
             `;
                 let optionsDisponible = '';
                 if (data.data.dispo_product === '1') {
@@ -418,6 +416,7 @@ async function Avis(){
 
     });
 }
+//Affichage des avis
 async function displayAvis() {
     await fetch ('src/php/fetch/client/isConnected.php')
     .then(response => response.json())
@@ -435,7 +434,7 @@ async function displayAvis() {
                     containerAvisClient.innerHTML = '';
                     for (let avis of data.avis) {
                         const avisContainer = document.createElement('div');
-                        avisContainer.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'space-y-2', 'border-[1px]', 'border-[#a8b3cf33]', 'rounded-[14px]', 'w-8/12', 'p-4', 'mb-2');
+                        avisContainer.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'space-y-2', 'border-[1px]', 'border-[#a8b3cf33]', 'rounded-[14px]', 'xl:w-8/12', 'w-full', 'p-4', 'mb-2');
                         avisContainer.innerHTML = `
                             <div class="flex flex-row justify-between w-full">
                                 <p class="text-[#fff] font-semibold">${avis.titre_avis}</p>

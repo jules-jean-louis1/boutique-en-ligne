@@ -24,7 +24,7 @@ session_start();
         <div id="containerLoginRegisterForm"></div>
         <div id="containerDialogAvis"></div>
         <section id="containerMessageAddCart"></section>
-        <section id="containerInformationProduits" class="pt-12"></section>
+        <section id="containerInformationProduits" class="xl:pt-12 pt-2"></section>
         <section id="containerSimilarProduct"></section>
         <section class="mt-12">
             <h2 class="text-center text-2xl text-white">Ajouter un avis sur ce produit</h2>

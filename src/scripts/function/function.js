@@ -279,7 +279,6 @@ async function Login(btnLogin) {
                         });
                 });
             });
-
         buttonLogin.addEventListener("click", () => {
             if (buttonLogin.textContent === "Connexion") {
                 buttonLogin.textContent = "S'inscrire";
