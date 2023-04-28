@@ -279,7 +279,8 @@ class Cart extends Database
             $req4 = $bdd->prepare("SELECT total_price_cart FROM cart WHERE id_cart = :cart_id");
             $req4->execute(["cart_id" => $cartId]);
             $result4 = $req4->fetchAll(PDO::FETCH_ASSOC);
-            $totalPriceCart = $result4[0]['total_price_cart'] + $priceProduct;
+            $updatePriceCart = $quantityProduct * $priceProduct;
+            $totalPriceCart = $result4[0]['total_price_cart'] + $updatePriceCart;
 
             $req5 = $bdd->prepare("UPDATE cart SET total_price_cart = :total_price_cart, modified_at_cart = NOW() WHERE id_cart = :cart_id");
             $req5->execute(["total_price_cart" => $totalPriceCart, "cart_id" => $cartId]);

@@ -248,11 +248,11 @@ async function getCategorie() {
         }
     });
 }
-const queryString = window.location.search;
+/*const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const currentPage = parseInt(urlParams.get('page')) || 1;
+const currentPage = parseInt(urlParams.get('page')) || 1;*/
 
-async function getPages(Date, order, categorie, subCategorie, currentPage) {
+/*async function getPages(Date, order, categorie, subCategorie, currentPage) {
     const params = new URLSearchParams();
     params.append('date', Date);
     params.append('order', order);
@@ -262,7 +262,7 @@ async function getPages(Date, order, categorie, subCategorie, currentPage) {
     const response = await fetch(`src/php/fetch/catalogue/getPages.php?${params.toString()}`);
     const data = await response.json();
     if (currentPage > 1) {
-        containerPage.innerHTML += `
+        containerPage.innerHTML = `
       <li class="page-item">
         <button type="button" class="px-2 py-2 rounded-[14px] bg-[#a87ee6] text-white" id="pageButton${currentPage-1}" value="${currentPage-1}">
             <a class="page-link" href="catalogue.php?page=${currentPage-1}">
@@ -279,7 +279,7 @@ async function getPages(Date, order, categorie, subCategorie, currentPage) {
     `;
     // Affichage du bouton "Page suivante" si la page actuelle n'est pas la dernière
     if (currentPage < data.displayPages) {
-        containerPage.innerHTML += `
+        containerPage.innerHTML = `
       <li class="page-item">
         <button type="button" class="px-2 py-2 rounded-[14px] bg-[#a87ee6] text-white" id="pageButton${currentPage+1}" value="${currentPage+1}">
           <a class="page-link" href="catalogue.php?page=${currentPage+1}">
@@ -289,8 +289,23 @@ async function getPages(Date, order, categorie, subCategorie, currentPage) {
       </li>
     `;
     }
+}*/
+async function getPages(Date, order, categorie, subCategorie) {
+    const response = await fetch(`src/php/fetch/catalogue/getPages.php?date=${Date}&order=${order}&categorie=${categorie}&subCategorie=${subCategorie}`);
+    const data = await response.json();
+    if (containerPage) { // check if containerPage exists
+        containerPage.innerHTML = ''; // clear containerPage
+        for (let i = 1; i <= data.displayPages; i++) {
+            containerPage.innerHTML += `
+        <li class="page-item">
+          <button type="button" class="px-4 py-2 rounded-[14px] bg-slate-100" id="pageButton${i}" value="${i}">
+            <a class="page-link" href="catalogue.php?page=${i}">${i}</a>
+          </button>
+        </li>
+        `;
+        }
+    }
 }
-
 
 
 function createFormFilter() {
@@ -443,7 +458,8 @@ async function filterForm(Page, Date, order, categorie, subCategorie) {
                     `;
             }
         });
-    getPages(Date, order, categorie, subCategorie, currentPage);
+    containerPage.innerHTML += '';
+    getPages(Date, order, categorie, subCategorie);
 }
 
 

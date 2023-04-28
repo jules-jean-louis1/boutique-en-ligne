@@ -502,7 +502,7 @@ async function getCart() {
                     `;
                     const btnLoginCart = document.getElementById("btnLoginCart");
                     btnLoginCart.addEventListener('click', () => {
-                        loginFormHeader(btnLoginCart)
+                        Login(btnLoginCart)
                     });
                 } else {
                     containerBtnLogin.innerHTML = `
@@ -540,20 +540,13 @@ async function getCart() {
                             const containerBtnLogin = document.getElementById("containerBtnLoginSigin");
                             containerBtnLogin.innerHTML = `
                                 <button class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold" id="btnLoginCart">Se connecter</button>
-                                <button class="bg-[#e04337] text-white px-5 py-2 rounded-lg font-extrabold" id="btnSigninCart">S'inscrire</button>
                             `;
                         }
                     });
                 const btnLoginCart = document.getElementById("btnLoginCart");
                 if (btnLoginCart) {
                     btnLoginCart.addEventListener('click', (ev) => {
-                        loginFormHeader(btnLoginCart);
-                    });
-                }
-                const btnSigninCart = document.getElementById("btnSigninCart");
-                if (btnSigninCart) {
-                    btnSigninCart.addEventListener('click', (ev) => {
-                        registerHeader(btnSigninCart);
+                        Login(btnLoginCart);
                     });
                 }
             }

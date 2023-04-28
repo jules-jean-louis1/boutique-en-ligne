@@ -409,6 +409,7 @@ async function Avis(){
                             <small class="text-lg">Produit ajouté au panier</small>
                         </div>
                         `;
+                        displayAvis();
                     }
                 });
             });
@@ -539,7 +540,7 @@ async function displayAvis() {
                                                             </div>
                                                             <div id="containerReplyCommentaire" class="ml-4"></div>
                                                         </div>
-                                                        `;
+                                                    `;
                                                 }
                                             }
                                         }
