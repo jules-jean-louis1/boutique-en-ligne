@@ -52,6 +52,20 @@ class Avis extends Database
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+    public function getReplyAvis($id_product)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT comment_avis.*, u.login_users, u.avatar_users
+                                    FROM comment_avis
+                                    JOIN users u ON comment_avis.users_id = u.id_users
+                                    WHERE comment_avis.product_id = :id_product
+                                    ORDER BY comment_avis.created_at ASC;");
+        $req->execute([
+            "id_product" => $id_product
+        ]);
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
     public function addReplyAvis($content, $id_avis, $id_users, $id_product)
     {
         $bdd = $this->getBdd();
@@ -63,20 +77,6 @@ class Avis extends Database
             "id_users" => $id_users,
             "id_product" => $id_product
         ]);
-    }
-    public function getReplyAvis($id_product)
-    {
-        $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT comment_avis.id_comment, comment_avis.avis_parent_id, comment_avis.content_comment, comment_avis.created_at, users.login_users, users.avatar_users
-                                    FROM comment_avis
-                                    INNER JOIN users ON comment_avis.users_id = users.id_users
-                                    WHERE comment_avis.avis_parent_id IN (SELECT id_avis FROM avis_client WHERE produit_id = :id_product));
-                                    ");
-        $req->execute([
-            "id_product" => $id_product
-        ]);
-        $result = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
     }
     public function getReplyById($id_avis)
     {
