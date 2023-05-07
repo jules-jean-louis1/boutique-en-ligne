@@ -874,10 +874,11 @@ async function displayAvis() {
                                 if (BtnDeleteComment) {
                                     BtnDeleteComment.addEventListener('click', async (ev) => {
                                         ev.preventDefault();
-                                        await fetch(`src/php/fetch/avis/deleteComment.php`, {
-                                            method: 'POST',
-                                            body: new FormData(formEditComment)
-                                        });
+                                        await fetch(`src/php/fetch/avis/deleteComment.php?id_comment=${reply.id_comment}`)
+                                            .then(response => response.json())
+                                            .then(data => {
+
+                                            });
                                     });
                                 }
                             }

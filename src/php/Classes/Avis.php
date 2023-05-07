@@ -127,4 +127,16 @@ class Avis extends Database
             "id_comment" => $id_comment
         ]);
     }
+    public function searchIfCommentAsReply($id_comment)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT * FROM comment_avis WHERE comment_parent_id = :id_comment");
+        $req->execute([
+            "id_comment" => $id_comment
+        ]);
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+
+        return count($result) > 0 ? true : false;
+    }
 }
