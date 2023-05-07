@@ -118,4 +118,13 @@ class Avis extends Database
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+    public function editReplyAvis(string $content, int $id_comment)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("UPDATE comment_avis SET content_comment = :content, update_at = NOW() WHERE id_comment = :id_comment");
+        $req->execute([
+            "content" => $content,
+            "id_comment" => $id_comment
+        ]);
+    }
 }

@@ -417,6 +417,35 @@ async function Avis(){
     });
 }
 //Affichage des avis
+function formatDistanceToNow(date) {
+    const distanceInMillis = new Date() - date;
+    const minuteInMillis = 60 * 1000;
+    const hourInMillis = 60 * minuteInMillis;
+    const dayInMillis = 24 * hourInMillis;
+    const weekInMillis = 7 * dayInMillis;
+
+    if (distanceInMillis < minuteInMillis) {
+        return "à l'instant";
+    } else if (distanceInMillis < hourInMillis) {
+        const minutes = Math.round(distanceInMillis / minuteInMillis);
+        return `${minutes} minute${minutes > 1 ? 's' : ''}`;
+    } else if (distanceInMillis < dayInMillis) {
+        const hours = Math.round(distanceInMillis / hourInMillis);
+        return `${hours} heure${hours > 1 ? 's' : ''}`;
+    } else if (distanceInMillis < weekInMillis) {
+        const days = Math.round(distanceInMillis / dayInMillis);
+        return `${days} jour${days > 1 ? 's' : ''}`;
+    } else {
+        const daysAgo = Math.floor(distanceInMillis / dayInMillis);
+        return `il y a ${daysAgo} jour${daysAgo > 1 ? 's' : ''}`;
+    }
+}
+const date = new Date('2022-04-30');
+console.log(formatDistanceToNow(date)); // affiche "il y a 7 jours"
+
+
+
+
 async function displayAvis() {
     await fetch ('src/php/fetch/client/isConnected.php')
     .then(response => response.json())
@@ -643,7 +672,10 @@ async function displayAvis() {
                                                 <img src="src/images/avatars/${reply.avatar_users}" alt="" class="w-6 h-6 rounded-full">
                                                 <div class="flex flex-col items-start">
                                                     <p class="font-semibold text-white">${reply.login_users}</p>
-                                                    <p class="text-[#a8b3cf] text-xs">${formatDate(reply.created_at)}</p>
+                                                    <p class="text-[#a8b3cf] text-xs">
+                                                        <span>${formatDistanceToNow(new Date(reply.created_at))}</span>
+                                                        <span id="ifUpdateComment_${reply.id_comment}"></span>
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="flex flex-row ml-8">
@@ -656,13 +688,13 @@ async function displayAvis() {
                                                         <svg width="1em" height="1em" viewBox="0 0 24 24" stroke="#A8B3CF" fill="none" stroke-width="0.3" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 pointer-events-none"><path d="M8.084 3.217a35.447 35.447 0 017.05-.078l.782.078.279.031c1.089.121 1.885.372 2.606.828a4.516 4.516 0 011.664 1.86c.336.69.5 1.423.53 2.361l.005.321v3.975a4.493 4.493 0 01-3.545 4.392l-.207.04-2.089.346-2.86 2.992-.147.135c-.986.789-2.399.623-3.205-.324-.532-.625-.616-1.34-.51-2.29l.029-.224.038-.254.033-.187-1.332-.189a5.011 5.011 0 01-1.677-.55l-.253-.146-.243-.16a4.777 4.777 0 01-1.491-1.721 4.935 4.935 0 01-.532-1.972l-.009-.3V8.618c0-1.096.162-1.915.535-2.683.375-.77.94-1.4 1.664-1.859.649-.41 1.359-.655 2.288-.788l.318-.04.28-.031zm7.666 1.491a33.948 33.948 0 00-6.752-.075l-.748.075-.28.031c-.915.102-1.481.297-1.97.606a3.016 3.016 0 00-1.116 1.247c-.228.468-.357.989-.38 1.76l-.004.266v3.563c0 .577.134 1.116.375 1.587.242.471.592.874 1.024 1.18.37.263.801.453 1.276.554l.242.043 1.98.283c.339.048.457.096.575.175.119.078.262.187.27.386l-.002.024-.013.08-.164.741-.064.333c-.111.63-.167 1.332.09 1.634.263.309.7.39 1.037.187l.089-.062 2.998-3.135.13-.101.092-.063.077-.04.08-.03.035-.01.087-.02L17 15.545a2.993 2.993 0 002.495-2.77l.005-.182V8.618c0-.921-.13-1.506-.384-2.026A3.016 3.016 0 0018 5.345c-.44-.278-.943-.464-1.706-.572l-.265-.034-.279-.03zm-.55 6.294l.093.005c.398.044.707.36.707.746 0 .38-.301.693-.691.743l-.109.007H8.8l-.093-.005c-.398-.044-.707-.36-.707-.745 0-.38.301-.694.691-.744l.109-.007h6.4zm0-3.5l.093.004c.398.044.707.36.707.746 0 .38-.301.693-.691.743l-.109.007H8.8l-.093-.005C8.309 8.953 8 8.637 8 8.252c0-.38.301-.694.691-.744l.109-.007h6.4z" fill="#A8B3CF" fill-rule="evenodd"></path></svg>
                                                     </button>
                                                 </div>
-                                                <div id="callToActionComment"></div>
+                                                <div id="callToActionComment_${reply.id_comment}"></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div id="reponseComment" data-comment-id="${reply.id_comment}" class="ml-4"></div>
                                     `;
-                                    const callToActionComment = avisContainer.querySelector('#callToActionComment');
+                                    const callToActionComment = document.getElementById(`callToActionComment_${reply.id_comment}`);
                                     if (avis.users_id === Users_id) {
                                         callToActionComment.innerHTML = `
                                             <div class="flex flex-row justify-between w-full">
@@ -680,9 +712,13 @@ async function displayAvis() {
                                                 </button>
                                             </div>
                                         `;
-
+                                    }
+                                    const ifUpdateComment = document.getElementById(`ifUpdateComment_${reply.id_comment}`);
+                                    if (ifUpdateComment) {
+                                        if (reply.update_at !== null) {
+                                            ifUpdateComment.textContent = "· Modifier il y a " + formatDistanceToNow(new Date(reply.update_at));
                                         }
-
+                                    }
                                 }
                             }
                             for (let reply of data.reply_avis) {
@@ -691,7 +727,6 @@ async function displayAvis() {
                                 if (BtnreplyComment) {
                                     BtnreplyComment.addEventListener('click', async (ev) => {
                                         ev.preventDefault();
-
                                         const containerDialogAvis = document.getElementById('containerDialogAvis');
                                         containerDialogAvis.innerHTML = '';
                                         const dialogAvis = document.createElement('dialog');
@@ -712,7 +747,9 @@ async function displayAvis() {
                                                         <img src="src/images/avatars/${reply.avatar_users}" alt="" class="w-6 h-6 rounded-full">
                                                         <div class="flex flex-col">
                                                             <p class="text-white font-regular">${reply.login_users}</p>
-                                                            <p class="text-[#a8b3cf] text-xs">${formatDate(reply.created_at)}</p>
+                                                            <p class="text-[#a8b3cf] text-xs">
+                                                                <span>${formatDate(reply.created_at)}</span>
+                                                            </p>
                                                         </div>
                                                     </div>
                                                     <div class="m-2 border-l border-white pl-6">
@@ -722,13 +759,19 @@ async function displayAvis() {
                                                         <p class="text-xs text-white pl-8">Réponse à <b>${reply.login_users}</b></p>
                                                     </div>
                                                 </div>
-                                                <form action="" method="post" id="formAddReplyComment" class="flex flex-col items-center justify-center space-y-2 pb-2">
-                                                    <input type="hidden" name="id_product" value="${URLid}">
-                                                    <input type="hidden" name="parent_comment" value="${reply.id_comment}">
-                                                    <textarea name="content_avis" id="content_avis" cols="30" rows="5" placeholder="Contenu de la réponse" class="bg-[#24272A] focus:outline-none p-2 rounded-b-[14px] w-full h-full"></textarea>
-                                                    <div id="errorMsg" class="h-12"></div>
-                                                    <button type="submit" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg" id="buttonAddAvis">Répondre</button>
-                                                </form>
+                                                <div class="flex relative flex-1 pl-6 pr-2">
+                                                    <img src="src/images/avatars/${reply.avatar_users}" alt="" class="w-6 h-6 rounded-full">
+                                                        <form action="" method="post" id="formAddReplyComment" class="flex flex-col items-center justify-center w-full">
+                                                        <input type="hidden" name="id_product" value="${URLid}">
+                                                        <input type="hidden" name="parent_comment" value="${reply.id_comment}">
+                                                        <textarea name="content_avis" id="content_avis" cols="30" rows="5" placeholder="@${reply.login_users}" class="ml-3 flex-1 bg-[#24272A] focus:outline-none rounded-b-[14px] w-full h-full"></textarea>
+                                                        <div id="errorMsg" class="h-12"></div>
+                                                        <div class="flex flex-row justify-end w-full py-2">
+                                                            <button class="bg-[#39e58c] text-black font-bold px-5 py-2 rounded-[14px]" id="buttonAddAvis">Répondre</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                
                                             </div>
                                         `;
                                         const formAddReplyComment = document.getElementById('formAddReplyComment');
@@ -760,6 +803,83 @@ async function displayAvis() {
                                         });
                                     });
                                 }
+                                const BtnEditComment = document.getElementById(`buttonEditComment_${reply.id_comment}`);
+                                if (BtnEditComment) {
+                                    BtnEditComment.addEventListener('click', (ev) => {
+                                        ev.preventDefault();
+                                        const containerDialogAvis = document.getElementById('containerDialogAvis');
+                                        containerDialogAvis.innerHTML = '';
+                                        const dialogAvis = document.createElement('dialog');
+                                        dialogAvis.setAttribute('id', 'dialog_fixed');
+                                        dialogAvis.className = 'dialog_modal w-6/12 h-6/12 bg-[#24272A] text-[#a8b3cf] rounded-[14px] shadow-lg';
+                                        containerDialogAvis.appendChild(dialogAvis);
+                                        dialogAvis.innerHTML = '';
+                                        dialogAvis.innerHTML = `
+                                            <div class="border-[1px] rounded-[14px] border-[#a8b3cf]">
+                                                <div class="flex flex-row justify-between border-b border-[#a8b3cf] flex items-center py-4 px-6 w-full h-14">
+                                                    <h3>Modifier votre réponse</h3>
+                                                    <button class="close" id="closeDialogAvis">
+                                                        <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none"><path d="M16.804 6.147a.75.75 0 011.049 1.05l-.073.083L13.061 12l4.72 4.72a.75.75 0 01-.977 1.133l-.084-.073L12 13.061l-4.72 4.72-.084.072a.75.75 0 01-1.049-1.05l.073-.083L10.939 12l-4.72-4.72a.75.75 0 01.977-1.133l.084.073L12 10.939l4.72-4.72.084-.072z" fill="currentcolor" fill-rule="evenodd"></path></svg>
+                                                    </button>
+                                                </div>
+                                                <div class="pl-6 p-2">
+                                                    <p class="text-[#a8b3cf] text-xs">${formatDate(reply.created_at)}</p>
+                                                </div>
+                                                <div class="flex relative flex-1 pl-6 pr-2">
+                                                    <img src="src/images/avatars/${reply.avatar_users}" alt="" class="w-6 h-6 rounded-full">
+                                                        <form action="" method="post" id="formEditComment" class="flex flex-col items-center justify-center w-full">
+                                                        <input type="hidden" name="id_product" value="${URLid}">
+                                                        <input type="hidden" name="parent_comment" value="${reply.id_comment}">
+                                                        <input type="hidden" name="id_comment" value="${reply.id_comment}">
+                                                        <textarea name="content_avis" id="content_avis" cols="30" rows="5" class="ml-3 flex-1 bg-[#24272A] focus:outline-none rounded-b-[14px] w-full h-full">${reply.content_comment}</textarea>
+                                                        <div id="errorMsg" class="h-12"></div>
+                                                        <div class="flex flex-row justify-end w-full py-2">
+                                                            <button class="bg-[#39e58c] text-black font-bold px-5 py-2 rounded-[14px]" id="buttonAddAvis">Modifier</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                
+                                            </div>
+                                        `;
+                                        const formEditComment = document.getElementById('formEditComment');
+                                        formEditComment.addEventListener('submit', async (ev) => {
+                                            ev.preventDefault();
+                                            await fetch(`src/php/fetch/avis/editComment.php`, {
+                                                method: 'POST',
+                                                body: new FormData(formEditComment)
+                                            })
+                                                .then(response => response.json())
+                                                .then(data => {
+                                                    if (data.status == 'error') {
+                                                        const errorMsg = document.getElementById('errorMsg');
+                                                        displayErrorMessageFormUpdateProduct(errorMsg, data.message);
+                                                    }
+                                                    if (data.status == 'success') {
+                                                        dialogAvis.close();
+                                                        dialogAvis.remove();
+                                                        displayAvis();
+                                                    }
+                                                });
+                                        });
+                                        dialogAvis.showModal();
+                                        const closeDialogAvis = document.getElementById('closeDialogAvis');
+                                        closeDialogAvis.addEventListener('click', (ev) => {
+                                            ev.preventDefault();
+                                            dialogAvis.close();
+                                            dialogAvis.remove();
+                                        });
+                                    });
+                                }
+                                const BtnDeleteComment = document.getElementById(`buttonDeleteComment_${reply.id_comment}`);
+                                if (BtnDeleteComment) {
+                                    BtnDeleteComment.addEventListener('click', async (ev) => {
+                                        ev.preventDefault();
+                                        await fetch(`src/php/fetch/avis/deleteComment.php`, {
+                                            method: 'POST',
+                                            body: new FormData(formEditComment)
+                                        });
+                                    });
+                                }
                             }
 
                             const reponseCommentaire = document.getElementById('reponseComment');
@@ -784,7 +904,10 @@ async function displayAvis() {
                                                     <img src="src/images/avatars/${reply2.avatar_users}" alt="" class="w-6 h-6 rounded-full">
                                                     <div class="flex flex-col items-start">
                                                       <p class="font-semibold text-white">${reply2.login_users}</p>
-                                                      <p class="text-[#a8b3cf] text-xs">${formatDate(reply2.created_at)}</p>
+                                                      <p class="text-[#a8b3cf] text-xs">
+                                                            <span>${formatDistanceToNow(new Date(reply.created_at))}</span>
+                                                            <span id="ifUpdateComment_${reply.id_comment}"></span>
+                                                        </p>
                                                     </div>
                                                   </div>
                                                   <div class="flex flex-row ml-8">
