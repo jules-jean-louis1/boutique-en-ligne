@@ -237,6 +237,35 @@ cartHeader();
 const btnDisplayProfil = document.querySelector('#buttonFormProfilInfo');
 const btnDisplayCommande = document.querySelector('#buttonFormCommandeInfo');
 
+// Affichage Informations Profil
+async function displayProfil() {
+    const containerProfile = document.querySelector('#containerInfoUsers');
+    await fetch('src/php/fetch/profil/getClientInfoProfil.php')
+        .then(response => response.json())
+        .then(data => {
+            for (let i = 0; i < data.length; i++) {
+            containerProfile.innerHTML = '';
+            containerProfile.innerHTML = `
+            <div class="flex space-x-2">
+                <img src="src/images/avatars/${data[0].avatar_users}" class="h-36 rounded-full" id="profile-image">
+                <div class="flex flex-col justify-around">
+                    <p class="text-white font-semibold text-lg">@${data[0].login_users}</p>
+                    <p class="text-[#a8b3cf]">${data[0].email_users}</p>
+                    <p class="text-sm font-light">
+                        <span class="text-[#a8b3cf]">Inscrit depuis le </span>
+                        <span class="text-[#a8b3cf]">${formatDateSansh(data[0].created_at_users)}</span>
+                    </p>
+                    <p class="p-2 w-full bg-[#1c1f26] text-white rounded-[14px] text-center">
+                        <span class="">Vos commande :</span>
+                        <span class="font-semibold">${data[0].nombre_commandes}</span>
+                    </p>
+                </div>
+            </div>
+            `;
+            }
+                console.log(data);
+        });
+}
 //Fonction de modifiacation du profil
 async function modifyProfil() {
     const containerProfile = document.querySelector('#containerFormProfilInfo');
@@ -381,7 +410,6 @@ async function modifyProfil() {
                     .then(data => {
                         let message = document.querySelector('#errorMsg');
                         if (data.status === 'success') {
-                            console.log("ok")
                             message.innerHTML = data.message;
                             displaySuccess(message);
                             modifyProfil();
@@ -435,7 +463,7 @@ async function commandeClient() {
                 let TotalItem = data.totalItems;
                 for (let commande of data.Commande) {
                     sectionCommande.innerHTML += `
-                        <div class="flex flex-col items-center rounded-[14px] border-[1px] border-[#a8b3cf33] bg-[#1c1f26]">
+                        <div class="flex flex-col items-center rounded-[14px] border-[1px] border-[#a8b3cf33] bg-[#1c1f26] py-4">
                             <div class="flex items-center justify-between text-white w-full bg-[#a87ee6] rounded-t-[14px] p-4">
                                 <p>Date de la commande: ${formatDateSansh(commande.date_commande)}</p>
                                 <p>Nombre d'article: ${TotalItem}</p>
@@ -471,19 +499,24 @@ async function commandeClient() {
 // Fonction d'affichage du profil
 const sectionCommande = document.querySelector('#containerCommande');
 const sectionProfil = document.querySelector('#itemsModifProfil');
+displayProfil();
 modifyProfil();
 commandeClient();
 btnDisplayProfil.addEventListener('click', () => {
     if (sectionProfil.classList.contains('hidden')) {
         sectionProfil.classList.remove('hidden');
+        sectionCommande.classList.add('hidden');
     } else {
         sectionProfil.classList.add('hidden');
+        sectionCommande.classList.remove('hidden');
     }
 });
 btnDisplayCommande.addEventListener('click', () => {
     if (sectionCommande.classList.contains('hidden')) {
         sectionCommande.classList.remove('hidden');
+        sectionProfil.classList.add('hidden');
     } else {
         sectionCommande.classList.add('hidden');
+        sectionProfil.classList.remove('hidden');
     }
 });

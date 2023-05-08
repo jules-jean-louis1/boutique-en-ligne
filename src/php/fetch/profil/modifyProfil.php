@@ -2,10 +2,18 @@
 session_start();
 require_once "../../Classes/Client.php"; // On inclut la classe Client
 
-$errors = array();
-$success = array();
+function verifyField($field)
+    {
+        if (isset($_POST[$field]) && !empty(trim($_POST[$field]))) {
+            return $_POST[$field];
+        } else {
+            return false;
+        }
+    }
+$errors = [];
+$success = [];
 
-if (!empty($_POST['login'])) {
+if (verifyField('login')) {
     $login = htmlspecialchars($_POST['login']);
     if ($login == $_SESSION['login']) {
         $valid = true;

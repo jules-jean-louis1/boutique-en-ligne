@@ -1,15 +1,15 @@
 <?php
 require_once "Database.php";
 
-class Client
+class Client extends Database
 {
     public function __construct()
     {
+        parent::__construct();
     }
     public function checkLogin($login)
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $req = $bdd->prepare("SELECT COUNT(*) as total FROM users WHERE login_users = :login_users");
         $req->execute(array(
             "login_users" => $login
@@ -23,8 +23,7 @@ class Client
     }
     public function checkEmail($email)
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $req = $bdd->prepare("SELECT COUNT(*) as total FROM users WHERE email_users = :email_users");
         $req->execute(array(
             "email_users" => $email
@@ -80,8 +79,7 @@ class Client
     }
     public function register($login, $password, $email)
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $req = $bdd->prepare("INSERT INTO users (login_users, password_users, email_users, type_compte_users, avatar_users, created_at_users) VALUES (:login, :password, :email, :type_compte, :avatar, NOW())");
         $password = password_hash($password, PASSWORD_DEFAULT);
         $req->execute(array(
@@ -101,8 +99,7 @@ class Client
     }
     public function login($loginOrEmail, $password)
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $req = $bdd->prepare("SELECT id_users, login_users, email_users, password_users, type_compte_users FROM users WHERE login_users = :loginOrEmail OR email_users = :loginOrEmail");
         $req->execute(array(
             "loginOrEmail" => $loginOrEmail
@@ -124,8 +121,7 @@ class Client
     }
     public function getShippingInfo($id)
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $req = $bdd->prepare("SELECT client.id_client, client.prenom_client, client.nom_client, client.ville_client, client.code_postal_client, client.adresse_client, client.mobile_client, client.pays_client, client.users_id, users.login_users, users.email_users, users.avatar_users
                             FROM client
                             INNER JOIN users ON client.users_id = users.id_users
@@ -138,8 +134,7 @@ class Client
     }
     public function getClientInfo($id)
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $req = $bdd->prepare("SELECT client.id_client, client.prenom_client, client.nom_client, client.ville_client, client.code_postal_client, client.adresse_client, client.mobile_client, client.pays_client, client.users_id, users.id_users as user_id, users.login_users, users.email_users, users.password_users, users.type_compte_users, users.avatar_users, users.created_at_users, users.modified_at_users 
 FROM client
 INNER JOIN users ON client.users_id = users.id_users
@@ -160,8 +155,7 @@ WHERE users.id_users = :id;");
     }
     public function modifyLogin($id, $login)
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $req = $bdd->prepare("UPDATE users SET login_users = :login, modified_at_users = NOW() WHERE id_users = :id");
         $req->execute(array(
             "login" => $login,
@@ -171,8 +165,7 @@ WHERE users.id_users = :id;");
     }
     public function modifyEmail($id, $email)
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $req = $bdd->prepare("UPDATE users SET email_users = :email, modified_at_users = NOW() WHERE id_users = :id");
         $req->execute(array(
             "email" => $email,
@@ -182,8 +175,7 @@ WHERE users.id_users = :id;");
     }
     public function modifyPassword($id, $password)
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $req = $bdd->prepare("UPDATE users SET password_users = :password, modified_at_users = NOW() WHERE id_users = :id");
         $password = password_hash($password, PASSWORD_DEFAULT);
         $req->execute(array(
@@ -193,8 +185,7 @@ WHERE users.id_users = :id;");
     }
     public function modifyClientField($id, $field, $client, $value)
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $req = $bdd->prepare("UPDATE client SET {$client} = :value WHERE users_id = :id");
         $req->execute(array(
             "value" => $value,
@@ -204,8 +195,7 @@ WHERE users.id_users = :id;");
     }
     public function modifyAvatar($id, $filename)
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $req = $bdd->prepare("UPDATE users SET avatar_users = :avatar, modified_at_users = NOW() WHERE id_users = :id");
         $req->execute(array(
             "avatar" => $filename,
@@ -214,8 +204,7 @@ WHERE users.id_users = :id;");
     }
     public function getAllUsers()
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $req = $bdd->prepare("SELECT users.id_users, users.login_users, users.email_users, users.type_compte_users, users.avatar_users, users.created_at_users FROM users");
         $req->execute();
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
@@ -223,8 +212,7 @@ WHERE users.id_users = :id;");
     }
     public function getUser($id)
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $req = $bdd->prepare("SELECT users.id_users, users.login_users, users.email_users, users.type_compte_users, users.avatar_users, users.created_at_users FROM users WHERE id_users = :id");
         $req->execute(array(
             "id" => $id
@@ -234,8 +222,7 @@ WHERE users.id_users = :id;");
     }
     public function deleteUser($id)
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         // Table users
         $req1 = $bdd->prepare("DELETE FROM users WHERE id_users = :id");
         $req1->execute(["id" => $id]);
@@ -262,8 +249,7 @@ WHERE users.id_users = :id;");
     }
     public function updateUserDroits($id, $droits)
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $req = $bdd->prepare("UPDATE users SET type_compte_users = :droits WHERE id_users = :id");
         $req->execute(array(
             "droits" => $droits,
@@ -272,8 +258,7 @@ WHERE users.id_users = :id;");
     }
     public function numberOfPagesForUser($searchUser, $order = 'DESC')
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $Query = "SELECT COUNT(*) as nb FROM users";
         if (!empty($searchUser)) {
             $Query = "SELECT COUNT(*) as nb FROM users WHERE login_users LIKE '%{$searchUser}%'";
@@ -292,8 +277,7 @@ WHERE users.id_users = :id;");
     }
     public function getUserInfoByPages($page = 1, $searchUser = '', $order = 'DESC')
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
 
         // Définir la page par défaut si elle est nulle ou inférieure à 0
         $page = max(1, $page);
@@ -319,8 +303,7 @@ WHERE users.id_users = :id;");
     }
     public function verifyIfUsersInfoExists($users_id)
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $req = $bdd->prepare("SELECT * FROM client WHERE users_id = :users_id");
         $req->execute(array(
             "users_id" => $users_id
@@ -350,11 +333,45 @@ WHERE users.id_users = :id;");
     }
     public function getUserInfo($users_id)
     {
-        $db = new Database();
-        $bdd = $db->getBdd();
+        $bdd = $this->getBdd();
         $req = $bdd->prepare("SELECT * FROM client WHERE users_id = :users_id");
         $req->execute(array(
             "users_id" => $users_id
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+    /**
+     * Summary of getAllInfoForProfil
+     * @param int $id_users
+     * @return array
+     */
+    public function getAllInfoForProfil(int $id_users) : array
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT 
+                            u.login_users, 
+                            u.email_users, 
+                            u.avatar_users,
+                            u.created_at_users, 
+                            COUNT(DISTINCT cmd.id_commande) AS nombre_commandes, 
+                            COUNT(DISTINCT av.id_avis) AS nombre_avis, 
+                            COUNT(DISTINCT com.id_comment) AS nombre_commentaires 
+                        FROM 
+                            users u 
+                            LEFT JOIN client cl ON u.id_users = cl.users_id 
+                            LEFT JOIN commande cmd ON cl.id_client = cmd.users_id 
+                            LEFT JOIN avis_client av ON cl.id_client = av.users_id 
+                            LEFT JOIN comment_avis com ON cl.id_client = com.users_id 
+                        WHERE 
+                            u.id_users = :id_users
+                        GROUP BY 
+                            u.login_users, 
+                            u.email_users, 
+                            u.created_at_users
+                        ");
+        $req->execute(array(
+            "id_users" => $id_users
         ));
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;

@@ -20,12 +20,12 @@ if (isset($_SESSION['login']) != null) { ?>
 </header>
 <main class="bg-[#242629]">
     <article class="flex flex-col items-center">
-        <section id="containerFormCommandeInfo"></section>
-        <div id="containerFormProfil">
-            <button type="button" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
-                    id="buttonFormProfilInfo">Modifier mes informations
+        <section id="containerInfoUsers" class="pt-6"></section>
+        <div id="containerFormProfil" class="pt-4">
+            <button type="button" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-[14px]"
+                    id="buttonFormProfilInfo">Détails du compte
             </button>
-            <button type="button" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
+            <button type="button" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-[14px]"
                     id="buttonFormCommandeInfo">Mes commandes
             </button>
         </div>
