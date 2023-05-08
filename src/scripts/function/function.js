@@ -6,7 +6,7 @@ function displayError(message) {
     // Effacer le message après 3 secondes
     setTimeout(() => {
         message.style.display = 'none';
-    }, 3000);
+    }, 5000);
 }
 
 // Fonction pour la gestion des messages de success
@@ -290,16 +290,28 @@ async function Login(btnLogin) {
                         .then(response => response.json())
                         .then(data => {
                             let message = document.querySelector('#errorMsg');
-                            if (data.status === 'success') {
-                                message.innerHTML = data.message;
+                            const loginInput = document.getElementById("login");
+                            const passwordInput = document.getElementById("password");
+                            // Small
+                            const smallLogin = document.getElementById("errorLogin");
+                            const smallPassword = document.getElementById("errorPassword");
+                            updateField(data, 'login', loginInput, smallLogin);
+                            updateField(data, 'password', passwordInput, smallPassword);
+
+                            if (data.login || data.password) {
+                                message.innerHTML = 'Veuillez remplir tous les champs';
+                                displayError(message);
+                            }
+                            if (data.error) {
+                                message.innerHTML = data.error;
+                                displayError(message);
+                            }
+                            if (data.success) {
+                                message.innerHTML = data.success;
                                 displaySuccess(message);
                                 setTimeout(() => {
                                     window.location.reload();
                                 }, 1000);
-                            }
-                            if (data.status === 'error') {
-                                message.innerHTML = data.message;
-                                displayError(message);
                             }
                         });
                 });
@@ -322,16 +334,28 @@ async function Login(btnLogin) {
                                 .then(response => response.json())
                                 .then(data => {
                                     let message = document.querySelector('#errorMsg');
-                                    if (data.status === 'success') {
-                                        message.innerHTML = data.message;
+                                    const loginInput = document.getElementById("login");
+                                    const passwordInput = document.getElementById("password");
+                                    // Small
+                                    const smallLogin = document.getElementById("errorLogin");
+                                    const smallPassword = document.getElementById("errorPassword");
+                                    updateField(data, 'login', loginInput, smallLogin);
+                                    updateField(data, 'password', passwordInput, smallPassword);
+
+                                    if (data.login || data.password) {
+                                        message.innerHTML = 'Veuillez remplir tous les champs';
+                                        displayError(message);
+                                    }
+                                    if (data.error) {
+                                        message.innerHTML = data.error;
+                                        displayError(message);
+                                    }
+                                    if (data.success) {
+                                        message.innerHTML = data.success;
                                         displaySuccess(message);
                                         setTimeout(() => {
                                             window.location.reload();
                                         }, 1000);
-                                    }
-                                    if (data.status === 'error') {
-                                        message.innerHTML = data.message;
-                                        displayError(message);
                                     }
                                 });
                         });
@@ -374,10 +398,19 @@ async function Login(btnLogin) {
                                         message.innerHTML = 'Veuillez remplir tous les champs';
                                         displayError(message);
                                     }
-                                    if (data.success) {
-                                        message.innerHTML = 'Votre compte a bien été créé';
-                                        displaySuccess(message);
+                                    function displayMessage(data, field, message) {
+                                        if (data[field]) {
+                                            message.innerHTML = data[field];
+                                            displayError(message);
+                                        }
                                     }
+                                    displayMessage(data, 'errorLogin', message);
+                                    displayMessage(data, 'errorEmail', message);
+                                    displayMessage(data, 'errorPassword', message);
+                                    displayMessage(data, 'errorPasswordConfirm', message);
+                                    displayMessage(data, 'validEmail', message);
+                                    displayMessage(data, 'success', message);
+
                                 });
                         });
                     })
