@@ -1,14 +1,35 @@
 <?php
 session_start();
 require_once "../../Classes/Client.php"; // On inclut la classe Client
+function verifyField($field)
+    {
+        if (isset($_POST[$field]) && !empty(trim($_POST[$field]))) {
+            return $_POST[$field];
+        } else {
+            return false;
+        }
+    }
 
 if(isset($_POST['login'])) {
+    $error = [];
     $login = htmlspecialchars($_POST['login']);
     $email = htmlspecialchars($_POST['email']);
     $password = htmlspecialchars($_POST['password']);
     $password2 = htmlspecialchars($_POST['passwordConfirm']);
 
-    if(!empty($login) && !empty($email) && !empty($password) && !empty($password2)) {
+    if (!verifyField('login')) {
+        $error['login'] = "Veuillez entrer un login";
+    }
+    if (!verifyField('email')) {
+        $error['email'] = "Veuillez entrer une adresse email";
+    }
+    if (!verifyField('password')) {
+        $error['password'] = "Veuillez entrer un mot de passe";
+    }
+    if (!verifyField('passwordConfirm')) {
+        $error['passwordConfirm'] = "Veuillez confirmer votre mot de passe";
+    }
+    if (empty($error)) {
         $client = new Client();
         if ($client->checkLogin($login) === false) {
             if ($client->validEmail($email)) {
@@ -16,34 +37,29 @@ if(isset($_POST['login'])) {
                     if ($client->validPassword($password) === true) {
                        if ($password === $password2) {
                            $client->register($login, $password, $email);
-                            header("Content-Type: application/json");
-                            echo json_encode(['status' => 'success', 'message' => 'Votre compte a bien été créé']);
+                           $error['success'] = "Votre compte a bien été créé";
                        } else {
-                            header("Content-Type: application/json");
-                            echo json_encode(['status' => 'error', 'message' => 'Les mots de passe ne correspondent pas']);
+                            $error['passwordConfirm'] = "Les mots de passe ne correspondent pas";
                        }
                     } else {
-                        header("Content-Type: application/json");
-                        echo json_encode(['status' => 'error', 'message' => 'Le mot de passe doit contenir au moins 8 caractères, 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial']);
+                        $error['password'] = "Votre mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre";
                     }
                 } else {
-                    header("Content-Type: application/json");
-                    echo json_encode(['status' => 'error', 'message' => 'Cette adresse email est déjà utilisée']);
+                    $error['email'] = "Cette adresse email est déjà utilisée";
                 }
             } else {
-                header("Content-Type: application/json");
-                echo json_encode(['status' => 'error', 'message' => 'Veuillez entrer une adresse email valide']);
+                $error['email'] = "Veuillez entrer une adresse email valide";
             }
         } else {
-            header("Content-Type: application/json");
-            echo json_encode(['status' => 'error', 'message' => 'Ce login est déjà utilisé']);
+            $error['login'] = "Ce login est déjà utilisé";
         }
-    } else {
-        header("Content-Type: application/json");
-        echo json_encode(['status' => 'error', 'message' => 'Veuillez remplir tous les champs']);
     }
+    header('Content-Type: application/json');
+    echo json_encode($error);
     die();
 }
+
+
 
 ?>
 
@@ -51,20 +67,25 @@ if(isset($_POST['login'])) {
                 mobileL:h-[40rem] mobileL:max-h-[calc(100vh-5rem)]
                 w-[26.25rem] px-4 py-5 flex flex-col justify-around">
     <div class="relative">
-        <input type="text" name="login" id="login" placeholder="Entrez votre login" class="px-2.5 pt-4 pb-1 text-white bg-[#52586633] hover:bg-[#31333a] rounded-[14px] border-l-2 border-[#a87ee6] w-full">
+        <input type="text" name="login" id="login" placeholder="Entrez votre login" class="px-2.5 pt-4 pb-1 text-white bg-[#52586633] hover:bg-[#31333a] rounded-[14px] textField_border w-full">
         <label for="login" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Login</label>
+        <small id="errorLogin" class="flex items-center h-4 text-red-500 px-2 my-1 "></small>
     </div>
     <div class="relative">
-        <input type="text" name="email" id="E-mail" placeholder="Entrez votre E-mail" class="px-2.5 pt-4 pb-1 text-white bg-[#52586633] hover:bg-[#31333a] rounded-[14px] border-l-2 border-[#a87ee6] w-full">
+        <input type="text" name="email" id="E-mail" placeholder="Entrez votre E-mail" class="px-2.5 pt-4 pb-1 text-white bg-[#52586633] hover:bg-[#31333a] rounded-[14px] textField_border w-full">
         <label for="login" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">E-mail</label>
+        <small id="errorEmail" class="flex items-center h-4 text-red-500 px-2 my-1 "></small>
     </div>
+
     <div class="relative">
-        <input type="password" name="password" id="password" placeholder="Entrez votre mot de passe" class="px-2.5 pt-4 pb-1 text-white bg-[#52586633] hover:bg-[#31333a] rounded-[14px] border-l-2 border-[#a87ee6] w-full">
+        <input type="password" name="password" id="password" placeholder="Entrez votre mot de passe" class="px-2.5 pt-4 pb-1 text-white bg-[#52586633] hover:bg-[#31333a] rounded-[14px] textField_border w-full">
         <label for="password" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Mot de passe</label>
+        <small id="errorPassword" class="flex items-center h-4 text-red-500 px-2 my-1"></small>
     </div>
     <div class="relative">
-        <input type="password" name="passwordConfirm" id="passwordConfirm" placeholder="Confirmer le mot de passe" class="px-2.5 pt-4 pb-1 text-white bg-[#31333a] hover:bg-[#21262D] rounded-[14px] border-l-2 border-[#a87ee6] w-full">
+        <input type="password" name="passwordConfirm" id="passwordConfirm" placeholder="Confirmer le mot de passe" class="px-2.5 pt-4 pb-1 text-white bg-[#31333a] hover:bg-[#21262D] rounded-[14px] textField_border w-full">
         <label for="passwordConfirm" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Confirmer le mot de passe</label>
+        <small id="errorC_Password" class="flex items-center h-4 text-red-500 px-2 my-1"></small>
     </div>
     <div id="containerMessageProfil" class="h-[85px] w-full">
         <div id="errorMsg"></div>

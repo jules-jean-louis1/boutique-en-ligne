@@ -197,13 +197,38 @@ function registerHeader(BtnRegister) {
         });
     });
 }
+function updateField(data, fieldName, fieldInput, smallField) {
+    if (data[fieldName]) {
+        fieldInput.addEventListener('keyup', () => {
+            const fieldValue = fieldInput.value;
+            if (fieldValue === ''){
+                smallField.innerHTML = '';
+                smallField.innerHTML = `${data[fieldName]}`;
+                smallField.classList.add('text-red-500');
+                fieldInput.classList.remove('textField_border');
+                fieldInput.classList.add('textField_invalid');
+            } else {
+                smallField.innerHTML = '';
+                fieldInput.classList.remove('textField_invalid');
+                fieldInput.classList.add('textField_border');
+            }
+        });
+        smallField.innerHTML = '';
+        smallField.innerHTML = `${data[fieldName]}`;
+        fieldInput.classList.remove('textField_border');
+        smallField.classList.add('text-red-500');
+        fieldInput.classList.add('textField_invalid');
+    }
+}
+
+
 // Amelioration du formulaire d'inscription
 async function Login(btnLogin) {
     const containerForm = document.getElementById("containerLoginRegisterForm");
     function createDialog() {
         const dialog = document.createElement("dialog");
         dialog.setAttribute("id", "dialog");
-        dialog.setAttribute("class", "md:w-[45%] lg:max-w-[25%] h-[55%] bg-[#202225] border-[1px] border-[#a8b3cf33] rounded-[14px] shadow-lg");
+        dialog.setAttribute("class", "w-[26.25rem] h-[55%] bg-[#202225] border-[1px] border-[#a8b3cf33] rounded-[14px] shadow-lg");
 
         const divBottom = document.createElement("div");
         divBottom.setAttribute("id", "divBottom");
@@ -327,14 +352,31 @@ async function Login(btnLogin) {
                             })
                                 .then(response => response.json())
                                 .then(data => {
+                                    console.log(data);
                                     let message = document.querySelector('#errorMsg');
-                                    if (data.status === 'success') {
-                                        message.innerHTML = data.message;
-                                        displaySuccess(message);
-                                    }
-                                    if (data.status === 'error') {
-                                        message.innerHTML = data.message;
+                                    const loginInput = document.getElementById("login");
+                                    const emailInput = document.getElementById("E-mail");
+                                    const passwordInput = document.getElementById("password");
+                                    const passwordConfirmInput = document.getElementById("passwordConfirm");
+
+                                    // Small
+                                    const smallLogin = document.getElementById("errorLogin");
+                                    const smallEmail = document.getElementById("errorEmail");
+                                    const smallPassword = document.getElementById("errorPassword");
+                                    const smallPasswordConfirm = document.getElementById("errorC_Password");
+
+                                    updateField(data, 'login', loginInput, smallLogin);
+                                    updateField(data, 'email', emailInput, smallEmail);
+                                    updateField(data, 'password', passwordInput, smallPassword);
+                                    updateField(data, 'passwordConfirm', passwordConfirmInput, smallPasswordConfirm);
+
+                                    if (data.login || data.email || data.password || data.passwordConfirm) {
+                                        message.innerHTML = 'Veuillez remplir tous les champs';
                                         displayError(message);
+                                    }
+                                    if (data.success) {
+                                        message.innerHTML = 'Votre compte a bien été créé';
+                                        displaySuccess(message);
                                     }
                                 });
                         });

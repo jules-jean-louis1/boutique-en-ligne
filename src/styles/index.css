@@ -260,3 +260,17 @@ body {
     font-family: "Anek Latin", sans-serif;
     transition: color 600ms;
 }
+.textField_invalid {
+    box-shadow: inset 3px 0 0 0 #ff0000;
+}
+.textField_valid {
+    box-shadow: inset 3px 0 0 0 #39e58c;
+}
+.textField_border {
+    box-shadow: inset 3px 0 0 0 #a87ee6;
+}
+.textField_border:focus {
+    box-shadow: inset 3px 0 0 0 #a8b3cf;
+    outline: #a8b3cf;
+    border: 1px solid #a8b3cf;
+}
