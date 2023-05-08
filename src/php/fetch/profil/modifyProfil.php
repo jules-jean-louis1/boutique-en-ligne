@@ -2,17 +2,6 @@
 session_start();
 require_once "../../Classes/Client.php"; // On inclut la classe Client
 
-/*$login = htmlspecialchars($_POST['login']);
-$email = htmlspecialchars($_POST['email']);
-$password = htmlspecialchars($_POST['password']);
-$passwordConfirm = htmlspecialchars($_POST['passwordConfirm']);
-$nom = htmlspecialchars($_POST['surname']);
-$prenom = htmlspecialchars($_POST['firstname']);
-$phone = htmlspecialchars($_POST['phone']);
-$adresse = htmlspecialchars($_POST['address']);
-$ville = htmlspecialchars($_POST['city']);
-$codePostal = htmlspecialchars($_POST['zipcode']);
-$pays = htmlspecialchars($_POST['country']);*/
 $errors = array();
 $success = array();
 
