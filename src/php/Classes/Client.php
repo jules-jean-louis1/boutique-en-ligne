@@ -227,7 +227,7 @@ WHERE users.id_users = :id;");
         $req1 = $bdd->prepare("DELETE FROM users WHERE id_users = :id");
         $req1->execute(["id" => $id]);
         // Table avis_client
-        $req2 = $bdd->prepare("DELETE FROM avis_client WHERE client_id = :id");
+        $req2 = $bdd->prepare("DELETE FROM avis_client WHERE users_id = :id");
         $req2->execute(["id" => $id]);
         // Table client
         $req3 = $bdd->prepare("DELETE FROM client WHERE users_id = :id");

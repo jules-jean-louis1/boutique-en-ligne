@@ -1021,90 +1021,106 @@ async function fetchUser(page, search, order) {
     if (data.status === 'success') {
         const users = JSON.parse(data.users);
         containerUserInfo.innerHTML = '';
-        for (let user of users) {
-            let optionHtml = '';
-            if (user.type_compte_users === 'administrateur') {
-                optionHtml = `
-                        <option value="utilisateur">client</option>
-                    `;
-            } else if (user.type_compte_users === 'client') {
-                optionHtml = `
-                        <option value="administrateur">administrateur</option>
-                    `;
+        let tableHtml = `
+                <table class="text-white border border-[#a8b3cf33] rounded-[14px]">
+                  <thead class="bg-[#0e1217]">
+                    <tr class=" border border-[#a8b3cf33]">
+                        <th class="p-2 border border-[#a8b3cf33]">Login</th>
+                        <th class="p-2 border border-[#a8b3cf33]">Email</th>
+                        <th class="p-2 border border-[#a8b3cf33]">Type de compte</th>
+                        <th class="p-2 border border-[#a8b3cf33]">Date d'inscription</th>
+                        <th class="p-2 border border-[#a8b3cf33]">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                `;
+            for (let user of users) {
+                    let optionHtml = '';
+                    if (user.type_compte_users === 'administrateur') {
+                        optionHtml = `
+              <option value="utilisateur">client</option>
+            `;
+                    } else if (user.type_compte_users === 'client') {
+                        optionHtml = `
+              <option value="administrateur">administrateur</option>
+            `;
             }
-                containerUserInfo.innerHTML += `
-                <div class="flex items-center justify-between bg-[#43464c] p-2 text-white w-full">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="p-1">
-                                    ${user.id_users}
-                                </div>
-                                </td>
-                            <td>
-                                <div class="p-1 flex items-center space-x-2">
-                                    <img src="src/images/avatars/${user.avatar_users}" alt="" class="rounded-full w-6">
-                                    <p>${user.login_users}</p>
-                                </div>
-                            </td>
-                            <td>${user.email_users}</td>
-                            <td>
-                                <div id="containerUpdateDroits_${user.id_users}" class="flex">
-                                    <form action="resources/assests/fetch/updateDroits.php" method="post" id="updateDroits_${user.id_users}" data-id="${user.id_users}" class="flex space-x-2">
-                                        <select name="droits" id="droits" class="p-4 bg-[#1c1f26] rounded-[14px] border-[1px] border-[#a8b3cf33]">
-                                            <option value="${user.type_compte_users}">${user.type_compte_users}</option>
-                                            ${optionHtml}
-                                        </select>
-                                        <div id="btnSubmit">
-                                            <button type="submit" class="hover:bg-[#39E58C98] p-2 rounded-lg duration-100 ease-in "
-                                                    name="btnUpdateDroits" id="btnUpdateDroits">
-                                                    <img src="public/images/icones/edit-color-font.svg" alt="" class="filter-green">
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </td>
-                            <td>${formatDate(user.created_at_users)}</td>
-                            <td>
-                                <div id="btnForDeleteUser">
-                                    <button class="hover:bg-[#FF000061] p-2 rounded-lg text-white" id="btnDeleteUser_${user.id_users}">
-                                    <img src="public/images/icones/suppr-user.svg" alt="" class="filter-red">
+            tableHtml += `
+                <tr class="py-2 border border-[#a8b3cf33]">
+                    <td class="flex justify-center">
+                        <div class="p-1 flex items-center space-x-2">
+                            <img src="src/images/avatars/${user.avatar_users}" alt="" class="rounded-full w-6">
+                            <p>${user.login_users}</p>
+                        </div>
+                    </td>
+                    <td class="text-center">${user.email_users}</td>
+                    <td class="flex justify-center"> 
+                        <div id="containerUpdateDroits_${user.id_users}" class="flex">
+                            <form action="resources/assests/fetch/updateDroits.php" method="post" id="updateDroits_${user.id_users}" data-id="${user.id_users}" class="flex space-x-2">
+                                <select name="droits" id="droits" class="p-4 bg-[#1c1f26] rounded-[14px] border-[1px] border-[#a8b3cf33]">
+                                    <option value="${user.type_compte_users}">${user.type_compte_users}</option>
+                                    ${optionHtml}
+                                </select>
+                                <div id="btnSubmit">
+                                    <button type="submit" class="hover:bg-[#39E58C98] p-2 rounded-lg duration-100 ease-in "
+                                            name="btnUpdateDroits" id="btnUpdateDroits">
+                                            <img src="public/images/icones/edit-color-font.svg" alt="" class="filter-green">
                                     </button>
                                 </div>
-                            </td> 
-                        </tr>
-                    </tbody>
-                </div>
-                `;
-
-        }
-        for (let user of users) {
-            const btnDeleteUser = document.querySelector(`#btnDeleteUser_${user.id_users}`);
-            btnDeleteUser.addEventListener('click', async () => {
-                await fetch(`src/php/fetch/client/deleteUser.php?id=${user.id_users}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data);
-                    })
-            })
-            const btnUpdateDroits = document.querySelector(`#updateDroits_${user.id_users}`);
-            btnUpdateDroits.addEventListener('submit', async (ev) => {
-                ev.preventDefault();
-                const id = btnUpdateDroits.dataset.id;
-                await fetch(`src/php/fetch/client/updateDroits.php?id=${id}`, {
-                    method: 'POST',
-                    body: new FormData(btnUpdateDroits)
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            message.innerHTML = data.message;
-                            displaySuccess(message);
-                            gestionUser();
+                            </form>
+                        </div>
+                    </td>
+                    <td class="text-center">${formatDate(user.created_at_users)}</td>
+                    <td class="flex justify-center">
+                        <div id="btnForDeleteUser">
+                            <button class="hover:bg-[#FF000061] p-2 rounded-lg text-white" id="btnDeleteUser_${user.id_users}">
+                            <img src="public/images/icones/suppr-user.svg" alt="" class="filter-red">
+                            </button>
+                        </div>
+                    </td> 
+                </tr>
+                        `;
                         }
+                        tableHtml += `
+                  </tbody>
+                </table>
+                `;
+                    containerUserInfo.innerHTML = tableHtml;
+            for (let user of users) {
+                const btnDeleteUser = document.querySelector(`#btnDeleteUser_${user.id_users}`);
+                btnDeleteUser.addEventListener('click', async () => {
+                    await fetch(`src/php/fetch/client/deleteUser.php?id=${user.id_users}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                message.innerHTML = data.message;
+                                displaySuccess(message);
+                                gestionUser();
+                            }
+                            if (data.status === 'error') {
+                                message.innerHTML = data.message;
+                                displayError(message);
+                            }
+                        })
+                })
+                const btnUpdateDroits = document.querySelector(`#updateDroits_${user.id_users}`);
+                btnUpdateDroits.addEventListener('submit', async (ev) => {
+                    ev.preventDefault();
+                    const id = btnUpdateDroits.dataset.id;
+                    await fetch(`src/php/fetch/client/updateDroits.php?id=${id}`, {
+                        method: 'POST',
+                        body: new FormData(btnUpdateDroits)
                     })
-            })
-        }
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                message.innerHTML = data.message;
+                                displaySuccess(message);
+                                gestionUser();
+                            }
+                        })
+                })
+            }
     } if (data.status === 'error') {
         containerUserInfo.innerHTML = 'Aucun utilisateur trouvé';
     }
