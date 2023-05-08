@@ -260,8 +260,10 @@ WHERE users.id_users = :id;");
     {
         $bdd = $this->getBdd();
         $Query = "SELECT COUNT(*) as nb FROM users";
+        $params = [];
         if (!empty($searchUser)) {
-            $Query = "SELECT COUNT(*) as nb FROM users WHERE login_users LIKE '%{$searchUser}%'";
+            $Query = "SELECT COUNT(*) as nb FROM users WHERE login_users LIKE ?";
+            $params[] = "%{$searchUser}%";
         }
         if ($order == 'ASC') {
             $Query .= " ORDER BY `users`.`created_at_users` ASC";
@@ -269,7 +271,7 @@ WHERE users.id_users = :id;");
             $Query .= " ORDER BY `users`.`created_at_users` DESC";
         }
         $req = $bdd->prepare($Query);
-        $req->execute();
+        $req->execute($params);
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         $nb = $result[0]['nb'];
         $nbPages = ceil($nb / 10);
@@ -282,10 +284,13 @@ WHERE users.id_users = :id;");
         // Définir la page par défaut si elle est nulle ou inférieure à 0
         $page = max(1, $page);
 
+        $start = ($page - 1) * 10;
+        $limit = 10;
+
         $query = "SELECT users.id_users, users.login_users, users.email_users, users.type_compte_users, users.avatar_users, users.created_at_users FROM users";
 
         if (!empty($searchUser)) {
-            $query .= " WHERE login_users LIKE '%" . $searchUser . "%'";
+            $query .= " WHERE login_users LIKE :searchUser";
         }
 
         if ($order == 'ASC') {
@@ -294,13 +299,24 @@ WHERE users.id_users = :id;");
             $query .= " ORDER BY `users`.`created_at_users` DESC";
         }
 
-        $query .= " LIMIT " . (($page - 1) * 10) . ", 10";
+        $query .= " LIMIT :start, :limit";
 
-        $req = $bdd->prepare($query);
-        $req->execute();
-        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $bdd->prepare($query);
+
+        if (!empty($searchUser)) {
+            $stmt->bindValue(':searchUser', '%' . $searchUser . '%');
+        }
+
+        $stmt->bindValue(':start', $start, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         return $result;
     }
+
     public function verifyIfUsersInfoExists($users_id)
     {
         $bdd = $this->getBdd();

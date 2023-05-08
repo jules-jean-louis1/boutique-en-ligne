@@ -952,8 +952,8 @@ async function paginationUser(search, order, parentSelector) {
                 const page = data.pages[i];
                 if (page > 0) {
                     pageUser += `
-                    <li class="flex space-x-1">
-                        <button class="page-link" id="pageUser${page}">${page}</button>
+                    <li class="flex p-2">
+                        <button class="page-link px-4 py-2 rounded-[14px] bg-white" id="pageUser${page}">${page}</button>
                     </li>
                 `;
                 }
@@ -963,21 +963,26 @@ async function paginationUser(search, order, parentSelector) {
 }
 const params = new URLSearchParams(window.location.search);
 const page = params.get('page') || 1;
-// Fonction de gestion des utilisateurs
-let search = '';
-let order = 'DESC';
+const search = params.get('search') || '';
+const order = params.get('order') || 'DESC';
 async function gestionUser(page, search, order) {
     const modiyprofil = document.querySelector('#containerModifyProduct');
     modiyprofil.className = 'flex justify-center';
+    let wapperUserInfos1 = document.querySelector('#wapperUserInfos');
+    if (wapperUserInfos1) {
+        wapperUserInfos1.remove();
+    }
     const wapperUserInfos = document.createElement('div');
     wapperUserInfos.setAttribute('id', 'wapperUserInfos');
     wapperUserInfos.className = 'flex flex-col justify-center items-around space-y-2 w-8/12';
     containerAllDiv.appendChild(wapperUserInfos);
+    wapperUserInfos.innerHTML = '';
 
     const containerFormSearch = document.createElement('div');
     containerFormSearch.setAttribute('id', 'containerFormSearch');
     containerFormSearch.setAttribute('class', 'flex justify-between items-center');
     wapperUserInfos.appendChild(containerFormSearch);
+    containerFormSearch.innerHTML = '';
 
     const containerUserInfo = document.createElement('div');
     containerUserInfo.setAttribute('id', 'containerUserInfo');
@@ -989,11 +994,11 @@ async function gestionUser(page, search, order) {
     containerPagination.setAttribute('id', 'containerPagination');
     containerPagination.setAttribute('class', 'flex justify-center');
     wapperUserInfos.appendChild(containerPagination);
+    containerPagination.innerHTML = '';
 
     containerFormSearch.innerHTML = `
         <form action="" method="post" class="flex justify-between items-center space-x-2 m-2 bg-[#242629] text-white w-full" id="formSearchUser">
             <input type="text" name="search" id="search" placeholder="Rechercher un utilisateur" class="p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
-            <label for="order">Date de création</label>
             <select name="order" id="order" class="p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
                 <option value="DESC">Plus récent</option>
                 <option value="ASC">Plus ancien</option>
@@ -1012,10 +1017,12 @@ async function gestionUser(page, search, order) {
         order = ev.target.value;
         fetchUser(page, search, order);
     });
-    paginationUser(search, order, containerPagination);
+    paginationUser(search = '', order = 'DESC', containerPagination);
 }
 
-async function fetchUser(page, search, order) {
+async function fetchUser(page = 1, search = '', order = 'DESC') {
+
+    console.log(page, search, order);
     const response = await fetch(`src/php/fetch/dashboard/gestionUser.php?page=${page}&search=${search}&order=${order}`);
     const data = await response.json();
     if (data.status === 'success') {
@@ -1029,7 +1036,8 @@ async function fetchUser(page, search, order) {
                         <th class="p-2 border border-[#a8b3cf33]">Email</th>
                         <th class="p-2 border border-[#a8b3cf33]">Type de compte</th>
                         <th class="p-2 border border-[#a8b3cf33]">Date d'inscription</th>
-                        <th class="p-2 border border-[#a8b3cf33]">Actions</th>
+                        <th class="p-2 border border-[#a8b3cf33]">Profil</th>
+                        <th class="p-2 border border-[#a8b3cf33]">Suppression</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1038,7 +1046,7 @@ async function fetchUser(page, search, order) {
                     let optionHtml = '';
                     if (user.type_compte_users === 'administrateur') {
                         optionHtml = `
-              <option value="utilisateur">client</option>
+              <option value="client">client</option>
             `;
                     } else if (user.type_compte_users === 'client') {
                         optionHtml = `
@@ -1071,10 +1079,17 @@ async function fetchUser(page, search, order) {
                         </div>
                     </td>
                     <td class="text-center">${formatDate(user.created_at_users)}</td>
-                    <td class="flex justify-center">
+                    <td class="text-center">
+                        <div id="btnForUpdateUser">
+                            <button class="p-2 rounded-lg duration-100 ease-in" id="btnUpdateUser_${user.id_users}">
+                                <svg width="1.5em" height="1.5em" viewBox="-2 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 0a6.333 6.333 0 0 1 6.333 6.333c0 2.087-1.02 4.002-2.728 5.203l-.234.155.404.132.402.147.14.06.341.162c3.045 1.52 5.062 4.421 5.317 7.73l.02.357.006.354v.47l-.006.152-.01.138-.018.154a2.89 2.89 0 0 1-2.45 2.414l-.225.023-.283.018-2.646-.586a1.334 1.334 0 0 1-1.044-1.371l.017-.15.396-2.382.021-.153a1.334 1.334 0 0 0-1.108-1.445l-.11-.013-.109-.004-4.786-.002-.155.004c-.642.042-1.158.541-1.234 1.128l-.01.148.003.128.016.146.406 2.446a1.334 1.334 0 0 1-.883 1.48l-.145.04-2.645.586-.376-.026-.172-.02C1.192 23.762.213 22.769.028 21.45l-.024-.236L0 21.028l.002-.479.008-.354c.155-3.542 2.364-6.678 5.818-8.227.265-.102.531-.194.798-.276l-.023-.013A6.333 6.333 0 0 1 10 0Zm0 19.333A1.333 1.333 0 1 1 10 22a1.333 1.333 0 0 1 0-2.667Zm.002-6.16c-1.153 0-2.306.22-3.459.662-2.563 1.153-4.278 3.48-4.514 6.128l-.021.32-.007.31-.001.44.003.13.02.136c.07.309.301.556.6.65l.13.032.09.006 1.746-.387-.302-1.823-.025-.181-.015-.182-.005-.183.007-.22a3.334 3.334 0 0 1 2.892-3.085l.215-.021.22-.007h4.85l.183.005a3.333 3.333 0 0 1 3.15 3.44l-.015.216-.03.217-.302 1.824 1.753.388.138-.02a.89.89 0 0 0 .657-.598l.03-.131.011-.138v-.47l-.005-.316-.02-.321c-.207-2.45-1.682-4.627-3.916-5.858l-.295-.155-.304-.144-.432-.155a9.47 9.47 0 0 0-3.027-.509ZM10 2a4.333 4.333 0 1 0 1.796 8.278l.269-.134.258-.153.221-.15A4.333 4.333 0 0 0 10 2Z" fill="#A8B3CF" fill-rule="evenodd"/></svg>
+                            </button>
+                        </div>
+                    </td>
+                    <td class="text-center">
                         <div id="btnForDeleteUser">
                             <button class="hover:bg-[#FF000061] p-2 rounded-lg text-white" id="btnDeleteUser_${user.id_users}">
-                            <img src="public/images/icones/suppr-user.svg" alt="" class="filter-red">
+                                <svg width="32" height="32" viewBox="0 0 24 24" stroke="#a8b3cf" fill="none" stroke-linejoin="round" stroke-width="1.8" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M17.9997 18L19.7675 16.2322M17.9997 18L16.232 19.7678M17.9997 18L16.232 16.2322M17.9997 18L19.7675 19.7678M14.9997 14.1241C14.081 13.7227 13.0664 13.5 11.9997 13.5C8.5419 13.5 5.63061 15.84 4.76307 19.0229C4.4726 20.0886 5.39517 21 6.49974 21H12.9997M15.4997 7C15.4997 8.933 13.9327 10.5 11.9997 10.5C10.0667 10.5 8.49974 8.933 8.49974 7C8.49974 5.067 10.0667 3.5 11.9997 3.5C13.9327 3.5 15.4997 5.067 15.4997 7Z"></path></svg>
                             </button>
                         </div>
                     </td> 
@@ -1095,7 +1110,7 @@ async function fetchUser(page, search, order) {
                             if (data.status === 'success') {
                                 message.innerHTML = data.message;
                                 displaySuccess(message);
-                                gestionUser();
+                                fetchUser();
                             }
                             if (data.status === 'error') {
                                 message.innerHTML = data.message;
@@ -1120,10 +1135,19 @@ async function fetchUser(page, search, order) {
                             }
                         })
                 })
+                const btnUpdateUser = document.querySelector(`#updateUser_${user.id_users}`);
+                if (btnUpdateUser) {
+                    btnUpdateUser.addEventListener('click', async (ev) => {
+                        ev.preventDefault();
+                    });
+                }
             }
     } if (data.status === 'error') {
         containerUserInfo.innerHTML = 'Aucun utilisateur trouvé';
     }
+}
+async function OrderUser() {
+
 }
 
 

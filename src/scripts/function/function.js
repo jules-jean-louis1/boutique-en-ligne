@@ -409,8 +409,10 @@ async function Login(btnLogin) {
                                     displayMessage(data, 'errorPassword', message);
                                     displayMessage(data, 'errorPasswordConfirm', message);
                                     displayMessage(data, 'validEmail', message);
-                                    displayMessage(data, 'success', message);
-
+                                    if (data.success) {
+                                        message.innerHTML = data.success;
+                                        displaySuccess(message);
+                                    }
                                 });
                         });
                     })
