@@ -59,7 +59,7 @@ class Avis extends Database
                                     FROM comment_avis
                                     JOIN users u ON comment_avis.users_id = u.id_users
                                     WHERE comment_avis.product_id = :id_product
-                                    ORDER BY comment_avis.created_at ASC;");
+                                    ORDER BY comment_avis.comment_parent_id ASC;");
         $req->execute([
             "id_product" => $id_product
         ]);
@@ -130,13 +130,28 @@ class Avis extends Database
     public function searchIfCommentAsReply($id_comment)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT * FROM comment_avis WHERE comment_parent_id = :id_comment");
+        $req = $bdd->prepare("SELECT COUNT(comment_parent_id) FROM comment_avis WHERE comment_parent_id = :id_comment");
         $req->execute([
             "id_comment" => $id_comment
         ]);
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
-
-        return count($result) > 0 ? true : false;
+//        return count($result) > 0 ? true : false;
+    }
+public function updateReplyComment($id_comment)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("UPDATE comment_avis SET content_comment = 'Ce commentaire a était supprimer.' WHERE id_comment = :id_comment");
+        $req->execute([
+            "id_comment" => $id_comment
+        ]);
+    }
+    public function deleteReplyAvis($id_comment)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("DELETE FROM comment_avis WHERE id_comment = :id_comment");
+        $req->execute([
+            "id_comment" => $id_comment
+        ]);
     }
 }
