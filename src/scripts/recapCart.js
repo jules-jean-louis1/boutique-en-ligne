@@ -465,7 +465,6 @@ async function cardDetail() {
     });
 }
 
-
 recapCart();
 diplayShippingInfo();
 cardDetail();
