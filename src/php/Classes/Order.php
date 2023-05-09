@@ -151,4 +151,15 @@ class Order extends Database
             "statue_commande" => $statue_commande
         ));
     }
+    public function deleteOrder($id_commande)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("DELETE FROM commande, detail_commande
+                                    USING commande
+                                    JOIN detail_commande ON commande.id_commande = detail_commande.command_id
+                                    WHERE id_commande = :id_commande");
+        $req->execute(array(
+            "id_commande" => $id_commande
+        ));
+    }
 }

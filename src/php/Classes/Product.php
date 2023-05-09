@@ -105,7 +105,7 @@ class Product extends Database
         $req = $bdd->prepare("UPDATE product SET quantite_product = :stock, dispo_product = :dispo WHERE id_product = :id");
         $req->execute(array(
             "stock" => 0,
-            "dispo" => 0,
+            "dispo" => 1,
             "id" => $id
         ));
     }

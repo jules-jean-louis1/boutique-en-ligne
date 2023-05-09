@@ -172,10 +172,10 @@ function messagePopup(message, status) {
 // fonction de gestion des produits
 async function addProduct() {
     const buttonAddProductContainer = document.createElement('div');
-    buttonAddProductContainer.className = 'flex justify-center';
+    buttonAddProductContainer.className = 'flex justify-center pt-2';
     buttonAddProductContainer.innerHTML = `
-            <button type="button" class="bg-[#D74CF6] px-3 py-2 flex space-x-2 items-center text-[#0E1217] font-bold rounded-lg" id="buttonAddProduct">
-            <svg width="32" height="32" viewBox="0 0 24 24" stroke="#0E1217" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M6.99999 12H12M12 12H17M12 12V6.99999M12 12V17M21.5 12C21.5 17.2467 17.2467 21.5 12 21.5C6.75329 21.5 2.5 17.2467 2.5 12C2.5 6.75329 6.75329 2.5 12 2.5C17.2467 2.5 21.5 6.75329 21.5 12Z"></path></svg>
+            <button type="button" class="bg-[#a87ee6] px-4 py-2 flex space-x-4 items-center text-white font-bold rounded-lg" id="buttonAddProduct">
+            <svg width="32" height="32" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M6.99999 12H12M12 12H17M12 12V6.99999M12 12V17M21.5 12C21.5 17.2467 17.2467 21.5 12 21.5C6.75329 21.5 2.5 17.2467 2.5 12C2.5 6.75329 6.75329 2.5 12 2.5C17.2467 2.5 21.5 6.75329 21.5 12Z"></path></svg>
             Ajouter un produit
             </button>
                 `;
@@ -313,7 +313,7 @@ async function gestionProduct() {
     const containerFormProductSearch = document.createElement('div');
     containerFormProductSearch.className = 'flex justify-center text-white'
     const craftFormProductSearch = document.createElement('div');
-    craftFormProductSearch.className = 'flex justify-center w-8/12 pt-6 pb-4 overflow-y-auto border-b-2 border-[#a8b3cfa3]';
+    craftFormProductSearch.className = 'flex justify-center w-10/12 pt-6 pb-4 overflow-y-auto border-b-2 border-[#a8b3cfa3]';
     craftFormProductSearch.innerHTML = `
         <form action="" method="post" id="formProductSearch" class="w-full">
             <div class="flex justify-between w-full">
@@ -373,6 +373,7 @@ async function gestionProduct() {
         const subCategoryId = subCategorySelect.value;
         const ContainerDisplayProduct = document.createElement('div');
         ContainerDisplayProduct.id = 'displayProduct';
+        ContainerDisplayProduct.className = 'flex flex-col items-center justify-center';
         ContainerDisplayProduct.innerHTML = '';
 
         if (subCategoryId !== '0') {
@@ -380,7 +381,8 @@ async function gestionProduct() {
 
                 products.forEach(product => {
                     ContainerDisplayProduct.innerHTML += `
-                    <div class="flex m-1 p-2 bg-[#43464c] rounded-[14px] border-[1px] border-[#a8b3cf33] text-white">
+                <div class="w-10/12">
+                    <div class="flex m-1 p-2 px-4 bg-[#43464c] rounded-[14px] border-[1px] border-[#a8b3cf33] text-white">
                         <div id="displayProductContainer" class="w-[12rem] flex flex-col">
                             <img src="src/images/products/${product.img_product}" alt="${product.name_product}" class="max-w-fit">
                         </div>
@@ -395,31 +397,31 @@ async function gestionProduct() {
                                     <h2>${product.description_product}</h2>
                                 </div>
                             </div>
-                            <div id="containerProductInformation" class="flex justify-around">
+                            <div id="containerProductInformation" class="flex justify-between px-16">
                                 <div id="prix_produit" class="flex space-x-0.5">
-                                    <h2 class="font-normal text-slate-700">Prix :</h2>
+                                    <h2 class="font-normal text-white">Prix :</h2>
                                     <h2>${product.price_product} €</h2>
                                 </div>
                                 <div id="date_sortie_produit" class="flex space-x-0.5"> 
-                                    <h2 class="font-normal text-slate-700">Date de sortie :</h2>
+                                    <h2 class="font-normal text-white">Date de sortie :</h2>
                                     <h2>${formatDateSansh(product.released_date_product)}</h2>
                                 </div>
                                 <div id="categorie_produit" class="flex space-x-0.5">
-                                    <h2 class="font-normal text-slate-700">Genre :</h2>
+                                    <h2 class="font-normal text-white">Genre :</h2>
                                     <h2>${product.name_subcategories}</h2>
                                 </div>
                             </div>
-                            <div id="containerProductInformation" class="flex justify-around">
+                            <div id="containerProductInformation" class="flex justify-between px-16">
                                 <div id="stock_produit" class="flex space-x-0.5">
-                                    <h2 class="font-normal text-slate-700">Stock :</h2>
+                                    <h2 class="font-normal text-white">Stock :</h2>
                                     <h2>${product.quantite_product}</h2>
                                 </div>
                                 <div class="flex space-x-0.5">
-                                    <h2 class="font-normal text-slate-700">Nombre de vente :</h2> 
+                                    <h2 class="font-normal text-white">Nombre de vente :</h2> 
                                     <h2>${product.quantite_vendue}</h2>
                                 </div>
                             </div>
-                            <div id="containerBtnUpdateProduct" class="flex justify-around">
+                            <div id="containerBtnUpdateProduct" class="flex justify-between px-16">
                                 <div id="wapperFormUpdateProduct">
                                     <button type="button" class="bg-green-500 text-white p-2 rounded-lg" id="btnUpdateProduct_${product.id_product}" data-id-product="${product.id_product}">Modifier</button>
                                 </div>
@@ -432,6 +434,7 @@ async function gestionProduct() {
                                     </form>
                                 </div> 
                             </div>
+                        </div>
                     </div>
                     `;
                     containerAllDiv.appendChild(ContainerDisplayProduct);
@@ -974,7 +977,7 @@ async function gestionUser(page, search, order) {
     }
     const wapperUserInfos = document.createElement('div');
     wapperUserInfos.setAttribute('id', 'wapperUserInfos');
-    wapperUserInfos.className = 'flex flex-col justify-center items-around space-y-2 w-8/12';
+    wapperUserInfos.className = 'flex flex-col justify-center items-around space-y-2 w-10/12';
     containerAllDiv.appendChild(wapperUserInfos);
     wapperUserInfos.innerHTML = '';
 
@@ -1274,7 +1277,11 @@ async function fetchOrder(search, order) {
                        await fetch(`src/php/fetch/dashboard/deleteOrder.php?id_commande=${order.id_commande}`)
                             .then(response => response.json())
                             .then(data => {
-                               console.log(data);
+                               if (data.status === 'success') {
+                                    message.innerHTML = data.message;
+                                    displaySuccess(message);
+                                    fetchOrder(search, order);
+                               }
                             });
                     });
                 }
@@ -1285,9 +1292,9 @@ async function fetchOrder(search, order) {
 async function OrderUser(search, order) {
     containerAllDiv.innerHTML = '';
     containerAllDiv.innerHTML = `
-    <div>
+    <div class="w-full">
         <div class="flex justify-center">
-            <div class="w-11/12">
+            <div class="w-10/12">
                 <h1 class="text-2xl font-bold text-center text-white">Gestion des commandes</h1>
                 <div id="containerFormOrder">
                     <form action="" method="post" id="filterOrderAdmin" class="flex justify-between items-center space-x-2 m-2 bg-[#242629] text-white w-full">
@@ -1308,6 +1315,11 @@ async function OrderUser(search, order) {
     const searchInput = document.querySelector('#search');
     searchInput.addEventListener('keyup', (ev) => {
         search = ev.target.value;
+        fetchOrder(search, order);
+    });
+    const orderSelect = document.querySelector('#order');
+    orderSelect.addEventListener('change', (ev) => {
+        order = ev.target.value;
         fetchOrder(search, order);
     });
 }
@@ -1335,5 +1347,4 @@ buttonGestionCommande.addEventListener('click', () => {
     containerAllDiv.innerHTML = '';
     OrderUser(search, order);
 });
-OrderUser(search, order);
-// gestionUser(page, search, order);
+gestionUser(page, search, order);
