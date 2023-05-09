@@ -1146,8 +1146,42 @@ async function fetchUser(page = 1, search = '', order = 'DESC') {
         containerUserInfo.innerHTML = 'Aucun utilisateur trouvé';
     }
 }
-async function OrderUser() {
-
+async function fetchOrder(search, order) {
+    await fetch(`src/php/fetch/dashboard/getOrderUser.php?search=${search}&order=${order}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // if (data.status === 'success') {
+            //     displayOrder(data.orders);
+            // }
+        });
+}
+async function OrderUser(search, order) {
+    containerAllDiv.innerHTML = '';
+    containerAllDiv.innerHTML = `
+    <div>
+        <div class="flex justify-center">
+            <div class="w-11/12">
+                <h1 class="text-2xl font-bold text-center text-white">Gestion des commandes</h1>
+                <div>
+                    <form action="" method="post" id="filterOrderAdmin" class="flex justify-between items-center space-x-2 m-2 bg-[#242629] text-white w-full">
+                        <input type="text" name="search" id="search" placeholder="Rechercher un utilisateur" class="p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
+                        <select name="order" id="order" class="p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
+                            <option value="DESC">Plus récent</option>
+                            <option value="ASC">Plus ancien</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+    fetchOrder(search, order);
+    const searchInput = document.querySelector('#search');
+    searchInput.addEventListener('keyup', (ev) => {
+        search = ev.target.value;
+        fetchOrder(search, order);
+    });
 }
 
 
@@ -1169,4 +1203,9 @@ buttonGestionUser.addEventListener('click', () => {
     containerAllDiv.innerHTML = '';
     gestionUser(page, search, order);
 });
-gestionUser(page, search, order);
+buttonGestionCommande.addEventListener('click', () => {
+    containerAllDiv.innerHTML = '';
+    OrderUser(search, order);
+});
+OrderUser(search, order);
+// gestionUser(page, search, order);

@@ -109,4 +109,39 @@ class Order extends Database
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+    public function getOrderAdmin($search = '', $order = 'DESC')
+    {
+        $bdd = $this->getBdd();
+        $query = "SELECT commande.id_commande, commande.date_commande, commande.motant_commande, commande.statue_commande,
+            users.login_users, users.email_users,
+            product.name_product, detail_commande.quantite_produit, 
+            categories.name_categories, subcategories.name_subcategories
+    FROM commande
+    JOIN client ON commande.users_id = client.id_client
+    JOIN users ON client.users_id = users.id_users
+    JOIN detail_commande ON commande.id_commande = detail_commande.command_id
+    JOIN product ON detail_commande.product_id = product.id_product
+    JOIN subcategories ON product.subcategories_id = subcategories.id_subcategories
+    JOIN categories ON subcategories.categories_id = categories.id_categories";
+
+        if (isset($search) && !empty(trim($search))) {
+            $query .= " WHERE users.login_users LIKE :search OR users.email_users LIKE :search";
+        }
+        if (trim($order) != 'DESC') {
+            $query .= " ORDER BY commande.date_commande ASC";
+        } else {
+            $query .= " ORDER BY commande.date_commande DESC";
+        }
+        $stmt = $bdd->prepare($query);
+        if (!empty(trim($search))) {
+            $searchParam = '%' . $search . '%';
+            $stmt->bindParam(':search', $searchParam, PDO::PARAM_STR);
+        }
+        $stmt->bindParam(':order', $order, PDO::PARAM_STR); // Ajout de la liaison de ":order"
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+
 }
