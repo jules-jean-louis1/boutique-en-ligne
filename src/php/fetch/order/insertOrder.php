@@ -12,6 +12,11 @@ if (isset($_SESSION['id'])) {
     $cart = new Cart();
     $Total = $cart->countTotalPriceInCart($id_users);
     $Panier = $cart->getCartByUserId($id_users);
+    if (empty($Panier)) {
+        header("Content-Type: application/json");
+        echo json_encode(['status' => 'error', 'message' => 'Votre panier est vide.']);
+        exit();
+    }
     $Commade = $Order->insertOrderAndDetailsForUsers($id_users, $Total, $Panier);
     if ($Commade) {
         $cart->deleteCartByUserId($id_users);
