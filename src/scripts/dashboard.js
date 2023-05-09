@@ -1200,10 +1200,78 @@ async function fetchOrder(search, order) {
                 `;
                 containerOrderUser.innerHTML = tableHtml;
                 for (let order of data.orders) {
+                    const alertMessage = document.querySelector('#alertMessage');
                     const btnUpdateStatusOrder = document.querySelector(`#updateStatusOrder_${order.id_commande}`);
                     btnUpdateStatusOrder.addEventListener('submit', async (ev) => {
                        ev.preventDefault();
-                       await fetch(`src/php/fetch/dashboard/updateStatusOrder.php?id=${order.id_commande}`)
+                       await fetch(`src/php/fetch/dashboard/updateStatusOrder.php?id_commande=${order.id_commande}`, {
+                            method: 'POST',
+                            body: new FormData(btnUpdateStatusOrder)
+                       })
+                            .then(response => response.json())
+                            .then(data => {
+                               console.log(data);
+                               if (data.status === 'success') {
+                                      message.innerHTML = data.message;
+                                      displaySuccess(message);
+                                      fetchOrder(search, order);
+                               }
+                               if (data.status === 'error') {
+                                      message.innerHTML = data.message;
+                                      displayError(message);
+                               }
+                            });
+                    });
+                    const btnDetailOrder = document.querySelector(`#btnDetailOrder_${order.id_commande}`);
+                    btnDetailOrder.addEventListener('click', async (ev) => {
+                        ev.preventDefault();
+                        console.log('Button clicked!');
+                        containerdialogUpdateProduct.innerHTML = '';
+                        const dialogDetailOrder = document.createElement('dialog');
+
+                        dialogDetailOrder.setAttribute('id', 'dialog');
+                        dialogDetailOrder.className = 'bg-[#0e1217] rounded-[14px] border border-[#a8b3cf33] lg:w-7/12 w-3/4';
+                        dialogDetailOrder.innerHTML = `
+                            <div class="flex flex-col justify-between items-center">
+                                <div class="flex w-full flex-row items-cente justify-between border-b border-[#a8b3cf33] p-3">
+                                    <h1 class="text-2xl font-bold text-center text-white">Detail de la commande</h1>
+                                    <div>
+                                        <button type="button" id="btncloseDialogUpdate" class="text-[#a8b3cf] hover:text-[#A87EE6FF] float-right text-2xl">
+                                            <svg width="1em" height="1em" viewBox="0 0 24 24" fill="#a8b3cf" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none"><path d="M16.804 6.147a.75.75 0 011.049 1.05l-.073.083L13.061 12l4.72 4.72a.75.75 0 01-.977 1.133l-.084-.073L12 13.061l-4.72 4.72-.084.072a.75.75 0 01-1.049-1.05l.073-.083L10.939 12l-4.72-4.72a.75.75 0 01.977-1.133l.084.073L12 10.939l4.72-4.72.084-.072z" fill="currentcolor" fill-rule="evenodd"></path></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="flex w-full justify-around items-start text-white p-4">
+                                    <img src="src/images/products/${order.img_product}" alt="close" id="closeDialog" class="h-24">
+                                    <div>
+                                        <p>${order.name_product}</p>
+                                        <p>
+                                            <span class="font-bold">Quantité:</span>
+                                            <span>${order.quantite_produit}</span>
+                                        </p>
+                                        <p>
+                                            <span class="font-bold">Prix:</span>
+                                            <span>${order.price_product} €</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                        containerdialogUpdateProduct.appendChild(dialogDetailOrder);
+                        dialogDetailOrder.showModal();
+
+
+                        const BtnCloseDialogUpdateProduct = document.getElementById('btncloseDialogUpdate');
+                        BtnCloseDialogUpdateProduct.addEventListener('click', () => {
+                            dialogDetailOrder.close();
+                            dialogDetailOrder.innerHTML = '';
+                        });
+                    });
+
+                    const btnDeleteOrder = document.querySelector(`#btnDeleteOrder_${order.id_commande}`);
+                    btnDeleteOrder.addEventListener('click', async (ev) => {
+                       ev.preventDefault();
+                       await fetch(`src/php/fetch/dashboard/deleteOrder.php?id_commande=${order.id_commande}`)
                             .then(response => response.json())
                             .then(data => {
                                console.log(data);
@@ -1229,6 +1297,7 @@ async function OrderUser(search, order) {
                             <option value="ASC">Plus ancien</option>
                         </select>
                     </form>
+                    <div id="alertMessage" class="h-8"></div>
                 </div>
                 <div id="containerOrderUser" class="flex justify-center"></div>
             </div>

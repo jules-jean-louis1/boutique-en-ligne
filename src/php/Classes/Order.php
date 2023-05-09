@@ -114,7 +114,7 @@ class Order extends Database
         $bdd = $this->getBdd();
         $query = "SELECT commande.id_commande, commande.date_commande, commande.motant_commande, commande.statue_commande,
             users.login_users, users.email_users,
-            product.name_product, detail_commande.quantite_produit, 
+            product.name_product, product.img_product, product.price_product ,detail_commande.quantite_produit, 
             categories.name_categories, subcategories.name_subcategories
     FROM commande
     JOIN client ON commande.users_id = client.id_client
@@ -142,6 +142,13 @@ class Order extends Database
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
-
-
+    public function updateStatusOrder($id_commande, $statue_commande)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("UPDATE commande SET statue_commande = :statue_commande WHERE id_commande = :id_commande");
+        $req->execute(array(
+            "id_commande" => $id_commande,
+            "statue_commande" => $statue_commande
+        ));
+    }
 }
