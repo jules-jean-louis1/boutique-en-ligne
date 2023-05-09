@@ -1083,8 +1083,8 @@ async function fetchUser(page = 1, search = '', order = 'DESC') {
                     </td>
                     <td class="text-center">${formatDate(user.created_at_users)}</td>
                     <td class="text-center">
-                        <div id="btnForUpdateUser">
-                            <button class="p-2 rounded-lg duration-100 ease-in" id="btnUpdateUser_${user.id_users}">
+                        <div id="btnForUpdateUser" class="flex justify-center">
+                            <button class="p-2 rounded-lg duration-100 ease-in flex flex-col items-center" id="btnDetailUser_${user.id_users}">
                                 <svg width="1.5em" height="1.5em" viewBox="-2 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 0a6.333 6.333 0 0 1 6.333 6.333c0 2.087-1.02 4.002-2.728 5.203l-.234.155.404.132.402.147.14.06.341.162c3.045 1.52 5.062 4.421 5.317 7.73l.02.357.006.354v.47l-.006.152-.01.138-.018.154a2.89 2.89 0 0 1-2.45 2.414l-.225.023-.283.018-2.646-.586a1.334 1.334 0 0 1-1.044-1.371l.017-.15.396-2.382.021-.153a1.334 1.334 0 0 0-1.108-1.445l-.11-.013-.109-.004-4.786-.002-.155.004c-.642.042-1.158.541-1.234 1.128l-.01.148.003.128.016.146.406 2.446a1.334 1.334 0 0 1-.883 1.48l-.145.04-2.645.586-.376-.026-.172-.02C1.192 23.762.213 22.769.028 21.45l-.024-.236L0 21.028l.002-.479.008-.354c.155-3.542 2.364-6.678 5.818-8.227.265-.102.531-.194.798-.276l-.023-.013A6.333 6.333 0 0 1 10 0Zm0 19.333A1.333 1.333 0 1 1 10 22a1.333 1.333 0 0 1 0-2.667Zm.002-6.16c-1.153 0-2.306.22-3.459.662-2.563 1.153-4.278 3.48-4.514 6.128l-.021.32-.007.31-.001.44.003.13.02.136c.07.309.301.556.6.65l.13.032.09.006 1.746-.387-.302-1.823-.025-.181-.015-.182-.005-.183.007-.22a3.334 3.334 0 0 1 2.892-3.085l.215-.021.22-.007h4.85l.183.005a3.333 3.333 0 0 1 3.15 3.44l-.015.216-.03.217-.302 1.824 1.753.388.138-.02a.89.89 0 0 0 .657-.598l.03-.131.011-.138v-.47l-.005-.316-.02-.321c-.207-2.45-1.682-4.627-3.916-5.858l-.295-.155-.304-.144-.432-.155a9.47 9.47 0 0 0-3.027-.509ZM10 2a4.333 4.333 0 1 0 1.796 8.278l.269-.134.258-.153.221-.15A4.333 4.333 0 0 0 10 2Z" fill="#A8B3CF" fill-rule="evenodd"/></svg>
                             </button>
                         </div>
@@ -1138,10 +1138,72 @@ async function fetchUser(page = 1, search = '', order = 'DESC') {
                             }
                         })
                 })
-                const btnUpdateUser = document.querySelector(`#updateUser_${user.id_users}`);
-                if (btnUpdateUser) {
-                    btnUpdateUser.addEventListener('click', async (ev) => {
+                const btnDetailUser = document.querySelector(`#btnDetailUser_${user.id_users}`);
+                if (btnDetailUser) {
+                    btnDetailUser.addEventListener('click', async (ev) => {
                         ev.preventDefault();
+                        await fetch(`src/php/fetch/client/getUser.php?id=${user.id_users}`)
+                            .then(response => response.json())
+                            .then(data => {
+                              console.log(data);
+                                containerdialogUpdateProduct.innerHTML = '';
+                                if (data.status === 'success') {
+                                    const dialogDetailOrder = document.createElement('dialog');
+                                    dialogDetailOrder.setAttribute('id', 'dialog');
+                                    dialogDetailOrder.className = 'bg-[#0e1217] rounded-[14px] border border-[#a8b3cf33] lg:w-7/12 w-3/4';
+                                    dialogDetailOrder.innerHTML = `
+                                    <div class="flex flex-col justify-between items-center">
+                                        <div class="flex w-full flex-row items-cente justify-between border-b border-[#a8b3cf33] p-3">
+                                            <h1 class="text-2xl font-bold text-center text-white">Detail</h1>
+                                            <div>
+                                                <button type="button" id="btncloseDialogUpdate" class="text-[#a8b3cf] hover:text-[#A87EE6FF] float-right text-2xl">
+                                                    <svg width="1em" height="1em" viewBox="0 0 24 24" fill="#a8b3cf" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none"><path d="M16.804 6.147a.75.75 0 011.049 1.05l-.073.083L13.061 12l4.72 4.72a.75.75 0 01-.977 1.133l-.084-.073L12 13.061l-4.72 4.72-.084.072a.75.75 0 01-1.049-1.05l.073-.083L10.939 12l-4.72-4.72a.75.75 0 01.977-1.133l.084.073L12 10.939l4.72-4.72.084-.072z" fill="currentcolor" fill-rule="evenodd"></path></svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center w-full">
+                                            <div id="displayDetailUser" class="flex flex-col w-full justify-around items-start text-white p-4"></div>
+                                        </div>
+                                    </div>
+                                        `;
+                                    containerdialogUpdateProduct.appendChild(dialogDetailOrder);
+                                    dialogDetailOrder.showModal();
+                                    const displayDetailUser = document.getElementById('displayDetailUser');
+                                    displayDetailUser.innerHTML = '';
+                                    for (let user of data.detailUser) {
+
+                                        displayDetailUser.innerHTML += `  
+                                       <div class="flex flex-row w-full space-x-16 py-2 px-24">
+                                           <img src="src/images/avatars/${user.avatar_users}" alt="close" id="closeDialog" class="h-24 rounded-full">
+                                            <div>
+                                                <p class="font-bold text-xl">@${user.login_users}</p>
+                                                <p>
+                                                    <span class="font-bold">Date d'inscription:</span>
+                                                    <span>${formatDateSansh(user.created_at_users)}</span>
+                                                </p>
+                                                <p>
+                                                    <span class="font-bold">Avis poster:</span>
+                                                    <span>${user.nb_avis}</span>
+                                                </p>
+                                                <p>
+                                                    <span class="font-bold">Commentaires poster:</span>
+                                                    <span>${user.nb_commentaires}</span>
+                                                </p>
+                                                <p>
+                                                    <span class="font-bold">Commande :</span>
+                                                    <span>${user.nb_commandes}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        `;
+                                    }
+                                    const btncloseDialogUpdate = document.querySelector('#btncloseDialogUpdate');
+                                    btncloseDialogUpdate.addEventListener('click', () => {
+                                        dialogDetailOrder.close();
+                                        dialogDetailOrder.innerHTML = '';
+                                    })
+                                }
+                            })
                     });
                 }
             }
