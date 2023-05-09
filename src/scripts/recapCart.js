@@ -443,21 +443,6 @@ async function cardDetail() {
                         <p class="text-lg">Vous pouvez consulter votre commande depuis votre <a href="profil.php" class="underline decoration-1">page profil</a></p>
                     </div>
                     `;
-
-                    const animationContainer = document.getElementById('animation-container');
-                    // Charger l'animation avec Lottie
-                    lottie.loadAnimation({
-                        container: animationContainer,
-                        renderer: 'svg',
-                        loop: false,
-                        autoplay: true,
-                        path: animationContainer.dataset.animationPath // Récupérer l'URL du fichier JSON depuis l'attribut data-animation-path
-                    });
-                    /*setTimeout(() => {
-                        window.location.href = 'index.php';
-                    }, 5000);*/
-                    // Sélectionner l'élément qui contient l'animation
-
                 }
                 if (data.status == 'error') {
                     containerDialog.innerHTML = `
