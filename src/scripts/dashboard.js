@@ -956,7 +956,7 @@ async function paginationUser(search, order, parentSelector) {
                 if (page > 0) {
                     pageUser += `
                     <li class="flex p-2">
-                        <button class="page-link px-4 py-2 rounded-[14px] bg-white" id="pageUser${page}">${page}</button>
+                        <button class="page-link px-4 py-2 rounded-[14px] bg-transparent border border-white font-light text-white" id="pageUser${page}">${page}</button>
                     </li>
                 `;
                 }
@@ -1065,17 +1065,18 @@ async function fetchUser(page = 1, search = '', order = 'DESC') {
                         </div>
                     </td>
                     <td class="text-center">${user.email_users}</td>
-                    <td class="flex justify-center"> 
+                    <td class="flex justify-center items-center"> 
                         <div id="containerUpdateDroits_${user.id_users}" class="flex">
-                            <form action="resources/assests/fetch/updateDroits.php" method="post" id="updateDroits_${user.id_users}" data-id="${user.id_users}" class="flex space-x-2">
+                            <form action="resources/assests/fetch/updateDroits.php" method="post" id="updateDroits_${user.id_users}" data-id="${user.id_users}" class="flex space-x-2 items-center">
                                 <select name="droits" id="droits" class="p-4 bg-[#1c1f26] rounded-[14px] border-[1px] border-[#a8b3cf33]">
                                     <option value="${user.type_compte_users}">${user.type_compte_users}</option>
                                     ${optionHtml}
                                 </select>
                                 <div id="btnSubmit">
-                                    <button type="submit" class="hover:bg-[#39E58C98] p-2 rounded-lg duration-100 ease-in "
-                                            name="btnUpdateDroits" id="btnUpdateDroits">
-                                            <img src="public/images/icones/edit-color-font.svg" alt="" class="filter-green">
+                                    <button type="submit" class="text-[#A8B3CF] p-2 rounded-lg duration-100 ease-in hover:text-[#39e58c] hover:bg-[#1ddc6f3d] ">
+                                            <svg width="1.5em" height="1.5em" fill="#a8b3cf" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none">
+                                                <path d="M14.1824404,1.6172889 C16.3256165,-0.522826061 19.7912803,-0.520842405 22.0494443,1.51550529 L22.271142,1.72591728 L22.4818462,1.94787454 C24.4530473,4.13313365 24.5205684,7.44268703 22.5896371,9.5969067 L22.3827528,9.81554226 L10.6078507,21.5904402 C9.09044506,23.1026696 7.072424,23.9502567 4.9150063,23.9970158 L4.53291203,23.9970158 L0.0999260362,23.8991341 L0.00213362205,19.4661481 C-0.045784211,17.2940054 0.714752369,15.2394924 2.1489402,13.6637582 L2.40899765,13.3907309 L14.1824404,1.6172889 Z M11.9064782,6.72167754 L3.82321121,14.8049445 C2.69189074,15.9401436 2.05176733,17.4453872 2.00300766,19.0717655 L2.00164715,19.4220385 L2.05723408,21.9418261 L4.57702164,21.997413 L4.92729521,21.9960507 C6.43751089,21.9507562 7.84337465,21.3954025 8.94686226,20.4090477 L9.19605549,20.1738125 L17.2773343,12.0925337 L11.9064782,6.72167754 Z M18.2051113,2.00095629 C17.3386516,1.98283908 16.4781596,2.26385506 15.7950747,2.8481288 L15.5956429,3.03251278 L13.6967636,4.93139216 L19.0676197,10.3022483 L20.9685393,8.4013287 C22.3855182,6.98232025 22.3368069,4.62186337 20.8579051,3.14110678 C20.180157,2.46429378 19.3167369,2.08700734 18.4434061,2.013476 L18.2051113,2.00095629 Z" fill="currentcolor" fill-rule="evenodd"></path>
+                                            </svg>
                                     </button>
                                 </div>
                             </form>
@@ -1084,15 +1085,15 @@ async function fetchUser(page = 1, search = '', order = 'DESC') {
                     <td class="text-center">${formatDate(user.created_at_users)}</td>
                     <td class="text-center">
                         <div id="btnForUpdateUser" class="flex justify-center">
-                            <button class="p-2 rounded-lg duration-100 ease-in flex flex-col items-center" id="btnDetailUser_${user.id_users}">
-                                <svg width="1.5em" height="1.5em" viewBox="-2 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 0a6.333 6.333 0 0 1 6.333 6.333c0 2.087-1.02 4.002-2.728 5.203l-.234.155.404.132.402.147.14.06.341.162c3.045 1.52 5.062 4.421 5.317 7.73l.02.357.006.354v.47l-.006.152-.01.138-.018.154a2.89 2.89 0 0 1-2.45 2.414l-.225.023-.283.018-2.646-.586a1.334 1.334 0 0 1-1.044-1.371l.017-.15.396-2.382.021-.153a1.334 1.334 0 0 0-1.108-1.445l-.11-.013-.109-.004-4.786-.002-.155.004c-.642.042-1.158.541-1.234 1.128l-.01.148.003.128.016.146.406 2.446a1.334 1.334 0 0 1-.883 1.48l-.145.04-2.645.586-.376-.026-.172-.02C1.192 23.762.213 22.769.028 21.45l-.024-.236L0 21.028l.002-.479.008-.354c.155-3.542 2.364-6.678 5.818-8.227.265-.102.531-.194.798-.276l-.023-.013A6.333 6.333 0 0 1 10 0Zm0 19.333A1.333 1.333 0 1 1 10 22a1.333 1.333 0 0 1 0-2.667Zm.002-6.16c-1.153 0-2.306.22-3.459.662-2.563 1.153-4.278 3.48-4.514 6.128l-.021.32-.007.31-.001.44.003.13.02.136c.07.309.301.556.6.65l.13.032.09.006 1.746-.387-.302-1.823-.025-.181-.015-.182-.005-.183.007-.22a3.334 3.334 0 0 1 2.892-3.085l.215-.021.22-.007h4.85l.183.005a3.333 3.333 0 0 1 3.15 3.44l-.015.216-.03.217-.302 1.824 1.753.388.138-.02a.89.89 0 0 0 .657-.598l.03-.131.011-.138v-.47l-.005-.316-.02-.321c-.207-2.45-1.682-4.627-3.916-5.858l-.295-.155-.304-.144-.432-.155a9.47 9.47 0 0 0-3.027-.509ZM10 2a4.333 4.333 0 1 0 1.796 8.278l.269-.134.258-.153.221-.15A4.333 4.333 0 0 0 10 2Z" fill="#A8B3CF" fill-rule="evenodd"/></svg>
+                            <button class="text-[#A8B3CF] p-2 rounded-lg duration-100 ease-in hover:text-[#2cdce6] hover:bg-[#0dcfdc3d] " id="btnDetailUser_${user.id_users}">
+                                <svg width="1.5em" height="1.5em" viewBox="-2 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none"><path d="M10 0a6.333 6.333 0 0 1 6.333 6.333c0 2.087-1.02 4.002-2.728 5.203l-.234.155.404.132.402.147.14.06.341.162c3.045 1.52 5.062 4.421 5.317 7.73l.02.357.006.354v.47l-.006.152-.01.138-.018.154a2.89 2.89 0 0 1-2.45 2.414l-.225.023-.283.018-2.646-.586a1.334 1.334 0 0 1-1.044-1.371l.017-.15.396-2.382.021-.153a1.334 1.334 0 0 0-1.108-1.445l-.11-.013-.109-.004-4.786-.002-.155.004c-.642.042-1.158.541-1.234 1.128l-.01.148.003.128.016.146.406 2.446a1.334 1.334 0 0 1-.883 1.48l-.145.04-2.645.586-.376-.026-.172-.02C1.192 23.762.213 22.769.028 21.45l-.024-.236L0 21.028l.002-.479.008-.354c.155-3.542 2.364-6.678 5.818-8.227.265-.102.531-.194.798-.276l-.023-.013A6.333 6.333 0 0 1 10 0Zm0 19.333A1.333 1.333 0 1 1 10 22a1.333 1.333 0 0 1 0-2.667Zm.002-6.16c-1.153 0-2.306.22-3.459.662-2.563 1.153-4.278 3.48-4.514 6.128l-.021.32-.007.31-.001.44.003.13.02.136c.07.309.301.556.6.65l.13.032.09.006 1.746-.387-.302-1.823-.025-.181-.015-.182-.005-.183.007-.22a3.334 3.334 0 0 1 2.892-3.085l.215-.021.22-.007h4.85l.183.005a3.333 3.333 0 0 1 3.15 3.44l-.015.216-.03.217-.302 1.824 1.753.388.138-.02a.89.89 0 0 0 .657-.598l.03-.131.011-.138v-.47l-.005-.316-.02-.321c-.207-2.45-1.682-4.627-3.916-5.858l-.295-.155-.304-.144-.432-.155a9.47 9.47 0 0 0-3.027-.509ZM10 2a4.333 4.333 0 1 0 1.796 8.278l.269-.134.258-.153.221-.15A4.333 4.333 0 0 0 10 2Z"  fill="currentcolor" fill-rule="evenodd"></path></svg>
                             </button>
                         </div>
                     </td>
                     <td class="text-center">
                         <div id="btnForDeleteUser">
-                            <button class="hover:bg-[#FF000061] p-2 rounded-lg text-white" id="btnDeleteUser_${user.id_users}">
-                                <svg width="32" height="32" viewBox="0 0 24 24" stroke="#a8b3cf" fill="none" stroke-linejoin="round" stroke-width="1.8" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M17.9997 18L19.7675 16.2322M17.9997 18L16.232 19.7678M17.9997 18L16.232 16.2322M17.9997 18L19.7675 19.7678M14.9997 14.1241C14.081 13.7227 13.0664 13.5 11.9997 13.5C8.5419 13.5 5.63061 15.84 4.76307 19.0229C4.4726 20.0886 5.39517 21 6.49974 21H12.9997M15.4997 7C15.4997 8.933 13.9327 10.5 11.9997 10.5C10.0667 10.5 8.49974 8.933 8.49974 7C8.49974 5.067 10.0667 3.5 11.9997 3.5C13.9327 3.5 15.4997 5.067 15.4997 7Z"></path></svg>
+                            <button class="text-[#A8B3CF] p-2 rounded-lg duration-100 ease-in hover:text-[#ff3b3b] hover:bg-[#ff606033]" id="btnDeleteUser_${user.id_users}">
+                                <svg width="32" height="32" viewBox="0 0 24 24" stroke="#a8b3cf" fill="none" stroke-linejoin="round" stroke-width="1.8" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none"><path d="M17.9997 18L19.7675 16.2322M17.9997 18L16.232 19.7678M17.9997 18L16.232 16.2322M17.9997 18L19.7675 19.7678M14.9997 14.1241C14.081 13.7227 13.0664 13.5 11.9997 13.5C8.5419 13.5 5.63061 15.84 4.76307 19.0229C4.4726 20.0886 5.39517 21 6.49974 21H12.9997M15.4997 7C15.4997 8.933 13.9327 10.5 11.9997 10.5C10.0667 10.5 8.49974 8.933 8.49974 7C8.49974 5.067 10.0667 3.5 11.9997 3.5C13.9327 3.5 15.4997 5.067 15.4997 7Z" fill="currentcolor" fill-rule="nonzero"></path></svg>
                             </button>
                         </div>
                     </td> 
