@@ -112,17 +112,15 @@ class Order extends Database
     public function getOrderAdmin($search = '', $order = 'DESC')
     {
         $bdd = $this->getBdd();
-        $query = "SELECT commande.id_commande, commande.date_commande, commande.motant_commande, commande.statue_commande,
-            users.login_users, users.email_users,
-            product.name_product, product.img_product, product.price_product ,detail_commande.quantite_produit, 
-            categories.name_categories, subcategories.name_subcategories
-    FROM commande
-    JOIN client ON commande.users_id = client.id_client
-    JOIN users ON client.users_id = users.id_users
-    JOIN detail_commande ON commande.id_commande = detail_commande.command_id
-    JOIN product ON detail_commande.product_id = product.id_product
-    JOIN subcategories ON product.subcategories_id = subcategories.id_subcategories
-    JOIN categories ON subcategories.categories_id = categories.id_categories";
+        $query = "SELECT DISTINCT commande.id_commande, commande.date_commande, commande.motant_commande, commande.statue_commande,
+                    users.login_users, users.email_users
+                FROM commande
+                JOIN client ON commande.users_id = client.id_client
+                JOIN users ON client.users_id = users.id_users
+                JOIN detail_commande ON commande.id_commande = detail_commande.command_id
+                JOIN product ON detail_commande.product_id = product.id_product
+                JOIN subcategories ON product.subcategories_id = subcategories.id_subcategories
+                JOIN categories ON subcategories.categories_id = categories.id_categories";
 
         if (isset($search) && !empty(trim($search))) {
             $query .= " WHERE users.login_users LIKE :search OR users.email_users LIKE :search";
@@ -140,6 +138,22 @@ class Order extends Database
         $stmt->bindParam(':order', $order, PDO::PARAM_STR); // Ajout de la liaison de ":order"
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+    public function displayDetailOrder(int $id_commande) : array
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT p.img_product, p.name_product, p.price_product, dc.quantite_produit, s.name_subcategories 
+                                    FROM detail_commande dc 
+                                    JOIN product p ON p.id_product = dc.product_id 
+                                    JOIN subcategories s ON s.id_subcategories = p.subcategories_id 
+                                    JOIN commande c ON c.id_commande = dc.command_id 
+                                    JOIN client cl ON cl.id_client = c.users_id 
+                                    WHERE c.id_commande = :id_commande");
+        $req->execute(array(
+            "id_commande" => $id_commande
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
     public function updateStatusOrder($id_commande, $statue_commande)
