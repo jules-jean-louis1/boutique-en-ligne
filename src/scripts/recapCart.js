@@ -442,11 +442,6 @@ async function cardDetail() {
                         <p class="text-lg">Vous pouvez consulter votre commande depuis votre <a href="profil.php" class="underline decoration-1">page profil</a></p>
                     </div>
                     `;
-                    /*setTimeout(() => {
-                        window.location.href = 'index.php';
-                    }, 5000);*/
-                    // Sélectionner l'élément qui contient l'animation
-
                 }
                 if (data.status == 'error') {
                     containerDialog.innerHTML = `
