@@ -1151,11 +1151,69 @@ async function fetchOrder(search, order) {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            // if (data.status === 'success') {
-            //     displayOrder(data.orders);
-            // }
+            const containerOrderUser = document.querySelector('#containerOrderUser');
+            if (data.status === 'success') {
+                let tableHtml = `
+                <table class="text-white border border-[#a8b3cf33] rounded-[14px] w-full">
+                  <thead class="bg-[#0e1217]">
+                    <tr class=" border border-[#a8b3cf33]">
+                        <th class="p-2 border border-[#a8b3cf33]">Utilisateur</th>
+                        <th class="p-2 border border-[#a8b3cf33]">Date de la commande</th>
+                        <th class="p-2 border border-[#a8b3cf33]">Status</th>
+                        <th class="p-2 border border-[#a8b3cf33]">Montant</th>
+                        <th class="p-2 border border-[#a8b3cf33]">Detail</th>
+                        <th class="p-2 border border-[#a8b3cf33]">Suppression</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                `;
+                for (let order of data.orders) {
+                    let optionHtml = '';
+                    if (order.statue_commande === 'En cours') {
+                        optionHtml = `<option value="Expédiée">Expédiée</option>`;
+                    }
+                    tableHtml += `
+                    <tr class="border border-[#a8b3cf33] text-center">
+                        <td class="p-2 border border-[#a8b3cf33]">${order.login_users}</td>
+                        <td class="p-2 border border-[#a8b3cf33]">${formatDateSansh(order.date_commande)}</td>
+                        <td class="p-2 border border-[#a8b3cf33]">
+                            <form action="" method="post" id="updateStatusOrder_${order.id_commande}">
+                                <select name="statue_commande" id="statue_commande" class="p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
+                                    <option value="${order.statue_commande}">${order.statue_commande}</option>
+                                    ${optionHtml}
+                                </select>
+                                <button class="p-2 bg-[#242629] hover:bg-[#464c51] rounded-lg" type="submit" id="btnUpdateStatusOrder_${order.id_commande}">Modifier</button>
+                            </form>
+                        </td>
+                        <td class="p-2 border border-[#a8b3cf33]">${order.motant_commande} €</td>
+                        <td class="p-2 border border-[#a8b3cf33]">
+                            <button class="p-2 bg-[#242629] hover:bg-[#464c51] rounded-lg" type="button" id="btnDetailOrder_${order.id_commande}">Detail</button>
+                        </td>
+                        <td class="p-2 border border-[#a8b3cf33]">
+                            <button class="p-2 bg-[#242629] hover:bg-[#464c51] rounded-lg" type="button" id="btnDeleteOrder_${order.id_commande}">Supprimer</button>
+                        </td>
+                    `;
+                }
+                tableHtml += `
+                  </tbody>
+                </table>
+                `;
+                containerOrderUser.innerHTML = tableHtml;
+                for (let order of data.orders) {
+                    const btnUpdateStatusOrder = document.querySelector(`#updateStatusOrder_${order.id_commande}`);
+                    btnUpdateStatusOrder.addEventListener('submit', async (ev) => {
+                       ev.preventDefault();
+                       await fetch(`src/php/fetch/dashboard/updateStatusOrder.php?id=${order.id_commande}`)
+                            .then(response => response.json())
+                            .then(data => {
+                               console.log(data);
+                            });
+                    });
+                }
+            }
         });
 }
+
 async function OrderUser(search, order) {
     containerAllDiv.innerHTML = '';
     containerAllDiv.innerHTML = `
@@ -1163,7 +1221,7 @@ async function OrderUser(search, order) {
         <div class="flex justify-center">
             <div class="w-11/12">
                 <h1 class="text-2xl font-bold text-center text-white">Gestion des commandes</h1>
-                <div>
+                <div id="containerFormOrder">
                     <form action="" method="post" id="filterOrderAdmin" class="flex justify-between items-center space-x-2 m-2 bg-[#242629] text-white w-full">
                         <input type="text" name="search" id="search" placeholder="Rechercher un utilisateur" class="p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
                         <select name="order" id="order" class="p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
@@ -1172,6 +1230,7 @@ async function OrderUser(search, order) {
                         </select>
                     </form>
                 </div>
+                <div id="containerOrderUser" class="flex justify-center"></div>
             </div>
         </div>
     </div>
