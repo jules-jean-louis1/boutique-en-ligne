@@ -7,11 +7,17 @@ class Order extends Database
     {
         parent::__construct();
     }
+
+    /**
+     * @param $users_id int
+     * @param $totalOrder decimal
+     * @param $orderDetails array
+     * @return bool
+     */
     public function insertOrderAndDetailsForUsers($users_id, $totalOrder, $orderDetails)
     {
         $bdd = $this->getBdd();
         $bdd->beginTransaction();
-
         try {
             // Insertion de la commande
             $req = $bdd->prepare("INSERT INTO commande (date_commande, motant_commande, statue_commande, users_id) VALUES (NOW(), :total_order, :statue_commande, :users_id)");
@@ -20,10 +26,8 @@ class Order extends Database
                 "statue_commande" => "En cours",
                 "users_id" => $users_id
             ]);
-
             // Récupération de l'ID de la commande
             $command_id = $bdd->lastInsertId();
-
             // Insertion des détails de la commande
             foreach ($orderDetails as $detail) {
                 $product_id = $detail['id_product'];
@@ -42,7 +46,7 @@ class Order extends Database
                 $req2->execute(array(
                     "id_product" => $product_id
                 ));
-                $result = $req->fetchAll(PDO::FETCH_ASSOC);
+                $result = $req2->fetchAll(PDO::FETCH_ASSOC);
                 $stock = $result[0]['quantite_product'];
                 $sold = $result[0]['quantite_vendue'];
 
@@ -56,8 +60,6 @@ class Order extends Database
                     "newSold" => $newSold
                 ));
             }
-
-
             // Valider la transaction
             $bdd->commit();
             return true;

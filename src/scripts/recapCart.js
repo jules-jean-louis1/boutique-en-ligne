@@ -437,22 +437,11 @@ async function cardDetail() {
                 if(data.status == 'success') {
                     containerDialog.innerHTML = `
                     <div class="flex flex-col space-y-2 items-center mb-4">
-                        <div id="animation-container" data-animation-path="public/images/iconAnim/icons8-ok.json" class="h-40"></div>
                         <h1 class="text-2xl font-bold">Commande effectuée avec succès</h1>
                         <p class="text-sm">Veuillez patienter pendant que nous traitons votre commande</p>
                         <p class="text-lg">Vous pouvez consulter votre commande depuis votre <a href="profil.php" class="underline decoration-1">page profil</a></p>
                     </div>
                     `;
-
-                    const animationContainer = document.getElementById('animation-container');
-                    // Charger l'animation avec Lottie
-                    lottie.loadAnimation({
-                        container: animationContainer,
-                        renderer: 'svg',
-                        loop: false,
-                        autoplay: true,
-                        path: animationContainer.dataset.animationPath // Récupérer l'URL du fichier JSON depuis l'attribut data-animation-path
-                    });
                     /*setTimeout(() => {
                         window.location.href = 'index.php';
                     }, 5000);*/
