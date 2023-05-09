@@ -1229,12 +1229,15 @@ async function fetchOrder(search, order) {
                     btnDetailOrder.addEventListener('click', async (ev) => {
                         ev.preventDefault();
                         console.log('Button clicked!');
-                        containerdialogUpdateProduct.innerHTML = '';
-                        const dialogDetailOrder = document.createElement('dialog');
-
-                        dialogDetailOrder.setAttribute('id', 'dialog');
-                        dialogDetailOrder.className = 'bg-[#0e1217] rounded-[14px] border border-[#a8b3cf33] lg:w-7/12 w-3/4';
-                        dialogDetailOrder.innerHTML = `
+                        await fetch(`src/php/fetch/dashboard/getDetailOrder.php?id_commande=${order.id_commande}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                containerdialogUpdateProduct.innerHTML = '';
+                               if (data.status === 'success') {
+                                   const dialogDetailOrder = document.createElement('dialog');
+                                   dialogDetailOrder.setAttribute('id', 'dialog');
+                                   dialogDetailOrder.className = 'bg-[#0e1217] rounded-[14px] border border-[#a8b3cf33] lg:w-7/12 w-3/4';
+                                   dialogDetailOrder.innerHTML = `
                             <div class="flex flex-col justify-between items-center">
                                 <div class="flex w-full flex-row items-cente justify-between border-b border-[#a8b3cf33] p-3">
                                     <h1 class="text-2xl font-bold text-center text-white">Detail de la commande</h1>
@@ -1244,31 +1247,44 @@ async function fetchOrder(search, order) {
                                         </button>
                                     </div>
                                 </div>
-                                <div class="flex w-full justify-around items-start text-white p-4">
-                                    <img src="src/images/products/${order.img_product}" alt="close" id="closeDialog" class="h-24">
-                                    <div>
-                                        <p>${order.name_product}</p>
-                                        <p>
-                                            <span class="font-bold">Quantité:</span>
-                                            <span>${order.quantite_produit}</span>
-                                        </p>
-                                        <p>
-                                            <span class="font-bold">Prix:</span>
-                                            <span>${order.price_product} €</span>
-                                        </p>
-                                    </div>
+                                <div class="flex flex-col items-center w-full">
+                                    <div id="displayDetailCart" class="flex flex-col w-full justify-around items-start text-white p-4"></div>
                                 </div>
                             </div>
                             `;
-                        containerdialogUpdateProduct.appendChild(dialogDetailOrder);
-                        dialogDetailOrder.showModal();
+                                   containerdialogUpdateProduct.appendChild(dialogDetailOrder);
+                                   dialogDetailOrder.showModal();
+                                   const displayDetailCart = document.getElementById('displayDetailCart');
+                                   displayDetailCart.innerHTML = '';
+                                   for (let detail of data.detailOrder) {
+
+                                       displayDetailCart.innerHTML += `  
+                                       <div class="flex flex-row w-full space-x-16 py-2 px-24">
+                                           <img src="src/images/products/${detail.img_product}" alt="close" id="closeDialog" class="h-24">
+                                            <div>
+                                                <p>${detail.name_product}</p>
+                                                <p>
+                                                    <span class="font-bold">Quantité:</span>
+                                                    <span>${detail.quantite_produit}</span>
+                                                </p>
+                                                <p>
+                                                    <span class="font-bold">Prix:</span>
+                                                    <span>${detail.price_product} €</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        `;
+                                   }
 
 
-                        const BtnCloseDialogUpdateProduct = document.getElementById('btncloseDialogUpdate');
-                        BtnCloseDialogUpdateProduct.addEventListener('click', () => {
-                            dialogDetailOrder.close();
-                            dialogDetailOrder.innerHTML = '';
-                        });
+
+                                   const BtnCloseDialogUpdateProduct = document.getElementById('btncloseDialogUpdate');
+                                   BtnCloseDialogUpdateProduct.addEventListener('click', () => {
+                                       dialogDetailOrder.close();
+                                       dialogDetailOrder.innerHTML = '';
+                                   });
+                               }
+                            });
                     });
 
                     const btnDeleteOrder = document.querySelector(`#btnDeleteOrder_${order.id_commande}`);
