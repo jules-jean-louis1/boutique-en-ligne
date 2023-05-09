@@ -654,9 +654,14 @@ async function gestionProduct() {
 
 // Fonction gestion de catégorie
 async function gestionCategory() {
+    const containerCategoriesAndSubCategories = document.createElement('div');
+    containerCategoriesAndSubCategories.setAttribute('id', 'containerCategoriesAndSubCategories');
+    containerCategoriesAndSubCategories.className = 'flex w-7/12 mx-auto pt-4';
+    containerAllDiv.appendChild(containerCategoriesAndSubCategories);
+
     const wapperGestionCategory = document.createElement('div');
     wapperGestionCategory.setAttribute('id', 'wapperGestionCategory');
-    containerAllDiv.appendChild(wapperGestionCategory);
+    containerCategoriesAndSubCategories.appendChild(wapperGestionCategory);
 
     const ContainerGestionCategory = document.createElement('div');
     ContainerGestionCategory.setAttribute('id', 'ContainerGestionCategory');
@@ -673,14 +678,16 @@ async function gestionCategory() {
                     ContainerGestionCategory.innerHTML += `
                 <div id="containerCategoryProduct" class="flex space-x-2 py-0.5">
                     <form action="" method="post" class="flex space-x-2" id="update_${category.id_categories}"  data-id-cat="${category.id_categories}">
-                        <input type="text" name="nom" id="nom" placeholder="${category.name_categories}" class="p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
-                        <button type="submit" class="p-2 rounded-lg" name="btnUpdateCategory" id="btnUpdateCategory_${category.id_categories}">
-                            <svg width="32" height="32" viewBox="0 0 24 24" stroke="#A87EE6FF" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M4.00037 20.9999H20.5M19.2372 3.91416L20.0861 4.76315C20.8672 5.5442 20.8672 6.81053 20.0861 7.59158L8.85031 18.8274C8.63076 19.0469 8.36311 19.2124 8.06856 19.3105L3.94902 20.6837C3.55814 20.814 3.18627 20.4421 3.31656 20.0513L4.68974 15.9317C4.78793 15.6372 4.95335 15.3695 5.1729 15.15L16.4087 3.91415C17.1898 3.13311 18.4561 3.13311 19.2372 3.91416Z"></path></svg>
+                        <input type="text" name="nom" id="nom" placeholder="${category.name_categories}" class="p-2 rounded-[14px] bg-[#41474c] hover:bg-[#464c51] focus:outline-none textField_border hover:border-[#A87EE6FF]">
+                        <button type="submit" class="text-[#A8B3CF] p-2 rounded-lg duration-100 ease-in hover:text-[#39e58c] hover:bg-[#1ddc6f3d]" name="btnUpdateCategory" id="btnUpdateCategory_${category.id_categories}">
+                            <svg width="1.5em" height="1.5em" fill="#a8b3cf" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none">
+                                <path d="M14.1824404,1.6172889 C16.3256165,-0.522826061 19.7912803,-0.520842405 22.0494443,1.51550529 L22.271142,1.72591728 L22.4818462,1.94787454 C24.4530473,4.13313365 24.5205684,7.44268703 22.5896371,9.5969067 L22.3827528,9.81554226 L10.6078507,21.5904402 C9.09044506,23.1026696 7.072424,23.9502567 4.9150063,23.9970158 L4.53291203,23.9970158 L0.0999260362,23.8991341 L0.00213362205,19.4661481 C-0.045784211,17.2940054 0.714752369,15.2394924 2.1489402,13.6637582 L2.40899765,13.3907309 L14.1824404,1.6172889 Z M11.9064782,6.72167754 L3.82321121,14.8049445 C2.69189074,15.9401436 2.05176733,17.4453872 2.00300766,19.0717655 L2.00164715,19.4220385 L2.05723408,21.9418261 L4.57702164,21.997413 L4.92729521,21.9960507 C6.43751089,21.9507562 7.84337465,21.3954025 8.94686226,20.4090477 L9.19605549,20.1738125 L17.2773343,12.0925337 L11.9064782,6.72167754 Z M18.2051113,2.00095629 C17.3386516,1.98283908 16.4781596,2.26385506 15.7950747,2.8481288 L15.5956429,3.03251278 L13.6967636,4.93139216 L19.0676197,10.3022483 L20.9685393,8.4013287 C22.3855182,6.98232025 22.3368069,4.62186337 20.8579051,3.14110678 C20.180157,2.46429378 19.3167369,2.08700734 18.4434061,2.013476 L18.2051113,2.00095629 Z" fill="currentcolor" fill-rule="evenodd"></path>
+                            </svg>
                         </button>
                     </form>
                     <form action="" method="post" class="flex space-x-2" id="delete_${category.id_categories}"  data-id-cat="${category.id_categories}">
-                        <button type="submit" class="p-2" name="btnDeleteCategory" id="btnDeleteCategory_${category.id_categories}">
-                            <svg width="32" height="32" viewBox="0 0 24 24" stroke="#D74CF6" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M11.9999 14.5L14.4999 12M14.4999 12L16.9999 9.5M14.4999 12L16.9999 14.5M14.4999 12L11.9999 9.5M3.39862 12.7282L8.71112 17.7282C8.89662 17.9028 9.14175 18 9.39648 18H18.9999C20.1045 18 20.9999 17.1046 20.9999 16V8C20.9999 6.89543 20.1045 6 18.9999 6L9.39648 6C9.14175 6 8.89662 6.09721 8.71112 6.2718L3.39862 11.2718C2.97911 11.6666 2.97911 12.3334 3.39862 12.7282Z"></path></svg>
+                        <button type="submit" class="text-[#A8B3CF] p-2 rounded-lg duration-100 ease-in hover:text-[#ff3b3b] hover:bg-[#ff606033]" name="btnDeleteCategory" id="btnDeleteCategory_${category.id_categories}">
+                            <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none"><path d="M16.804 6.147a.75.75 0 011.049 1.05l-.073.083L13.061 12l4.72 4.72a.75.75 0 01-.977 1.133l-.084-.073L12 13.061l-4.72 4.72-.084.072a.75.75 0 01-1.049-1.05l.073-.083L10.939 12l-4.72-4.72a.75.75 0 01.977-1.133l.084.073L12 10.939l4.72-4.72.084-.072z" fill="currentcolor" fill-rule="evenodd"></path></svg>                        
                         </button>
                     </form>
                 </div>
@@ -731,11 +738,12 @@ async function gestionCategory() {
     }
     displayCategories();
     const containerCreateBtnAddCategory = document.createElement('div');
+    containerCreateBtnAddCategory.setAttribute('id', 'containerCreateBtnAddCategory');
     containerCreateBtnAddCategory.setAttribute('class', 'flex flex-col items-center justify-center');
 
-    containerAllDiv.appendChild(containerCreateBtnAddCategory);
+    wapperGestionCategory.appendChild(containerCreateBtnAddCategory);
     containerCreateBtnAddCategory.innerHTML = `
-        <button type="button" class="bg-green-500 p-2 rounded-lg text-white flex items-center " id="btnAddCategory_">
+        <button type="button" class="bg-transparent p-2 border-2 border-white rounded-[12px] w-full text-white flex items-center hover:bg-slate-900 text-center font-bold flex justify-center mx-2" id="btnAddCategory_">
             <svg width="32" height="32" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M6.99999 12H12M12 12H17M12 12V6.99999M12 12V17M21.5 12C21.5 17.2467 17.2467 21.5 12 21.5C6.75329 21.5 2.5 17.2467 2.5 12C2.5 6.75329 6.75329 2.5 12 2.5C17.2467 2.5 21.5 6.75329 21.5 12Z"></path></svg>
             Ajouter une catégorie
         </button>
@@ -745,8 +753,8 @@ async function gestionCategory() {
     btnAddCategory.addEventListener('click', () => {
         const formAddCategory = document.querySelector('#formAddCategory');
         formAddCategory.innerHTML = `
-                <form action="" method="post" class="flex space-x-2 block" id="addCategory">
-                    <input type="text" name="nom" id="nom" placeholder="Nom de la catégorie" class="bg-[#E9E9E9] rounded-lg p-2">
+                <form action="" method="post" class="flex space-x-2 block mt-2" id="addCategory">
+                    <input type="text" name="nom" id="nom" placeholder="Nom de la catégorie" class="bg-[#41474c] hover:bg-[#464c51] focus:outline-none textField_border hover:border-[#A87EE6FF] rounded-[14px] p-2">
                     <button type="submit" class="bg-green-500 p-2 rounded-lg text-white" name="btnAddCategory" id="btnAddCategory">
                         Ajouter
                     </button>
@@ -789,15 +797,16 @@ async function gestionCategory() {
 }
 
 async function gestionSubCategories() {
+    const containerCategoriesAndSubCategories = document.querySelector('#containerCategoriesAndSubCategories');
     const createContainerAddSubCategory = document.createElement('div');
     createContainerAddSubCategory.setAttribute('id', '__containerAddSubCategory');
-    containerAllDiv.appendChild(createContainerAddSubCategory);
+    containerCategoriesAndSubCategories.appendChild(createContainerAddSubCategory);
     createContainerAddSubCategory.innerHTML = '';
     createContainerAddSubCategory.innerHTML = `
         <div id="containerAddSubCategory" class="flex space-x-2">
             <form id="formSubCategories" method="post">
-                <label for="category">Sélectionnez une catégorie :</label>
-                <select id="Categories" name="Categories" class="p-2 rounded-lg">
+                <label for="category" class="text-white">Sélectionnez une catégorie :</label>
+                <select id="Categories" name="Categories" class="bg-[#41474c] hover:bg-[#464c51] focus:outline-none textField_border hover:border-[#A87EE6FF] rounded-[14px] p-2">
                     <option value="">Sélectionnez une catégorie</option>
                     <!-- Les options du select seront générées en JS -->
                 </select>
@@ -886,14 +895,14 @@ async function gestionSubCategories() {
     const containerBtnAddSubCategory = document.querySelector('#containerAddSubCategory');
     const createBtnAddSubCategory = document.createElement('button');
     createBtnAddSubCategory.setAttribute('id', 'btnAddSubCategory_');
-    createBtnAddSubCategory.setAttribute('class', 'bg-green-500 p-2 rounded-lg text-white');
+    createBtnAddSubCategory.setAttribute('class', 'bg-transparent p-2 border-2 border-white rounded-[12px] w-full text-white flex items-center hover:bg-slate-900 text-center font-bold flex justify-center');
     createBtnAddSubCategory.textContent = 'Ajouter une sous-catégorie';
     containerBtnAddSubCategory.appendChild(createBtnAddSubCategory);
 
     const formAddSubCategory = document.createElement('div');
     formAddSubCategory.setAttribute('id', 'formAddSubCategory');
     formAddSubCategory.setAttribute('class', 'flex space-x-2 block');
-    containerAllDiv.appendChild(formAddSubCategory);
+    containerCategoriesAndSubCategories.appendChild(formAddSubCategory);
 
 
 
@@ -970,7 +979,7 @@ const search = params.get('search') || '';
 const order = params.get('order') || 'DESC';
 async function gestionUser(page, search, order) {
     const modiyprofil = document.querySelector('#containerModifyProduct');
-    modiyprofil.className = 'flex justify-center';
+    modiyprofil.className = 'flex flex-row justify-center items-center space-x-2';
     let wapperUserInfos1 = document.querySelector('#wapperUserInfos');
     if (wapperUserInfos1) {
         wapperUserInfos1.remove();
