@@ -211,4 +211,18 @@ class Product extends Database
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+    public function verifyStockProduct(int $id_product, int $quantite)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT quantite_product FROM product WHERE id_product = :id_product");
+        $req->execute(array(
+            "id_product" => $id_product
+        ));
+        $result = $req->fetch(PDO::FETCH_ASSOC);
+        if ($result['quantite_product'] > $quantite) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -132,6 +132,7 @@ async function getProduct(URLid) {
     await fetch(`src/php/fetch/produit/getProductById.php?id=${URLid}`)
         .then(response => response.json())
         .then(data => {
+            console.log(data);
             let options = '';
             for (let i = 1; i <= 10; i++) {
                 options += `<option value="${i}">${i}</option>`;
@@ -139,7 +140,7 @@ async function getProduct(URLid) {
             const containerProduct = document.getElementById("containerProduct");
             for (const product of data.data) {
                 containerProduct.innerHTML = `
-            <div class="lg:w-full xl:w-11/12 border-[1px] border-[#a8b3cf33] rounded-lg">
+            <div class="lg:w-full xl:w-9/12 border-[1px] border-[#a8b3cf33] rounded-lg">
                 <div class="bg-[#A87EE6FF] flex xl:flex-row flex-col items-center xl:justify-between justify-center rounded-[14px]  xl:px-16 xl:py-6 p-1">
                     <div class="h-fit">
                         <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="xl:h-96 rounded-[14px] h-80">
@@ -151,7 +152,7 @@ async function getProduct(URLid) {
                         <p class="mt-5 text-black font-xl">À propos du jeu</p>
                         <p class="text-white xl:text-start text-center">${product.description_product}</p>
                         <div>
-                            <p class="text-white mt-2 font-bold text-6xl  xl:text-start text-center">${product.price_product} €</p>
+                            <p class="text-white mt-2 font-bold text-6xl  xl:text-start text-center" id="price_product">${product.price_product} €</p>
                             <div id="containerFormAddProductToCart">
                                 <form action="" method="post" id="formAddToCart">
                                     <input type="hidden" name="id" value="${product.id_product}">
@@ -174,22 +175,26 @@ async function getProduct(URLid) {
             </div>
             
             `;
-                let optionsDisponible = '';
-                if (data.data.dispo_product === '1') {
-                    optionsDisponible = `<button class="bg-[#A87EE6FF] text-white rounded-lg px-4 py-2" disabled>Ce produit n'est plus disponible</button>`;
-                    containerProduct.innerHTML = optionsDisponible;
+                const containerFormAddProductToCart = document.getElementById("containerFormAddProductToCart");
+                const priceProduct = document.getElementById("price_product");
+                if (product.dispo_product === '1') {
+                    let optionsDisponible = `<button class="bg-black opacity-50 text-white rounded-lg px-6 py-3" disabled>Ce produit n'est plus disponible a la vente</button>`;
+                    priceProduct.innerHTML = '';
+                    containerFormAddProductToCart.innerHTML = optionsDisponible;
                 }
                 const titlePageProduct = document.querySelector("title");
                 titlePageProduct.innerHTML = `${product.name_product}`;
                 // Ajouter au panier
                 const formAddToCart = document.getElementById("formAddToCart");
-                formAddToCart.addEventListener('submit', (ev) => {
-                    ev.preventDefault();
-                    const id = formAddToCart.querySelector('[name="id"]').value;
-                    const quantity = formAddToCart.querySelector('[name="quantity"]').value;
-                    const name = formAddToCart.querySelector('[name="name"]').value;
-                    addToCart(id, quantity, name);
-                });
+                if (formAddToCart) {
+                    formAddToCart.addEventListener('submit', (ev) => {
+                        ev.preventDefault();
+                        const id = formAddToCart.querySelector('[name="id"]').value;
+                        const quantity = formAddToCart.querySelector('[name="quantity"]').value;
+                        const name = formAddToCart.querySelector('[name="name"]').value;
+                        addToCart(id, quantity, name);
+                    });
+                    }
             }
             async function addToCart(id, quantity, name) {
                 await fetch(`src/php/fetch/cart/addProductToCart.php?id=${id}&quantity=${quantity}&name=${name}`)
@@ -428,23 +433,18 @@ function formatDistanceToNow(date) {
         return "à l'instant";
     } else if (distanceInMillis < hourInMillis) {
         const minutes = Math.round(distanceInMillis / minuteInMillis);
-        return `${minutes} minute${minutes > 1 ? 's' : ''}`;
+        return `il y a ${minutes} minute${minutes > 1 ? 's' : ''}`;
     } else if (distanceInMillis < dayInMillis) {
         const hours = Math.round(distanceInMillis / hourInMillis);
-        return `${hours} heure${hours > 1 ? 's' : ''}`;
+        return `il y a ${hours} heure${hours > 1 ? 's' : ''}`;
     } else if (distanceInMillis < weekInMillis) {
         const days = Math.round(distanceInMillis / dayInMillis);
-        return `${days} jour${days > 1 ? 's' : ''}`;
+        return `il y a ${days} jour${days > 1 ? 's' : ''}`;
     } else {
         const daysAgo = Math.floor(distanceInMillis / dayInMillis);
         return `il y a ${daysAgo} jour${daysAgo > 1 ? 's' : ''}`;
     }
 }
-const date = new Date('2022-04-30');
-console.log(formatDistanceToNow(date)); // affiche "il y a 7 jours"
-
-
-
 
 async function displayAvis() {
     await fetch ('src/php/fetch/client/isConnected.php')

@@ -1,5 +1,5 @@
 
-<nav class="py-3 bg-[#0E1217] border-b-[1px] border-b-[#a8b3cf33]">
+<nav class="py-3 bg-[#181920] border-b-[1px] border-b-[#a8b3cf33]">
     <div class="flex items-center justify-around">
         <div>
             <ul class="flex space-x-4 items-center text-white">

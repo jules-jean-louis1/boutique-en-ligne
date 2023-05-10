@@ -200,6 +200,7 @@ async function getCart() {
     await fetch('src/php/fetch/cart/getCart.php')
         .then(response => response.json())
         .then(data => {
+            console.log(data);
             containerCart.innerHTML = '';
             if (data.status == 'success_connected') {
                 const total = data.total;
@@ -224,12 +225,71 @@ async function getCart() {
                         <button id="btnVerifyInfoUsers" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg">Passer la commande</button>
                     </div>
                     `;
+                // Cree un tableau avec les id et les quantités des produits
+                let QuantityProduct = [];
+                for (let product of data.products) {
+                    QuantityProduct.push({id: product.id_product, quantity: product.quantity_product});
+                }
+                // Créez une instance de URLSearchParams
+                const params = new URLSearchParams();
+                // Parcourez le tableau et ajoutez les paramètres à l'instance URLSearchParams
+                QuantityProduct.forEach((product) => {
+                    params.append('id[]', product.id);
+                    params.append('quantity[]', product.quantity);
+                });
                 const btnVerifyInfoUsers = document.getElementById("btnVerifyInfoUsers");
                 btnVerifyInfoUsers.addEventListener('click', async () => {
-                    await fetch('src/php/fetch/client/verifyInfoUsers.php')
+                    await fetch(`src/php/fetch/client/verifyInfoUsers.php?${params.toString()}`)
                         .then(response => response.json())
                         .then(data => {
                             console.log(data);
+                            if (data.status === 'error') {
+                                const containerMessageCart = document.getElementById("containerMessageCart");
+                                const dialogCompleteInfo = document.createElement("dialog");
+                                dialogCompleteInfo.setAttribute('id', 'dialog');
+                                dialogCompleteInfo.className = 'w-[50%] rounded-[14px] shadow-lg p-2 bg-[#1c1f26] border border-[#a8b3cf33]';
+                                containerMessageCart.appendChild(dialogCompleteInfo);
+                                dialogCompleteInfo.showModal();
+                                containerMessageCart.classList.add('bg-overlay-quaternary-onion');
+                                dialogCompleteInfo.innerHTML = '';
+                                    dialogCompleteInfo.innerHTML += `
+                                    <div class="flex flex-col items-center space-y-2">
+                                        <div class="mt-2 flex flex-row justify-between items-center w-full px-4 border-b border-[#a8b3cf33]">
+                                            <h2 class="text-white text-xl">Produit non disponible en quantité suffisante</h2>
+                                            <button id="btnCloseDialog" class="p-2 hover:bg-slate-800 rounded-lg">
+                                                <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none reply_svg"><path d="M16.804 6.147a.75.75 0 011.049 1.05l-.073.083L13.061 12l4.72 4.72a.75.75 0 01-.977 1.133l-.084-.073L12 13.061l-4.72 4.72-.084.072a.75.75 0 01-1.049-1.05l.073-.083L10.939 12l-4.72-4.72a.75.75 0 01.977-1.133l.084.073L12 10.939l4.72-4.72.084-.072z" fill="currentcolor" fill-rule="evenodd"></path></svg>
+                                            </button>
+                                        </div>
+                                        <div id="productUnavaibleCart" class="flex flex-col items-center space-y-2"></div>
+                                    </div>
+                                    `;
+                                    const productUnavaibleCart = document.getElementById("productUnavaibleCart");
+                                    for (let product of data.infoProduct) {
+                                        productUnavaibleCart.innerHTML += `
+                                        <div class="flex items-start space-x-4 text-white">
+                                                <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-20 rounded">
+                                                <div class="flex flex-col items-start space-y-2">
+                                                    <p class="font-semibold text-xl">${product.name_product}</p>
+                                                    <p class="">
+                                                        <span>Prix :</span>
+                                                        <span class="font-semibold">${product.price_product}</span>
+                                                    </p>
+                                                    <p class="">
+                                                        <span>Quantité :</span>
+                                                        <span class="font-semibold">${product.quantity_product}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }
+                                    const btnCloseDialog = document.getElementById("btnCloseDialog");
+                                    btnCloseDialog.addEventListener('click', () => {
+                                        dialogCompleteInfo.close();
+                                        containerMessageCart.classList.remove('bg-overlay-quaternary-onion');
+                                        dialogCompleteInfo.innerHTML = '';
+                                    });
+
+                            }
                             if (data.verify === true) {
                                 const containerMessageCart = document.getElementById("containerMessageCart");
                                 const dialogCompleteInfo = document.createElement("dialog");
@@ -348,7 +408,7 @@ async function getCart() {
                                                 if (data.status === 'success') {
                                                     displaySuccessMessageFormUpdateProduct(message, data.message);
                                                     setTimeout(() => {
-
+                                                        window.location.href = 'recapCart.php';
                                                     }, 2000);
                                                 }
                                                 if (data.status === 'error') {
