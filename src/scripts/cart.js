@@ -107,23 +107,8 @@ if (btnLogin) {
 
 // Cart.js
 
-function checkInput(input) {
-    const small = input.nextElementSibling;
-    if (input.value.trim() === '') {
-        input.classList.add('input_error');
-        small.innerHTML = `
-    <div class="flex space-x-2">
-        <svg width="20" height="20" viewBox="0 0 24 24" stroke="#ff0303" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M10.2202 4.4703C10.9637 3.02048 13.036 3.02048 13.7795 4.4703L20.5062 17.5874C21.1887 18.9183 20.2223 20.5 18.7266 20.5H5.27316C3.77747 20.5 2.81101 18.9183 3.49352 17.5874L10.2202 4.4703Z"></path><path d="M11.5191 13.3173L10.5493 9.92306C10.274 8.95934 10.9976 8.00001 11.9999 8.00001C13.0021 8.00001 13.7258 8.95934 13.4504 9.92306L12.4806 13.3173C12.3425 13.8009 11.6573 13.8009 11.5191 13.3173Z"></path><path d="M12.9999 17C12.9999 17.5523 12.5522 18 11.9999 18C11.4476 18 10.9999 17.5523 10.9999 17C10.9999 16.4477 11.4476 16 11.9999 16C12.5522 16 12.9999 16.4477 12.9999 17Z"></path></svg>
-        <p class="text-red-500">Champ Requis</p>
-    </div>
-    `;
-        return false;
-    } else {
-        input.classList.remove('input_error');
-        small.innerHTML = '';
-        return true;
-    }
-}
+
+
 // Récupérer les données du produit
 async function cartHeader() {
     const cartButtonHeader = document.getElementById("cartHeader");
@@ -193,7 +178,21 @@ async function cartHeader() {
 cartHeader();
 
 
-
+function checkInput(input, selector) {
+    selector.innerHTML = '';
+    if (input.value.trim() === '') {
+        input.classList.add('input_error');
+        selector.innerHTML = `<div class="flex space-x-2">
+                                                <svg width="20" height="20" viewBox="0 0 24 24" stroke="#ff0303" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M10.2202 4.4703C10.9637 3.02048 13.036 3.02048 13.7795 4.4703L20.5062 17.5874C21.1887 18.9183 20.2223 20.5 18.7266 20.5H5.27316C3.77747 20.5 2.81101 18.9183 3.49352 17.5874L10.2202 4.4703Z"></path><path d="M11.5191 13.3173L10.5493 9.92306C10.274 8.95934 10.9976 8.00001 11.9999 8.00001C13.0021 8.00001 13.7258 8.95934 13.4504 9.92306L12.4806 13.3173C12.3425 13.8009 11.6573 13.8009 11.5191 13.3173Z"></path><path d="M12.9999 17C12.9999 17.5523 12.5522 18 11.9999 18C11.4476 18 10.9999 17.5523 10.9999 17C10.9999 16.4477 11.4476 16 11.9999 16C12.5522 16 12.9999 16.4477 12.9999 17Z"></path></svg>
+                                                <p class="text-red-500">Champ Requis</p>
+                                            </div>`;
+        return false;
+    } else {
+        input.classList.remove('input_error');
+        selector.innerHTML = '';
+        return true;
+    }
+}
 
 // Page cart.php
 async function getCart() {
@@ -207,12 +206,12 @@ async function getCart() {
                 const nbProduits = data.countProducts;
                 containerCart.innerHTML = `
                     <div class="flex flex-col items-center space-y-2 w-full">
-                        <div class="flex flex-row items-center justify-between w-9/12">
-                            <div id="total_items_cart">
-                                <p class="text-[#a8b3cf]">Vous avez ${nbProduits} articles dans votre panier</p>
+                        <div class="flex flex-row items-center justify-between w-9/12 text-white">
+                            <div id="total_items_cart" class="bg-[#1c1f26] px-6 py-6 border border-[#a8b3cf33] rounded-[12px]">
+                                <p class="">Vous avez <b class="font-bold">${nbProduits}</b> articles dans votre panier</p>
                             </div>
-                            <div id="total_prix">
-                                <p class="text-[#a8b3cf]">Total : ${total} €</p>
+                            <div id="total_prix" class="bg-[#1c1f26] px-6 py-6 border border-[#a8b3cf33] rounded-[12px]">
+                                <p class="font-regular">Total : <b class="font-bold">${total}</b> €</p>
                             </div>
                         </div>
                         <div id="displayproductsInCart" class=" w-9/12"></div>
@@ -235,60 +234,65 @@ async function getCart() {
                                 const containerMessageCart = document.getElementById("containerMessageCart");
                                 const dialogCompleteInfo = document.createElement("dialog");
                                 dialogCompleteInfo.setAttribute('id', 'dialog');
-                                dialogCompleteInfo.className = 'bg-white w-[80%] rounded-lg shadow-lg p-2';
+                                dialogCompleteInfo.className = 'w-[50%] rounded-[14px] shadow-lg p-2 bg-[#1c1f26] border border-[#a8b3cf33]';
                                 containerMessageCart.appendChild(dialogCompleteInfo);
                                 dialogCompleteInfo.showModal();
+                                containerMessageCart.classList.add('bg-overlay-quaternary-onion');
                                 dialogCompleteInfo.innerHTML = '';
                                 for (let info of data.info) {
                                     dialogCompleteInfo.innerHTML += `
                                     <div class="flex flex-col items-center space-y-2">
-                                        <div class="mt-2 flex flex-row justify-between items-center w-full px-4">
-                                            <p class="text-[#a8b3cf]">Veuillez renseigner votre profil.</p>
+                                        <div class="mt-2 flex flex-row justify-between items-center w-full px-4 border-b border-[#a8b3cf33]">
+                                            <h2 class="text-white text-xl">Veuillez renseigner votre profil.</h2>
                                             <button id="btnCloseDialog" class="p-2 hover:bg-slate-100 rounded-lg">
                                                 <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none reply_svg"><path d="M16.804 6.147a.75.75 0 011.049 1.05l-.073.083L13.061 12l4.72 4.72a.75.75 0 01-.977 1.133l-.084-.073L12 13.061l-4.72 4.72-.084.072a.75.75 0 01-1.049-1.05l.073-.083L10.939 12l-4.72-4.72a.75.75 0 01.977-1.133l.084.073L12 10.939l4.72-4.72.084-.072z" fill="currentcolor" fill-rule="evenodd"></path></svg>
                                             </button>
                                         </div>
                                         <div class="flex flex-row items-center justify-between w-9/12">
-                                            <form action="" method="post" id="formCompleteInfo" class="flex flex-col space-y-2">
-                                                <div class="flex flex-row space-x-4">
+                                            <form action="" method="post" id="formCompleteInfo" class="flex flex-col space-y-4 w-full pb-4">
+                                                <div class="flex flex-row justify-between space-x-4">
                                                     <div>
-                                                        <label for="nom_client">Nom</label>
-                                                        <input type="text" value="${info.nom_client}" name="nom_client" placeholder="Votre Nom" class="p-2 rounded-[14px] bg-slate-100">
-                                                        <small id="errorSmall" class="text-red-500"></small>
+                                                        <div class="relative">
+                                                        <input type="text" value="${info.nom_client}" name="nom_client" placeholder="Votre Nom" class="px-2.5 pt-4 pb-1 text-white bg-[#31333a] hover:bg-[#21262D] rounded-[14px] textField_form focus:outline-none w-full">
+                                                        <label for="nom_client" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Nom</label>
+                                                        </div>
+                                                        <small id="alertNom" class="flex items-center text-red-500 h-6 py-1 text-sm"></small>
                                                     </div>
-                                                    <div>
-                                                        <label for="prenom_client">Prénom</label>
-                                                        <input type="text" value="${info.prenom_client}" name="prenom_client" placeholder="Votre Prénom" class="p-2 rounded-[14px] bg-slate-100">
-                                                        <small id="errorSmall" class="text-red-500"></small>
+                                                    <div class="relative">
+                                                        <input type="text" value="${info.prenom_client}" name="prenom_client" placeholder="Votre Prénom" class="px-2.5 pt-4 pb-1 text-white bg-[#31333a] hover:bg-[#21262D] rounded-[14px] textField_form focus:outline-none w-full">
+                                                        <label for="prenom_client" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Prénom</label>
+                                                        <small id="alertPrenom" class="flex items-center text-red-500 h-6 py-1 text-sm"></small>
                                                     </div>
                                                 </div>
-                                                <div class="flex flex-row space-x-4">
-                                                    <div>
-                                                        <label for="mobile_client">Tel. mobile (optionel)</label>
-                                                        <input type="text" value="${info.mobile_client}" placeholder="Votre mobile" name="mobile_client" class="p-2 rounded-[14px] bg-slate-100">
-                                                        <small id="errorSmall" class="text-red-500"></small>
+                                                <div class="flex flex-row justify-between space-x-4">
+                                                    <div class="relative">
+                                                        <input type="text" value="${info.mobile_client}" placeholder="Votre mobile" name="mobile_client" class="px-2.5 pt-4 pb-1 text-white bg-[#31333a] hover:bg-[#21262D] rounded-[14px] textField_form focus:outline-none w-full">
+                                                        <label for="mobile_client" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Tel. mobile (optionel)</label>
+                                                        <small id="alertMobile" class="flex items-center text-red-500 h-6 py-1 text-sm"></small>
                                                     </div>
-                                                    <div>
-                                                        <label for="pays_client">Pays</label>
-                                                        <input type="text" value="${info.pays_client}" placeholder="Votre Pays" name="pays_client" class="p-2 rounded-[14px] bg-slate-100">
-                                                        <small id="errorSmall" class="text-red-500"></small>
+                                                    <div class="relative">
+                                                        <input type="text" value="${info.pays_client}" placeholder="Votre Pays" name="pays_client" class="px-2.5 pt-4 pb-1 text-white bg-[#31333a] hover:bg-[#21262D] rounded-[14px] textField_form focus:outline-none w-full">
+                                                        <label for="pays_client" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Pays</label>
+                                                        <small id="alertPays" class="flex items-center text-red-500 h-6 py-1 text-sm"></small>
                                                     </div>
                                                 </div>
                                                 <div class="flex flex-col w-full">
-                                                    <label for="adresse_client">Adresse</label>
-                                                    <input type="text" value="${info.adresse_client}" placeholder="Votre Adresse" name="adresse_client" class="p-2 rounded-[14px] bg-slate-100">
-                                                    <small id="errorSmall" class="text-red-500"></small>
-                                                </div>
-                                                <div class="flex flex-row space-x-4">
-                                                    <div>
-                                                        <label for="ville_client">Ville</label>
-                                                        <input type="text" value="${info.ville_client}" placeholder="Votre Ville" name="ville_client" class="p-2 rounded-[14px] bg-slate-100">
-                                                        <small id="errorSmall" class="text-red-500"></small>
+                                                    <div class="relative">
+                                                        <input type="text" value="${info.adresse_client}" placeholder="Votre Adresse" name="adresse_client" class="px-2.5 pt-4 pb-1 text-white bg-[#31333a] hover:bg-[#21262D] rounded-[14px] textField_form focus:outline-none w-full">
+                                                        <label for="adresse_client" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Adresse</label>
+                                                        <small id="alertAdresse" class="flex items-center text-red-500 h-6 py-1 text-sm"></small>
                                                     </div>
-                                                    <div>
-                                                        <label for="code_postal_client">Code Postal</label>
-                                                        <input type="text" value="${info.code_postal_client}" placeholder="Votre Code Postal" name="code_postal_client" class="p-2 rounded-[14px] bg-slate-100">
-                                                        <small id="errorSmall" class="text-red-500"></small>
+                                                </div>
+                                                <div class="flex flex-row justify-between space-x-4">
+                                                    <div class="relative">
+                                                        <input type="text" value="${info.ville_client}" placeholder="Votre Ville" name="ville_client" class="px-2.5 pt-4 pb-1 text-white bg-[#31333a] hover:bg-[#21262D] rounded-[14px] textField_form focus:outline-none w-full">
+                                                        <label for="ville_client" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Ville</label>
+                                                        <small id="alertVille" class="flex items-center text-red-500 h-6 py-1 text-sm"></small>
+                                                    </div>
+                                                    <div class="relative">
+                                                        <input type="text" value="${info.code_postal_client}" placeholder="Votre Code Postal" name="code_postal_client" class="px-2.5 pt-4 pb-1 text-white bg-[#31333a] hover:bg-[#21262D] rounded-[14px] textField_form focus:outline-none w-full">
+                                                        <label for="code_postal_client" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Code Postal</label>
+                                                        <small id="alertZip" class="flex items-center text-red-500 h-6 py-1 text-sm"></small>
                                                     </div>
                                                 </div>
                                                 <div id="errorMsg" class="w-full h-fit"></div>
@@ -309,19 +313,30 @@ async function getCart() {
                                     let adresse_client_input = document.querySelector('[name="adresse_client"]');
                                     let code_postal_client_input = document.querySelector('[name="code_postal_client"]');
 
-                                    nom_client_input.addEventListener('input', () => { checkInput(nom_client_input) });
-                                    prenom_client_input.addEventListener('input', () => { checkInput(prenom_client_input) });
-                                    pays_client_input.addEventListener('input', () => { checkInput(pays_client_input) });
-                                    ville_client_input.addEventListener('input', () => { checkInput(ville_client_input) });
-                                    adresse_client_input.addEventListener('input', () => { checkInput(adresse_client_input) });
-                                    code_postal_client_input.addEventListener('input', () => { checkInput(code_postal_client_input) });
+                                    const smallNom = document.querySelector('#alertNom');
+                                    const smallPrenom = document.querySelector('#alertPrenom');
+                                    const smallPays = document.getElementById("alertPays");
+                                    const smallVille = document.getElementById("alertVille");
+                                    const smallAdresse = document.getElementById("alertAdresse");
+                                    const smallZip = document.getElementById("alertZip");
+
+
+                                    nom_client_input.addEventListener('input', () => { checkInput(nom_client_input, smallNom) });
+                                    prenom_client_input.addEventListener('input', () => { checkInput(prenom_client_input, smallPrenom) });
+                                    pays_client_input.addEventListener('input', () => { checkInput(pays_client_input, smallPays) });
+                                    ville_client_input.addEventListener('input', () => { checkInput(ville_client_input, smallVille) });
+                                    adresse_client_input.addEventListener('input', () => { checkInput(adresse_client_input, smallAdresse) });
+                                    code_postal_client_input.addEventListener('input', () => { checkInput(code_postal_client_input, smallZip) });
 
                                     const btnUpdateInfo = document.getElementById("formCompleteInfo");
                                     btnUpdateInfo.addEventListener('submit', async (ev) => {
                                         ev.preventDefault();
                                         const message = document.getElementById("errorMsg");
-                                        if (checkInput(nom_client_input) === false && checkInput(prenom_client_input)  === false && checkInput(pays_client_input) === false && checkInput(adresse_client_input) === false && checkInput(code_postal_client_input) === false && checkInput(ville_client_input) === false) {
-                                            message.innerHTML = `<p class="text-red-500">Veuillez remplir tous les champs</p>`;
+                                        if (checkInput(nom_client_input, smallNom) === false && checkInput(prenom_client_input, smallPrenom)  === false && checkInput(pays_client_input, smallPays) === false && checkInput(adresse_client_input, smallAdresse) === false && checkInput(code_postal_client_input, smallZip) === false && checkInput(ville_client_input, smallVille) === false) {
+                                            message.innerHTML = `<div class="flex items-center py-3 px-2 rounded-[14px] bg-[#DC110154] text-[#D8000C] border-l-[3px] border-[#D8000C]">
+                                                                    <img src="public/images/icones/danger-red-stroke-2.svg" alt="" class="w-5 h-5">
+                                                                    <small class="text-lg">Veuillez remplir tous les champs</small>
+                                                                </div>`;
                                         } else {
                                             await fetch('src/php/fetch/profil/updateInfoClient.php', {
                                                 method: 'POST',
@@ -346,6 +361,7 @@ async function getCart() {
                                     const btnCloseDialog = document.getElementById("btnCloseDialog");
                                     btnCloseDialog.addEventListener('click', () => {
                                         dialogCompleteInfo.close();
+                                        containerMessageCart.classList.remove('bg-overlay-quaternary-onion');
                                         dialogCompleteInfo.innerHTML = '';
                                     });
                                 }
@@ -358,10 +374,10 @@ async function getCart() {
                 const displayproductsInCart = document.getElementById("displayproductsInCart");
                 for (const product of data.products) {
                     displayproductsInCart.innerHTML += `
-                    <div class="flex xl:flex-row flex-col items-center justify-between px-5 py-3 border-b-[1px] border-[#e5e7eb]">
-                        <div class="flex xl:flex-row items-center">
+                    <div class="flex xl:flex-row flex-col items-center justify-between px-5 py-3 border-[1px] border-[#a8b3cf33] bg-[#1c1f26] rounded-[14px] my-3">
+                        <div class="flex xl:flex-row items-center w-10/12 justify-between pr-4">
                             <div class="flex flex-row items-center">
-                                <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded-lg">
+                                <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded">
                                 <p class="text-[#a8b3cf] ml-5">${product.name_product}</p>
                             </div>
                             <div class="flex flex-col items-center">
@@ -370,14 +386,16 @@ async function getCart() {
                             </div>
                         </div>
                         <div id="actionOnProduct" class="flex justify-end space-x-2">
-                            <form action="" method="POST" id="formModifyProduct_${product.id_product}" class="flex flex-row items-center space-x-0.5">
+                            <form action="" method="POST" id="formModifyProduct_${product.id_product}" class="flex flex-row items-center space-x-2">
                                 <input type="hidden" name="id_product" value="${product.id_product}">
-                                <input type="number" name="quantity_product" id="quantity_product" class="bg-[#000] text-white p-2 rounded-lg w-[55px]" min="1" max="${product.quantite_product}" value="${product.quantity_product}">
-                                <button class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold" type="submit" id="modifyProduct_${product.id_product}" data-id-cat="${product.id_product}">
+                                <input type="number" name="quantity_product" id="quantity_product" class="bg-[#000] text-white p-3 rounded-lg w-[55px]" min="1" max="${product.quantite_product}" value="${product.quantity_product}">
+                                <button class="bg-[#a87ee6] text-white px-5 py-3 rounded-lg font-bold" type="submit" id="modifyProduct_${product.id_product}" data-id-cat="${product.id_product}">
                                     Modifier
                                 </button>
                             </form>
-                            <button class="bg-[#e04337] text-white px-5 py-2 rounded-lg font-extrabold" id="deleteProduct_${product.id_product}" data-id-cat="${product.id_product}">Supprimer</button>
+                            <button class="bg-[#a87ee6] text-white px-4 py-2 rounded-lg font-extrabold" id="deleteProduct_${product.id_product}" data-id-cat="${product.id_product}">
+                                <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none"><path d="M16.804 6.147a.75.75 0 011.049 1.05l-.073.083L13.061 12l4.72 4.72a.75.75 0 01-.977 1.133l-.084-.073L12 13.061l-4.72 4.72-.084.072a.75.75 0 01-1.049-1.05l.073-.083L10.939 12l-4.72-4.72a.75.75 0 01.977-1.133l.084.073L12 10.939l4.72-4.72.084-.072z" fill="currentcolor" fill-rule="evenodd"></path></svg>
+                            </button>
                         </div>
                     </div>
                     `;
@@ -423,12 +441,12 @@ async function getCart() {
                 const nbProduits = data.countProducts;
                 containerCart.innerHTML = `
                     <div class="flex flex-col items-center space-y-2 w-full">
-                        <div class="flex flex-row items-center justify-between w-9/12">
+                        <div class="flex flex-row items-center justify-between w-9/12 text-white">
                             <div id="total_items_cart">
-                                <p class="text-[#a8b3cf]">Vous avez ${nbProduits} articles dans votre panier</p>
+                                <p class="font-bold">Vous avez ${nbProduits} articles dans votre panier</p>
                             </div>
-                            <div id="total_prix">
-                                <p class="text-[#a8b3cf]">Total : ${total} €</p>
+                            <div id="total_prix" class="bg-[#1c1f26]">
+                                <p class="font-bold">Total : ${total} €</p>
                             </div>
                         </div>
                         <div id="displayproductsInCart" class="w-full xl:w-9/12"></div>

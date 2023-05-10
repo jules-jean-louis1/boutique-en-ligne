@@ -405,4 +405,18 @@ WHERE users.id_users = :id;");
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+    public function verifieIfUserExist(int $id) : bool
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT * FROM users WHERE id_users = :id");
+        $req->execute(array(
+            "id" => $id
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($result)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

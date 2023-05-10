@@ -115,6 +115,14 @@ body {
     outline: #a8b3cf;
     border: 1px solid #a8b3cf;
 }
+.textField_form:focus {
+    box-shadow: inset 3px 0 0 0 #fff;
+    outline: #fff;
+    border: 1px solid #fff;
+}
+.textField_form:hover {
+    box-shadow: inset 3px 0 0 0 #fff;
+}
 .bg-overlay-quaternary-onion {
     position: fixed;
     top: 0;

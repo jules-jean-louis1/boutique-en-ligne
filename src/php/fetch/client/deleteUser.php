@@ -3,7 +3,7 @@ session_start();
 require_once "../../Classes/Client.php";
 
 if (isset($_GET['id'])) {
-    $id = intval($_GET['id']);
+    $id = htmlspecialchars($_GET['id']);
     if ($_SESSION['type_compte'] !== 'administrateur') {
         header("Content-Type: application/json");
         echo json_encode(['status' => 'error', 'message' => 'Vous n\'avez pas les droits pour supprimer un utilisateur']);
@@ -18,6 +18,12 @@ if (isset($_GET['id'])) {
         exit();
     } else {
         $user = new Client();
+        $userExist = $user->verifieIfUserExist($id);
+        if (!$userExist) {
+            header("Content-Type: application/json");
+            echo json_encode(['status' => 'error', 'message' => 'Utilisateur introuvable']);
+            exit();
+        }
         $deleteUser = $user->deleteUser($id);
         header("Content-Type: application/json");
         echo json_encode(['status' => 'success', 'message' => 'Utilisateur supprimé avec succès']);
