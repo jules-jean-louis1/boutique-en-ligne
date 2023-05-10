@@ -187,7 +187,6 @@ async function addProduct() {
         const dialog = document.createElement('dialog');
         dialog.setAttribute('id', 'dialog');
         dialog.className = 'dialog_modal w-10/12 bg-[#24272A] text-[#a8b3cf] rounded-lg shadow-lg';
-        body.appendChild(dialog);
         dialog.innerHTML = '';
         dialog.innerHTML = `
         <div class="w-full p-2 flex flex-col space-y-2">
@@ -235,6 +234,9 @@ async function addProduct() {
             </div>
         </div>
             `;
+        containerdialogUpdateProduct.appendChild(dialog);
+        dialog.showModal();
+        containerdialogUpdateProduct.classList.add('bg-overlay-quaternary-onion');
         let selectedSubCategoryId = null;
 
         const searchSubCategories = document.querySelector('#searchSubCategories');
@@ -268,13 +270,11 @@ async function addProduct() {
                     }
                 });
         });
-
-
-        dialog.showModal();
         const btnClose = document.querySelector('#btncloseDialog');
         btnClose.addEventListener('click', () => {
             dialog.close();
-            dialog.remove();
+            containerdialogUpdateProduct.classList.remove('bg-overlay-quaternary-onion');
+            containerdialogUpdateProduct.innerHTML = '';
         });
 
         const formAddProduct = document.querySelector('#formAddProduct');
@@ -444,7 +444,7 @@ async function gestionProduct() {
                     const btnUpdateProduct = document.querySelector(`#btnUpdateProduct_${product.id_product}`);
                     btnUpdateProduct.addEventListener('click',  (ev) => {
                         const dialogUpdateProduct = document.createElement('dialog');
-
+                        containerdialogUpdateProduct.classList.add('bg-overlay-quaternary-onion');
                         dialogUpdateProduct.setAttribute('id', 'dialog');
                         dialogUpdateProduct.className = 'bg-white p-2 rounded-lg lg:w-9/12 w-3/4';
                         dialogUpdateProduct.innerHTML = `
@@ -515,7 +515,8 @@ async function gestionProduct() {
                         const BtnCloseDialogUpdateProduct = document.getElementById('btncloseDialogUpdate');
                         BtnCloseDialogUpdateProduct.addEventListener('click', () => {
                             dialogUpdateProduct.close();
-                            dialogUpdateProduct.remove();
+                            containerdialogUpdateProduct.classList.remove('bg-overlay-quaternary-onion');
+                            containerdialogUpdateProduct.innerHTML = '';
                         });
 
                         let selectedSubCategoryId = null;
@@ -1158,6 +1159,7 @@ async function fetchUser(page = 1, search = '', order = 'DESC') {
                               console.log(data);
                                 containerdialogUpdateProduct.innerHTML = '';
                                 if (data.status === 'success') {
+                                    containerdialogUpdateProduct.classList.add('bg-overlay-quaternary-onion');
                                     const dialogDetailOrder = document.createElement('dialog');
                                     dialogDetailOrder.setAttribute('id', 'dialog');
                                     dialogDetailOrder.className = 'bg-[#0e1217] rounded-[14px] border border-[#a8b3cf33] lg:w-7/12 w-3/4';
@@ -1210,6 +1212,7 @@ async function fetchUser(page = 1, search = '', order = 'DESC') {
                                     const btncloseDialogUpdate = document.querySelector('#btncloseDialogUpdate');
                                     btncloseDialogUpdate.addEventListener('click', () => {
                                         dialogDetailOrder.close();
+                                        containerdialogUpdateProduct.classList.remove('bg-overlay-quaternary-onion');
                                         dialogDetailOrder.innerHTML = '';
                                     })
                                 }
@@ -1306,6 +1309,7 @@ async function fetchOrder(search, order) {
                             .then(data => {
                                 containerdialogUpdateProduct.innerHTML = '';
                                if (data.status === 'success') {
+                                   containerdialogUpdateProduct.classList.add('bg-overlay-quaternary-onion');
                                    const dialogDetailOrder = document.createElement('dialog');
                                    dialogDetailOrder.setAttribute('id', 'dialog');
                                    dialogDetailOrder.className = 'bg-[#0e1217] rounded-[14px] border border-[#a8b3cf33] lg:w-7/12 w-3/4';
@@ -1353,6 +1357,7 @@ async function fetchOrder(search, order) {
                                    const BtnCloseDialogUpdateProduct = document.getElementById('btncloseDialogUpdate');
                                    BtnCloseDialogUpdateProduct.addEventListener('click', () => {
                                        dialogDetailOrder.close();
+                                       containerdialogUpdateProduct.classList.remove('bg-overlay-quaternary-onion');
                                        dialogDetailOrder.innerHTML = '';
                                    });
                                }

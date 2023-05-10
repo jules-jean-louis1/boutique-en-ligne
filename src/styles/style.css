@@ -115,3 +115,15 @@ body {
     outline: #a8b3cf;
     border: 1px solid #a8b3cf;
 }
+.bg-overlay-quaternary-onion {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    min-height: 100vh;
+    padding: 0;
+    overflow-y: scroll;
+    z-index: 10;
+    background-color: #6637e93d;
+}

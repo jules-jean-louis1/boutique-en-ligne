@@ -225,10 +225,12 @@ function updateField(data, fieldName, fieldInput, smallField) {
 // Amelioration du formulaire d'inscription
 async function Login(btnLogin) {
     const containerForm = document.getElementById("containerLoginRegisterForm");
+    containerForm.innerHTML = '';
     function createDialog() {
         const dialog = document.createElement("dialog");
         dialog.setAttribute("id", "dialog");
         dialog.setAttribute("class", "w-[26.25rem] h-[55%] bg-[#202225] border-[1px] border-[#a8b3cf33] rounded-[14px] shadow-lg");
+        dialog.innerHTML = '';
 
         const divBottom = document.createElement("div");
         divBottom.setAttribute("id", "divBottom");
@@ -269,6 +271,8 @@ async function Login(btnLogin) {
         dialog.appendChild(divBottom);
         containerForm.appendChild(dialog);
     }
+
+
     createDialog();
     const dialog = document.getElementById("dialog");
     const containerDiv = document.getElementById("containerDiv");
@@ -323,6 +327,7 @@ async function Login(btnLogin) {
                 fetch('src/php/fetch/registerLogin/login.php')
                     .then(response => response.text())
                     .then(data => {
+                        containerDiv.innerHTML ='';
                         containerDiv.innerHTML = data;
                         const formLogin = document.querySelector('#login-form');
                         formLogin.addEventListener('submit', (ev) => {
@@ -362,10 +367,11 @@ async function Login(btnLogin) {
                     })
             } else {
                 buttonLogin.textContent = "Connexion";
-                ParaModifyText.textContent = "Se connecter sur Game+";
+                ParaModifyText.textContent = "S'inscrire sur Game+";
                 fetch('src/php/fetch/registerLogin/register.php')
                     .then(response => response.text())
                     .then(data => {
+                        containerDiv.innerHTML ='';
                         containerDiv.innerHTML = data;
                         const formRegister = document.querySelector('#resgister-form');
                         formRegister.addEventListener('submit', (ev) => {

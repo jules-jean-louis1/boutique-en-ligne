@@ -19,7 +19,7 @@ session_start();
     <header class="w-full">
         <?php require_once "src/import/header.php"; ?>
     </header>
-    <main class="bg-[#242629] mb-10">
+    <main class="bg-[#242629] pb-12">
         <div id="containerLoginRegisterForm"></div>
         <section id="containerMessageCart"></section>
         <section>
