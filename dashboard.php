@@ -26,7 +26,14 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
     </article>
     <div id="containerButtonAction" class="flex justify-center space-x-5 lg:pt-[3%] pt-[6%]">
         <button type="button" class="bg-[#A87EE6FF] hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center space-x-2" id="buttonSeeProduct">
-            <svg width="24" height="24" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M3.67709 8.5L8.70966 3.47186C9.05795 3.17747 9.50825 3 10 3H19C20.1046 3 21 3.89543 21 5V14C21 14.5763 20.7563 15.0956 20.3663 15.4606L15.3229 20.5M15.3229 8.5L20.3229 3.5M5 21H14C15.1046 21 16 20.1046 16 19V10C16 8.89543 15.1046 8 14 8H5C3.89543 8 3 8.89543 3 10V19C3 20.1046 3.89543 21 5 21Z"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-device-gamepad-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M12 5h3.5a5 5 0 0 1 0 10h-5.5l-4.015 4.227a2.3 2.3 0 0 1 -3.923 -2.035l1.634 -8.173a5 5 0 0 1 4.904 -4.019h3.4z" />
+                <path d="M14 15l4.07 4.284a2.3 2.3 0 0 0 3.925 -2.023l-1.6 -8.232" />
+                <path d="M8 9v2" />
+                <path d="M7 10h2" />
+                <path d="M14 10h2" />
+            </svg>
             <span>Produits</span>
         </button>
         <button type="button" class="bg-[#A87EE6FF] hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center space-x-2" id="buttonSeeCommandes">
@@ -34,7 +41,11 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
             <span>Commandes</span>
         </button>
         <button type="button" class="bg-[#A87EE6FF] hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center space-x-2" id="buttonSeeCategories">
-            <svg width="24" height="24" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M7 5C5.89543 5 5 5.89543 5 7V20.1121C5 21.0614 6.19882 21.4765 6.78587 20.7305L8.14754 19M17 18.5V20.1121C17 21.0614 15.8012 21.4765 15.2141 20.7305L11.7859 16.3737C11.5857 16.1193 11.2928 15.9921 11 15.9921"></path><path d="M7 5C7 3.89543 7.89543 3 9 3H17C18.1046 3 19 3.89543 19 5V18.1121C19 19.0614 17.8012 19.4765 17.2141 18.7305L13.7859 14.3737C13.3855 13.8649 12.6145 13.8649 12.2141 14.3737L8.78587 18.7305C8.19882 19.4765 7 19.0614 7 18.1121V5Z"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <circle cx="8.5" cy="8.5" r="1" fill="currentColor" />
+                <path d="M4 7v3.859c0 .537 .213 1.052 .593 1.432l8.116 8.116a2.025 2.025 0 0 0 2.864 0l4.834 -4.834a2.025 2.025 0 0 0 0 -2.864l-8.117 -8.116a2.025 2.025 0 0 0 -1.431 -.593h-3.859a3 3 0 0 0 -3 3z" />
+            </svg>
             <span>Catégories</span>
         </button>
         <button type="button" class="bg-[#A87EE6FF] hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center space-x-2" id="buttonSeeUsers">

@@ -487,11 +487,13 @@ async function displayAvis() {
                             <div class="flex flex-row w-full justify-start">
                                 <div>
                                     <button class="text-[#A8B3CF] p-2 rounded-lg duration-100 ease-in hover:text-[#39e58c] hover:bg-[#1ddc6f3d]" id="buttonRepondreAvis_${avis.id_avis}">
-                                        <svg width="1.2em" height="1.2em" viewBox="0 0 24 24" stroke="#A8B3CF" fill="none" stroke-width="0.3" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 pointer-events-none"><path d="M8.084 3.217a35.447 35.447 0 017.05-.078l.782.078.279.031c1.089.121 1.885.372 2.606.828a4.516 4.516 0 011.664 1.86c.336.69.5 1.423.53 2.361l.005.321v3.975a4.493 4.493 0 01-3.545 4.392l-.207.04-2.089.346-2.86 2.992-.147.135c-.986.789-2.399.623-3.205-.324-.532-.625-.616-1.34-.51-2.29l.029-.224.038-.254.033-.187-1.332-.189a5.011 5.011 0 01-1.677-.55l-.253-.146-.243-.16a4.777 4.777 0 01-1.491-1.721 4.935 4.935 0 01-.532-1.972l-.009-.3V8.618c0-1.096.162-1.915.535-2.683.375-.77.94-1.4 1.664-1.859.649-.41 1.359-.655 2.288-.788l.318-.04.28-.031zm7.666 1.491a33.948 33.948 0 00-6.752-.075l-.748.075-.28.031c-.915.102-1.481.297-1.97.606a3.016 3.016 0 00-1.116 1.247c-.228.468-.357.989-.38 1.76l-.004.266v3.563c0 .577.134 1.116.375 1.587.242.471.592.874 1.024 1.18.37.263.801.453 1.276.554l.242.043 1.98.283c.339.048.457.096.575.175.119.078.262.187.27.386l-.002.024-.013.08-.164.741-.064.333c-.111.63-.167 1.332.09 1.634.263.309.7.39 1.037.187l.089-.062 2.998-3.135.13-.101.092-.063.077-.04.08-.03.035-.01.087-.02L17 15.545a2.993 2.993 0 002.495-2.77l.005-.182V8.618c0-.921-.13-1.506-.384-2.026A3.016 3.016 0 0018 5.345c-.44-.278-.943-.464-1.706-.572l-.265-.034-.279-.03zm-.55 6.294l.093.005c.398.044.707.36.707.746 0 .38-.301.693-.691.743l-.109.007H8.8l-.093-.005c-.398-.044-.707-.36-.707-.745 0-.38.301-.694.691-.744l.109-.007h6.4zm0-3.5l.093.004c.398.044.707.36.707.746 0 .38-.301.693-.691.743l-.109.007H8.8l-.093-.005C8.309 8.953 8 8.637 8 8.252c0-.38.301-.694.691-.744l.109-.007h6.4z"  fill="currentcolor" fill-rule="evenodd"></path></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                          <path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1" />
+                                        </svg>                                    
                                     </button>
                                 </div>
-                                <div id="callToAction" class="flex space-x-2"></div>
-                                
+                                <div id="callToAction" class="flex"></div>
                             </div>
                         <div id="reponseAvis-${avis.id_avis}" class="w-full"></div>
                     </div>
@@ -500,17 +502,25 @@ async function displayAvis() {
                     if (avis.users_id === Users_id) {
                         callToAction.innerHTML = `
                         <div class="flex flex-row justify-between w-full">
-                            <button class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg mx-2 bg-transparent" id="buttonEditAvis_${avis.id_avis}">
-                                <svg width="1em" height="1em" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                    <g id="My-Feed-Update" stroke-width="1.8" fill="none" fill-rule="evenodd">
-                                        <g id="customization" fill="#A8B3CF">
-                                            <path d="M14.1824404,1.6172889 C16.3256165,-0.522826061 19.7912803,-0.520842405 22.0494443,1.51550529 L22.271142,1.72591728 L22.4818462,1.94787454 C24.4530473,4.13313365 24.5205684,7.44268703 22.5896371,9.5969067 L22.3827528,9.81554226 L10.6078507,21.5904402 C9.09044506,23.1026696 7.072424,23.9502567 4.9150063,23.9970158 L4.53291203,23.9970158 L0.0999260362,23.8991341 L0.00213362205,19.4661481 C-0.045784211,17.2940054 0.714752369,15.2394924 2.1489402,13.6637582 L2.40899765,13.3907309 L14.1824404,1.6172889 Z M11.9064782,6.72167754 L3.82321121,14.8049445 C2.69189074,15.9401436 2.05176733,17.4453872 2.00300766,19.0717655 L2.00164715,19.4220385 L2.05723408,21.9418261 L4.57702164,21.997413 L4.92729521,21.9960507 C6.43751089,21.9507562 7.84337465,21.3954025 8.94686226,20.4090477 L9.19605549,20.1738125 L17.2773343,12.0925337 L11.9064782,6.72167754 Z M18.2051113,2.00095629 C17.3386516,1.98283908 16.4781596,2.26385506 15.7950747,2.8481288 L15.5956429,3.03251278 L13.6967636,4.93139216 L19.0676197,10.3022483 L20.9685393,8.4013287 C22.3855182,6.98232025 22.3368069,4.62186337 20.8579051,3.14110678 C20.180157,2.46429378 19.3167369,2.08700734 18.4434061,2.013476 L18.2051113,2.00095629 Z" id="Shape"/>
-                                        </g>
-                                    </g>
+                            <button class="text-[#A8B3CF] p-2 rounded-lg duration-100 ease-in hover:text-[#2cdce6] hover:bg-[#0dcfdc3d]" id="buttonEditAvis_${avis.id_avis}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle-cog" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M11.996 19.98a9.868 9.868 0 0 1 -4.296 -.98l-4.7 1l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c1.842 1.572 2.783 3.691 2.77 5.821" />
+                                  <path d="M19.001 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                  <path d="M19.001 15.5v1.5" />
+                                  <path d="M19.001 21v1.5" />
+                                  <path d="M22.032 17.25l-1.299 .75" />
+                                  <path d="M17.27 20l-1.3 .75" />
+                                  <path d="M15.97 17.25l1.3 .75" />
+                                  <path d="M20.733 20l1.3 .75" />
                                 </svg>                            
                             </button>
-                            <button class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg mx-2 bg-transparent" id="buttonDeleteAvis_${avis.id_avis}">
-                                <svg width="26" height="26" viewBox="0 0 24 24" stroke="#A8B3CF" fill="none" stroke-linejoin="round" stroke-width="1.8" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M11.9999 14.5L14.4999 12M14.4999 12L16.9999 9.5M14.4999 12L16.9999 14.5M14.4999 12L11.9999 9.5M3.39862 12.7282L8.71112 17.7282C8.89662 17.9028 9.14175 18 9.39648 18H18.9999C20.1045 18 20.9999 17.1046 20.9999 16V8C20.9999 6.89543 20.1045 6 18.9999 6L9.39648 6C9.14175 6 8.89662 6.09721 8.71112 6.2718L3.39862 11.2718C2.97911 11.6666 2.97911 12.3334 3.39862 12.7282Z"></path></svg>
+                            <button class="text-[#A8B3CF] p-2 rounded-lg duration-100 ease-in hover:text-[#ff3b3b] hover:bg-[#ff606033]" id="buttonDeleteAvis_${avis.id_avis}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M12.023 19.98a9.87 9.87 0 0 1 -4.323 -.98l-4.7 1l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c2.718 2.319 3.473 5.832 2.096 8.811" />
+                                  <path d="M16 19h6" />
+                                </svg>
                             </button>
                         </div>
                     `;
