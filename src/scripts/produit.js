@@ -1081,12 +1081,87 @@ async function displayAvis() {
             });
         }
         if (data.status == 'error') {
-            containerAvisClient.innerHTML = `
-            <div class="flex flex-col items-center justify-center space-y-2 w-full">
-                <p class="text-[#a8b3cf]">Vous devez être connecté pour voir les avis</p>
-                <a href="connexion" class="text-[#a8b3cf] hover:text-[#a87ee6]">Se connecter</a>
-            </div>
-            `;
+            fetch ('src/php/fetch/avis/getAvis.php?id_product='+URLid)
+                .then(response => response.json())
+                .then(data => {
+                    containerAvisClient.innerHTML = '';
+                    for (let avis of data.avis) {
+                        const avisContainer = document.createElement('div');
+                        avisContainer.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'space-y-2', 'border-[1px]', 'border-[#a8b3cf33]', 'rounded-[14px]', 'xl:w-8/12', 'w-full', 'p-4', 'mb-2');
+                        avisContainer.innerHTML = `
+                    <div id="avis_${avis.id_avis}" class="w-full">
+                        <div class="flex flex-row justify-between w-full">
+                                <p class="text-[#fff] font-semibold">${avis.titre_avis}</p>
+                                <p class="text-[#a8b3cf]">${formatDateSansh(avis.created_at)}</p>
+                            </div>
+                            <div class="w-full flex flex-row justify-between">
+                                <div class="flex flex-row space-x-2">
+                                    <img src="src/images/avatars/${avis.avatar_users}" alt="" class="w-6 h-6 rounded-full">
+                                    <p class="font-semibold text-white">${avis.login_users}</p>
+                                </div>
+                                <div class="flex flex-row justify-end w-full">
+                                    <p class="text-[#a8b3cf]">${afficherEtoiles(avis.note_avis)}</p>
+                                </div>
+                            </div>
+                            <div class="w-full flex flex-row justify-start">
+                                <p class="text-white font-light">${avis.commentaire_avis}</p>
+                            </div>
+                            <div class="flex flex-row w-full justify-start">
+                                <div>
+                                    <button class="text-[#A8B3CF] p-2 rounded-lg duration-100 ease-in hover:text-[#39e58c] hover:bg-[#1ddc6f3d]" id="buttonRepondreAvis_${avis.id_avis}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                          <path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1" />
+                                        </svg>                                    
+                                    </button>
+                                </div>
+                                <div id="callToAction" class="flex"></div>
+                            </div>
+                        <div id="reponseAvis-${avis.id_avis}" class="w-full"></div>
+                    </div>  
+                        `;
+                        containerAvisClient.appendChild(avisContainer);
+                        for (let reply of data.reply_avis) {
+                            if (reply.avis_parent_id == avis.id_avis) {
+                                const reponseAvis = document.getElementById('reponseAvis-' + avis.id_avis);
+                                reponseAvis.innerHTML += `
+                                    <div class="flex flex-col w-full ml-6 p-4 mr-2">
+                                        <div class="flex flex-col justify-between hover:bg-[#21262D] w-full border-l-2 border-[#a8b3cf33]">
+                                            <div class="flex flex-col py-4 px-2">
+                                            <div class="flex flex-row py-1 space-x-2">
+                                                <img src="src/images/avatars/${reply.avatar_users}" alt="" class="w-6 h-6 rounded-full">
+                                                <div class="flex flex-col items-start">
+                                                    <p class="font-semibold text-white">${reply.login_users}</p>
+                                                    <p class="text-[#a8b3cf] text-xs">
+                                                        <span>${formatDistanceToNow(new Date(reply.created_at))}</span>
+                                                        <span id="ifUpdateComment_${reply.id_comment}"></span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-row ml-8">
+                                                <p class="text-white font-light"><b class="bg-[#A87EE6AE] p-0.5 w-fit rounded-lg text-white">@${avis.login_users}</b><span id="replyOfAvis_content"> ${reply.content_comment}</span></p>
+                                            </div>
+                                            </div>
+                                            <div class="flex flex-row py-1 ml-2">
+                                                <div id="button">
+                                                    <button class="text-[#A8B3CF] p-2 rounded-lg duration-100 ease-in hover:text-[#39e58c] hover:bg-[#1ddc6f3d]" id="buttonRepondreComment_${reply.id_comment}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                      <path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1" />
+                                                    </svg>                                                      
+                                                    </button>
+                                                </div>
+                                                <div id="callToActionComment_${reply.id_comment}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="reponseComment_${reply.id_comment}" data-comment-id="${reply.id_comment}" class="ml-4"></div>
+                                    `;
+                                }
+                            }
+                        }
+
+                });
         }
     });
 }
