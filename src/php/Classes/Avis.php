@@ -127,6 +127,29 @@ class Avis extends Database
             "id_comment" => $id_comment
         ]);
     }
+    public function searchIfAvisAsReply(int $id_avis)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT COUNT(avis_parent_id) FROM comment_avis WHERE avis_parent_id = :id_avis");
+        $req->execute([
+            "id_avis" => $id_avis
+        ]);
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        if ($result[0]["COUNT(avis_parent_id)"] > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function deleteUpdateAvis(int $id_avis)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("UPDATE avis_client SET commentaire_avis = :comment WHERE id_avis = :id_avis");
+        $req->execute([
+            "id_avis" => $id_avis,
+            "comment" => "<i>Ce avis a été supprimé.</i>"
+        ]);
+    }
     public function searchIfCommentAsReply($id_comment)
     {
         $bdd = $this->getBdd();
@@ -135,13 +158,16 @@ class Avis extends Database
             "id_comment" => $id_comment
         ]);
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
-//        return count($result) > 0 ? true : false;
+        if ($result[0]["COUNT(comment_parent_id)"] > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 public function updateReplyComment($id_comment)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("UPDATE comment_avis SET content_comment = 'Ce commentaire a était supprimer.' WHERE id_comment = :id_comment");
+        $req = $bdd->prepare("UPDATE comment_avis SET content_comment = '<i>Ce commentaire a été supprimé..</i>' WHERE id_comment = :id_comment");
         $req->execute([
             "id_comment" => $id_comment
         ]);

@@ -91,9 +91,28 @@ FormSearchBarHeader.addEventListener('keyup', (ev) => {
     ev.preventDefault();
     searchHeader();
 });
+let UserAvatar = '';
+let UserLogin = '';
+
 if (profilInfoHeader) {
-    displayUserInfoHeader();
+    async function displayUserInfoHeader() {
+        const response = await fetch('src/php/fetch/client/displayUserById.php');
+        const data = await response.json();
+
+        for (const user of data) {
+            profilInfoHeader.innerHTML = `
+                <p>${user.login_users}</p>
+                <img src="src/images/avatars/${user.avatar_users}" alt="${user.avatar_users}" class="h-6 rounded-full">
+            `;
+            UserAvatar = user.avatar_users;
+            UserLogin = user.login_users;
+        }
+    }
+
+    await displayUserInfoHeader();
 }
+
+
 if (btnRegister) {
     registerHeader(btnRegister);
 }
@@ -462,7 +481,10 @@ async function displayAvis() {
                         containerAvisClient.innerHTML = `<p class="text-[#a8b3cf]">Aucun avis pour ce produit</p>`;
                     } else {
                         containerAvisClient.innerHTML = '';
-                        const displayedParents = [];
+                        let avisID = [];
+                        for (let avis of data.avis) {
+                            avisID.push(avis.id_avis);
+                        }
                         for (let avis of data.avis) {
                             const avisContainer = document.createElement('div');
                             avisContainer.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'space-y-2', 'border-[1px]', 'border-[#a8b3cf33]', 'rounded-[14px]', 'xl:w-8/12', 'w-full', 'p-4', 'mb-2');
@@ -534,30 +556,44 @@ async function displayAvis() {
                                     const containerDialogAvis = document.getElementById('containerDialogAvis');
                                     const dialogAvis = document.createElement('dialog');
                                     dialogAvis.setAttribute('id', 'dialog_fixed');
-                                    dialogAvis.className = 'dialog_modal w-10/12 bg-[#24272A] text-[#a8b3cf] rounded-lg shadow-lg';
+                                    dialogAvis.className = 'dialog_modal w-6/12 h-6/12 bg-[#24272A] text-[#a8b3cf] rounded-[14px] shadow-lg';
                                     containerDialogAvis.appendChild(dialogAvis);
+                                    containerDialogAvis.classList.add('bg-overlay-quaternary-onion');
                                     dialogAvis.innerHTML = `
-                                    <div class="p-2">
-                                        <div class="flex flex-row justify-between">
-                                            <p>Modifier Avis</p>
-                                            <button class="close" id="closeDialogAvis">&times;</button>
+                                    <div class="border-[1px] rounded-[14px] border-[#a8b3cf]">
+                                        <div class="flex flex-row justify-between border-b border-[#a8b3cf] flex items-center py-4 px-6 w-full h-14">
+                                            <p class="text-xl font-semibold text-white">Modifier votre avis</p>
+                                            <button class="p-2 hover:bg-slate-800" id="closeDialogAvis">
+                                                <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none"><path d="M16.804 6.147a.75.75 0 011.049 1.05l-.073.083L13.061 12l4.72 4.72a.75.75 0 01-.977 1.133l-.084-.073L12 13.061l-4.72 4.72-.084.072a.75.75 0 01-1.049-1.05l.073-.083L10.939 12l-4.72-4.72a.75.75 0 01.977-1.133l.084.073L12 10.939l4.72-4.72.084-.072z" fill="currentcolor" fill-rule="evenodd"></path></svg>
+                                            </button>
                                         </div>
-                                        <form action="" method="post" id="formEditAvisClient" class="flex flex-col items-center justify-center space-y-2">
+                                        <form action="" method="post" id="formEditAvisClient" class="flex flex-col items-center justify-center space-y-2 p-3">
                                             <input type="hidden" name="id_avis" value="${avis.id_avis}">
                                             <input type="hidden" name="id_product" value="${avis.id_product}">
-                                            <input type="text" name="title_avis" id="title_avis" placeholder="Titre de l'avis" class="bg-slate-100 p-2 rounded-lg" value="${avis.titre_avis}">
-                                            <textarea name="content_avis" id="content_avis" cols="30" rows="10" placeholder="Contenu de l'avis" class="bg-slate-100 p-2 rounded-lg">${avis.commentaire_avis}</textarea>
-                                            <select name="note_avis" id="note_avis" class="bg-slate-100 p-2 rounded-lg">
-                                                <option value="${avis.note_avis}" selected>${avis.note_avis}</option>
-                                                <option value="0">0/5</option>
-                                                <option value="1">1/5</option>
-                                                <option value="2">2/5</option>
-                                                <option value="3">3/5</option>
-                                                <option value="4">4/5</option>
-                                                <option value="5">5/5</option>
-                                            </select>
+                                            <div class="flex items-center w-full space-x-2">
+                                                <div class="relative w-full">
+                                                    <input type="text" name="title_avis" id="title_avis" placeholder="Titre de l'avis" class="px-2.5 pt-4 pb-1 text-white bg-[#31333a] hover:bg-[#21262D] rounded-[14px] textField_form focus:outline-none w-full" value="${avis.titre_avis}">
+                                                    <label for="title_avis" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Titre de l'avis</label>
+                                                </div>
+                                                <div class="relative w-full">
+                                                    <select name="note_avis" id="note_avis" class="px-2.5 pt-4 pb-1 text-white bg-[#31333a] hover:bg-[#21262D] rounded-[14px] textField_form focus:outline-none w-full">
+                                                        <option value="${avis.note_avis}" selected>${avis.note_avis}</option>
+                                                        <option value="0">0/5</option>
+                                                        <option value="1">1/5</option>
+                                                        <option value="2">2/5</option>
+                                                        <option value="3">3/5</option>
+                                                        <option value="4">4/5</option>
+                                                        <option value="5">5/5</option>
+                                                    </select>
+                                                    <label for="note_avis" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Note de l'avis</label>
+                                                </div>
+                                            </div>
+                                            <div class="relative w-full">
+                                                <textarea name="content_avis" id="content_avis" cols="30" rows="10" placeholder="Contenu de l'avis" class="px-2.5 pt-4 pb-1 text-white bg-[#31333a] hover:bg-[#21262D] rounded-[14px] textField_form focus:outline-none w-full">${avis.commentaire_avis}</textarea>
+                                                <label for="content_avis" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Contenu de l'avis</label>
+                                            </div>
                                             <div id="errorMsg" class="h-12"></div>
-                                            <button type="submit" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg" id="buttonAddAvis">Modifier un avis</button>
+                                            <button type="submit" class="bg-[#39e58c] text-black font-bold px-5 py-2 rounded-[14px]" id="buttonAddAvis">Modifier un avis</button>
                                         </form>
                                     </div>
                                 `;
@@ -585,6 +621,7 @@ async function displayAvis() {
                                     const closeDialogAvis = document.getElementById('closeDialogAvis');
                                     closeDialogAvis.addEventListener('click', (ev) => {
                                         ev.preventDefault();
+                                        containerDialogAvis.classList.remove('bg-overlay-quaternary-onion');
                                         dialogAvis.close();
                                         dialogAvis.remove();
                                     });
@@ -689,13 +726,16 @@ async function displayAvis() {
                                                 </div>
                                             </div>
                                             <div class="flex flex-row ml-8">
-                                                <span class="text-white font-light"><b class="bg-[#A87EE6AE] p-0.5 w-fit rounded-lg text-white">@${avis.login_users}</b> ${reply.content_comment}</span>
+                                                <p class="text-white font-light"><b class="bg-[#A87EE6AE] p-0.5 w-fit rounded-lg text-white">@${avis.login_users}</b><span id="replyOfAvis_content"> ${reply.content_comment}</span></p>
                                             </div>
                                             </div>
-                                            <div class="flex flex-row">
+                                            <div class="flex flex-row py-1 ml-2">
                                                 <div id="button">
-                                                    <button class="text-[#A8B3CF] p-2 rounded-lg duration-100 ease-in hover:text-[#39e58c] hover:bg-[#1ddc6f3d] " id="buttonRepondreComment_${reply.id_comment}">
-                                                        <svg width="1.2em" height="1.2em" viewBox="0 0 24 24" stroke="#A8B3CF" fill="none" stroke-width="0.3" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 pointer-events-none"><path d="M8.084 3.217a35.447 35.447 0 017.05-.078l.782.078.279.031c1.089.121 1.885.372 2.606.828a4.516 4.516 0 011.664 1.86c.336.69.5 1.423.53 2.361l.005.321v3.975a4.493 4.493 0 01-3.545 4.392l-.207.04-2.089.346-2.86 2.992-.147.135c-.986.789-2.399.623-3.205-.324-.532-.625-.616-1.34-.51-2.29l.029-.224.038-.254.033-.187-1.332-.189a5.011 5.011 0 01-1.677-.55l-.253-.146-.243-.16a4.777 4.777 0 01-1.491-1.721 4.935 4.935 0 01-.532-1.972l-.009-.3V8.618c0-1.096.162-1.915.535-2.683.375-.77.94-1.4 1.664-1.859.649-.41 1.359-.655 2.288-.788l.318-.04.28-.031zm7.666 1.491a33.948 33.948 0 00-6.752-.075l-.748.075-.28.031c-.915.102-1.481.297-1.97.606a3.016 3.016 0 00-1.116 1.247c-.228.468-.357.989-.38 1.76l-.004.266v3.563c0 .577.134 1.116.375 1.587.242.471.592.874 1.024 1.18.37.263.801.453 1.276.554l.242.043 1.98.283c.339.048.457.096.575.175.119.078.262.187.27.386l-.002.024-.013.08-.164.741-.064.333c-.111.63-.167 1.332.09 1.634.263.309.7.39 1.037.187l.089-.062 2.998-3.135.13-.101.092-.063.077-.04.08-.03.035-.01.087-.02L17 15.545a2.993 2.993 0 002.495-2.77l.005-.182V8.618c0-.921-.13-1.506-.384-2.026A3.016 3.016 0 0018 5.345c-.44-.278-.943-.464-1.706-.572l-.265-.034-.279-.03zm-.55 6.294l.093.005c.398.044.707.36.707.746 0 .38-.301.693-.691.743l-.109.007H8.8l-.093-.005c-.398-.044-.707-.36-.707-.745 0-.38.301-.694.691-.744l.109-.007h6.4zm0-3.5l.093.004c.398.044.707.36.707.746 0 .38-.301.693-.691.743l-.109.007H8.8l-.093-.005C8.309 8.953 8 8.637 8 8.252c0-.38.301-.694.691-.744l.109-.007h6.4z" fill="currentcolor" fill-rule="evenodd"></path></svg>
+                                                    <button class="text-[#A8B3CF] p-2 rounded-lg duration-100 ease-in hover:text-[#39e58c] hover:bg-[#1ddc6f3d]" id="buttonRepondreComment_${reply.id_comment}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                      <path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1" />
+                                                    </svg>                                                      
                                                     </button>
                                                 </div>
                                                 <div id="callToActionComment_${reply.id_comment}"></div>
@@ -708,11 +748,25 @@ async function displayAvis() {
                                     if (avis.users_id === Users_id) {
                                         callToActionComment.innerHTML = `
                                             <div class="flex flex-row justify-between w-full">
-                                                <button class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg mx-2 bg-transparent" id="buttonEditComment_${reply.id_comment}">
-                                                    Editer                           
+                                                <button class="text-[#A8B3CF] p-2 rounded-lg duration-100 ease-in hover:text-[#2cdce6] hover:bg-[#0dcfdc3d]" id="buttonEditComment_${reply.id_comment}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle-cog" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                      <path d="M11.996 19.98a9.868 9.868 0 0 1 -4.296 -.98l-4.7 1l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c1.842 1.572 2.783 3.691 2.77 5.821" />
+                                                      <path d="M19.001 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                      <path d="M19.001 15.5v1.5" />
+                                                      <path d="M19.001 21v1.5" />
+                                                      <path d="M22.032 17.25l-1.299 .75" />
+                                                      <path d="M17.27 20l-1.3 .75" />
+                                                      <path d="M15.97 17.25l1.3 .75" />
+                                                      <path d="M20.733 20l1.3 .75" />
+                                                    </svg>                         
                                                 </button>
-                                                <button class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg mx-2 bg-transparent" id="buttonDeleteComment_${reply.id_comment}">
-                                                    Supprimer
+                                                <button class="text-[#A8B3CF] p-2 rounded-lg duration-100 ease-in hover:text-[#ff3b3b] hover:bg-[#ff606033]" id="buttonDeleteComment_${reply.id_comment}">
+                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                  <path d="M12.023 19.98a9.87 9.87 0 0 1 -4.323 -.98l-4.7 1l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c2.718 2.319 3.473 5.832 2.096 8.811" />
+                                                  <path d="M16 19h6" />
+                                                </svg>
                                                 </button>
                                             </div>
                                         `;
@@ -765,7 +819,7 @@ async function displayAvis() {
                                                     </div>
                                                 </div>
                                                 <div class="flex relative flex-1 pl-6 pr-2">
-                                                    <img src="src/images/avatars/${reply.avatar_users}" alt="" class="w-6 h-6 rounded-full">
+                                                    <img src="src/images/avatars/${UserAvatar}" alt="" class="w-6 h-6 rounded-full">
                                                         <form action="" method="post" id="formAddReplyComment" class="flex flex-col items-center justify-center w-full">
                                                         <input type="hidden" name="id_product" value="${URLid}">
                                                         <input type="hidden" name="parent_comment" value="${reply.id_comment}">
@@ -831,7 +885,7 @@ async function displayAvis() {
                                                     <p class="text-[#a8b3cf] text-xs">${formatDate(reply.created_at)}</p>
                                                 </div>
                                                 <div class="flex relative flex-1 pl-6 pr-2">
-                                                    <img src="src/images/avatars/${reply.avatar_users}" alt="" class="w-6 h-6 rounded-full">
+                                                    <img src="src/images/avatars/${UserAvatar}" alt="" class="w-6 h-6 rounded-full">
                                                         <form action="" method="post" id="formEditComment" class="flex flex-col items-center justify-center w-full">
                                                         <input type="hidden" name="id_product" value="${URLid}">
                                                         <input type="hidden" name="parent_comment" value="${reply.id_comment}">
@@ -882,7 +936,7 @@ async function displayAvis() {
                                         await fetch(`src/php/fetch/avis/deleteComment.php?id_comment=${reply.id_comment}`)
                                             .then(response => response.json())
                                             .then(data => {
-
+                                                console.log(data);
                                             });
                                     });
                                 }
@@ -914,28 +968,19 @@ async function displayAvis() {
                                                   <span class="text-white font-light"><b class="bg-[#A87EE6AE] p-0.5 w-fit rounded-lg text-white" id="Loginusers">@${avis.login_users}</b> ${reply.content_comment}</span>
                                                 </div>
                                               </div>
-                                              <div class="flex flex-row justify-between">
-                                                <button class="bg-[#A87EE6FF] text-white px-5 py-2 mx-2 rounded-lg bg-transparent" id="buttonRepondreAvis_${reply.id_comment}">
-                                                  Repondre                                                  
+                                              <div class="flex flex-row py-1 ml-2">
+                                                <button class="text-[#A8B3CF] p-2 rounded-lg duration-100 ease-in hover:text-[#39e58c] hover:bg-[#1ddc6f3d]" id="buttonRepondreReply_${reply.id_comment}">
+                                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                      <path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1" />
+                                                  </svg>                                                  
                                                 </button>
+                                                <div id="callToActionReply_"></div>
                                               </div>
-                                              <div id="callToActionReply_${reply.id_comment}"></div>
                                             </div>
                                           </div>
                                           `;
-                                    const callToActionComment = document.getElementById(`callToActionReply_${reply.id_comment}`);
-                                    if (avis.users_id === Users_id) {
-                                        callToActionComment.innerHTML = `
-                                            <div class="flex flex-row justify-between w-full">
-                                                <button class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg mx-2 bg-transparent" id="buttonEditComment_${reply.id_comment}">
-                                                    Editer                           
-                                                </button>
-                                                <button class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg mx-2 bg-transparent" id="buttonDeleteComment_${reply.id_comment}">
-                                                    Supprimer
-                                                </button>
-                                            </div>
-                                        `;
-                                    }
+
                                     const ifUpdateComment = document.getElementById(`ifUpdateComment_${reply.id_comment}`);
                                     if (ifUpdateComment) {
                                         if (reply.update_at !== null) {
@@ -947,9 +992,9 @@ async function displayAvis() {
                                         replyDiv.classList.add('ml-4');
                                         parentCommentDiv.appendChild(replyDiv);
                                     }
-                                    const buttonRepondreAvis = document.getElementById(`buttonRepondreAvis_${reply.id_comment}`);
-                                    if (buttonRepondreAvis) {
-                                        buttonRepondreAvis.addEventListener('click', async (ev) => {
+                                    const buttonRepondreReply = document.getElementById(`buttonRepondreReply_${reply.id_comment}`);
+                                    if (buttonRepondreReply) {
+                                        buttonRepondreReply.addEventListener('click', async (ev) => {
                                             ev.preventDefault();
                                             const containerDialogAvis = document.getElementById('containerDialogAvis');
                                             containerDialogAvis.innerHTML = '';
@@ -984,7 +1029,7 @@ async function displayAvis() {
                                                     </div>
                                                 </div>
                                                 <div class="flex relative flex-1 pl-6 pr-2">
-                                                    <img src="src/images/avatars/${reply.avatar_users}" alt="" class="w-6 h-6 rounded-full">
+                                                    <img src="src/images/avatars/${UserAvatar}" alt="" class="w-6 h-6 rounded-full">
                                                         <form action="" method="post" id="formAddRepliesComment" class="flex flex-col items-center justify-center w-full">
                                                         <input type="hidden" name="id_product" value="${URLid}">
                                                         <input type="hidden" name="parent_comment" value="${reply.id_comment}">
