@@ -38,14 +38,12 @@ class Avis extends Database
             "id_avis" => $id_avis
         ]);
     }
-    public function getAvis($id_product)
+    public function getAvis(int $id_product)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT a.*, u.login_users, u.avatar_users
-                                    FROM avis_client a
-                                    JOIN users u ON a.users_id = u.id_users
-                                    WHERE a.produit_id = :id_product
-                                    ORDER BY `a`.`created_at` DESC");
+        $req = $bdd->prepare("SELECT GROUP_CONCAT(ac.id_avis) AS id, ac.produit_id, ac.parent_avis_id, GROUP_CONCAT(ac.titre_avis) AS titres, GROUP_CONCAT(ac.commentaire_avis) AS commentaires, ac.created_at, GROUP_CONCAT(u.login_users) AS logins, GROUP_CONCAT(u.avatar_users) AS avatar 
+                                    FROM avis_client ac JOIN users u ON ac.users_id = u.id_users WHERE ac.produit_id = :id_product 
+                                    GROUP BY ac.produit_id, ac.parent_avis_id, ac.titre_avis, ac.commentaire_avis, u.login_users ORDER BY ac.parent_avis_id ASC;");
         $req->execute([
             "id_product" => $id_product
         ]);
@@ -66,11 +64,11 @@ class Avis extends Database
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
-    public function addReplyAvis($content, $id_avis, $id_users, $id_product)
+    public function addReplyAvis($content, $id_avis, $id_users, $id_product, $id_parent)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("INSERT INTO comment_avis (avis_parent_id, content_comment, created_at, users_id, product_id)
-                                    VALUES (:id_avis, :content, NOW(), :id_users, :id_product)");
+        $req = $bdd->prepare("INSERT INTO avis_client (produit_id, commentaire_avis, parent_avis_id, created_at, users_id) 
+                                VALUES (:id_product, :content_avis, :parent_avis_id, :note_avis, NOW(), :id_user)");
         $req->execute([
             "id_avis" => $id_avis,
             "content" => $content,
