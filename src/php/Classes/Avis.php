@@ -41,7 +41,7 @@ class Avis extends Database
     public function getAvis(int $id_product)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT GROUP_CONCAT(ac.id_avis) AS id, ac.produit_id, ac.parent_avis_id, GROUP_CONCAT(ac.titre_avis) AS titres, GROUP_CONCAT(ac.commentaire_avis) AS commentaires, ac.created_at, GROUP_CONCAT(u.login_users) AS logins, GROUP_CONCAT(u.avatar_users) AS avatar 
+        $req = $bdd->prepare("SELECT GROUP_CONCAT(ac.id_avis) AS id, ac.produit_id, ac.parent_avis_id, GROUP_CONCAT(ac.titre_avis) AS titres, GROUP_CONCAT(ac.commentaire_avis) AS commentaires, ac.created_at, GROUP_CONCAT(u.login_users) AS logins, GROUP_CONCAT(u.avatar_users) AS avatar, u.id_users 
                                     FROM avis_client ac JOIN users u ON ac.users_id = u.id_users WHERE ac.produit_id = :id_product 
                                     GROUP BY ac.produit_id, ac.parent_avis_id, ac.titre_avis, ac.commentaire_avis, u.login_users ORDER BY ac.parent_avis_id ASC;");
         $req->execute([

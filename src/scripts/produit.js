@@ -563,139 +563,104 @@ async function displayAvis() {
                                         });
                                     }
                                 }
-                                function generateCommentHTML(comment) {
-                                    const commentId = `comment_${comment.id}`;
-                                    let commentHTML = '';
-                                    let callToActionHTML = '';
-                                    if (comment.users_id === user_id) {
-                                        callToActionHTML = `
-                                    <div class="flex">
-                                    <button class="flex items-center gap-2 p-2 text-[#bebabd] hover:bg-[#ff2b2b3d] hover:text-[ff3b3b]" id="delete_${comment.id}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                            <path d="M9 12h6"/>
-                                            <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z"/>
-                                        </svg>
-                                    Supprimer
-                                    </button>
-                                    <button class="flex items-center gap-2 p-2 text-[#bebabd] hover:bg-[#0dcfdc3d] hover:text-[#2cdce6]" id="edit_${comment.id}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                            <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"/>
-                                            <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"/>
-                                            <path d="M16 5l3 3"/>
-                                        </svg>
-                                        Modifier
-                                    </button>
-                                    </div>
-                                `;
-                                    }
-                                    commentHTML = `
-                                    <div class="comment" id="${commentId}">
-                                        <div class="flex space-x-2">
-                                            <div class="flex justify-between items-center w-full"> 
-                                                <div class="flex items-center gap-2">   
-                                                    <img src="src/images/avatars/${comment.avatar}" alt="avatar" class="w-8 h-8 rounded-full">
-                                                    <p>${comment.logins}</p>
-                                                </div>
-                                                <p>${formatDistanceToNow(new Date(comment.created_at))}</p>
-                                            </div>
-                                        </div>
-                                        <h3>${comment.titres}</h3>
-                                        <p class="ml-6 font-light">${comment.commentaires}</p>
-                                        <div class="flex space-x-2">
-                                            <button class="p-2 text-[#bebabd] flex items-center gap-2 hover:bg-[#1ddc6f3d] hover:text-[#39e58c]" id="reply_${comment.id}">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                    <path d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1"/>
-                                                </svg>
-                                            Répondre
-                                            </button>
-                                            <div id="callToAction_${comment.id}" class="ml-6">${callToActionHTML}</div>
-                                        </div>
-                                    </div>
-                                `;
-                                    return commentHTML;
+                            function generateCommentHTML(comment) {
+                                const commentId = `comment_${comment.id}`;
+                                let commentHTML = '';
+                                let callToActionHTML = '';
+                                if (comment.id_users === user_id) {
+                                    callToActionHTML = `
+      <div class="flex">
+        <button class="flex items-center gap-2 p-2 text-[#bebabd] hover:bg-[#ff2b2b3d] hover:text-[ff3b3b]" id="delete_${comment.id}">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M9 12h6"/>
+            <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z"/>
+          </svg>
+          Supprimer
+        </button>
+        <button class="flex items-center gap-2 p-2 text-[#bebabd] hover:bg-[#0dcfdc3d] hover:text-[#2cdce6]" id="edit_${comment.id}">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"/>
+            <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"/>
+            <path d="M16 5l3 3"/>
+          </svg>
+          Modifier
+        </button>
+      </div>
+    `;
                                 }
-                                function generateNestedRepliesHTML(comments, parentId) {
-                                    const replies = comments.filter(comment => comment.parent_avis_id === parentId);
-                                    if (replies.length === 0) {
-                                        return '';
-                                    }
-                                    let repliesHTML = '';
-                                    replies.forEach(reply => {
-                                        const replyId = `${reply.id}`;
-                                        const callToActionId = `callToAction_${reply.id}`;
-
-                                        let callToActionHTML = '';
-
-                                        if (reply.users_id === user_id) {
-                                            callToActionHTML = `
-                                        <button class="flex items-center gap-2 p-2 text-[#bebabd] hover:bg-[#ff2b2b3d] hover:text-[ff3b3b]" id="delete_${reply.id}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                            <path d="M9 12h6"/>
-                                            <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z"/>
-                                        </svg>
-                                        Supprimer
-                                        </button>
-                                        <button class="flex items-center gap-2 p-2 text-[#bebabd] hover:bg-[#0dcfdc3d] hover:text-[#2cdce6]" id="edit_${reply.id}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                            <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"/>
-                                            <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"/>
-                                            <path d="M16 5l3 3"/>
-                                        </svg>
-                                        Modifier
-                                        </button>
-                                    `;
-                                        }
-                                        repliesHTML += `
-                                    <div class="reply my-2 rounded" id="container_${replyId}">
-                                        <div class="flex space-x-2">
-                                            <div class="flex justify-between items-center w-full"> 
-                                                <div class="flex items-center gap-2">   
-                                                    <img src="src/images/avatars/${reply.avatar}" alt="avatar" class="w-8 h-8 rounded-full">
-                                                    <p>${reply.logins}</p>
-                                                </div>
-                                                <p>${formatDistanceToNow(new Date(reply.created_at))}</p>
-                                            </div>
-                                        </div>
-                                        <p class="ml-10 font-light">${reply.commentaires}</p>
-                                        <div class="flex space-x-2 ml-10">
-                                            <button class="p-2 text-[#bebabd] flex items-center gap-2 hover:bg-[#1ddc6f3d] hover:text-[#39e58c]" id="reply_${replyId}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                    <path d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1"/>
-                                                </svg>
-                                            Répondre
-                                            </button>
-                                            <div id="${callToActionId}" class="flex gap-2">${callToActionHTML}</div>
-                                        </div>
-                                        ${generateNestedRepliesHTML(comments, reply.id)}
-                                    </div>
-                                `;
-                                    });
-                                    return repliesHTML;
-                                }
-                                function displayComments(comments) {
+                                commentHTML = `
+    <div class="comment" id="${commentId}">
+      <div class="flex space-x-2">
+        <div class="flex justify-between items-center w-full"> 
+          <div class="flex items-center gap-2">   
+            <img src="src/images/avatars/${comment.avatar}" alt="avatar" class="w-8 h-8 rounded-full">
+            <p>${comment.logins}</p>
+          </div>
+          <p>${formatDistanceToNow(new Date(comment.created_at))}</p>
+        </div>
+      </div>
+      <h3>${comment.titres}</h3>
+      <p class="ml-6 font-light">${comment.commentaires}</p>
+      <div class="flex space-x-2">
+        <button class="p-2 text-[#bebabd] hover:bg-[#0dcfdc3d] hover:text-[#2cdce6]">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <circle cx="12" cy="12" r="9" />
+            <line x1="8" y1="12" x2="12" y2="12" />
+            <line x1="12" y1="12" x2="16" y2="12" />
+          </svg>
+          Répondre
+        </button>
+        ${callToActionHTML}
+      </div>
+      <div class="replies-container ml-6 mt-2"></div>
+    </div>
+  `;
+                                return commentHTML;
+                            }
+                            function generateNestedRepliesHTML(comments, parentId) {
+                                let repliesHTML = '';
+                                const filteredReplies = comments.filter(comment => comment.parent_avis_id === String(parentId));
+                                filteredReplies.forEach(reply => {
+                                    const replyHTML = generateCommentHTML(reply);
+                                    const nestedRepliesHTML = generateNestedRepliesHTML(comments, reply.id);
+                                    repliesHTML += replyHTML + nestedRepliesHTML;
+                                });
+                                return repliesHTML;
+                            }
+                            function displayComments(commentsData) {
+                                const commentsContainer = document.getElementById('containerAvisClients');
+                                let commentsHTML = '';
+                                commentsData.forEach(comment => {
+                                    const commentHTML = generateCommentHTML(comment);
+                                    const nestedRepliesHTML = generateNestedRepliesHTML(commentsData, comment.id);
+                                    commentsHTML += commentHTML + nestedRepliesHTML;
+                                });
+                                commentsContainer.innerHTML = commentsHTML;
+                            }
+                               /* function displayComments(comments) {
                                     const commentsContainer = document.getElementById('containerAvisClients');
                                     comments.forEach(comment => {
-                                        if (comment.parent_avis_id === null) {
-                                            const commentHTML = generateCommentHTML(comment);
-                                            const repliesHTML = generateNestedRepliesHTML(comments, comment.id);
-
-                                            commentsContainer.innerHTML += `
+                                        console.log(comment.parent_avis_id);
+                                        let repliesHTML = '';
+                                        let commentHTML = '';
+                                        if (comment.parent_avis_id !== null) {
+                                            repliesHTML = generateNestedRepliesHTML(comments, comment.id);
+                                        }else if (comment.parent_avis_id === null) {
+                                            commentHTML = generateCommentHTML(comment);
+                                        }
+                                        commentsContainer.innerHTML += `
                                         <div class="comment-container p-2 bg-[#4c3745] rounded text-white m-2">
-                                            ${commentHTML}
+                                                ${commentHTML}
                                             <div id="replies-container" class="pl-2">
-                                            ${repliesHTML}
+                                                ${repliesHTML}
                                             </div>
                                         </div>
                                         `;
-                                        }
                                     });
-                                    /*comments.forEach(comment => {
+                                    /!*comments.forEach(comment => {
                                         const repliesButton = commentsContainer.querySelector(`#reply_${comment.id}`);
                                         repliesButton.addEventListener('click', (e) => {
                                             e.preventDefault();
@@ -728,8 +693,8 @@ async function displayAvis() {
                                                     });
                                             });
                                         }
-                                    });*/
-                                }
+                                    });*!/
+                                }*/
                                 // Appel de la fonction pour afficher les commentaires
                                 displayComments(commentsData);
                         }
