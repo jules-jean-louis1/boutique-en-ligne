@@ -94,12 +94,12 @@ class Avis extends Database
     public function searchIfAvisAsReply(int $id_avis)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT COUNT(avis_parent_id) FROM comment_avis WHERE avis_parent_id = :id_avis");
+        $req = $bdd->prepare("SELECT COUNT(parent_id) FROM avis_client WHERE parent_id = :id_avis");
         $req->execute([
             "id_avis" => $id_avis
         ]);
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
-        if ($result[0]["COUNT(avis_parent_id)"] > 0) {
+        if ($result[0]["COUNT(parent_id)"] > 0) {
             return true;
         } else {
             return false;
@@ -108,7 +108,7 @@ class Avis extends Database
     public function deleteUpdateAvis(int $id_avis)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("UPDATE avis_client SET commentaire_avis = :comment WHERE id_avis = :id_avis");
+        $req = $bdd->prepare("UPDATE avis_client SET content = :comment WHERE id_avis = :id_avis");
         $req->execute([
             "id_avis" => $id_avis,
             "comment" => "<i>Ce avis a été supprimé.</i>"

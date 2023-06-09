@@ -604,7 +604,7 @@ async function displayAvis() {
                                             </div>
                                         </div>
                                         <h3>${comment.title_comment}</h3>
-                                        <p>${comment.content}</p>
+                                        <p class="ml-3">${comment.content}</p>
                                         <div class="flex space-x-2 py-2 text-[#dcdcdc]">
                                             <button class="flex space-x-2 rounded hover:bg-[#A87EE627] hover:text-[#a87ee6] p-1" id="reply_${comment.id}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -637,10 +637,16 @@ async function displayAvis() {
 
                                     if (reply.id_users === UserId) {
                                         callToActionHTML = `
-                                        <button class="border-2 border-black" id="edit_${reply.id}">
+                                        <button class="flex space-x-2 p-1 rounded hover:bg-[#1ddc6f3d] hover:text-[#39e58c]" id="edit_${reply.id}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                              <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"/>
+                                              <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"/>
+                                              <path d="M16 5l3 3"/>
+                                            </svg>
                                             Modifier
                                         </button>
-                                        <button class="border-2 border-black" id="delete_${reply.id}">
+                                        <button class="flex space-x-2 p-1 rounded hover:bg-[#dc1d1d3d] hover:text-[#e53939]" id="delete_${reply.id}">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                                 <path d="M9 12h6"/>
@@ -662,10 +668,18 @@ async function displayAvis() {
                                                 <p>${formatDate(reply.created_at)}</p>
                                             </div>
                                         </div>
-                                        <h3>${reply.content}</h3>
-                                        <div class="flex space-x-2">
-                                            <button class="border-2 border-black" id="reply_${replyId}">Répondre</button>
-                                            <div id="${callToActionId}">${callToActionHTML}</div>
+                                        <p class="ml-2">${reply.content}</p>
+                                        <div class="flex space-x-2 py-2 text-[#dcdcdc]">
+                                            <button class="flex space-x-2 rounded hover:bg-[#A87EE627] hover:text-[#a87ee6] p-1" id="reply_${replyId}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                  <path d="M8 9h8"/>
+                                                  <path d="M8 13h6"/>
+                                                  <path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z"/>
+                                                </svg>
+                                            Répondre
+                                            </button>
+                                            <div id="${callToActionId}"  class="flex space-x-2">${callToActionHTML}</div>
                                         </div>
                                         ${generateNestedRepliesHTML(comments, reply.id)}
                                     </div>
@@ -707,12 +721,9 @@ async function displayAvis() {
                                     if (deleteButton) {
                                         deleteButton.addEventListener('click', async (e) => {
                                             e.preventDefault();
-                                            await fetch(`src/php/fetch/avis/deleteAvis.php`, {
+                                            await fetch(`src/php/fetch/avis/deleteAvis.php?id_avis=${comment.id}`, {
                                                 method: 'POST',
                                                 body: new FormData(),
-                                                headers: {
-                                                    'Content-Type': 'application/json'
-                                                }
                                             })
                                                 .then((response) => response.json())
                                                 .then((data) => {

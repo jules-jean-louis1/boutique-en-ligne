@@ -2,6 +2,7 @@
 session_start();
 require_once "../../Classes/Avis.php";
 
+
 if (isset($_GET['id_avis'])){
     $id_avis = htmlspecialchars($_GET['id_avis']);
     $avis = new Avis();
