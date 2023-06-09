@@ -573,8 +573,23 @@ async function displayAvis() {
                                 let callToActionHTML = '';
                                 if (comment.id_users === UserId) {
                                     callToActionHTML = `
-                                    <button class="border-2 border-black" id="delete_${comment.id}">Supprimer</button>
-                                    <button class="border-2 border-black" id="edit_${comment.id}">Modifier</button>
+                                    <button class="flex space-x-2 p-1 rounded hover:bg-[#1ddc6f3d] hover:text-[#39e58c]" id="edit_${comment.id}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                          <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"/>
+                                          <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"/>
+                                          <path d="M16 5l3 3"/>
+                                        </svg>
+                                        Modifier
+                                    </button>
+                                    <button class="flex space-x-2 p-1 rounded hover:bg-[#dc1d1d3d] hover:text-[#e53939]" id="delete_${comment.id}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M9 12h6"/>
+                                            <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z"/>
+                                        </svg>
+                                    Supprimer
+                                    </button>
                                 `;
                                 }
                                 commentHTML = `
@@ -590,9 +605,17 @@ async function displayAvis() {
                                         </div>
                                         <h3>${comment.title_comment}</h3>
                                         <p>${comment.content}</p>
-                                        <div class="flex space-x-2">
-                                            <button class="border-2 border-black" id="reply_${comment.id}">Répondre</button>
-                                            <div id="callToAction_${comment.id}">${callToActionHTML}</div>
+                                        <div class="flex space-x-2 py-2 text-[#dcdcdc]">
+                                            <button class="flex space-x-2 rounded hover:bg-[#A87EE627] hover:text-[#a87ee6] p-1" id="reply_${comment.id}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                  <path d="M8 9h8"/>
+                                                  <path d="M8 13h6"/>
+                                                  <path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z"/>
+                                                </svg>
+                                                Répondre
+                                            </button>
+                                            <div id="callToAction_${comment.id}" class="flex space-x-2">${callToActionHTML}</div>
                                         </div>
                                     </div>
                                 `;
@@ -614,8 +637,18 @@ async function displayAvis() {
 
                                     if (reply.id_users === UserId) {
                                         callToActionHTML = `
-                                        <button class="border-2 border-black" id="delete_${reply.id}">Supprimer</button>
-                                        <button class="border-2 border-black" id="edit_${reply.id}">Modifier</button>
+                                        <button class="border-2 border-black" id="edit_${reply.id}">
+                                            Modifier
+                                        </button>
+                                        <button class="border-2 border-black" id="delete_${reply.id}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                <path d="M9 12h6"/>
+                                                <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z"/>
+                                            </svg>
+                                            Supprimer
+                                        </button>
+                                        
                                     `;
                                     }
                                     repliesHTML += `
@@ -648,9 +681,9 @@ async function displayAvis() {
                                         const repliesHTML = generateNestedRepliesHTML(comments, comment.id);
 
                                         commentsContainer.innerHTML += `
-                                        <div class="comment-container p-2 bg-slate-100 m-2">
+                                        <div class="comment-container p-2 bg-[#2d323c] rounded-[14px] text-white m-2">
                                             ${commentHTML}
-                                            <div id="replies-container" class="pl-2">
+                                            <div id="replies-container" class="pl-2 mt-2">
                                             ${repliesHTML}
                                             </div>
                                         </div>
