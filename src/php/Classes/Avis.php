@@ -29,15 +29,15 @@ class Avis extends Database
             "id_avis" => $id_avis
         ]);
     }
-    public function deleteAvis($id_avis)
+    public function deleteAvis(int $id_avis)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("DELETE FROM avis_client WHERE id_avis = :id_avis");
+        $req = $bdd->prepare("DELETE FROM avis_client WHERE id = :id_avis");
         $req->execute([
             "id_avis" => $id_avis
         ]);
     }
-    public function getAvis(int $id_product)
+    public function getAvis(int $id_product) :array
     {
         $bdd = $this->getBdd();
         $req = $bdd->prepare("SELECT ac.id, ac.produit_id, ac.parent_id, ac.title_comment, ac.content, ac.created_at, GROUP_CONCAT(u.login_users) AS login, GROUP_CONCAT(u.avatar_users) AS avatar, u.id_users 
@@ -61,37 +61,7 @@ class Avis extends Database
             "users_id" => $id_users
         ]);
     }
-    public function getReplyById($id_avis)
-    {
-        $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT c.*, u.login_users, u.email_users, u.avatar_users
-                                    FROM comment_avis c
-                                    JOIN users u ON c.users_id = u.id_users
-                                    WHERE c.avis_parent_id = :id_avis
-                                    OR c.comment_parent_id IN (
-                                      SELECT id_comment
-                                      FROM comment_avis
-                                      WHERE avis_parent_id = :id_avis
-                                    )ORDER BY c.created_at ASC");
-        $req->execute([
-            "id_avis" => $id_avis
-        ]);
-        $result = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
-    }
-    public function addReplyToComment($content, $id_comment, $id_users, $id_product)
-    {
-        $bdd = $this->getBdd();
-        $req = $bdd->prepare("INSERT INTO comment_avis (comment_parent_id, content_comment, created_at, users_id, product_id)
-                                    VALUES (:id_comment, :content, NOW(), :id_users, :id_product)");
-        $req->execute([
-            "id_comment" => $id_comment,
-            "content" => $content,
-            "id_users" => $id_users,
-            "id_product" => $id_product
-        ]);
-    }
-    public function searchIfAvisAsReply(int $id_avis)
+    public function searchIfAvisAsReply(int $id_avis) :bool
     {
         $bdd = $this->getBdd();
         $req = $bdd->prepare("SELECT COUNT(parent_id) FROM avis_client WHERE parent_id = :id_avis");
@@ -108,40 +78,10 @@ class Avis extends Database
     public function deleteUpdateAvis(int $id_avis)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("UPDATE avis_client SET content = :comment WHERE id_avis = :id_avis");
+        $req = $bdd->prepare("UPDATE avis_client SET content = :comment WHERE id = :id_avis");
         $req->execute([
             "id_avis" => $id_avis,
             "comment" => "<i>Ce avis a été supprimé.</i>"
-        ]);
-    }
-    public function searchIfCommentAsReply($id_comment)
-    {
-        $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT COUNT(comment_parent_id) FROM comment_avis WHERE comment_parent_id = :id_comment");
-        $req->execute([
-            "id_comment" => $id_comment
-        ]);
-        $result = $req->fetchAll(PDO::FETCH_ASSOC);
-        if ($result[0]["COUNT(comment_parent_id)"] > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-public function updateReplyComment($id_comment)
-    {
-        $bdd = $this->getBdd();
-        $req = $bdd->prepare("UPDATE comment_avis SET content_comment = '<i>Ce commentaire a été supprimé..</i>' WHERE id_comment = :id_comment");
-        $req->execute([
-            "id_comment" => $id_comment
-        ]);
-    }
-    public function deleteReplyAvis($id_comment)
-    {
-        $bdd = $this->getBdd();
-        $req = $bdd->prepare("DELETE FROM comment_avis WHERE id_comment = :id_comment");
-        $req->execute([
-            "id_comment" => $id_comment
         ]);
     }
 }

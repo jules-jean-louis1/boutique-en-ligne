@@ -224,7 +224,7 @@ async function getProduct(URLid) {
                             diaog.innerHTML = `
                             <div class="flex items-center py-3 px-2 rounded-lg bg-[#DFF2BF] text-[#270] border-l-[3px] border-[#270]">
                                 <img src="public/images/icones/succes-circle-green-stroke-2.svg" alt="" class="w-5 h-5">
-                                <small class="text-lg">Produit ajouté au panier</small>
+                                <small class="text-lg">Votre avis a été ajouté.</small>
                             </div>
                             `;
                             containerMessageCart.appendChild(diaog);
@@ -430,6 +430,9 @@ async function Avis(){
                             <small class="text-lg">Produit ajouté au panier</small>
                         </div>
                         `;
+                        setTimeout(() => {
+                            msg.innerHTML = '';
+                        } , 2000);
                         displayAvis();
                     }
                 });
@@ -472,7 +475,9 @@ async function displayAvis() {
                 fetch (`src/php/fetch/avis/getAvis.php?id_product=${URLid}`)
                     .then(response => response.json())
                     .then(data => {
+                        let commentsContainer = document.getElementById('containerAvisClients');
                         if (data.status === 'success') {
+                            commentsContainer.innerHTML = '';
                             let commentsData = data.avis;
                             console.log(commentsData);
                             function addReplyToComment(comment, action, UrlId) {
@@ -545,8 +550,9 @@ async function displayAvis() {
                                             .then((response) => response.json())
                                             .then((data) => {
                                                 console.log(data);
-                                                if (data.success) {
+                                                if (data.status === 'success') {
                                                     dialogAvis.close();
+                                                    displayComments(commentsData);
                                                 }
                                             });
                                     });
@@ -562,6 +568,7 @@ async function displayAvis() {
                                                 console.log(data);
                                                 if (data.success) {
                                                     dialogAvis.close();
+                                                    displayComments(commentsData);
                                                 }
                                             });
                                     });
@@ -729,7 +736,7 @@ async function displayAvis() {
                                                 .then((data) => {
                                                     console.log(data);
                                                     if (data.success) {
-
+                                                        displayComments(commentsData);
                                                     }
                                                 });
                                         });
@@ -739,7 +746,7 @@ async function displayAvis() {
                             // Appel de la fonction pour afficher les commentaires
                             displayComments(commentsData);
                         } else {
-                            containerComment.innerHTML = `
+                            commentsContainer.innerHTML = `
                                 <div class="w-full p-2 bg-[#2a1825] h-12 rounded my-6">
                                     <p class="text-white">Aucun commentaire pour cette series</p>
                                 </div>`;

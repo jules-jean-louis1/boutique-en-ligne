@@ -30,6 +30,13 @@ if (isset($_POST['title_avis'])) {
                 'message' => 'Veuillez attribuer une note à votre avis',
             ]);
             exit();
+        } elseif (strlen($content) > 1200) {
+            header("Content-Type: application/json");
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Votre avis ne doit pas dépasser les 1200 caractères',
+            ]);
+            exit();
         } else {
             $rating = new Product();
             $avis = new Avis();
