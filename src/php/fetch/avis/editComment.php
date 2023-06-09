@@ -2,28 +2,37 @@
 session_start();
 require_once "../../Classes/Avis.php";
 
-if (isset($_POST['content_avis'])) {
-    if (isset($_POST['content_avis']) && !empty($_POST['content_avis'])) {
-        if (strlen($_POST['content_avis']) < 1) {
-            header("Content-Type: application/json");
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Votre commentaire est trop court',
-            ]);
-            exit();
-        }
-        $avis = new Avis();
-        $avis->editReplyAvis(htmlspecialchars($_POST['content_avis']), intval($_POST['id_comment']));
-        header("Content-Type: application/json");
-        echo json_encode([
-            'status' => 'success',
-            'message' => 'Commentaire modifié',
-        ]);
-    } else {
+if (isset($_POST['content'])) {
+    $id_avis = htmlspecialchars($_POST['parent_id']);
+    $content = htmlspecialchars($_POST['content']);
+    $user_id = $_SESSION['id'];
+
+    if (empty($content)) {
         header("Content-Type: application/json");
         echo json_encode([
             'status' => 'error',
-            'message' => 'Veuillez remplir le champ',
+            'message' => 'Veuillez remplir tous les champs',
+        ]);
+    } elseif (empty($id_avis) || empty($user_id)) {
+        header("Content-Type: application/json");
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Veuillez remplir tous les champs',
+        ]);
+    } elseif (strlen($content) > 1200) {
+        header("Content-Type: application/json");
+        echo json_encode([
+            'status' => 'tooLong',
+            'message' => 'Votre commentaire ne doit pas dépasser les 1200 caractères',
+        ]);
+        exit();
+    } else {
+        $avis = new Avis();
+        $avis->editAvis(trim($content), $id_avis);
+        header("Content-Type: application/json");
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Votre réponse a bien été modifiée',
         ]);
     }
 }

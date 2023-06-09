@@ -6,10 +6,10 @@ class Avis extends Database
     {
         parent::__construct();
     }
-    public function addAvis($title, $content, $note, $id_user, $id_product)
+    public function addAvis(string $title, string $content, $note, int $id_user, int $id_product) :void
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("INSERT INTO avis_client (produit_id, titre_avis, commentaire_avis, note_avis, created_at, users_id) 
+        $req = $bdd->prepare("INSERT INTO avis_client (produit_id, title_comment, content, note_avis, created_at, users_id) 
                                 VALUES (:id_product, :title_avis, :content_avis, :note_avis, NOW(), :id_user)");
         $req->execute([
             "id_product" => $id_product,
@@ -19,14 +19,13 @@ class Avis extends Database
             "id_user" => $id_user
         ]);
     }
-    public function editAvis($title, $content, $note, $id_avis)
+    public function editAvis(string $content, int $id_avis)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("UPDATE avis_client SET titre_avis = :title_avis, commentaire_avis = :content_avis, note_avis = :note_avis, update_at = NOW() WHERE id_avis = :id_avis");
+        $req = $bdd->prepare("UPDATE avis_client SET content = :content, update_at = NOW() 
+                                    WHERE id = :id_avis");
         $req->execute([
-            "title_avis" => $title,
-            "content_avis" => $content,
-            "note_avis" => $note,
+            "content" => $content,
             "id_avis" => $id_avis
         ]);
     }
@@ -41,39 +40,25 @@ class Avis extends Database
     public function getAvis(int $id_product)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT GROUP_CONCAT(ac.id_avis) AS id, ac.produit_id, ac.parent_avis_id, GROUP_CONCAT(ac.titre_avis) AS titres, GROUP_CONCAT(ac.commentaire_avis) AS commentaires, ac.created_at, GROUP_CONCAT(u.login_users) AS logins, GROUP_CONCAT(u.avatar_users) AS avatar, u.id_users 
+        $req = $bdd->prepare("SELECT ac.id, ac.produit_id, ac.parent_id, ac.title_comment, ac.content, ac.created_at, GROUP_CONCAT(u.login_users) AS login, GROUP_CONCAT(u.avatar_users) AS avatar, u.id_users 
                                     FROM avis_client ac JOIN users u ON ac.users_id = u.id_users WHERE ac.produit_id = :id_product 
-                                    GROUP BY ac.produit_id, ac.parent_avis_id, ac.titre_avis, ac.commentaire_avis, u.login_users ORDER BY ac.parent_avis_id ASC;");
+                                    GROUP BY ac.produit_id, ac.parent_id, ac.title_comment, ac.content, u.login_users ORDER BY ac.parent_id ASC;");
         $req->execute([
             "id_product" => $id_product
         ]);
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
-    public function getReplyAvis($id_product)
+    public function addReplyAvis(int $produit_id, string $content, int $parent_id, int $id_users)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT comment_avis.*, u.login_users, u.avatar_users
-                                    FROM comment_avis
-                                    JOIN users u ON comment_avis.users_id = u.id_users
-                                    WHERE comment_avis.product_id = :id_product
-                                    ORDER BY comment_avis.comment_parent_id ASC;");
+        $req = $bdd->prepare("INSERT INTO avis_client (produit_id, content, parent_id, created_at, users_id) 
+                                VALUES (:produit_id, :content, :parent_id, NOW(), :users_id)");
         $req->execute([
-            "id_product" => $id_product
-        ]);
-        $result = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
-    }
-    public function addReplyAvis($content, $id_avis, $id_users, $id_product, $id_parent)
-    {
-        $bdd = $this->getBdd();
-        $req = $bdd->prepare("INSERT INTO avis_client (produit_id, commentaire_avis, parent_avis_id, created_at, users_id) 
-                                VALUES (:id_product, :content_avis, :parent_avis_id, :note_avis, NOW(), :id_user)");
-        $req->execute([
-            "id_avis" => $id_avis,
+            "produit_id" => $produit_id,
             "content" => $content,
-            "id_users" => $id_users,
-            "id_product" => $id_product
+            "parent_id" => $parent_id,
+            "users_id" => $id_users
         ]);
     }
     public function getReplyById($id_avis)
@@ -104,25 +89,6 @@ class Avis extends Database
             "content" => $content,
             "id_users" => $id_users,
             "id_product" => $id_product
-        ]);
-    }
-    public function getReplyByProduct($id_product)
-    {
-        $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT * FROM comment_avis WHERE product_id = :id ORDER BY `comment_avis`.`created_at` DESC ");
-        $req->execute([
-            "id" => $id_product
-        ]);
-        $result = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
-    }
-    public function editReplyAvis(string $content, int $id_comment)
-    {
-        $bdd = $this->getBdd();
-        $req = $bdd->prepare("UPDATE comment_avis SET content_comment = :content, update_at = NOW() WHERE id_comment = :id_comment");
-        $req->execute([
-            "content" => $content,
-            "id_comment" => $id_comment
         ]);
     }
     public function searchIfAvisAsReply(int $id_avis)

@@ -2,25 +2,32 @@
 session_start();
 require_once "../../Classes/Avis.php";
 
-
-if (isset($_GET['id_avis'])) {
-    $id_avis = intval($_GET['id_avis']);
-    $id_product = intval($_POST['id_product']);
-    $comment = htmlspecialchars($_POST['content_avis']);
-    $id_user = intval($_SESSION['id']);
-    if (empty($comment)) {
+if (isset($_POST['content'])) {
+    $produit_id = htmlspecialchars($_POST['produit_id']);
+    $parent_id = htmlspecialchars($_POST['parent_id']);
+    $content = htmlspecialchars($_POST['content']);
+    $user_id = $_SESSION['id'];
+    if (empty($content)) {
         header("Content-Type: application/json");
         echo json_encode([
             'status' => 'error',
             'message' => 'Veuillez remplir tous les champs',
         ]);
-    } else {
-        $avis = new Avis();
-        $avis->addReplyAvis($comment, $id_avis, $id_user, $id_product);
-        header("Content-Type: application/json");
-        echo json_encode([
-            'status' => 'success',
-            'message' => 'Votre réponse a bien été ajoutée',
-        ]);
+        if (strlen($content) > 1200) {
+            header("Content-Type: application/json");
+            echo json_encode([
+                'status' => 'tooLong',
+                'message' => 'Votre commentaire ne doit pas dépasser les 500 caractères',
+            ]);
+            exit();
+        } else {
+            $avis = new Avis();
+            $avis->addReplyAvis($produit_id, trim($content), $parent_id, $user_id);
+            header("Content-Type: application/json");
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Votre réponse a bien été ajoutée',
+            ]);
+        }
     }
 }

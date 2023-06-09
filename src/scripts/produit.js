@@ -126,7 +126,7 @@ if (btnLogin) {
 const containerDivProduct = document.getElementById("containerInformationProduits");
 // Récupérer l'ID à partir de la query string
 const searchParams = new URLSearchParams(window.location.search);
-const URLid = searchParams.get("id");
+let URLid = searchParams.get("id");
 
 // Afficher les étoiles
 function afficherEtoiles(note) {
@@ -468,19 +468,19 @@ async function displayAvis() {
         .then(response => response.json())
         .then(data => {
             if (data.status == 'success') {
-                let user_id = data.id;
+                let UserId = data.id;
                 fetch (`src/php/fetch/avis/getAvis.php?id_product=${URLid}`)
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'success') {
                             let commentsData = data.avis;
                             console.log(commentsData);
-                                function addReplyToComment(comment, action, UrlId) {
-                                    const dialogAvis = document.createElement('dialog');
-                                    dialogAvis.setAttribute('id', 'dialog_fixed');
-                                    dialogAvis.className = 'dialog_modal w-6/12 h-6/12 bg-[#24272A] text-[#a8b3cf] rounded-[14px] shadow-lg';
-                                    containerModalDialog.appendChild(dialogAvis);
-                                    dialogAvis.innerHTML = `
+                            function addReplyToComment(comment, action, UrlId) {
+                                const dialogAvis = document.createElement('dialog');
+                                dialogAvis.setAttribute('id', 'dialog_fixed');
+                                dialogAvis.className = 'dialog_modal w-6/12 h-6/12 bg-[#24272A] text-[#a8b3cf] rounded-[14px] shadow-lg';
+                                containerModalDialog.appendChild(dialogAvis);
+                                dialogAvis.innerHTML = `
                                 <div class="border-[1px] rounded-[14px] border-[#a8b3cf]">
                                     <div class="flex flex-row justify-between border-b border-[#a8b3cf] flex items-center py-4 px-6 w-full h-14">
                                         <h3>Votre réponse</h3>
@@ -506,199 +506,201 @@ async function displayAvis() {
                                     </div>
                                     <div class="flex relative flex-1 pl-6 pr-2">
                                             <form action="" method="post" id="formAddReplyComment" class="flex flex-col items-center justify-center w-full text-white">
-                                            <input type="hidden" name="id_movie" value="${UrlId}">
-                                            <input type="hidden" name="parent_comment" value="${comment.id}">
-                                            <textarea name="content" id="content" cols="30" rows="5" placeholder="@${comment.logins}" class="ml-3 flex-1 bg-[#24272A] focus:outline-none rounded-b-[14px] w-full h-full text-white"></textarea>
+                                            <input type="hidden" name="produit_id" value="${UrlId}">
+                                            <input type="hidden" name="parent_id" value="${comment.id}">
+                                            <textarea name="content" id="content" cols="30" rows="5" placeholder="@${comment.login}" class="ml-3 flex-1 bg-[#24272A] focus:outline-none rounded-b-[14px] w-full h-full text-white"></textarea>
                                             <div id="errorMsg" class="h-12"></div>
                                             <div class="flex flex-row justify-end w-full py-2">
                                                 <button class="bg-[#39e58c] text-black font-bold px-5 py-2 rounded-[14px]" id="buttonAddAvis">Répondre</button>
                                             </div>
                                         </form>
                                     </div>
-                                </div>`;
-                                    const textArea = document.querySelector('#content');
-                                    if (action === 'reply') {
-                                        textArea.placeholder = `@${comment.login}`;
-                                    } else if (action === 'edit') {
-                                        textArea.placeholder = '';
-                                        textArea.value = comment.content;
-                                    }
-                                    dialogAvis.showModal();
-                                    const closeDialogAvis = document.getElementById('closeDialogAvis');
-                                    closeDialogAvis.addEventListener('click', (ev) => {
-                                        ev.preventDefault();
-                                        dialogAvis.close();
-                                        dialogAvis.remove();
-                                    });
-                                    const formAddReplyComment = document.querySelector('#formAddReplyComment');
-                                    if (action === 'reply') {
-                                        formAddReplyComment.addEventListener('submit', async (e) => {
-                                            e.preventDefault();
-                                            await fetch(`${window.location.origin}/cinetech/addReplyComment/${UrlId}`, {
-                                                method: 'POST',
-                                                body: new FormData(formAddReplyComment)
-                                            })
-                                                .then((response) => response.json())
-                                                .then((data) => {
-                                                    console.log(data);
-                                                    if (data.success) {
-                                                        dialogAvis.close();
-                                                    }
-                                                });
-                                        });
-                                    } else if (action === 'edit') {
-                                        formAddReplyComment.addEventListener('submit', async (e) => {
-                                            e.preventDefault();
-                                            await fetch(`${window.location.origin}/cinetech/editComment/${UrlId}`, {
-                                                method: 'POST',
-                                                body: new FormData(formAddReplyComment)
-                                            })
-                                                .then((response) => response.json())
-                                                .then((data) => {
-                                                    console.log(data);
-                                                    if (data.success) {
-                                                        dialogAvis.close();
-                                                    }
-                                                });
-                                        });
-                                    }
+                                </div>
+                                        `;
+                                const textArea = document.querySelector('#content');
+                                const buttonAddAvis = document.querySelector('#buttonAddAvis');
+                                if (action === 'reply') {
+                                    textArea.placeholder = `@${comment.login}`;
+                                    buttonAddAvis.textContent = 'Répondre';
+                                } else if (action === 'edit') {
+                                    textArea.placeholder = '';
+                                    textArea.value = comment.content;
+                                    buttonAddAvis.textContent = 'Modifier';
                                 }
+                                dialogAvis.showModal();
+                                const closeDialogAvis = document.getElementById('closeDialogAvis');
+                                closeDialogAvis.addEventListener('click', (ev) => {
+                                    ev.preventDefault();
+                                    dialogAvis.close();
+                                    dialogAvis.remove();
+                                });
+                                const formAddReplyComment = document.querySelector('#formAddReplyComment');
+                                if (action === 'reply') {
+                                    formAddReplyComment.addEventListener('submit', async (e) => {
+                                        e.preventDefault();
+                                        await fetch(`src/php/fetch/avis/addReplyAvis.php`, {
+                                            method: 'POST',
+                                            body: new FormData(formAddReplyComment)
+                                        })
+                                            .then((response) => response.json())
+                                            .then((data) => {
+                                                console.log(data);
+                                                if (data.success) {
+                                                    dialogAvis.close();
+                                                }
+                                            });
+                                    });
+                                } else if (action === 'edit') {
+                                    formAddReplyComment.addEventListener('submit', async (e) => {
+                                        e.preventDefault();
+                                        await fetch('src/php/fetch/avis/editComment.php', {
+                                            method: 'POST',
+                                            body: new FormData(formAddReplyComment)
+                                        })
+                                            .then((response) => response.json())
+                                            .then((data) => {
+                                                console.log(data);
+                                                if (data.success) {
+                                                    dialogAvis.close();
+                                                }
+                                            });
+                                    });
+                                }
+                            }
                             function generateCommentHTML(comment) {
                                 const commentId = `comment_${comment.id}`;
                                 let commentHTML = '';
                                 let callToActionHTML = '';
-                                if (comment.id_users === user_id) {
+                                if (comment.id_users === UserId) {
                                     callToActionHTML = `
-      <div class="flex">
-        <button class="flex items-center gap-2 p-2 text-[#bebabd] hover:bg-[#ff2b2b3d] hover:text-[ff3b3b]" id="delete_${comment.id}">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M9 12h6"/>
-            <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z"/>
-          </svg>
-          Supprimer
-        </button>
-        <button class="flex items-center gap-2 p-2 text-[#bebabd] hover:bg-[#0dcfdc3d] hover:text-[#2cdce6]" id="edit_${comment.id}">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"/>
-            <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"/>
-            <path d="M16 5l3 3"/>
-          </svg>
-          Modifier
-        </button>
-      </div>
-    `;
+                                    <button class="border-2 border-black" id="delete_${comment.id}">Supprimer</button>
+                                    <button class="border-2 border-black" id="edit_${comment.id}">Modifier</button>
+                                `;
                                 }
                                 commentHTML = `
-    <div class="comment" id="${commentId}">
-      <div class="flex space-x-2">
-        <div class="flex justify-between items-center w-full"> 
-          <div class="flex items-center gap-2">   
-            <img src="src/images/avatars/${comment.avatar}" alt="avatar" class="w-8 h-8 rounded-full">
-            <p>${comment.logins}</p>
-          </div>
-          <p>${formatDistanceToNow(new Date(comment.created_at))}</p>
-        </div>
-      </div>
-      <h3>${comment.titres}</h3>
-      <p class="ml-6 font-light">${comment.commentaires}</p>
-      <div class="flex space-x-2">
-        <button class="p-2 text-[#bebabd] hover:bg-[#0dcfdc3d] hover:text-[#2cdce6]">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <circle cx="12" cy="12" r="9" />
-            <line x1="8" y1="12" x2="12" y2="12" />
-            <line x1="12" y1="12" x2="16" y2="12" />
-          </svg>
-          Répondre
-        </button>
-        ${callToActionHTML}
-      </div>
-      <div class="replies-container ml-6 mt-2"></div>
-    </div>
-  `;
+                                    <div class="comment" id="${commentId}">
+                                        <div class="flex space-x-2">
+                                            <div class="flex justify-between items-center w-full"> 
+                                                <div class="flex items-center gap-2">   
+                                                    <img src="src/images/avatars/${comment.avatar}" alt="avatar" class="w-8 h-8 rounded-full">
+                                                    <p>${comment.login}</p>
+                                                </div>
+                                                <p>${formatDate(comment.created_at)}</p>
+                                            </div>
+                                        </div>
+                                        <h3>${comment.title_comment}</h3>
+                                        <p>${comment.content}</p>
+                                        <div class="flex space-x-2">
+                                            <button class="border-2 border-black" id="reply_${comment.id}">Répondre</button>
+                                            <div id="callToAction_${comment.id}">${callToActionHTML}</div>
+                                        </div>
+                                    </div>
+                                `;
                                 return commentHTML;
                             }
+                            // Fonction récursive pour générer le HTML des réponses imbriquées
                             function generateNestedRepliesHTML(comments, parentId) {
+                                const replies = comments.filter(comment => comment.parent_id === parentId);
+
+                                if (replies.length === 0) {
+                                    return '';
+                                }
                                 let repliesHTML = '';
-                                const filteredReplies = comments.filter(comment => comment.parent_avis_id === String(parentId));
-                                filteredReplies.forEach(reply => {
-                                    const replyHTML = generateCommentHTML(reply);
-                                    const nestedRepliesHTML = generateNestedRepliesHTML(comments, reply.id);
-                                    repliesHTML += replyHTML + nestedRepliesHTML;
+                                replies.forEach(reply => {
+                                    const replyId = `${reply.id}`;
+                                    const callToActionId = `callToAction_${reply.id}`;
+
+                                    let callToActionHTML = '';
+
+                                    if (reply.id_users === UserId) {
+                                        callToActionHTML = `
+                                        <button class="border-2 border-black" id="delete_${reply.id}">Supprimer</button>
+                                        <button class="border-2 border-black" id="edit_${reply.id}">Modifier</button>
+                                    `;
+                                    }
+                                    repliesHTML += `
+                                    <div class="reply" id="container_${replyId}">
+                                        <div class="flex space-x-2">
+                                            <div class="flex justify-between items-center w-full"> 
+                                                <div class="flex items-center gap-2">   
+                                                    <img src="src/images/avatars/${reply.avatar}" alt="avatar" class="w-8 h-8 rounded-full">
+                                                    <p>${reply.login}</p>
+                                                </div>
+                                                <p>${formatDate(reply.created_at)}</p>
+                                            </div>
+                                        </div>
+                                        <h3>${reply.content}</h3>
+                                        <div class="flex space-x-2">
+                                            <button class="border-2 border-black" id="reply_${replyId}">Répondre</button>
+                                            <div id="${callToActionId}">${callToActionHTML}</div>
+                                        </div>
+                                        ${generateNestedRepliesHTML(comments, reply.id)}
+                                    </div>
+                                `;
                                 });
                                 return repliesHTML;
                             }
-                            function displayComments(commentsData) {
+                            function displayComments(comments) {
                                 const commentsContainer = document.getElementById('containerAvisClients');
-                                let commentsHTML = '';
-                                commentsData.forEach(comment => {
-                                    const commentHTML = generateCommentHTML(comment);
-                                    const nestedRepliesHTML = generateNestedRepliesHTML(commentsData, comment.id);
-                                    commentsHTML += commentHTML + nestedRepliesHTML;
-                                });
-                                commentsContainer.innerHTML = commentsHTML;
-                            }
-                               /* function displayComments(comments) {
-                                    const commentsContainer = document.getElementById('containerAvisClients');
-                                    comments.forEach(comment => {
-                                        console.log(comment.parent_avis_id);
-                                        let repliesHTML = '';
-                                        let commentHTML = '';
-                                        if (comment.parent_avis_id !== null) {
-                                            repliesHTML = generateNestedRepliesHTML(comments, comment.id);
-                                        }else if (comment.parent_avis_id === null) {
-                                            commentHTML = generateCommentHTML(comment);
-                                        }
+                                comments.forEach(comment => {
+                                    if (comment.parent_id === null) {
+                                        const commentHTML = generateCommentHTML(comment);
+                                        const repliesHTML = generateNestedRepliesHTML(comments, comment.id);
+
                                         commentsContainer.innerHTML += `
-                                        <div class="comment-container p-2 bg-[#4c3745] rounded text-white m-2">
-                                                ${commentHTML}
+                                        <div class="comment-container p-2 bg-slate-100 m-2">
+                                            ${commentHTML}
                                             <div id="replies-container" class="pl-2">
-                                                ${repliesHTML}
+                                            ${repliesHTML}
                                             </div>
                                         </div>
                                         `;
+                                    }
+                                });
+                                comments.forEach(comment => {
+                                    const repliesButton = commentsContainer.querySelector(`#reply_${comment.id}`);
+                                    repliesButton.addEventListener('click', (e) => {
+                                        e.preventDefault();
+                                        addReplyToComment(comment, 'reply', URLid);
                                     });
-                                    /!*comments.forEach(comment => {
-                                        const repliesButton = commentsContainer.querySelector(`#reply_${comment.id}`);
-                                        repliesButton.addEventListener('click', (e) => {
+                                    const editButton = commentsContainer.querySelector(`#edit_${comment.id}`);
+                                    if (editButton) {
+                                        editButton.addEventListener('click', (e) => {
                                             e.preventDefault();
-                                            addReplyToComment(comment, 'reply', URLid);
+                                            addReplyToComment(comment, 'edit', URLid);
                                         });
-                                        const editButton = commentsContainer.querySelector(`#edit_${comment.id}`);
-                                        if (editButton) {
-                                            editButton.addEventListener('click', (e) => {
-                                                e.preventDefault();
-                                                addReplyToComment(comment, 'edit', URLid);
-                                            });
-                                        }
-                                        const deleteButton = commentsContainer.querySelector(`#delete_${comment.id}`);
-                                        if (deleteButton) {
-                                            deleteButton.addEventListener('click', async (e) => {
-                                                e.preventDefault();
-                                                await fetch(`${window.location.origin}/cinetech/deleteComment/${UrlId}`, {
-                                                    method: 'POST',
-                                                    body: new FormData(),
-                                                    headers: {
-                                                        'Content-Type': 'application/json'
-                                                    }
-                                                })
-                                                    .then((response) => response.json())
-                                                    .then((data) => {
-                                                        console.log(data);
-                                                        if (data.success) {
+                                    }
+                                    const deleteButton = commentsContainer.querySelector(`#delete_${comment.id}`);
+                                    if (deleteButton) {
+                                        deleteButton.addEventListener('click', async (e) => {
+                                            e.preventDefault();
+                                            await fetch(`src/php/fetch/avis/deleteAvis.php`, {
+                                                method: 'POST',
+                                                body: new FormData(),
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                }
+                                            })
+                                                .then((response) => response.json())
+                                                .then((data) => {
+                                                    console.log(data);
+                                                    if (data.success) {
 
-                                                        }
-                                                    });
-                                            });
-                                        }
-                                    });*!/
-                                }*/
-                                // Appel de la fonction pour afficher les commentaires
-                                displayComments(commentsData);
+                                                    }
+                                                });
+                                        });
+                                    }
+                                });
+                            }
+                            // Appel de la fonction pour afficher les commentaires
+                            displayComments(commentsData);
+                        } else {
+                            containerComment.innerHTML = `
+                                <div class="w-full p-2 bg-[#2a1825] h-12 rounded my-6">
+                                    <p class="text-white">Aucun commentaire pour cette series</p>
+                                </div>`;
                         }
-                    })
+                    });
             } else {
                 console.log('Vous n\'êtes pas connecté');
             }

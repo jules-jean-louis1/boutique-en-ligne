@@ -32,7 +32,10 @@ session_start();
             <div id="containerAddAvis"></div>
         </section>
         <section class="my-6">
-            <div id="containerAvisClients" class="flex flex-col items-center"></div>
+            <div class="flex flex-col items-center">
+                <h2 class="text-2xl text-white">Avis clients</h2>
+                <div id="containerAvisClients" class="w-10/12"></div>
+            </div>
         </section>
     </main>
     <footer class="w-full">
