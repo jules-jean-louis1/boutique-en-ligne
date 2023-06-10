@@ -763,3 +763,36 @@ displayAvis();
 cartHeader();
 getProduct(URLid);
 
+async function getGameDetails() {
+    const gameDetails = document.getElementById('apiSteam');
+    await fetch(`src/php/fetch/API/NewsForApp.php`)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+
+            // Vérifier si les détails du jeu sont disponibles dans la réponse
+            if (data['2369390'].success) {
+                const gameData = data['2369390'].data;
+
+                // Afficher les détails du jeu
+                gameDetails.innerHTML = `
+                    <div class="flex flex-col items-center justify-center">
+                        <img src="${gameData.background}" alt="Image du jeu" class="w-96 h-52 rounded-lg">
+                        <h2 class="text-2xl font-bold">${gameData.name}</h2>
+                        <p class="text-gray-500">${gameData.about_the_game}</p>
+                    </div>
+                `;
+            }
+        })
+        .catch((error) => {
+            console.log('Une erreur s\'est produite lors de la requête.', error);
+        });
+}
+
+getGameDetails();
+
+
+
+
+
+
