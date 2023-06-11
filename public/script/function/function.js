@@ -280,14 +280,14 @@ async function Login(btnLogin) {
         dialog.showModal();
         const buttonLogin = document.getElementById("buttonLogin");
         const ParaModifyText = document.getElementById("ParaModifyText");
-        fetch('src/php/fetch/registerLogin/login.php')
+        fetch(`${window.location.origin}/wellgames/public/View/auth/login.php`)
             .then(response => response.text())
             .then(data => {
                 containerDiv.innerHTML = data;
                 const formLogin = document.querySelector('#login-form');
                 formLogin.addEventListener('submit', (ev) => {
                     ev.preventDefault();
-                    fetch('src/php/fetch/registerLogin/login.php', {
+                    fetch(`${window.location.origin}/wellgames/login/submit`, {
                         method: 'POST',
                         body: new FormData(formLogin)
                     })
@@ -324,7 +324,7 @@ async function Login(btnLogin) {
             if (buttonLogin.textContent === "Connexion") {
                 buttonLogin.textContent = "S'inscrire";
                 ParaModifyText.textContent = "S'inscrire sur Game+";
-                fetch('src/php/fetch/registerLogin/login.php')
+                fetch(`${window.location.origin}/wellgames/public/View/auth/login.php`)
                     .then(response => response.text())
                     .then(data => {
                         containerDiv.innerHTML ='';
@@ -332,7 +332,7 @@ async function Login(btnLogin) {
                         const formLogin = document.querySelector('#login-form');
                         formLogin.addEventListener('submit', (ev) => {
                             ev.preventDefault();
-                            fetch('src/php/fetch/registerLogin/login.php', {
+                            fetch(`${window.location.origin}/wellgames/login/submit`, {
                                 method: 'POST',
                                 body: new FormData(formLogin)
                             })
@@ -368,7 +368,7 @@ async function Login(btnLogin) {
             } else {
                 buttonLogin.textContent = "Connexion";
                 ParaModifyText.textContent = "S'inscrire sur Game+";
-                fetch('src/php/fetch/registerLogin/register.php')
+                fetch(`${window.location.origin}/wellgames/public/View/auth/register.php`)
                     .then(response => response.text())
                     .then(data => {
                         containerDiv.innerHTML ='';
@@ -376,7 +376,7 @@ async function Login(btnLogin) {
                         const formRegister = document.querySelector('#resgister-form');
                         formRegister.addEventListener('submit', (ev) => {
                             ev.preventDefault();
-                            fetch('src/php/fetch/registerLogin/register.php', {
+                            fetch(`${window.location.origin}/wellgames/register/submit`, {
                                 method: 'POST',
                                 body: new FormData(formRegister)
                             })

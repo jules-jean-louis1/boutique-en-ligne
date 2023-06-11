@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 use App\Model\AuthModel;
+use App\Model\CartModel;
 
 class AuthController extends AbstractController
 {
@@ -12,6 +13,11 @@ class AuthController extends AbstractController
     public function showRegisterForm()
     {
         require_once "public/View/auth/register.php";
+    }
+    public function logout()
+    {
+        session_destroy();
+        header('Location: /wellgames');
     }
     public function validEmail($email)
     {
@@ -121,6 +127,69 @@ class AuthController extends AbstractController
                     }
                 } else {
                     $error['errorLogin'] = "Ce login est déjà utilisé";
+                }
+            }
+            header('Content-Type: application/json');
+            echo json_encode($error);
+        }
+    }
+    public function login()
+    {
+        if (isset($_POST['login'])) {
+            $error = [];
+            $login = htmlspecialchars($_POST['login']);
+            $password = htmlspecialchars($_POST['password']);
+
+            if (!$this->verifyField('login')) {
+                $error['login'] = "Veuillez entrer un login / email";
+            }
+            if (!$this->verifyField('password')) {
+                $error['password'] = "Veuillez entrer un mot de passe";
+            }
+            if (empty($error)) {
+                $client = new AuthModel();
+                if ($client->login($login, $password) === true) {
+                    // On vérifie si le cookie 'cart' existe et le décode en tableau associatif
+                    if (isset($_COOKIE['cart']) && !empty($_COOKIE['cart'])) {
+                        // Vérifier si l'utilisateur a déjà un panier
+                        $cart = new CartModel();
+                        $cartExist = $cart->verifyIfCartExist($_SESSION['id']);
+                        $cartData = json_decode($_COOKIE['cart'], true);
+                        // Si FALSE, on crée un panier
+                        if ($cartExist === false) {
+                            $cart->createCart($_SESSION['id']);
+                            if (isset($_COOKIE["cart"])) {
+                                $cartData = json_decode($_COOKIE["cart"], true);
+                                if (is_array($cartData) && count($cartData) > 0) {
+                                    foreach ($cartData as $product) {
+                                        $id = $product['id'];
+                                        $quantity = $product['quantity'];
+                                        $cart->AddProductToClientCart($_SESSION['id'], $id, $quantity);
+                                    }
+                                }
+                                // Détruire la variable du cookie
+                                setcookie('cart', '', time() - 3600, '/');
+                                unset($_COOKIE["cart"]);
+                            }
+                        } else {
+                            if (isset($_COOKIE["cart"])) {
+                                $cartData = json_decode($_COOKIE["cart"], true);
+                                if (is_array($cartData) && count($cartData) > 0) {
+                                    foreach ($cartData as $product) {
+                                        $id = $product['id'];
+                                        $quantity = $product['quantity'];
+                                        $cart->AddProductToClientCart($_SESSION['id'], $id, $quantity);
+                                    }
+                                }
+                                // Détruire la variable du cookie
+                                setcookie('cart', '', time() - 3600, '/');
+                                unset($_COOKIE["cart"]);
+                            }
+                        }
+                    }
+                    $error['success'] = "Vous êtes connecté";
+                } else {
+                    $error['error'] = "Login ou mot de passe incorrect";
                 }
             }
             header('Content-Type: application/json');

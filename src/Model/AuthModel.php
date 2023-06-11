@@ -35,14 +35,13 @@ class AuthModel extends AbstractDatabase
     public function register($login, $password, $email)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("INSERT INTO users (login_users, password_users, email_users, type_compte_users, avatar_users, created_at_users) VALUES (:login, :password, :email, :type_compte, :avatar, NOW())");
+        $req = $bdd->prepare("INSERT INTO users (login_users, password_users, email_users, type_compte_users, created_at_users) VALUES (:login, :password, :email, :type_compte, NOW())");
         $password = password_hash($password, PASSWORD_DEFAULT);
         $req->execute(array(
             "login" => $login,
             "password" => $password,
             "email" => $email,
             "type_compte" => "client",
-            "avatar" => "default_avatar.png"
         ));
         // récupérer l'id_users généré
         $id_users = $bdd->lastInsertId();
@@ -62,13 +61,36 @@ class AuthModel extends AbstractDatabase
         $user = $req->fetch(\PDO::FETCH_ASSOC);
         return $user['id_users'];
     }
-    public function addAvatar(string $avatar, int $id)
+    public function addAvatar(int $id, string $avatar)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare('UPDATE users SET avatar_users = :avatar WHERE id = :id');
+        $req = $bdd->prepare('UPDATE users SET avatar_users = :avatar WHERE id_users = :id');
         $req->execute([
             ':avatar' => $avatar,
             ':id' => $id
         ]);
     }
+    public function login($loginOrEmail, $password)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT id_users, login_users, email_users, password_users, type_compte_users FROM users WHERE login_users = :loginOrEmail OR email_users = :loginOrEmail");
+        $req->execute(array(
+            "loginOrEmail" => $loginOrEmail
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        if ($result > 0) {
+            if (password_verify($password, $result[0]['password_users'])) {
+                $_SESSION['id'] = $result[0]['id_users'];
+                $_SESSION['login'] = $result[0]['login_users'];
+                $_SESSION['email'] = $result[0]['email_users'];
+                $_SESSION['type_compte'] = $result[0]['type_compte_users'];
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
 }

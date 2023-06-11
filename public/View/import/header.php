@@ -85,7 +85,7 @@
                                 <li>
                                     <button type="button" id="buttonLogoutHeader"
                                             class="block hover:bg-[#2D323C] flex w-full">
-                                        <a href="deconnexion.php"
+                                        <a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/wellgames/logout';?>"
                                            class="block py-2 px-4 flex items-center justify-between w-full">
                                             <svg width="22" height="22" viewBox="0 0 24 24" stroke="#a8b3cf" fill="none"
                                                  stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round"

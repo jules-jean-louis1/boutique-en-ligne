@@ -2,12 +2,29 @@
 session_start();
 require './vendor/autoload.php';
 
-use App\Controller\HomeController;
+use App\Controller\
+    {HomeController,
+    AuthController,
+    };
 $HomeController = new HomeController();
+$AuthController = new AuthController();
 $router = new AltoRouter();
 
 $router->setBasePath('/wellgames');
 
+// Auth
+// login
+$router->map('POST', '/login/submit', function() use ($AuthController) {
+    $AuthController->login();
+});
+// register
+$router->map('POST', '/register/submit', function() use ($AuthController) {
+    $AuthController->register();
+});
+// logout
+$router->map('GET', '/logout', function() use ($AuthController) {
+    $AuthController->logout();
+});
 // home Page
 $router->map('GET', '/', function() use ($HomeController) {
     $HomeController->index();
