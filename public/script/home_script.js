@@ -74,15 +74,14 @@ async function searchHeader() {
 }
 // Fonction pour afficher les infos de l'utilisateur dans le header
 async function displayUserInfoHeader() {
-    await fetch('src/php/fetch/client/displayUserById.php')
+    await fetch(`${window.location.origin}/wellgames/headerInfo`)
         .then(response => response.json())
         .then(data => {
-            for (const user of data) {
+            console.log(data);
                 profilInfoHeader.innerHTML = `
-            <p>${user.login_users}</p>
-            <img src="src/images/avatars/${user.avatar_users}" alt="${user.avatar_users}" class="h-6 rounded-full">
+            <p>${data.login_users}</p>
+            <img src="public/images/avatars/${data.avatar_users}" alt="${data.avatar_users}" class="h-6 rounded-full">
             `;
-            }
         });
 }
 FormSearchBarHeader.addEventListener('keyup', (ev) => {

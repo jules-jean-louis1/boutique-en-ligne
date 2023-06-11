@@ -196,4 +196,14 @@ class AuthController extends AbstractController
             echo json_encode($error);
         }
     }
+
+    public function headerInfo()
+    {
+        if (isset($_SESSION['id'])) {
+            $user = new AuthModel();
+            $data = $user->infoHeader(intval($_SESSION['id']));
+            header('Content-Type: application/json');
+            echo json_encode($data);
+        }
+    }
 }

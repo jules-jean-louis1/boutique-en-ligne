@@ -25,6 +25,10 @@ $router->map('POST', '/register/submit', function() use ($AuthController) {
 $router->map('GET', '/logout', function() use ($AuthController) {
     $AuthController->logout();
 });
+// HeaderInfo
+$router->map('GET', '/headerInfo', function() use ($AuthController) {
+    $AuthController->headerInfo();
+});
 // home Page
 $router->map('GET', '/', function() use ($HomeController) {
     $HomeController->index();

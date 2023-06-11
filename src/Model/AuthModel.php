@@ -77,7 +77,7 @@ class AuthModel extends AbstractDatabase
         $req->execute(array(
             "loginOrEmail" => $loginOrEmail
         ));
-        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        $result = $req->fetchAll(\PDO::FETCH_ASSOC);
         if ($result > 0) {
             if (password_verify($password, $result[0]['password_users'])) {
                 $_SESSION['id'] = $result[0]['id_users'];
@@ -91,6 +91,16 @@ class AuthModel extends AbstractDatabase
         } else {
             return false;
         }
+    }
+    public function infoHeader(int $intval) : array
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT avatar_users, login_users FROM users WHERE id_users = :id");
+        $req->execute([
+            ':id' => $intval
+        ]);
+        $result = $req->fetch(\PDO::FETCH_ASSOC);
+        return $result;
     }
 
 }
