@@ -29,6 +29,11 @@ $router->map('GET', '/logout', function() use ($AuthController) {
 $router->map('GET', '/headerInfo', function() use ($AuthController) {
     $AuthController->headerInfo();
 });
+
+// search Game
+$router->map('GET', '/search/[a:query]', function($query) use ($HomeController) {
+    $HomeController->search($query);
+});
 // home Page
 $router->map('GET', '/', function() use ($HomeController) {
     $HomeController->index();

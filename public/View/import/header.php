@@ -39,7 +39,7 @@
                         <input type="text" name="search_bar_form" id="search_bar_form" placeholder="Rechercher un produit" class="w-full bg-[#2D323C] text-[#a8b3cf]">
                     </form>
                 </div>
-                <div id="containerSearchBarResultHeader"></div>
+                <div id="containerSearchBarResultHeader" class="absolute w-full top-16"></div>
             </div>
         </div>
         <div>
