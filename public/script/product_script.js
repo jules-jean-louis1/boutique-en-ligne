@@ -86,9 +86,9 @@ async function displayUserInfoHeader() {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-                profilInfoHeader.innerHTML = `
+            profilInfoHeader.innerHTML = `
             <p>${data.login_users}</p>
-            <img src="public/images/avatars/${data.avatar_users}" alt="${data.avatar_users}" class="h-6 rounded-full">
+            <img src="${window.location.origin}/wellgames/public/images/avatars/${data.avatar_users}" alt="${data.avatar_users}" class="h-6 rounded-full">
             `;
         });
 }
@@ -106,13 +106,15 @@ if (btnLogin) {
     Login(btnLogin);
 }
 
-// Index.js
+// Product page
 
-async function displayLastGame() {
-    await fetch(`${window.location.origin}/wellgames/trending`)
+let idProduct = new URLSearchParams(window.location.search).get('id');
+console.log(idProduct);
+async function displayProduct(id){
+    await fetch(`${window.location.origin}/wellgames/product/${id}`)
         .then(response => response.json())
         .then(data => {
             console.log(data);
         });
 }
-displayLastGame();
+

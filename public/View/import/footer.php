@@ -1,4 +1,4 @@
-<div class="py-4 bg-[#181920] border-t-[1px] border-t-[#e669fb]">
+<div class="py-4 border-t-[1px] border-t-[#e669fb]">
     <div id="containerFooter">
         <div class="flex justify-center items-center">
             <div class="w-7/12 px-2">

@@ -14,6 +14,12 @@ class HomeController
         $json = file_get_contents($url);
         echo $json;
     }
+    public function trending()
+    {
+        $url = "https://store.steampowered.com/api/featuredcategories/?l=french&cc=FR&v=1&format=json";
+        $json = file_get_contents($url);
+        echo $json;
+    }
     public function lastGame()
     {
         $url = "https://store.steampowered.com/api/featured/?cc=FR&l=french&v=1&format=json";

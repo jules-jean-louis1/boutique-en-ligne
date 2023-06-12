@@ -4,10 +4,12 @@ require './vendor/autoload.php';
 
 use App\Controller\
     {HomeController,
+    ProductController,
     AuthController,
     };
 $HomeController = new HomeController();
 $AuthController = new AuthController();
+$ProductController = new ProductController();
 $router = new AltoRouter();
 
 $router->setBasePath('/wellgames');
@@ -38,8 +40,18 @@ $router->map('GET', '/search/[a:query]', function($query) use ($HomeController) 
 $router->map('GET', '/', function() use ($HomeController) {
     $HomeController->index();
 });
+// trending
+$router->map('GET', '/trending', function() use ($HomeController) {
+    $HomeController->trending();
+});
 $router->map('GET', '/lastGame', function() use ($HomeController) {
     $HomeController->lastGame();
+});
+
+// Product PAGE
+$router->map('GET', '/product/[i:id]', function($id) use ($ProductController) {
+    $ProductController->showPage();
+    $ProductController->product($id);
 });
 $match = $router->match();
 
