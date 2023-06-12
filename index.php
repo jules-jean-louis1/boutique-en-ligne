@@ -50,8 +50,8 @@ $router->map('GET', '/lastGame', function() use ($HomeController) {
 
 // Product PAGE
 $router->map('GET', '/product/[i:id]', function($id) use ($ProductController) {
-    $ProductController->showPage();
-    $ProductController->product($id);
+    $gameDetails = $ProductController->product($id);
+    $ProductController->showPage($gameDetails);
 });
 $match = $router->match();
 

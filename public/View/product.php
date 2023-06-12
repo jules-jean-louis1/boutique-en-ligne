@@ -18,6 +18,16 @@
 <main class=" pb-12">
     <div id="containerLoginRegisterForm"></div>
     <section id="containerMessageCart"></section>
+    <div id="DetailGames">
+        <div class="text-white">
+            <h1><?php echo $gameDetails['name']; ?></h1>
+            <img src="<?php echo $gameDetails['header_image']; ?>" alt="Image du jeu <?php echo $gameDetails['name']; ?>">
+            <p><?php echo $gameDetails['short_description']; ?></p>
+            <p><?php echo $gameDetails['detailed_description']; ?></p>
+            <p><?php echo $gameDetails['release_date']['date']; ?></p>
+            <p><?php echo $gameDetails['price_overview']['final_formatted']; ?></p>
+        </div>
+    </div>
 </main>
 <footer class="w-full">
     <?php require_once "public/View/import/footer.php"; ?>
