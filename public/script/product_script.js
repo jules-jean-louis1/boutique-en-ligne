@@ -107,7 +107,12 @@ if (btnLogin) {
 }
 
 // Product page
-
+function getID(){
+    let currentURL = window.location.href;
+    let segments = currentURL.split('/');
+    let id = segments[segments.length - 1];
+    return id;
+}
 let idProduct = new URLSearchParams(window.location.search).get('id');
 console.log(idProduct);
 async function displayProduct(id){
@@ -117,4 +122,45 @@ async function displayProduct(id){
             console.log(data);
         });
 }
+function displayMoreTags(){
+// Récupération des éléments HTML
+    const showAllCategoriesButton = document.getElementById('showAllCategories');
+    const categoryElements = document.querySelectorAll('#containerCategories span');
 
+// Vérification du nombre de catégories
+    if (categoryElements.length > 4) {
+        // Masquage des catégories supplémentaires
+        for (let i = 4; i < categoryElements.length; i++) {
+            categoryElements[i].classList.add('hidden');
+        }
+
+        // Ajout d'un gestionnaire d'événements au bouton "Voir plus"
+        showAllCategoriesButton.addEventListener('click', function() {
+            // Affichage ou masquage des catégories supplémentaires
+            for (var i = 4; i < categoryElements.length; i++) {
+                categoryElements[i].classList.toggle('hidden');
+            }
+
+            // Changement de texte du bouton en fonction de l'état actuel
+            if (showAllCategoriesButton.textContent === 'Voir plus') {
+                showAllCategoriesButton.textContent = 'Voir moins';
+            } else {
+                showAllCategoriesButton.textContent = 'Voir plus';
+            }
+        });
+    }
+}
+async function addProductToCart(){
+    let id = getID(); // Appel de la fonction getID() pour récupérer l'ID
+    await fetch(`${window.location.origin}/wellgames/cart/add/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        });
+}
+const btnAddToCart = document.getElementById('addToCart');
+btnAddToCart.addEventListener('click', (ev) => {
+    ev.preventDefault();
+    addProductToCart();
+});
+displayMoreTags();
