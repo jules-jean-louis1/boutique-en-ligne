@@ -152,14 +152,17 @@ function displayMoreTags(){
 }
 async function addProductToCart(){
     let id = getID(); // Appel de la fonction getID() pour récupérer l'ID
-    await fetch(`${window.location.origin}/wellgames/cart/add/${id}`)
+    await fetch(`${window.location.origin}/wellgames/product/addToCart/${id}`,{
+        method: 'POST',
+        body: new FormData(btnAddToCart)
+    })
         .then(response => response.json())
         .then(data => {
             console.log(data);
         });
 }
 const btnAddToCart = document.getElementById('addToCart');
-btnAddToCart.addEventListener('click', (ev) => {
+btnAddToCart.addEventListener('submit', (ev) => {
     ev.preventDefault();
     addProductToCart();
 });

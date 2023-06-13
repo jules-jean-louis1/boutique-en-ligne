@@ -6,10 +6,12 @@ use App\Controller\
     {HomeController,
     ProductController,
     AuthController,
+    CartController,
     };
 $HomeController = new HomeController();
 $AuthController = new AuthController();
 $ProductController = new ProductController();
+$CartController = new CartController();
 $router = new AltoRouter();
 
 $router->setBasePath('/wellgames');
@@ -52,6 +54,9 @@ $router->map('GET', '/lastGame', function() use ($HomeController) {
 $router->map('GET', '/product/[i:id]', function($id) use ($ProductController) {
     $gameDetails = $ProductController->product($id);
     $ProductController->showPage($gameDetails);
+});
+$router->map('POST', '/product/addToCart/[i:id]', function($id) use ($CartController) {
+    $CartController->addToCart($id);
 });
 $match = $router->match();
 

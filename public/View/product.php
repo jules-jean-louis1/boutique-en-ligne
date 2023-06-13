@@ -15,7 +15,7 @@ $discountPercentage = round(($initialPrice - $finalPrice) / $initialPrice * 100)
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Script JS -->
     <script defer type="module" src="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/wellgames/public/script/product_script.js';?>"></script>
-    <title>Produit</title>
+    <title><?= $gameDetails['name'] . ' - WellGames' ; ?></title>
 </head>
 <body>
 <header class="w-full">
@@ -30,25 +30,60 @@ $discountPercentage = round(($initialPrice - $finalPrice) / $initialPrice * 100)
                 <div id="background_img_banner">
                     <img src="<?php echo $gameDetails['screenshots'][0]['path_full']; ?>" alt="Image du jeu <?php echo $gameDetails['name']; ?>" class="absolute z-[-10]">
                 </div>
-                <div class="w-10/12 mx-auto">
+                <div class="lg:pt-20 w-10/12 mx-auto">
                     <div class="flex lg:flex-row lg:space-x-8 justify-between">
                         <div>
                             <img src="<?php echo $gameDetails['header_image']; ?>" alt="Image du jeu <?php echo $gameDetails['name']; ?>" class="rounded-lg">
                         </div>
-                        <div class="flex flex-col justify-around items-center rounded-lg p-4 bg-white/10">
-                            <h1 class="text-xl font-bold"><?php echo $gameDetails['name']; ?></h1>
-                            <p><?= $gameDetails['genres'][0]['description']; ?></p>
-                            <div class="w-11/12">
-                                <?php if ($initialPrice === $finalPrice) : ?>
-                                    <p class="text-4xl"><?php echo $gameDetails['price_overview']['final_formatted']; ?></p>
-                                <?php else: ?>
-                                    <div class="flex justify-center items-end gap-4 w-11/12">
-                                        <p class="line-through"><?php echo $gameDetails['price_overview']['initial_formatted']; ?></p>
-                                        <p class="text-[#a87ee6]">-<?php echo $discountPercentage; ?>%</p>
+                        <div class="flex flex-col justify-between items-center rounded-lg">
+                            <div class="p-4 backdrop-blur-2xl">
+                                <h1 class="text-xl font-bold"><?php echo $gameDetails['name']; ?></h1>
+                                <p><?= $gameDetails['genres'][0]['description']; ?></p>
+                                <div class="w-full">
+                                    <?php if ($initialPrice === $finalPrice) : ?>
                                         <p class="text-4xl"><?php echo $gameDetails['price_overview']['final_formatted']; ?></p>
-                                    </div>
-                                <?php endif; ?>
-                                <button id="addToCart" class="p-2 rounded-[14px] bg-[#a87ee6] font-semibold text-white w-full">Ajouter au panier</button>
+                                    <?php else: ?>
+                                        <div class="flex justify-center items-end gap-4 w-11/12">
+                                            <p class="line-through"><?php echo $gameDetails['price_overview']['initial_formatted']; ?></p>
+                                            <p class="text-[#a87ee6]">-<?php echo $discountPercentage; ?>%</p>
+                                            <p class="text-4xl"><?php echo $gameDetails['price_overview']['final_formatted']; ?></p>
+                                        </div>
+                                    <?php endif; ?>
+                                    <form action="" method="post" id="addToCart" class="w-full">
+                                        <div class="flex items-center w-full p-2">
+                                            <select name="platforms" class="p-3 bg-transparent border border-white rounded-l-[14px]">
+                                                <?php if ($gameDetails['platforms']['windows']) : ?>
+                                                    <option value="windows">Windows</option>
+                                                <?php endif; ?>
+                                                <?php if ($gameDetails['platforms']['mac']) : ?>
+                                                    <option value="mac">Mac</option>
+                                                <?php endif; ?>
+                                                <?php if ($gameDetails['platforms']['linux']) : ?>
+                                                    <option value="linux">Linux</option>
+                                                <?php endif; ?>
+                                            </select>
+                                            <select name="version" class="p-3 bg-transparent border border-white rounded-r-[14px]">
+                                                <?php foreach ($gameDetails['package_groups'][0]['subs'] as $edition) : ?>
+                                                    <option value="<?php echo $edition['packageid']; ?>">
+                                                        <?php echo $edition['option_text']; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="flex space-x-4 w-full items-center">
+                                            <button id="buyInstant" class="p-2 rounded-[14px] bg-[#a87ee6] font-semibold text-white" type="button">Acheter maintenant</button>
+                                            <button id="addToCart" class="p-2 rounded-[14px] bg-[#a87ee6] font-semibold text-white" type="submit">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                    <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/>
+                                                    <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/>
+                                                    <path d="M17 17h-11v-14h-2"/>
+                                                    <path d="M6 5l14 1l-1 7h-13"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>

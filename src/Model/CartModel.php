@@ -11,17 +11,17 @@ class CartModel extends AbstractDatabase
         $req->execute(array(
             "id" => $id
         ));
-        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        $result = $req->fetchAll(\PDO::FETCH_ASSOC);
         if (count($result) > 0) {
             return true;
         } else {
             return false;
         }
     }
-    public function createCart($id)
+    public function createCart(int $id)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("INSERT INTO cart (created_at_cart, modified_at_cart, users_id) VALUES (NOW(), NOW(), :id)");
+        $req = $bdd->prepare("INSERT INTO cart (created_at_cart, users_id) VALUES (NOW(), :id)");
         $req->execute(array(
             "id" => $id
         ));
@@ -168,4 +168,17 @@ class CartModel extends AbstractDatabase
             return true;
         }
     }
+
+    public function addProductToCart(int $id_product, int $id_user, int $version_product, string $platform_product, mixed $name, mixed $finalPrice)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT quantity_product, price_product, cart_id, product_id
+                                    FROM cart_product
+                                    INNER JOIN cart ON cart_product.cart_id = cart.id_cart
+                                    WHERE users_id = :userId AND product_id = :productId");
+        $req->execute(["userId" => $id_user, "productId" => $id_product]);
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
 }
