@@ -61,6 +61,8 @@ $discountPercentage = round(($initialPrice - $finalPrice) / $initialPrice * 100)
                                                 <?php if ($gameDetails['platforms']['linux']) : ?>
                                                     <option value="linux">Linux</option>
                                                 <?php endif; ?>
+                                                    <option value="PS5">PS5</option>
+                                                    <option value="Xbox Series X">Xbox Series X</option>
                                             </select>
                                             <select name="version" class="p-3 bg-transparent border border-white rounded-r-[14px]">
                                                 <?php foreach ($gameDetails['package_groups'][0]['subs'] as $edition) : ?>
