@@ -1,7 +1,7 @@
 
 <nav class="py-3 bg-[#181920] border-b-[1px] border-b-[#a8b3cf33]">
     <!-- Desktop -->
-    <div class="flex items-center justify-around hidden lg:block" id="desktopMenu">
+    <div class="lg:flex items-center justify-around hidden" id="desktopMenu">
         <div>
             <ul class="flex space-x-2 lg:space-x-4 items-center text-white">
                 <li>

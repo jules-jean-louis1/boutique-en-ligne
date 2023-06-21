@@ -290,6 +290,7 @@ async function addProduct() {
                         dialog.close();
                         dialog.remove();
                         messagePopup(data.message, 'success');
+                        containerdialogUpdateProduct.classList.remove('bg-overlay-quaternary-onion');
                     }
                     if (data.status === 'error') {
                         let messageError = document.querySelector('#errorMsg');

@@ -132,7 +132,7 @@ class Client extends Database
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
-    public function getClientInfo($id)
+    public function getClientInfo(int $id) : string
     {
         $bdd = $this->getBdd();
         $req = $bdd->prepare("SELECT client.id_client, client.prenom_client, client.nom_client, client.ville_client, client.code_postal_client, client.adresse_client, client.mobile_client, client.pays_client, client.users_id, users.id_users as user_id, users.login_users, users.email_users, users.password_users, users.type_compte_users, users.avatar_users, users.created_at_users, users.modified_at_users 
@@ -371,7 +371,7 @@ WHERE users.id_users = :id;");
                             u.avatar_users,
                             u.created_at_users, 
                             COUNT(DISTINCT cmd.id_commande) AS nombre_commandes, 
-                            COUNT(DISTINCT av.id_avis) AS nombre_avis, 
+                            COUNT(DISTINCT av.id) AS nombre_avis, 
                             COUNT(DISTINCT com.id_comment) AS nombre_commentaires 
                         FROM 
                             users u 
