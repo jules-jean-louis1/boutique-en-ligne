@@ -286,3 +286,6 @@ body {
     z-index: 10;
     background-color: #6637e93d;
 }
+#desktopMenu {
+    display: flex;
+}

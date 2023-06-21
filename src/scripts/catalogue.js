@@ -398,14 +398,14 @@ async function filterForm(Page, Date, order, categorie, subCategorie) {
                             <a href="produit.php?id=${product.id_product}">
                             <div id="wapperProduct" class="p-4">
                                 <div id="itemsImgProduct">
-                                    <div id="priceProduct" class="absolute mt-2 ml-2 rounded-full text-white bg-slate-900/90 w-fit p-1">
+                                    <div id="priceProduct" class="absolute mt-2 ml-2 rounded-full text-white bg-slate-900/90 w-fit p-1 hover:bg-[#a87ee6]">
                                         <p>${product.price_product}€</p>
                                     </div>
                                     <img src="src/images/products/${product.img_product}" alt="${product.name_product}" class="rounded-lg h-fit lg:h-72">
                                 </div>
                                 <div id="TitleProduct" class="flex items-center w-full justify-between">
                                     <div id="containerTitleProduct" class="flex flex-col items-start">
-                                        <p class="font-bold text-white">${product.name_product}</p>
+                                        <p class="font-bold text-white">${product.name_product.substring(0,22)}</p>
                                         <p class="font-light text-[#a8b3cf]">${product.name_subcategories}</p>
                                     </div>
                                     <div id="containerButtonAddToCart">

@@ -200,13 +200,13 @@ class Product extends Database
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
-    public function displayLastProduct()
+    public function displayLastProduct() : array
     {
         $bdd = $this->getBdd();
         $req = $bdd->prepare("SELECT p.id_product, p.name_product, p.price_product, p.rating_product, p.img_product, p.released_date_product, p.subcategories_id, s.name_subcategories 
                                     FROM product p 
                                     JOIN subcategories s ON p.subcategories_id = s.id_subcategories 
-                                    ORDER BY p.released_date_product DESC LIMIT 6; ");
+                                    ORDER BY p.released_date_product DESC LIMIT 8; ");
         $req->execute();
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;

@@ -10,7 +10,7 @@ const btnLogin = document.querySelector('#buttonLoginHeader');
 const buttonProfilHeader = document.getElementById("buttonProfilHeader");
 const menuProfilHeader = document.getElementById("menuProfilHeader");
 const profilInfoHeader = document.getElementById("infoUserNavBar");
-const SearchBarHeader = document.getElementById("search_bar_form");
+const SearchBarHeader = document.querySelectorAll("#search_bar_form");
 const FormSearchBarHeader = document.getElementById("searchBarFormHeader");
 
 // Ajout d'un écouteur d'événement sur le clic du bouton
@@ -215,5 +215,10 @@ async function displayAvis() {
     await fetch('src/php/fetch/avis/displayLastAvis.php')
 }
 
+const btnBurgerMenu = document.getElementById('btnBurgerMenu');
+btnBurgerMenu.addEventListener('click', () => {
+    const menuMobile = document.getElementById('menuMobile');
+    menuMobile.classList.toggle('hidden');
+});
 displayBanner();
 displayCategories();
