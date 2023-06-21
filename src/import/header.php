@@ -41,7 +41,7 @@
                     <div class="flex">
                         <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 pointer-events-none reply_svg"><path d="M10 3a7 7 0 016.068 10.492 2.813 2.813 0 012.076.67l.157.147 1.872 1.871a2.823 2.823 0 01-3.852 4.125l-.14-.132-1.872-1.872a2.817 2.817 0 01-.818-2.234A7 7 0 1110 3zm7.24 12.37a1.323 1.323 0 00-1.967 1.763l.096.108 1.872 1.871c.241.242.552.37.868.386h.135l.135-.014a1.324 1.324 0 00.83-2.136l-.097-.107-1.871-1.872zM10 4.5a5.5 5.5 0 00-.221 10.996L10 15.5l.221-.004A5.5 5.5 0 0010 4.5z" fill="currentcolor" fill-rule="evenodd"></path></svg>
                     </div>
-                    <form action="" method="post" id="searchBarFormHeader" class="w-full">
+                    <form action="./search.php" method="get" id="searchBarFormHeader" class="w-full">
                         <input type="text" name="search_bar_form" id="search_bar_form" placeholder="Rechercher un produit" class="w-full bg-[#2D323C] text-[#a8b3cf]">
                     </form>
                 </div>

@@ -10,7 +10,7 @@ const btnLogin = document.querySelector('#buttonLoginHeader');
 const buttonProfilHeader = document.getElementById("buttonProfilHeader");
 const menuProfilHeader = document.getElementById("menuProfilHeader");
 const profilInfoHeader = document.getElementById("infoUserNavBar");
-const SearchBarHeader = document.querySelectorAll("#search_bar_form");
+const SearchBarHeader = document.querySelector("#search_bar_form");
 const FormSearchBarHeader = document.getElementById("searchBarFormHeader");
 
 // Ajout d'un écouteur d'événement sur le clic du bouton
