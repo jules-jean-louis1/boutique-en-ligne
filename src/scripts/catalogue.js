@@ -373,7 +373,7 @@ async function filterForm(Page, Date, order, categorie, subCategorie) {
 
 
     Date = selectedDate;
-    order = orderSelect.value;
+    order = orderSelect.value || 'DESC_date';
     categorie = selectedCategoryValue;
     subCategorie = selectedSubCategoryValue;
 
@@ -385,6 +385,7 @@ async function filterForm(Page, Date, order, categorie, subCategorie) {
     params.append('subCategorie', subCategorie);
 
     getDateProduct(categorie, subCategorie);
+    console.log(params.toString());
     await fetch(`src/php/fetch/catalogue/getProductByFilter.php?${params.toString()}`)
         .then(response => response.json())
         .then(data => {
@@ -393,7 +394,7 @@ async function filterForm(Page, Date, order, categorie, subCategorie) {
                 containerProduct.innerHTML = '';
                 for (let product of data.displayProducts) {
                     containerProduct.innerHTML += `
-                        <div id="itemsProductContainer" class="w-60 flex justify-center mx-8">
+                        <div id="itemsProductContainer" class="w-80 flex justify-center mx-8">
                             <a href="produit.php?id=${product.id_product}">
                             <div id="wapperProduct" class="p-4">
                                 <div id="itemsImgProduct">
@@ -468,8 +469,11 @@ async function filterForm(Page, Date, order, categorie, subCategorie) {
 
 const searchParams = new URLSearchParams(window.location.search);
 let Page = searchParams.get("page");
+if (Page === null) {
+    Page = 1;
+}
 let Date = '';
-let order = 'ASC_date';
+let order = "DESC_date";
 let categorie = '';
 let subCategorie = '';
 createFormFilter();
