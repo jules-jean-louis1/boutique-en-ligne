@@ -29,7 +29,7 @@ if (isset($_GET['search_bar_form'])) {
 <main class="bg-[#242629] pb-12">
     <div id="containerLoginRegisterForm"></div>
     <section id="containerMessageCart"></section>
-    <section>
+    <section class="pt-4">
         <div>
             <p class="text-white text-2xl font-bold">
                 Résultats pour <?php echo $_GET['search_bar_form'];?>

@@ -394,7 +394,7 @@ async function filterForm(Page, Date, order, categorie, subCategorie) {
                 containerProduct.innerHTML = '';
                 for (let product of data.displayProducts) {
                     containerProduct.innerHTML += `
-                        <div id="itemsProductContainer" class="w-80 flex justify-center mx-8">
+                        <div id="itemsProductContainer" class="w-60 flex justify-center mx-8">
                             <a href="produit.php?id=${product.id_product}">
                             <div id="wapperProduct" class="p-4">
                                 <div id="itemsImgProduct">
