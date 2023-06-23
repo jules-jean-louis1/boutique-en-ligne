@@ -392,15 +392,15 @@ WHERE users.id_users = :id;");
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
-    public function getUserInfoById($id)
+    public function getUserInfoById(int $id) :array
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT COUNT(DISTINCT a.id_avis) AS nb_avis, COUNT(DISTINCT c.id_comment) AS nb_commentaires, COUNT(DISTINCT d.id_commande) AS nb_commandes, u.login_users, u.avatar_users, u.created_at_users 
-                                    FROM users u 
+        $req = $bdd->prepare("SELECT COUNT(DISTINCT a.id) AS nb_avis, COUNT(DISTINCT c.id_commande) AS nb_commandes, u.login_users, u.avatar_users, u.created_at_users 
+                                        FROM users u 
                                         LEFT JOIN avis_client a ON u.id_users = a.users_id 
-                                        LEFT JOIN comment_avis c ON a.id_avis = c.avis_parent_id LEFT JOIN commande d ON u.id_users = d.users_id 
-                                    WHERE u.id_users = :id 
-                                    GROUP BY u.login_users, u.avatar_users, u.created_at_users");
+                                        LEFT JOIN commande c ON u.id_users = c.users_id 
+                                        WHERE u.id_users = :id 
+                                        GROUP BY u.login_users, u.avatar_users, u.created_at_users; ");
         $req->execute(["id" => $id]);
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;

@@ -1157,7 +1157,6 @@ async function fetchUser(page = 1, search = '', order = 'DESC') {
                         await fetch(`src/php/fetch/client/getUser.php?id=${user.id_users}`)
                             .then(response => response.json())
                             .then(data => {
-                              console.log(data);
                                 containerdialogUpdateProduct.innerHTML = '';
                                 if (data.status === 'success') {
                                     containerdialogUpdateProduct.classList.add('bg-overlay-quaternary-onion');
@@ -1197,10 +1196,6 @@ async function fetchUser(page = 1, search = '', order = 'DESC') {
                                                 <p>
                                                     <span class="font-bold">Avis poster:</span>
                                                     <span>${user.nb_avis}</span>
-                                                </p>
-                                                <p>
-                                                    <span class="font-bold">Commentaires poster:</span>
-                                                    <span>${user.nb_commentaires}</span>
                                                 </p>
                                                 <p>
                                                     <span class="font-bold">Commande :</span>
