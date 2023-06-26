@@ -130,8 +130,8 @@
                             <div>
                                 <a href="cart.php">
                                     <button type="button" id="cartHeader"
-                                            class="flex items-center rounded-lg bg-[#1C1F26] py-1 px-2">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" stroke="#a8b3cf" fill="none"
+                                            class="flex items-center rounded-lg bg-[#2d323c] py-1 px-2">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" stroke="#fff" fill="none"
                                              stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <path d="M3 5L4.87153 5.62385C5.56699 5.85566 6.07989 6.44939 6.2082 7.17114L7.30668 13.3501C7.47638 14.3046 8.30628 15 9.2758 15H16.896C17.7868 15 18.5702 14.4109 18.8174 13.5551L20.2619 8.55508C20.6313 7.27618 19.6716 6 18.3404 6H9M10 18.5C10 19.3284 9.32843 20 8.5 20C7.67157 20 7 19.3284 7 18.5C7 17.6716 7.67157 17 8.5 17C9.32843 17 10 17.6716 10 18.5ZM18 18.5C18 19.3284 17.3284 20 16.5 20C15.6716 20 15 19.3284 15 18.5C15 17.6716 15.6716 17 16.5 17C17.3284 17 18 17.6716 18 18.5Z"></path>
@@ -143,8 +143,8 @@
                         </li>
                         <li>
                             <button type="button" id="buttonLoginHeader"
-                                    class="py-[5px] px-2 rounded-lg bg-[#1C1F26] flex items-center ease-in duration-300 border-[1px] border-[#a8b3cf33]">
-                                <span class="text-[#a8b3cf] font-meduim text-[0.8em]">Connexion</span>
+                                    class="py-[5px] px-2 rounded-lg bg-[#a87ee6] flex items-center ease-in duration-300 border border-[#a8b3cf33]">
+                                <span class="text-white ">Connexion</span>
                             </button>
                         </li>
                     </div>

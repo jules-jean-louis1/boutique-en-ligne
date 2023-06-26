@@ -216,9 +216,11 @@ async function displayAvis() {
 }
 
 const btnBurgerMenu = document.getElementById('btnBurgerMenu');
-btnBurgerMenu.addEventListener('click', () => {
-    const menuMobile = document.getElementById('menuMobile');
-    menuMobile.classList.toggle('hidden');
-});
+if (btnBurgerMenu) {
+    btnBurgerMenu.addEventListener('click', () => {
+        const menuMobile = document.getElementById('menuMobile');
+        menuMobile.classList.toggle('hidden');
+    });
+}
 displayBanner();
 displayCategories();

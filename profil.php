@@ -8,7 +8,7 @@ if (isset($_SESSION['login']) != null) { ?>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="src/styles/style.css">
-    <link rel="icon" href="public/images/icones/in-game-logo.png">
+    <link rel="icon" href="public/images/icones/wg_logo.png">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Script JS -->
