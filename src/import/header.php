@@ -64,6 +64,7 @@
                                     <span id="notifCartHeader"></span>
                                 </button>
                             </a>
+                            <div id="containerCartHeaderDiv"></div>
                         </div>
                         <div class="relative">
                             <button type="button" id="buttonProfilHeader"
@@ -139,6 +140,7 @@
                                         <span id="notifCartHeader"></span>
                                     </button>
                                 </a>
+                                <div id="containerCartHeaderDiv"></div>
                             </div>
                         </li>
                         <li>

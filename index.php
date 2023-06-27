@@ -30,10 +30,12 @@ session_start();
             <div class="flex flex-col justify-center lg:w-7/12 w-11/12">
                 <div id="containerTitleProduct" class="flex items-center justify-between w-full py-4">
                     <h2 class="text-center text-2xl text-white">Tendances</h2>
-                    <button type="button"
-                            class="bg-slate-600/40 hover:bg-slate-800/40 text-white font-bold py-2 px-4 rounded-[14px] border-[1px] border-[#a8b3cf33]"
-                            id="buttonTendances">Voir plus
-                    </button>
+                    <a href="catalogue.php">
+                        <button type="button"
+                                class="bg-slate-600/40 hover:bg-slate-800/40 text-white font-bold py-2 px-4 rounded-[14px] border-[1px] border-[#a8b3cf33]"
+                                id="buttonTendances">Voir plus
+                        </button>
+                    </a>
                 </div>
                 <div id="containerProduits" class="flex flex-wrap justify-between w-full h-full"></div>
             </div>
@@ -43,10 +45,12 @@ session_start();
             <div class="flex flex-col justify-center lg:w-7/12 w-11/12">
                 <div id="containerTitleCategories" class="flex items-center justify-between w-full py-4">
                     <h2 class="text-center text-2xl text-white">Catégories</h2>
-                    <button type="button"
-                            class="bg-slate-600/40 hover:bg-slate-800/40 text-white font-bold py-2 px-4 rounded-[14px] border-[1px] border-[#a8b3cf33]"
-                            id="buttonTendances">Voir plus
-                    </button>
+                    <a href="catalogue.php">
+                        <button type="button"
+                                class="bg-slate-600/40 hover:bg-slate-800/40 text-white font-bold py-2 px-4 rounded-[14px] border-[1px] border-[#a8b3cf33]"
+                                id="buttonTendances">Voir plus
+                        </button>
+                    </a>
                 </div>
                 <div id="displayCategories" class="flex flex-wrap justify-between w-full h-full"></div>
             </div>
