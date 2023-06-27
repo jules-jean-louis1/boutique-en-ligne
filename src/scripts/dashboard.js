@@ -4,6 +4,7 @@ import { formatDate } from "./function/function.js";
 import { loginFormHeader} from './function/function.js';
 import {registerHeader} from './function/function.js';
 import {formatDateSansh} from "./function/function.js";
+import {cartHeader} from "./function/function.js";
 
 const btnRegister = document.querySelector('#buttonRegisterHeader');
 const btnLogin = document.querySelector('#buttonLoginHeader');
@@ -99,6 +100,7 @@ if (btnRegister) {
 if (btnLogin) {
     loginFormHeader(btnLogin);
 }
+cartHeader();
 
 // Fonction Dashboard Admin
 // Declaration des variables pour les boutons

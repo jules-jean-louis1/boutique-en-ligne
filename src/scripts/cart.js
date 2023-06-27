@@ -5,6 +5,7 @@ import { displaySuccessMessageFormUpdateProduct } from './function/function.js';
 import { displayErrorMessageFormUpdateProduct } from './function/function.js';
 import { messagePopup } from "./function/function.js";
 import {Login} from "./function/function.js";
+import {cartHeader} from "./function/function.js";
 
 const btnRegister = document.querySelector('#buttonRegisterHeader');
 const btnLogin = document.querySelector('#buttonLoginHeader');
@@ -103,79 +104,17 @@ if (btnRegister) {
 if (btnLogin) {
     Login(btnLogin);
 }
-
+cartHeader();
 
 // Cart.js
 
 
 
 // Récupérer les données du produit
-async function cartHeader() {
-    const cartButtonHeader = document.getElementById("cartHeader");
-    const notifCartHeader = document.getElementById("notifCartHeader");
-    await fetch('src/php/fetch/cart/displayCartInfoHeader.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.status == 'success_not_connected' || data.status == 'success_connected') {
-                const total = data.total;
-                const nbProduits = data.countProducts;
-                notifCartHeader.innerHTML = `
-                    <p class="absolute rounded-full bg-purple-500 px-1">
-                        <span class="text-white text-xs">${nbProduits}</span>
-                    </p>
-                `;
-
-                let cartDivHeader = document.getElementById("cartDivHeader");
-                if (!cartDivHeader) {
-                    cartDivHeader = document.createElement("dialog");
-                    cartDivHeader.setAttribute('class', 'fixed top-10 left-1/2 lg:left-1/5 transform -translate-x-1/5 lg:-translate-x-1/2 z-50 bg-white w-80 rounded-lg shadow-lg');
-                    cartDivHeader.setAttribute('id', 'cartDivHeader');
-                    cartButtonHeader.appendChild(cartDivHeader);
-                }
-
-                cartButtonHeader.addEventListener('mouseenter', () => {
-                    cartDivHeader.setAttribute('open', '');
-                    cartDivHeader.innerHTML = `
-                        <div class="flex flex-col items-center space-y-2">
-                            <div class="mt-2">
-                                <p class="text-gray-500">Total : ${total} €</p>
-                            </div>
-                            <div id="containerCartHeader"></div>
-                            <div class="h-10 flex items-center justify-center pb-2">
-                                <a href="cart.php" class="bg-purple-500 text-white px-5 py-2 rounded-lg">Voir le panier</a>
-                            </div>
-                        </div>
-                    `;
-                    const containerCartHeader = document.getElementById("containerCartHeader");
-                    containerCartHeader.innerHTML = '';
-                    for (const product of data.products) {
-                        containerCartHeader.innerHTML += `
-                            <div class="flex flex-row justify-between px-5 py-3 border-b border-gray-200">
-                                <div class="flex flex-row items-center">
-                                    <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded-lg">
-                                    <p class="text-gray-500 ml-5">${product.name_product}</p>
-                                </div>
-                                <div class="flex flex-col items-start">
-                                    <p class="text-gray-500 text-2xl">${product.price_product} €</p>
-                                    <p class="text-gray-500 text-sm">Quantité :${product.quantity_product}</p>
-                                </div>
-                            </div>
-                        `;
-                    }
-                });
-                cartButtonHeader.addEventListener('mouseleave', () => {
-                    cartDivHeader.removeAttribute('open');
-                });
-            }
-            if (data.status == 'error') {
-                notifCartHeader.innerHTML = '';
-            }
-        });
-}
 
 
 
-cartHeader();
+
 
 
 function checkInput(input, selector) {
