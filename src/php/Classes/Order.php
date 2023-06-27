@@ -113,14 +113,14 @@ class Order extends Database
     {
         $bdd = $this->getBdd();
         $query = "SELECT DISTINCT commande.id_commande, commande.date_commande, commande.motant_commande, commande.statue_commande,
-                    users.login_users, users.email_users
-                FROM commande
-                JOIN client ON commande.users_id = client.id_client
-                JOIN users ON client.users_id = users.id_users
-                JOIN detail_commande ON commande.id_commande = detail_commande.command_id
-                JOIN product ON detail_commande.product_id = product.id_product
-                JOIN subcategories ON product.subcategories_id = subcategories.id_subcategories
-                JOIN categories ON subcategories.categories_id = categories.id_categories";
+                users.login_users, users.email_users
+            FROM commande
+            JOIN client ON commande.users_id = client.id_client
+            JOIN users ON client.users_id = users.id_users
+            JOIN detail_commande ON commande.id_commande = detail_commande.command_id
+            JOIN product ON detail_commande.product_id = product.id_product
+            JOIN subcategories ON product.subcategories_id = subcategories.id_subcategories
+            JOIN categories ON subcategories.categories_id = categories.id_categories";
 
         if (isset($search) && !empty(trim($search))) {
             $query .= " WHERE users.login_users LIKE :search OR users.email_users LIKE :search";
@@ -135,11 +135,16 @@ class Order extends Database
             $searchParam = '%' . $search . '%';
             $stmt->bindParam(':search', $searchParam, PDO::PARAM_STR);
         }
-        $stmt->bindParam(':order', $order, PDO::PARAM_STR); // Ajout de la liaison de ":order"
+        // Assurez-vous d'utiliser ":order" dans votre requête SQL où vous souhaitez l'utiliser
+        // Par exemple, si vous voulez l'utiliser dans la clause ORDER BY, vous pouvez faire comme ceci :
+        // $query .= " ORDER BY commande.date_commande " . $order;
+        // Et vous pouvez supprimer la ligne suivante qui lie le paramètre ":order"
+        //$stmt->bindParam(':order', $order, PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+
     public function displayDetailOrder(int $id_commande) : array
     {
         $bdd = $this->getBdd();

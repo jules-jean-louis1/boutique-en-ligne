@@ -233,13 +233,10 @@ WHERE users.id_users = :id;");
         $req3 = $bdd->prepare("DELETE FROM client WHERE users_id = :id");
         $req3->execute(["id" => $id]);
         // Table commande
-        $req4 = $bdd->prepare("DELETE FROM commande WHERE id_client = :id");
+        $req4 = $bdd->prepare("DELETE FROM commande WHERE users_id = :id");
         $req4->execute(["id" => $id]);
-        // Table comment_avis
-        $req5 = $bdd->prepare("DELETE FROM comment_avis WHERE client_id = :id");
-        $req5->execute(["id" => $id]);
         // Table detail_commande
-        $req6 = $bdd->prepare("DELETE FROM detail_commande WHERE id_commande IN (SELECT id_commande FROM commande WHERE id_client = :id)");
+        $req6 = $bdd->prepare("DELETE FROM detail_commande WHERE command_id  IN (SELECT id_commande FROM commande WHERE id_client = :id)");
         $req6->execute(["id" => $id]);
         // Table panier
         $req7 = $bdd->prepare("DELETE FROM cart WHERE users_id = :id");

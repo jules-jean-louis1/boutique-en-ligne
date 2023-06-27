@@ -5,6 +5,7 @@ import { displaySuccessMessageFormUpdateProduct } from './function/function.js';
 import { displayErrorMessageFormUpdateProduct } from './function/function.js';
 import { messagePopup } from "./function/function.js";
 import {Login} from "./function/function.js";
+import {cartHeader} from "./function/function.js";
 
 const btnRegister = document.querySelector('#buttonRegisterHeader');
 const btnLogin = document.querySelector('#buttonLoginHeader');
@@ -103,7 +104,7 @@ if (btnRegister) {
 if (btnLogin) {
     Login(btnLogin);
 }
-
+cartHeader();
 
 
 
@@ -124,139 +125,6 @@ function checkInput(input) {
         return true;
     }
 }
-// Récupérer les données du produit
-async function cartHeader() {
-    const cartButtonHeader = document.getElementById("cartHeader");
-    const notifCartHeader = document.getElementById("notifCartHeader");
-    await fetch('src/php/fetch/cart/displayCartInfoHeader.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.status == 'success_not_connected') {
-                const total = data.total;
-                const nbProduits = data.countProducts;
-                notifCartHeader.innerHTML = `
-                    <p class="absolute rounded-full bg-[#A87EE6FF] px-1">
-                        <span class="text-white text-xs">${nbProduits}</span>
-                    </p>
-                `;
-
-                const cartDivHeader = document.createElement("dialog");
-                cartDivHeader.setAttribute('class', 'absolute top-[17%] left-[57%] transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white w-80 rounded-lg shadow-lg');
-                cartDivHeader.setAttribute('id', 'cartDivHeader');
-
-                cartDivHeader.innerHTML = '';
-                cartButtonHeader.addEventListener('mouseenter', () => {
-                    cartDivHeader.setAttribute('open', '');
-                    cartDivHeader.innerHTML = `
-                    <div class="flex flex-col items-around space-y-2">
-                        <div class="mt-2">
-                            <p class="text-[#a8b3cf]">Total : ${total} €</p>
-                        </div>
-                        <div id="containerCartHeader"></div>
-                        <div class="h-10 flex items-center justify-center pb-2">
-                            <a href="cart.php" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg">Voir le panier</a>
-                        </div>
-                    </div>
-                    `;
-
-                    const containerCartHeader = document.getElementById("containerCartHeader");
-                    for (const product of data.products) {
-                        containerCartHeader.innerHTML += `
-                        <div class="flex flex-row justify-between px-5 py-3 border-b-[1px] border-[#e5e7eb]">
-                            <div class="flex flex-row items-center">
-                                <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded-lg">
-                                <p class="text-[#a8b3cf] ml-5">${product.name_product}</p>
-                            </div>
-                            <div class="flex flex-col items-start">
-                                <p class="text-[#a8b3cf] text-2xl">${product.price_product} €</p>
-                                <p class="text-[#a8b3cf] text-sm">Quantité :${product.quantity_product}</p>
-                            </div>
-                        </div>
-                        `;
-                    }
-
-                });
-                cartButtonHeader.appendChild(cartDivHeader);
-                cartButtonHeader.addEventListener('mouseleave', () => {
-                    cartDivHeader.removeAttribute('open');
-                    cartDivHeader.innerHTML = '';
-                });
-
-            }
-            if (data.status == 'success_connected') {
-                const total = data.total;
-                const nbProduits = data.countProducts;
-                notifCartHeader.innerHTML = `
-                    <p class="absolute rounded-full bg-[#A87EE6FF] px-1">
-                        <span class="text-white text-xs">${nbProduits}</span>
-                    </p>
-                `;
-                const cartDivHeader = document.createElement("dialog");
-                cartDivHeader.setAttribute('class', 'absolute top-[17%] left-[57%] transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white w-80 rounded-lg shadow-lg');
-                cartDivHeader.setAttribute('id', 'cartDivHeader');
-
-                cartButtonHeader.addEventListener('mouseenter', () => {
-                    cartDivHeader.setAttribute('open', '');
-                    cartDivHeader.innerHTML = `
-                    <div class="flex flex-col items-around space-y-2">
-                        <div class="mt-2">
-                            <p class="text-[#a8b3cf]">Total : ${total} €</p>
-                        </div>
-                        <div id="containerCartHeader"></div>
-                        <div class="h-10 flex items-center justify-center pb-2">
-                            <a href="cart.php" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg">Voir le panier</a>
-                        </div>
-                    </div>
-                    `;
-                    const containerCartHeader = document.getElementById("containerCartHeader");
-                    for (const product of data.products) {
-                        containerCartHeader.innerHTML += `
-                        <div class="flex flex-row justify-between px-5 py-3 border-b-[1px] border-[#e5e7eb]">
-                            <div class="flex flex-row items-center">
-                                <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded-lg">
-                                <p class="text-[#a8b3cf] ml-5">${product.name_product}</p>
-                            </div>
-                            <div class="flex flex-col items-start">
-                                <p class="text-[#a8b3cf] text-2xl">${product.price_product} €</p>
-                                <p class="text-[#a8b3cf] text-sm">Quantité :${product.quantity_product}</p>
-                            </div>
-                        </div>
-                        `;
-                    }
-                });
-                cartButtonHeader.appendChild(cartDivHeader);
-                cartButtonHeader.addEventListener('mouseleave', () => {
-                    cartDivHeader.removeAttribute('open');
-                    cartDivHeader.innerHTML = '';
-                });
-            }
-            if (data.status == 'error') {
-                notifCartHeader.innerHTML = '';
-                const cartDivHeader = document.createElement("dialog");
-                cartDivHeader.setAttribute('class', 'absolute top-[17%] left-[57%] transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white w-80 rounded-lg shadow-lg');
-                cartDivHeader.setAttribute('id', 'cartDivHeader');
-
-                cartDivHeader.addEventListener('mouseenter', () => {
-                    cartDivHeader.setAttribute('open', '');
-                    cartDivHeader.innerHTML = `
-                    <div class="flex flex-col items-center space-y-2">
-                        <div class="mt-2">
-                            <p class="text-[#a8b3cf]">Votre panier est vide</p>
-                        </div>
-                    </div>
-                    `;
-                });
-                cartButtonHeader.appendChild(cartDivHeader);
-                cartButtonHeader.addEventListener('mouseleave', () => {
-                    cartDivHeader.removeAttribute('open');
-                    cartDivHeader.innerHTML = '';
-                });
-            }
-        });
-}
-
-cartHeader();
-
 // Recap JS
 // Recapitulatif de la commande
 
