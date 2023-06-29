@@ -53,8 +53,10 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
             <span>Utilisateurs</span>
         </button>
     </div>
-    <div id="containerMessage">
-        <div id="message"></div>
+    <div class="flex justify-center">
+        <div id="containerMessage" class="h-10 w-1/2 my-2">
+            <div id="message"></div>
+        </div>
     </div>
     <div id="containerAddProduct"></div>
     <div id="containerInfo">

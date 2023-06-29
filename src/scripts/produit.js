@@ -552,7 +552,7 @@ async function displayAvis() {
                                                 console.log(data);
                                                 if (data.status === 'success') {
                                                     dialogAvis.close();
-                                                    displayComments(commentsData);
+                                                    displayAvis() ;
                                                 }
                                             });
                                     });
@@ -568,7 +568,7 @@ async function displayAvis() {
                                                 console.log(data);
                                                 if (data.success) {
                                                     dialogAvis.close();
-                                                    displayComments(commentsData);
+                                                    displayAvis();
                                                 }
                                             });
                                     });
@@ -736,7 +736,7 @@ async function displayAvis() {
                                                 .then((data) => {
                                                     console.log(data);
                                                     if (data.success) {
-                                                        displayComments(commentsData);
+                                                        displayAvis();
                                                     }
                                                 });
                                         });

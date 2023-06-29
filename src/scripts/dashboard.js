@@ -710,6 +710,7 @@ async function gestionCategory() {
                                     message.innerHTML = data.message;
                                     displaySuccess(message);
                                     displayCategories();
+                                    displaySubCategories();
                                 } else {
                                     message.innerHTML = data.message;
                                     displayError(message);
@@ -799,7 +800,76 @@ async function gestionCategory() {
     formAddCategory.setAttribute('class', 'flex space-x-2 block');
     containerCreateBtnAddCategory.appendChild(formAddCategory);
 }
-
+async function displaySubCategories() {
+    const formSubCategories = document.querySelector('#formSubCategories');
+    formSubCategories.addEventListener('change', async (ev) => {
+        ev.preventDefault();
+        await fetch(`src/php/fetch/category/displaySubCatFormCat.php?id=${Categories.value}`)
+            .then(response => response.json())
+            .then(data => {
+                const displayListSubCategory = document.querySelector('#displayListSubCategory');
+                displayListSubCategory.innerHTML = '';
+                for (let subCategory of data.displaySubCategories) {
+                    displayListSubCategory.innerHTML += `
+                    <div id="wapperSubCategory" class="flex space-x-2 py-0.5">
+                        <form action="" method="post" id="formDisplaySubCategory_${subCategory.id_subcategories}" class="flex space-x-2">
+                            <input type="text" name="nom" id="nom" value="${subCategory.name_subcategories}" class="bg-[#E9E9E9] rounded-lg p-2">
+                            <button type="submit" class="bg-green-500 p-2 rounded-lg text-white" name="btnUpdateSubCategory" id="btnUpdateSubCategory_${subCategory.id_subcategories}">
+                                Modifier
+                            </button>
+                        </form>
+                        <form action="" method="post" class="flex space-x-2" id="delete_${subCategory.id_subcategories}"  data-id-cat="${subCategory.id_subcategories}">
+                            <button type="submit" class="bg-red-500 p-2 rounded-lg text-white" name="btnDeleteSubCategory" id="btnDeleteSubCategory${subCategory.id_subcategories}">
+                                Supprimer
+                            </button>
+                        </form>
+                    </div>
+                `;
+                }
+                for (let subCategory of data.displaySubCategories) {
+                    const btnDeleteSubCategory = document.querySelector(`#btnDeleteSubCategory${subCategory.id_subcategories}`);
+                    btnDeleteSubCategory.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        await fetch(`src/php/fetch/category/deleteSubCategory.php?id=${subCategory.id_subcategories}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    message.innerHTML = data.message;
+                                    displaySuccess(message);
+                                    displaySubCategories();
+                                }
+                                if (data.status === 'error') {
+                                    message.innerHTML = data.message;
+                                    displayError(message);
+                                }
+                            })
+                    })
+                }
+                for (let subCategory of data.displaySubCategories) {
+                    const formModifySubCategory = document.querySelector(`#formDisplaySubCategory_${subCategory.id_subcategories}`);
+                    formModifySubCategory.addEventListener('submit', async (ev) => {
+                        ev.preventDefault();
+                        await fetch(`src/php/fetch/category/updateSubCategory.php?id=${subCategory.id_subcategories}`, {
+                            method: 'POST',
+                            body: new FormData(formModifySubCategory)
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    message.innerHTML = data.message;
+                                    displaySuccess(message);
+                                    displaySubCategories();
+                                }
+                                if (data.status === 'error') {
+                                    message.innerHTML = data.message;
+                                    displayError(message);
+                                }
+                            })
+                    })
+                }
+            })
+    })
+}
 async function gestionSubCategories() {
     const containerCategoriesAndSubCategories = document.querySelector('#containerCategoriesAndSubCategories');
     const createContainerAddSubCategory = document.createElement('div');
@@ -807,10 +877,10 @@ async function gestionSubCategories() {
     containerCategoriesAndSubCategories.appendChild(createContainerAddSubCategory);
     createContainerAddSubCategory.innerHTML = '';
     createContainerAddSubCategory.innerHTML = `
-        <div id="containerAddSubCategory" class="flex space-x-2">
+        <div id="containerAddSubCategory" class="flex flex-col gap-2">
             <form id="formSubCategories" method="post">
                 <label for="category" class="text-white">Sélectionnez une catégorie :</label>
-                <select id="Categories" name="Categories" class="bg-[#41474c] hover:bg-[#464c51] focus:outline-none textField_border hover:border-[#A87EE6FF] rounded-[14px] p-2">
+                <select id="Categories" name="Categories" class="bg-[#41474c] hover:bg-[#464c51] focus:outline-none textField_border hover:border-[#A87EE6FF] rounded-[14px] p-2 w-full text-white">
                     <option value="">Sélectionnez une catégorie</option>
                     <!-- Les options du select seront générées en JS -->
                 </select>
@@ -826,76 +896,7 @@ async function gestionSubCategories() {
     displayCategory(Categories);
 
     displaySubCategories();
-    async function displaySubCategories() {
-        const formSubCategories = document.querySelector('#formSubCategories');
-        formSubCategories.addEventListener('change', async (ev) => {
-            ev.preventDefault();
-            await fetch(`src/php/fetch/category/displaySubCatFormCat.php?id=${Categories.value}`)
-                .then(response => response.json())
-                .then(data => {
-                    const displayListSubCategory = document.querySelector('#displayListSubCategory');
-                    displayListSubCategory.innerHTML = '';
-                    for (let subCategory of data.displaySubCategories) {
-                        displayListSubCategory.innerHTML += `
-                    <div id="wapperSubCategory" class="flex space-x-2 py-0.5">
-                        <form action="" method="post" id="formDisplaySubCategory_${subCategory.id_subcategories}">
-                            <input type="text" name="nom" id="nom" value="${subCategory.name_subcategories}" class="bg-[#E9E9E9] rounded-lg p-2">
-                            <button type="submit" class="bg-green-500 p-2 rounded-lg text-white" name="btnUpdateSubCategory" id="btnUpdateSubCategory_${subCategory.id_subcategories}">
-                                Modifier
-                            </button>
-                        </form>
-                        <form action="" method="post" class="flex space-x-2" id="delete_${subCategory.id_subcategories}"  data-id-cat="${subCategory.id_subcategories}">
-                            <button type="submit" class="bg-red-500 p-2 rounded-lg text-white" name="btnDeleteSubCategory" id="btnDeleteSubCategory${subCategory.id_subcategories}">
-                                Supprimer
-                            </button>
-                        </form>
-                    </div>
-                `;
-                    }
-                    for (let subCategory of data.displaySubCategories) {
-                        const btnDeleteSubCategory = document.querySelector(`#btnDeleteSubCategory${subCategory.id_subcategories}`);
-                        btnDeleteSubCategory.addEventListener('click', async (e) => {
-                            e.preventDefault();
-                            await fetch(`src/php/fetch/category/deleteSubCategory.php?id=${subCategory.id_subcategories}`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.status === 'success') {
-                                        message.innerHTML = data.message;
-                                        displaySuccess(message);
-                                        displaySubCategories();
-                                    }
-                                    if (data.status === 'error') {
-                                        message.innerHTML = data.message;
-                                        displayError(message);
-                                    }
-                                })
-                        })
-                    }
-                    for (let subCategory of data.displaySubCategories) {
-                        const formModifySubCategory = document.querySelector(`#formDisplaySubCategory_${subCategory.id_subcategories}`);
-                        formModifySubCategory.addEventListener('submit', async (ev) => {
-                            ev.preventDefault();
-                            await fetch(`src/php/fetch/category/updateSubCategory.php?id=${subCategory.id_subcategories}`, {
-                                method: 'POST',
-                                body: new FormData(formModifySubCategory)
-                            })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.status === 'success') {
-                                        message.innerHTML = data.message;
-                                        displaySuccess(message);
-                                        displaySubCategories();
-                                    }
-                                    if (data.status === 'error') {
-                                        message.innerHTML = data.message;
-                                        displayError(message);
-                                    }
-                                })
-                        })
-                    }
-                })
-        })
-    }
+
     const containerBtnAddSubCategory = document.querySelector('#containerAddSubCategory');
     const createBtnAddSubCategory = document.createElement('button');
     createBtnAddSubCategory.setAttribute('id', 'btnAddSubCategory_');
@@ -906,7 +907,7 @@ async function gestionSubCategories() {
     const formAddSubCategory = document.createElement('div');
     formAddSubCategory.setAttribute('id', 'formAddSubCategory');
     formAddSubCategory.setAttribute('class', 'flex space-x-2 block');
-    containerCategoriesAndSubCategories.appendChild(formAddSubCategory);
+    createContainerAddSubCategory.appendChild(formAddSubCategory);
 
 
 
@@ -914,11 +915,14 @@ async function gestionSubCategories() {
     btnAddSubCategory.addEventListener('click', () => {
         const formAddSubCategory = document.querySelector('#formAddSubCategory');
         formAddSubCategory.innerHTML = `
-        <form action="" method="post" class="flex space-x-2 block" id="addSubCategory">
-            <input type="text" name="nom" id="nom" placeholder="Nom de la sous-catégorie" class="bg-[#E9E9E9] rounded-lg p-2">
-            <button type="submit" class="bg-green-500 p-2 rounded-lg text-white" name="btnAddSubCategory" id="btnAddSubCategory">
-                Ajouter
-            </button>
+        <form action="" method="post" class="flex flex-col py-2 space-x-2 block" id="addSubCategory">
+            <label for="nom" class="text-white">Nom de la sous-catégorie :</label>
+            <div class="flex flex-row space-x-2">
+                <input type="text" name="nom" id="nom" placeholder="Nom de la sous-catégorie" class="bg-[#E9E9E9] rounded-lg p-2">
+                <button type="submit" class="bg-[#39e58c] p-2 rounded-lg text-white font-bold" name="btnAddSubCategory" id="btnAddSubCategory">
+                    Ajouter
+                </button>
+            </div>
         </form>
         `;
         // Si le formulaire est déjà affiché, on le masque
@@ -935,7 +939,9 @@ async function gestionSubCategories() {
             ev.preventDefault();
             const categoryId = Categories.value;
             if (!categoryId) {
+                message.innerHTML = 'Vous devez sélectionner une catégorie';
                 console.error('Category ID is not defined');
+                displayError(message);
                 return;
             }
             await fetch(`src/php/fetch/category/addSubCategory.php?id=${categoryId}`, {
