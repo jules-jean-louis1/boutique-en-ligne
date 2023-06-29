@@ -12,7 +12,7 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Script JS -->
     <script defer type="module" src="src/scripts/dashboard.js"></script>
-    <title>Dashboard</title>
+    <title>Dashboard - WellGames</title>
 </head>
 <body>
 <header class="w-full">
@@ -54,7 +54,7 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
         </button>
     </div>
     <div class="flex justify-center">
-        <div id="containerMessage" class="h-10 w-1/2 my-2">
+        <div id="containerMessage" class="h-10 w-fit my-2">
             <div id="message"></div>
         </div>
     </div>

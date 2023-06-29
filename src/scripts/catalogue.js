@@ -38,8 +38,6 @@ async function displayUserInfoHeader() {
     await fetch('src/php/fetch/client/displayUserById.php')
         .then(response => response.json())
         .then(data => {
-            const titlePageCart = document.querySelector('title');
-            titlePageCart.innerHTML = `Panier - ${data[0].login_users}`;
             for (const user of data) {
                 profilInfoHeader.innerHTML = `
             <p>${user.login_users}</p>

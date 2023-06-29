@@ -5,6 +5,7 @@ import { loginFormHeader} from './function/function.js';
 import {registerHeader} from './function/function.js';
 import {formatDateSansh} from "./function/function.js";
 import {cartHeader} from "./function/function.js";
+import {displayMessageToast} from "./function/function.js";
 
 const btnRegister = document.querySelector('#buttonRegisterHeader');
 const btnLogin = document.querySelector('#buttonLoginHeader');
@@ -939,9 +940,8 @@ async function gestionSubCategories() {
             ev.preventDefault();
             const categoryId = Categories.value;
             if (!categoryId) {
-                message.innerHTML = 'Vous devez sélectionner une catégorie';
                 console.error('Category ID is not defined');
-                displayError(message);
+                displayMessageToast(message, 'Vous devez sélectionner une catégorie', 'error');
                 return;
             }
             await fetch(`src/php/fetch/category/addSubCategory.php?id=${categoryId}`, {
@@ -951,13 +951,16 @@ async function gestionSubCategories() {
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        message.innerHTML = data.message;
-                        displaySuccess(message);
+                        displayMessageToast(message, data.message, 'success');
                         displaySubCategories();
-                    }
-                    if (data.status === 'error') {
-                        message.innerHTML = data.message;
-                        displayError(message);
+                    } else if (data.status === 'empty') {
+                        displayMessageToast(message, data.message, 'error');
+                    } else if (data.status === 'long') {
+                        displayMessageToast(message, data.message, 'error');
+                    } else if (data.status === 'short') {
+                        displayMessageToast(message, data.message, 'error');
+                    } else if (data.status === 'error') {
+                        displayMessageToast(message, data.message, 'error');
                     }
                 });
         });
@@ -966,22 +969,21 @@ async function gestionSubCategories() {
 }
 // Fonction pagination pour les utilisateurs
 async function paginationUser(search, order, parentSelector) {
-    await fetch(`src/php/fetch/dashboard/paginationUser.php?search=${search}&order=${order}`)
-        .then(response => response.json())
-        .then(data => {
-            let pageUser = '';
-            for (let i = 0; i < data.pages.length; i++) {
-                const page = data.pages[i];
-                if (page > 0) {
-                    pageUser += `
-                    <li class="flex p-2">
-                        <button class="page-link px-4 py-2 rounded-[14px] bg-transparent border border-white font-light text-white" id="pageUser${page}">${page}</button>
-                    </li>
-                `;
-                }
-                parentSelector.innerHTML = pageUser;
-            }
-        })
+    const response = await fetch(`src/php/fetch/dashboard/paginationUser.php?search=${search}&order=${order}`);
+    const data = await response.json();
+
+    let pageUser = '';
+    for (let i = 0; i < data.pages.length; i++) {
+        const page = data.pages[i];
+        if (page > 0) {
+            pageUser += `
+            <li class="flex p-2">
+                <button class="page-link px-4 py-2 rounded-[14px] bg-transparent border border-white font-light text-white" id="pageUser${page}">${page}</button>
+            </li>
+            `;
+        }
+    }
+    parentSelector.innerHTML = pageUser;
 }
 const params = new URLSearchParams(window.location.search);
 const page = params.get('page') || 1;
@@ -1042,7 +1044,7 @@ async function gestionUser(page, search, order) {
     paginationUser(search = '', order = 'DESC', containerPagination);
 }
 
-async function fetchUser(page = 1, search = '', order = 'DESC') {
+async function fetchUser(page , search = '', order = 'DESC') {
 
     console.log(page, search, order);
     const response = await fetch(`src/php/fetch/dashboard/gestionUser.php?page=${page}&search=${search}&order=${order}`);
