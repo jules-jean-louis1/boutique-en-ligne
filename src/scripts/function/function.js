@@ -443,9 +443,6 @@ function closeModalDialog() {
     dialog.close();
     dialog.remove();
 }
-async function searchBarHeader() {
-
-}
 function messagePopup(message, status) {
     const body = document.querySelector('body');
     const dialog = document.createElement('dialog');
@@ -467,7 +464,9 @@ function messagePopup(message, status) {
 }
 
 // Input qui permet de faire la recherche
-async function searchHeader() {
+export async function searchHeader() {
+    const btnClearInput = document.getElementById("eraseSearches");
+    const SearchBarHeader = document.getElementById("search_bar_form");
     let query = SearchBarHeader.value;
     if (query.length > 0) {
         await fetch (`src/php/fetch/produit/searchBarProduct.php?query=${query}`)
@@ -475,32 +474,48 @@ async function searchHeader() {
             .then(data => {
                 const containerHeaderSearch = document.getElementById("containerSearchBarResultHeader");
                 if (data.status === 'error') {
+                    btnClearInput.classList.remove('hidden');
                     containerHeaderSearch.innerHTML = `
-                <div class="absolute top-14 transform -translate-y-1/2 w-[50%] mt-1.5 bg-[#2D323C] hover:border-[#A87EE6FF] border-[1px] border-[#a8b3cf33] z-10 rounded-lg">
+                <div class="bg-[#2D323C] hover:border-[#A87EE6FF] border-[1px] border-[#a8b3cf33] z-10 rounded-lg">
                     <p class="text-center text-[#a8b3cf] py-2">Aucun résultat</p>
-                </div>
-                `;
+                </div>`;
                 }
                 if (data.status === 'success') {
+                    btnClearInput.classList.remove('hidden');
                     containerHeaderSearch.innerHTML = '';
+                    let count = 0;
                     for (const product of data.data) {
+                        if (count < 6) {
+                            containerHeaderSearch.innerHTML += `
+                            <div class="bg-[#2D323C] hover:border-[#A87EE6FF] border border-[#2D323C] z-10 rounded-lg">
+                                <a href="produit.php?id=${product.id_product}" class="flex flex-row items-center justify-between p-2 ">
+                                    <div class="flex items-center">
+                                        <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-10">
+                                        <div class="flex flex-col items-start ml-2">
+                                            <p class="text-white">${product.name_product}</p>
+                                            <small class="text-[#a8b3cf]">${product.name_subcategories}</small>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-[#a8b3cf]">${product.price_product} €</p>
+                                </a>
+                            </div>`;
+                        }
+                        count++;
+                    }
+                    if (count > 6) {
                         containerHeaderSearch.innerHTML += `
-                    <div class="absolute top-16 transform -translate-y-1/2 w-[50%] mt-1.5 bg-[#2D323C] hover:border-[#A87EE6FF] border-[1px] border-[#a8b3cf33] z-10 rounded-lg">
-                        <a href="produit.php?id=${product.id_product}" class="flex flex-row items-center justify-between p-2 ">
-                            <div class="flex items-center">
-                                <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-10">
-                                <div class="flex flex-col items-start ml-2">
-                                    <p class="text-white">${product.name_product}</p>
-                                    <small class="text-[#a8b3cf]">${product.name_subcategories}</small>
-                                </div>
-                            </div>
-                            <p class="text-sm text-[#a8b3cf]">${product.price_product} €</p>
-                        </a>
-                    </div>
-                    `;
+                        <a href="./search.php?search_bar_form=${query}" class="text-white p-2">Afficher tous les résultats</a>`;
                     }
                 }
             });
+        if (btnClearInput) {
+            btnClearInput.addEventListener('click', () => {
+                SearchBarHeader.value = '';
+                btnClearInput.classList.add('hidden');
+                const containerHeaderSearch = document.getElementById("containerSearchBarResultHeader");
+                containerHeaderSearch.innerHTML = '';
+            });
+        }
     } else {
         const containerHeaderSearch = document.getElementById("containerSearchBarResultHeader");
         containerHeaderSearch.innerHTML = '';
@@ -735,4 +750,4 @@ export const displayMessageToast = (modalAppend, message, state) => {
 
 export { displayError, displaySuccess, formatDate, formatDateSansh, loginFormHeader, registerHeader,
     closeModalDialog, displayErrorMessageFormUpdateProduct, displaySuccessMessageFormUpdateProduct,
-    addSignInClickHandler, searchBarHeader, messagePopup, searchHeader, displayUserInfoHeader, cartHeader, Login};
+    addSignInClickHandler, messagePopup, displayUserInfoHeader, cartHeader, Login};

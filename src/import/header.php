@@ -55,7 +55,7 @@
                     </button>
                 </form>
             </div>
-            <div id="containerSearchBarResultHeader" class="absolute w-1/2 px-2 rounded-[14px] bg-[#2D323C]"></div>
+            <div id="containerSearchBarResultHeader" class="absolute w-1/2 px-2 rounded-[14px] bg-[#2D323C] z-[1000]"></div>
         </div>
         <div>
             <ul class="flex">

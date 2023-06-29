@@ -1,8 +1,8 @@
 import {displayErrorMessageFormUpdateProduct, loginFormHeader} from './function/function.js';
 import {registerHeader} from './function/function.js';
 import {formatDateSansh} from "./function/function.js";
-import {searchHeader} from "./function/function.js";
 import {Login} from "./function/function.js";
+import {searchHeader} from "./function/function.js";
 
 const btnRegister = document.querySelector('#buttonRegisterHeader');
 const btnLogin = document.querySelector('#buttonLoginHeader');
