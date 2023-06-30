@@ -56,7 +56,9 @@ session_start();
             </div>
         </section>
         <section>
-            <div id="lastAvisClient"></div>
+            <div class="flex justify-center">
+                <div id="lastAvisClient" class="w-2/3 flex justify-around my-8"></div>
+            </div>
         </section>
     </main>
     <footer class="w-full">

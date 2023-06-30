@@ -176,7 +176,31 @@ async function displayCategories() {
         });
 }
 async function displayAvis() {
-    await fetch('src/php/fetch/avis/displayLastAvis.php')
+    const response = await fetch('src/php/fetch/avis/displayLastAvis.php')
+    const data = await response.json();
+    console.log(data);
+    const containerAvis = document.getElementById('lastAvisClient');
+    for (let avis of data.lastAvis) {
+        const maxLength = 35; // Longueur maximale du contenu de l'avis
+        let truncatedContent = avis.content; // Contenu de l'avis initial
+        // Vérifier la longueur du contenu de l'avis
+        if (avis.content.length > maxLength) {
+            // Si la longueur dépasse la limite, raccourcir le contenu et ajouter "..."
+            truncatedContent = avis.content.substring(0, maxLength) + "...";
+        }
+        containerAvis.innerHTML += `
+    <div class="flex flex-col justify-between bg-[#2d323c] rounded-[14px] p-2 w-60">
+        <div class="flex space-x-2 items-center justify-start">
+            <img src="src/images/avatars/${avis.avatar_users}" alt="avatar_${avis.avatar_users}" class="w-8 h-8 rounded-full">
+            <p class="text-white">${avis.login_users}</p>
+        </div>
+        <p class="text-white text-lg">${avis.title_comment}</p>
+        <p class="ml-6 text-[#a8b3cf] font-light">${truncatedContent}</p>
+        <p class="flex items-end text-sm font-light text-white">${avis.name_product}</p>
+    </div>
+    `;
+    }
+
 }
 
 const btnBurgerMenu = document.getElementById('btnBurgerMenu');
@@ -188,3 +212,4 @@ if (btnBurgerMenu) {
 }
 displayBanner();
 displayCategories();
+displayAvis();

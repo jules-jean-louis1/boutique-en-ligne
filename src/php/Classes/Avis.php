@@ -84,4 +84,18 @@ class Avis extends Database
             "comment" => "<i>Ce avis a été supprimé.</i>"
         ]);
     }
+
+    public function displayLastAvis() : array
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT ac.id, ac.produit_id, ac.parent_id, ac.title_comment, ac.content, ac.created_at, GROUP_CONCAT(u.login_users) AS login, GROUP_CONCAT(u.avatar_users) AS avatar, u.id_users, u.login_users, u.avatar_users, p.name_product 
+                FROM avis_client ac 
+                JOIN users u ON ac.users_id = u.id_users 
+                JOIN product p ON ac.produit_id = p.id_product WHERE ac.title_comment IS NOT NULL GROUP BY ac.produit_id, ac.parent_id, ac.title_comment, ac.content, u.login_users 
+                ORDER BY ac.created_at DESC LIMIT 5; 
+                                    ");
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }
