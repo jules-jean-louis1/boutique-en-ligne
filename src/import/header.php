@@ -1,5 +1,5 @@
 
-<nav class="py-3 bg-[#181920] border-b-[1px] border-b-[#a8b3cf33]">
+<nav class="py-2 bg-[#181920] border-b-[1px] border-b-[#a8b3cf33]">
     <!-- Desktop -->
     <div class="lg:flex items-center justify-around hidden" id="desktopMenu">
         <div>
@@ -36,7 +36,7 @@
             </ul>
         </div>
         <div class="w-[50%]">
-            <div id="background_color" class="bg-[#2D323C] px-2 py-1 rounded-[14px]">
+            <div id="background_color" class="bg-[#2D323C] border border-[#a8b3cf33] px-2 rounded-[14px]">
                 <form action="./search.php" method="get" id="searchBarFormHeader" class="flex items-center space-x-2 w-full">
                     <input type="text" name="search_bar_form" id="search_bar_form" placeholder="Rechercher un produit" class="w-full bg-[#2D323C] text-[#a8b3cf]">
                     <div id="eraseSearches" class="hidden">
@@ -64,7 +64,7 @@
                         <div>
                             <a href="cart.php">
                                 <button type="button" id="cartHeader"
-                                        class="flex items-center rounded-lg bg-[#1C1F26] py-1 px-2">
+                                        class="flex items-center rounded-lg bg-[#2D323C] py-1 px-2">
                                     <svg width="24" height="24" viewBox="0 0 24 24" stroke="#a8b3cf" fill="none"
                                          stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round"
                                          xmlns="http://www.w3.org/2000/svg">
@@ -77,7 +77,7 @@
                         </div>
                         <div class="relative">
                             <button type="button" id="buttonProfilHeader"
-                                    class="py-1 px-2 rounded-lg bg-[#1C1F26] text-white font-semibold flex items-center justify-between">
+                                    class="py-1 px-2 rounded-lg bg-[#2D323C] text-white font-semibold flex items-center justify-between">
                                 <span id="infoUserNavBar"
                                       class="flex items-center space-x-2"><?= $_SESSION['login'] ?></span>
                             </button>
