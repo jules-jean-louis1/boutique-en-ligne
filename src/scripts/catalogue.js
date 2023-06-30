@@ -372,6 +372,11 @@ async function filterForm(Page, Date, order, categorie, subCategorie) {
     Date = selectedDate;
     order = orderSelect.value || 'DESC_date';
     categorie = selectedCategoryValue;
+    if (categorie === '') {
+        const urlParams = new URLSearchParams(window.location.search);
+        const categorieParam = urlParams.get('categorie');
+        categorie = categorieParam || '';
+    }
     subCategorie = selectedSubCategoryValue;
 
     const params = new URLSearchParams();
@@ -471,11 +476,11 @@ if (Page === null) {
 }
 let Date = '';
 let order = "DESC_date";
-let categorie = '';
+
 let subCategorie = '';
 createFormFilter();
 
-filterForm(Page, order, categorie, subCategorie);
+filterForm(Page, order, '', subCategorie);
 
 cartHeader();
 

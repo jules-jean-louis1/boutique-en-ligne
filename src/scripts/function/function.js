@@ -220,8 +220,26 @@ function updateField(data, fieldName, fieldInput, smallField) {
         fieldInput.classList.add('textField_invalid');
     }
 }
-
-
+function displayMessage(state, container, message) {
+    if (state === 'success') {
+        container.innerHTML = `
+        <div class="w-full flex items-center py-3 px-2 space-x-3 bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100 rounded-[14px] bg-[#cbf4f0] text-[#000] border-l-[3px] border-[#23a094]">
+            <svg width="25" height="25" viewBox="0 0 24 24" stroke="#23a094" fill="#fff" class="p-0.5 bg-white items-center rounded-full" stroke-linejoin="round" stroke-width="1.736842105263158" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M16.253 10.1109L11.8891 14.4749C11.4986 14.8654 10.8654 14.8654 10.4749 14.4749L7.99999 12M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"></path></svg>
+            <p class="text-lg">${message}</p>
+        </div>`;
+    } else if (state === 'error') {
+        container.innerHTML = `
+        <div class="w-full flex items-center py-3 px-2 space-x-3 bg-red-500/20 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100 rounded-[14px] bg-[#f9d0d0] text-[#fff] border-l-[3px] border-[#e02424]">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alert-triangle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/>
+                <path d="M12 9v4"/>
+                <path d="M12 17h.01"/>
+            </svg>            
+            <p class="text-lg">${message}</p>
+        </div>`;
+    }
+}
 // Amelioration du formulaire d'inscription
 async function Login(btnLogin) {
     const containerForm = document.getElementById("containerLoginRegisterForm");
@@ -293,6 +311,7 @@ async function Login(btnLogin) {
                     })
                         .then(response => response.json())
                         .then(data => {
+                            const containerMessageProfil= document.getElementById("containerMessageProfil");
                             let message = document.querySelector('#errorMsg');
                             const loginInput = document.getElementById("login");
                             const passwordInput = document.getElementById("password");
@@ -303,16 +322,13 @@ async function Login(btnLogin) {
                             updateField(data, 'password', passwordInput, smallPassword);
 
                             if (data.login || data.password) {
-                                message.innerHTML = 'Veuillez remplir tous les champs';
-                                displayError(message);
+                                displayMessage("error", containerMessageProfil, "Veuillez remplir tous les champs");
                             }
                             if (data.error) {
-                                message.innerHTML = data.error;
-                                displayError(message);
+                                displayMessage("error", containerMessageProfil, data.error)
                             }
                             if (data.success) {
-                                message.innerHTML = data.success;
-                                displaySuccess(message);
+                                displayMessage("success", containerMessageProfil, data.success)
                                 setTimeout(() => {
                                     window.location.reload();
                                 }, 1000);
@@ -348,16 +364,13 @@ async function Login(btnLogin) {
                                     updateField(data, 'password', passwordInput, smallPassword);
 
                                     if (data.login || data.password) {
-                                        message.innerHTML = 'Veuillez remplir tous les champs';
-                                        displayError(message);
+                                        displayMessage("error", containerMessageProfil, "Veuillez remplir tous les champs")
                                     }
                                     if (data.error) {
-                                        message.innerHTML = data.error;
-                                        displayError(message);
+                                        displayMessage("error", containerMessageProfil, data.error);
                                     }
                                     if (data.success) {
-                                        message.innerHTML = data.success;
-                                        displaySuccess(message);
+                                        displayMessage("success", containerMessageProfil, data.success)
                                         setTimeout(() => {
                                             window.location.reload();
                                         }, 1000);
@@ -401,13 +414,12 @@ async function Login(btnLogin) {
                                     updateField(data, 'passwordConfirm', passwordConfirmInput, smallPasswordConfirm);
 
                                     if (data.login || data.email || data.password || data.passwordConfirm) {
-                                        message.innerHTML = 'Veuillez remplir tous les champs';
-                                        displayError(message);
+                                        displayMessage("error", containerMessageProfil, "Veuillez remplir tous les champs");
                                     }
                                     function displayMessage(data, field, message) {
                                         if (data[field]) {
                                             message.innerHTML = data[field];
-                                            displayError(message);
+                                            displayMessage(message, 'errorLogin', message);
                                         }
                                     }
                                     displayMessage(data, 'errorLogin', message);
@@ -416,8 +428,7 @@ async function Login(btnLogin) {
                                     displayMessage(data, 'errorPasswordConfirm', message);
                                     displayMessage(data, 'validEmail', message);
                                     if (data.success) {
-                                        message.innerHTML = data.success;
-                                        displaySuccess(message);
+                                        displayMessage("success", containerMessageProfil, data.success);
                                     }
                                 });
                         });

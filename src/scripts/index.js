@@ -81,6 +81,7 @@ async function displayBanner() {
             for (let product of data.lastProduct) {
                 sectionHeader.innerHTML = `
                 <div class="flex flex-col justify-center h-fit relative z-5">
+                <div class="flex flex-col justify-center h-fit relative z-5">
                   <img src="public/images/banner/216.jpg" alt="${newestProduct.img_product}" class="max-h-[500px] object-cover relative">
                   <div class="absolute lg:w-1/4 w-1/3 lg:h-1/3 h-1/2 p-2 right-1/2 flex flex-col justify-around items-center">
                     <div class="bg-transparent rounded-lg backdrop-filter backdrop-blur-md backdrop-saturate-150 absolute top-0 left-0 right-0 bottom-0 border-[1px] border-[#a8b3cf33]"></div>

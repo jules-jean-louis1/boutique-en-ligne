@@ -133,7 +133,7 @@ class Categories extends Database
         $bdd = $this->getBdd();
         $req = $bdd->prepare("SELECT * FROM categories
                                     LEFT JOIN subcategories ON categories.id_categories = subcategories.categories_id
-                                    GROUP BY categories.id_categories LIMIT 6");
+                                    GROUP BY categories.id_categories LIMIT 8");
         $req->execute();
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
