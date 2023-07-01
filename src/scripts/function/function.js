@@ -295,7 +295,7 @@ async function Login(btnLogin) {
     const dialog = document.getElementById("dialog");
     const containerDiv = document.getElementById("containerDiv");
     btnLogin.addEventListener("click", () => {
-        dialog.showModal();
+        dialog.setAttribute("open", "");
         const buttonLogin = document.getElementById("buttonLogin");
         const ParaModifyText = document.getElementById("ParaModifyText");
         fetch('src/php/fetch/registerLogin/login.php')
@@ -437,7 +437,7 @@ async function Login(btnLogin) {
         });
         const buttonClose = document.getElementById("buttonClose");
         buttonClose.addEventListener("click", () => {
-            dialog.close();
+            dialog.removeAttribute("open");
         });
     });
 }

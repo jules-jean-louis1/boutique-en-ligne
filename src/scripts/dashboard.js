@@ -392,6 +392,10 @@ async function gestionProduct() {
                                 <div id="wapperFormUpdateProduct">
                                     <button type="button" class="bg-green-500 text-white p-2 rounded-lg" id="btnUpdateProduct_${product.id_product}" data-id-product="${product.id_product}">Modifier</button>
                                 </div>
+                                <div id="wapperFormImageProduct">
+                                    <button type="button" class="bg-blue-500 text-white p-2 rounded-lg" id="btnUpdateImageProduct_${product.id_product}" data-id-product="${product.id_product}">
+                                        Ajouter des images
+                                    </button>
                                 <div id="wapperFormDeleteProduct">
                                     <button type="button" class="bg-orange-600 text-white p-2 rounded-lg" id="btnArchiverProduct_${product.id_product}" data-id-product="${product.id_product}">Archiver</button>
                                 </div>
@@ -615,7 +619,65 @@ async function gestionProduct() {
                             }
                         });
                     });
-                    }
+                    const btnUpdateImageProduct = document.querySelector(`#btnUpdateImageProduct_${product.id_product}`);
+                    btnUpdateImageProduct.addEventListener('click', async () => {
+                        const dialogUpdateImageProduct = document.createElement('dialog');
+                        dialogUpdateImageProduct.setAttribute('id', 'dialogUpdateImageProduct');
+                        dialogUpdateImageProduct.setAttribute('open', '');
+                        dialogUpdateImageProduct.className = 'bg-white p-2 rounded-lg lg:w-9/12 w-3/4';
+                        dialogUpdateImageProduct.innerHTML = `
+        <div>
+            <div class="flex justify-between items-center">
+                <h2 class="text-center text-2xl font-bold">Ajouter des images à : <b>${product.name_product}</b></h2>
+                <button id="btnCloseDialogUpdateImageProduct" class="p-2 bg-red-500">
+                    x
+                </button>
+            </div>
+            <div id="imageFormContainer">
+                <div class="flex flex-col items-center space-y-4">
+                    <form action="" method="post" enctype="multipart/form-data" id="formUpdateImageProduct">
+                        <input type="hidden" value="${product.id_product}">
+                        <div id="divInputImageFiles"></div>
+                        <div>
+                            <button type="submit">Ajouter les images</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>`;
+                        const divInputImageFiles = dialogUpdateImageProduct.querySelector('#divInputImageFiles');
+                        const wapperImageFiles = document.createElement('div');
+                        wapperImageFiles.setAttribute('id', 'wapperImageFiles');
+                        divInputImageFiles.appendChild(wapperImageFiles);
+
+                        for (let i = 0; i < 6; i++) {
+                            wapperImageFiles.innerHTML += `
+                            <div class="flex p-2">
+                                <label for="image${i}">Image ${i}:</label>
+                                <input type="file" name="image${i}" id="image${i}">
+                                <input type="radio" name="banner" value="image${i}">
+                            </div>
+                                `;
+                        }
+                        const formUpdateImageProduct = dialogUpdateImageProduct.querySelector('#formUpdateImageProduct');
+                        formUpdateImageProduct.addEventListener('submit', async (e) => {
+                            const response = await fetch('src/php/fetch/produit/updateImageProduct.php', {
+                                method: 'POST',
+                                body: new FormData(formUpdateImageProduct)
+                            });
+                            const data = await response.json();
+                            console.log(data);
+                        });
+
+                        containerdialogUpdateProduct.appendChild(dialogUpdateImageProduct);
+                        const btnCloseDialogUpdateImageProduct = document.querySelector('#btnCloseDialogUpdateImageProduct');
+                        btnCloseDialogUpdateImageProduct.addEventListener('click', () => {
+                            dialogUpdateImageProduct.close();
+                            dialogUpdateImageProduct.remove();
+                        });
+                    });
+
+                }
             }
     });
 }

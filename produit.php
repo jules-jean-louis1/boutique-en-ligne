@@ -27,7 +27,10 @@ session_start();
         <div id="containerDialogAvis"></div>
         <section id="containerMessageAddCart"></section>
         <section id="containerInformationProduits" class="xl:pt-12 pt-2"></section>
-        <section id="containerSimilarProduct"></section>
+        <section class="py-4 w-11/12">
+            <h2 class="text-2xl text-white">Produits populaires</h2>
+            <div id="containerSimilarProduct" class="flex justify-center"></div>
+        </section>
         <section class="mt-12">
             <h2 class="text-center text-2xl text-white">Ajouter un avis sur ce produit</h2>
             <div id="containerAddAvis"></div>

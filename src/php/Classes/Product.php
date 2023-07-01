@@ -225,4 +225,5 @@ class Product extends Database
             return false;
         }
     }
+
 }

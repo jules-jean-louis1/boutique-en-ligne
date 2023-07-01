@@ -477,21 +477,30 @@ async function getCart() {
                 const containerBtnLogin = document.getElementById("containerBtnLoginSigin");
                 if (total > 0) {
                     containerBtnLogin.innerHTML = `
-                        <button class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold" id="btnLoginCart">Connectez-vous</button>
+                        <button class="bg-[#000] text-white px-5 py-2 rounded-lg font-bold" id="btnLoginCart">Connectez-vous</button>
                     `;
                     const btnLoginCart = document.getElementById("btnLoginCart");
                     btnLoginCart.addEventListener('click', () => {
-                        Login(btnLoginCart)
+                        console.log('ok');
                     });
+                    if (btnLoginCart) {
+                        Login(btnLoginCart);
+                    }
                 } else {
-                    containerBtnLogin.innerHTML = `
-                        <a href="login.php" class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold">Se connecter</a>
-                    `;
+                    containerBtnLogin.innerHTML = `<button type="button" class="bg-[#fff] text-white px-5 py-2 rounded-lg font-bold" id="btnLoginCart">Se connecter</button>`;
+                    const btnLoginCart = document.getElementById("btnLoginCart");
+                    btnLoginCart.addEventListener('click', () => {
+                        console.log('ok');
+                    });
+                    if (btnLoginCart) {
+                        Login(btnLoginCart);
+                    }
                 }
             }
             if (data.status == 'error') {
                 containerCart.innerHTML = `
                     <div class="flex flex-col items-center space-y-2 w-full">
+                        <h2 class="text-white flex items-start text-xl font-bold">Panier</h2>
                         <div class="flex flex-row items-center justify-between w-9/12">
                             <div id="total_items_cart">
                                 <p class="text-[#a8b3cf]">Vous avez 0 articles dans votre panier</p>
@@ -518,16 +527,12 @@ async function getCart() {
                         if (data.status == 'error') {
                             const containerBtnLogin = document.getElementById("containerBtnLoginSigin");
                             containerBtnLogin.innerHTML = `
-                                <button class="bg-[#ce3df3] text-white px-5 py-2 rounded-lg font-bold" id="btnLoginCart">Se connecter</button>
+                                <button class="bg-[#a87ee6] text-white px-6 py-4 rounded-lg font-bold" id="catalogue">
+                                    <a href="catalogue.php">Découvrir des jeux</a>
+                                </button>
                             `;
                         }
                     });
-                const btnLoginCart = document.getElementById("btnLoginCart");
-                if (btnLoginCart) {
-                    btnLoginCart.addEventListener('click', (ev) => {
-                        Login(btnLoginCart);
-                    });
-                }
             }
         });
 }
