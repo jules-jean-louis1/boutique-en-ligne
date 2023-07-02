@@ -7,6 +7,7 @@ import {formatDateSansh} from "./function/function.js";
 import {cartHeader} from "./function/function.js";
 import {displayMessageToast} from "./function/function.js";
 import {searchHeader} from "./function/function.js";
+import {displayMessage} from "./function/function.js";
 
 const btnRegister = document.querySelector('#buttonRegisterHeader');
 const btnLogin = document.querySelector('#buttonLoginHeader');
@@ -640,8 +641,9 @@ async function gestionProduct() {
                                         <form action="" method="post" enctype="multipart/form-data" id="formUpdateImageProduct">
                                             <input type="hidden" name="product_id" value="${product.id_product}">
                                             <div id="divInputImageFiles"></div>
+                                            <div id="errorsHandle" class="h-20"></div>
                                             <div>
-                                                <button type="submit">Ajouter les images</button>
+                                                <button type="submit" class="p-2 rounded-[14px] font-bold bg-purple-400 text-white">Ajouter les images</button>
                                             </div>
                                         </form>
                                     </div>
@@ -650,7 +652,7 @@ async function gestionProduct() {
                         const divInputImageFiles = dialogUpdateImageProduct.querySelector('#divInputImageFiles');
                         const wapperImageFiles = document.createElement('div');
                         wapperImageFiles.setAttribute('id', 'wapperImageFiles');
-                        wapperImageFiles.className = 'flex flex-wrap justify-between items-center space-x-4';
+                        wapperImageFiles.className = 'flex flex-wrap justify-between items-center gap-4 p-2';
                         divInputImageFiles.appendChild(wapperImageFiles);
 
                         for (let i = 1; i < 7; i++) {
@@ -671,6 +673,14 @@ async function gestionProduct() {
                             });
                             const data = await response.json();
                             console.log(data);
+                            const errorsHandle = dialogUpdateImageProduct.querySelector('#errorsHandle');
+                            if (data.error) {
+                                errorsHandle.innerHTML = '';
+                                errorsHandle.innerHTML += `<div class="text-red-500 text-sm font-bold">${data.error}</div>`;
+                            }
+                            if (data.success) {
+                                displayMessage('success', errorsHandle, data.success);
+                            }
                         });
 
                         containerdialogUpdateProduct.appendChild(dialogUpdateImageProduct);

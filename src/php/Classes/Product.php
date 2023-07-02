@@ -228,6 +228,11 @@ class Product extends Database
 
     public function addImageToProduct(int $productID, string $fileName, bool $isBanner)
     {
+        if ($isBanner === true) {
+            $isBanner = 'true';
+        } else {
+            $isBanner = 'false';
+        }
         $bdd = $this->getBdd();
         $req = $bdd->prepare("INSERT INTO img_product (name_img, banner_img, product_id) VALUES (:fileName, :isBanner,:productID)");
         $req->execute([

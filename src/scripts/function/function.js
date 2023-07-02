@@ -220,7 +220,7 @@ function updateField(data, fieldName, fieldInput, smallField) {
         fieldInput.classList.add('textField_invalid');
     }
 }
-function displayMessage(state, container, message) {
+export function displayMessage(state, container, message) {
     if (state === 'success') {
         container.innerHTML = `
         <div class="w-full flex items-center py-3 px-2 space-x-3 bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100 rounded-[14px] bg-[#cbf4f0] text-[#000] border-l-[3px] border-[#23a094]">
