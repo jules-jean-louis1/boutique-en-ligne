@@ -621,47 +621,51 @@ async function gestionProduct() {
                     });
                     const btnUpdateImageProduct = document.querySelector(`#btnUpdateImageProduct_${product.id_product}`);
                     btnUpdateImageProduct.addEventListener('click', async () => {
+                        containerdialogUpdateProduct.innerHTML = '';
                         const dialogUpdateImageProduct = document.createElement('dialog');
-                        dialogUpdateImageProduct.setAttribute('id', 'dialogUpdateImageProduct');
+                        dialogUpdateImageProduct.setAttribute('id', 'dialog');
                         dialogUpdateImageProduct.setAttribute('open', '');
-                        dialogUpdateImageProduct.className = 'bg-white p-2 rounded-lg lg:w-9/12 w-3/4';
+                        dialogUpdateImageProduct.classList.add('bg-overlay-quaternary-onion')
+                        dialogUpdateImageProduct.className = 'w-10/12 bg-[#24272A] text-[#a8b3cf] rounded-lg shadow-lg';
                         dialogUpdateImageProduct.innerHTML = `
-        <div>
-            <div class="flex justify-between items-center">
-                <h2 class="text-center text-2xl font-bold">Ajouter des images à : <b>${product.name_product}</b></h2>
-                <button id="btnCloseDialogUpdateImageProduct" class="p-2 bg-red-500">
-                    x
-                </button>
-            </div>
-            <div id="imageFormContainer">
-                <div class="flex flex-col items-center space-y-4">
-                    <form action="" method="post" enctype="multipart/form-data" id="formUpdateImageProduct">
-                        <input type="hidden" value="${product.id_product}">
-                        <div id="divInputImageFiles"></div>
-                        <div>
-                            <button type="submit">Ajouter les images</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>`;
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <h2 class="text-center text-2xl font-bold">Ajouter des images à : <b>${product.name_product}</b></h2>
+                                    <button id="btnCloseDialogUpdateImageProduct" class="p-2 bg-red-500">
+                                        x
+                                    </button>
+                                </div>
+                                <div id="imageFormContainer">
+                                    <div class="flex flex-col items-center space-y-4">
+                                        <form action="" method="post" enctype="multipart/form-data" id="formUpdateImageProduct">
+                                            <input type="hidden" name="product_id" value="${product.id_product}">
+                                            <div id="divInputImageFiles"></div>
+                                            <div>
+                                                <button type="submit">Ajouter les images</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>`;
                         const divInputImageFiles = dialogUpdateImageProduct.querySelector('#divInputImageFiles');
                         const wapperImageFiles = document.createElement('div');
                         wapperImageFiles.setAttribute('id', 'wapperImageFiles');
+                        wapperImageFiles.className = 'flex flex-wrap justify-between items-center space-x-4';
                         divInputImageFiles.appendChild(wapperImageFiles);
 
-                        for (let i = 0; i < 6; i++) {
+                        for (let i = 1; i < 7; i++) {
                             wapperImageFiles.innerHTML += `
                             <div class="flex p-2">
                                 <label for="image${i}">Image ${i}:</label>
-                                <input type="file" name="image${i}" id="image${i}">
+                                <input type="file" name="image${i}" id="image${i}" accept="image/*">
                                 <input type="radio" name="banner" value="image${i}">
                             </div>
                                 `;
                         }
                         const formUpdateImageProduct = dialogUpdateImageProduct.querySelector('#formUpdateImageProduct');
                         formUpdateImageProduct.addEventListener('submit', async (e) => {
-                            const response = await fetch('src/php/fetch/produit/updateImageProduct.php', {
+                            e.preventDefault();
+                            const response = await fetch('src/php/fetch/produit/addImageToProduct.php', {
                                 method: 'POST',
                                 body: new FormData(formUpdateImageProduct)
                             });
@@ -673,6 +677,7 @@ async function gestionProduct() {
                         const btnCloseDialogUpdateImageProduct = document.querySelector('#btnCloseDialogUpdateImageProduct');
                         btnCloseDialogUpdateImageProduct.addEventListener('click', () => {
                             dialogUpdateImageProduct.close();
+                            dialogUpdateImageProduct.classList.remove('bg-overlay-quaternary-onion');
                             dialogUpdateImageProduct.remove();
                         });
                     });
