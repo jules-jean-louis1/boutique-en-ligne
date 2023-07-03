@@ -26,10 +26,45 @@ session_start();
         <div id="containerLoginRegisterForm"></div>
         <div id="containerDialogAvis"></div>
         <section id="containerMessageAddCart"></section>
-        <section id="containerInformationProduits" class="xl:pt-12 pt-2"></section>
-        <section class="py-4 w-11/12">
-            <h2 class="text-2xl text-white">Produits populaires</h2>
-            <div id="containerSimilarProduct" class="flex justify-center"></div>
+        <section>
+            <div id="banner_img_container" class="w-full"></div>
+            <div id="containerInformationProduits" class="xl:pt-12 pt-2 relative z-[1]"></div>
+        </section>
+        <section id="wapperImagesProduct" class="flex justify-center py-6 relative z-[1]">
+            <div class="w-8/12">
+                <h2 class="text-2xl text-white flex items-center py-4">
+                    <span class="mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-photo" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M15 8h.01"/>
+                            <path d="M3 6a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12z"/>
+                            <path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5"/>
+                            <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3"/>
+                        </svg>
+                    </span>
+                    <span>
+                        Visuels
+                    </span>
+                </h2>
+                <div id="containerImagesProducts" class="flex flex-row gap-4 w-full h-[400px]"></div>
+            </div>
+        </section>
+        <section class="flex justify-center py-6 relative z-[1]">
+            <div class="w-8/12">
+                <h2 class="text-2xl text-white flex items-center py-4">
+                    <span class="mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trending-up" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                          <path d="M3 17l6 -6l4 4l8 -8"/>
+                          <path d="M14 7l7 0l0 7"/>
+                        </svg>
+                    </span>
+                    <span>
+                        Jeux tendances
+                    </span>
+                </h2>
+                <div id="containerSimilarProduct" class="flex justify-center"></div>
+            </div>
         </section>
         <section class="mt-12">
             <h2 class="text-center text-2xl text-white">Ajouter un avis sur ce produit</h2>

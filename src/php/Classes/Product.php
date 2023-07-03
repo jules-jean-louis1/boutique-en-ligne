@@ -126,9 +126,10 @@ class Product extends Database
     public function getProductById($id)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT p.*, s.name_subcategories 
-                                FROM product p 
+        $req = $bdd->prepare("SELECT p.*, s.name_subcategories, c.name_categories
+                                FROM product p
                                 JOIN subcategories s ON p.subcategories_id = s.id_subcategories 
+                                JOIN categories c ON s.categories_id = c.id_categories 
                                 WHERE id_product = :id");
         $req->execute(array(
             "id" => $id
@@ -136,10 +137,10 @@ class Product extends Database
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
-    public function getProductPriceById($id)
+    public function getProductImageById(int $id) : array
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT price_product FROM product WHERE id_product = :id");
+        $req = $bdd->prepare("SELECT ip.name_img, ip.banner_img FROM img_product ip WHERE product_id = :id");
         $req->execute(array(
             "id" => $id
         ));
@@ -241,5 +242,18 @@ class Product extends Database
             "isBanner" => $isBanner
         ]);
     }
-
+    public function verifyNumberImageProduct(int $productID) : bool
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT COUNT(*) as count FROM img_product WHERE product_id = :productID");
+        $req->execute([
+            "productID" => $productID
+        ]);
+        $result = $req->fetch(PDO::FETCH_ASSOC);
+        if ($result['count'] <= 6) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

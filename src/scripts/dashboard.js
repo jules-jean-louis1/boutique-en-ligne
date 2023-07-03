@@ -1,13 +1,15 @@
-import { displayError} from './function/function.js';
-import { displaySuccess} from './function/function.js';
-import { formatDate } from "./function/function.js";
-import { loginFormHeader} from './function/function.js';
-import {registerHeader} from './function/function.js';
-import {formatDateSansh} from "./function/function.js";
-import {cartHeader} from "./function/function.js";
-import {displayMessageToast} from "./function/function.js";
-import {searchHeader} from "./function/function.js";
-import {displayMessage} from "./function/function.js";
+import {
+    cartHeader,
+    displayError,
+    displayMessage,
+    displayMessageToast,
+    displaySuccess,
+    formatDate,
+    formatDateSansh,
+    loginFormHeader,
+    registerHeader,
+    searchHeader
+} from './function/function.js';
 
 const btnRegister = document.querySelector('#buttonRegisterHeader');
 const btnLogin = document.querySelector('#buttonLoginHeader');
@@ -397,6 +399,7 @@ async function gestionProduct() {
                                     <button type="button" class="bg-blue-500 text-white p-2 rounded-lg" id="btnUpdateImageProduct_${product.id_product}" data-id-product="${product.id_product}">
                                         Ajouter des images
                                     </button>
+                                </div>
                                 <div id="wapperFormDeleteProduct">
                                     <button type="button" class="bg-orange-600 text-white p-2 rounded-lg" id="btnArchiverProduct_${product.id_product}" data-id-product="${product.id_product}">Archiver</button>
                                 </div>
@@ -515,8 +518,7 @@ async function gestionProduct() {
                                     for (let result of searchResults) {
                                         result.addEventListener('click', () => {
                                             selectedSubCategoryId = result.getAttribute('data-id');
-                                            const subCategoryName = result.querySelector('p').textContent;
-                                            searchSubCategories.value = subCategoryName;
+                                            searchSubCategories.value = result.querySelector('p').textContent;
                                             // Faites quelque chose avec l'ID de sous-catégorie sélectionné
                                             document.querySelector('#subCategoryId').value = selectedSubCategoryId; // Mettre l'id sélectionné comme valeur de l'input caché
                                             displaySearchSubCategories.innerHTML = ''; // Cacher les résultats de recherche

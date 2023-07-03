@@ -113,6 +113,7 @@ async function getProduct(URLid) {
     await fetch(`src/php/fetch/produit/getProductById.php?id=${URLid}`)
         .then(response => response.json())
         .then(data => {
+            console.log(data);
             let options = '';
             for (let i = 1; i <= 10; i++) {
                 options += `<option value="${i}">${i}</option>`;
@@ -120,8 +121,8 @@ async function getProduct(URLid) {
             const containerProduct = document.getElementById("containerProduct");
             for (const product of data.data) {
                 containerProduct.innerHTML = `
-            <div class="lg:w-full xl:w-9/12 border-[1px] border-[#a8b3cf33] rounded-lg">
-                <div class="bg-[#A87EE6FF] flex xl:flex-row flex-col items-center xl:justify-between justify-center rounded-[14px]  xl:px-16 xl:py-6 p-1">
+            <div class="lg:w-full xl:w-9/12 border-[1px] border-[#a8b3cf33] rounded-[14px]">
+                <div class="bg-[#A87EE6FF]/30 flex xl:flex-row flex-col items-center xl:justify-between justify-center rounded-[14px]  xl:px-16 xl:py-6 p-1">
                     <div class="h-fit">
                         <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="xl:h-96 rounded-[14px] h-80">
                     </div>
@@ -198,6 +199,59 @@ async function getProduct(URLid) {
                     });
             }
         });
+    displayImagesProduct(URLid);
+}
+// afficher les images du produit
+async function displayImagesProduct(id) {
+    const response = await fetch(`src/php/fetch/produit/getImagesById.php?id=${id}`);
+    const data = await response.json();
+    const containerImagesProduct = document.getElementById("containerImagesProducts");
+    const banner_img_container = document.getElementById("banner_img_container");
+    for (let images of data.images) {
+        if (images.banner_img === 'true') {
+            banner_img_container.innerHTML += `
+            <div class="w-full absolute">
+                <div class="absolute inset-0 bg-gradient-to-b from-[#A87EE6FF]/20 to-[#181920]"></div>
+                <img src="public/images/produits/${images.name_img}" alt="${images.name_img}" class="w-full">
+            </div>
+            `;
+        } else {
+            /*containerImagesProduct.innerHTML += `
+            <div class="w-full">
+                <img src="public/images/produits/${images.name_img}" alt="${images.name_img}" class="w-full rounded-[14px]">
+            </div>
+            `;*/
+        }
+    }
+    console.log(data.images);
+    // Création du div pour l'image principale avec une taille différente
+    let mainImageContainer = document.createElement("div");
+    mainImageContainer.classList.add("main-image-container");
+
+    let mainImage = document.createElement("img");
+    mainImage.src = `public/images/produits/${data.images[1].name_img}`;
+    mainImage.alt = data.images[1].name_img;
+    mainImage.classList.add("object-cover", "rounded-[14px]", "main-image", "w-11/12");
+
+    mainImageContainer.appendChild(mainImage);
+    containerImagesProduct.appendChild(mainImageContainer);
+
+// Création du div pour les autres images avec une taille plus petite et flex wrap
+    let otherImagesContainer = document.createElement("div");
+    otherImagesContainer.classList.add("other-images-container", "flex", "flex-wrap" , "gap-2");
+
+// Ajout des autres images dans le div
+    for (let i = 2; i < data.images.length; i++) {
+        let image = document.createElement("img");
+        image.src = `public/images/produits/${data.images[i].name_img}`;
+        image.alt = data.images[i].name_img;
+        image.classList.add("w-56", "rounded-[14px]", "other-image", "h-fit");
+
+        otherImagesContainer.appendChild(image);
+    }
+
+    containerImagesProduct.appendChild(otherImagesContainer);
+
 }
 async function cartHeader() {
     const cartButtonHeader = document.getElementById("cartHeader");
@@ -727,7 +781,7 @@ async function getSimilarProduct() {
     for (const product of data.lastProduct) {
         if (count < 6) {
             containerSimilarProduct.innerHTML += `
-            <div id="itemsProductContainer" class="w-60 flex justify-center mx-8">
+            <div id="itemsProductContainer" class="w-60 flex justify-center mx-2 h-auto">
                 <a href="produit.php?id=${product.id_product}">
                 <div id="wapperProduct" class="p-4">
                     <div id="itemsImgProduct">
@@ -764,6 +818,7 @@ Avis();
 displayAvis();
 cartHeader();
 getProduct(URLid);
+
 getSimilarProduct();
 
 
