@@ -659,10 +659,10 @@ async function gestionProduct() {
 
                         for (let i = 1; i < 7; i++) {
                             wapperImageFiles.innerHTML += `
-                            <div class="flex p-2">
+                            <div class="flex flex-col p-2 rounded-[14px] bg-black/20 w-1/3">
                                 <label for="image${i}">Image ${i}:</label>
                                 <input type="file" name="image${i}" id="image${i}" accept="image/*">
-                                <input type="radio" name="banner" value="image${i}">
+                                <input type="radio" name="banner" value="image${i}"> Banner
                             </div>
                                 `;
                         }

@@ -46,7 +46,7 @@ session_start();
                         Visuels
                     </span>
                 </h2>
-                <div id="containerImagesProducts" class="flex flex-row gap-4 w-full h-[400px]"></div>
+                <div id="containerImagesProducts" class="flex flex-row gap-4 w-full h-fit"></div>
             </div>
         </section>
         <section class="flex justify-center py-6 relative z-[1]">

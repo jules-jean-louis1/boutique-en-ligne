@@ -61,7 +61,7 @@ class Catalogue extends Database
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $count = $result['total_count'];
-        $pages = ceil($count / 12);
+        $pages = ceil($count / 15);
         return $pages;
     }
 
@@ -70,7 +70,7 @@ class Catalogue extends Database
         if (!$pages || $pages < 1) {
             $pages = 1;
         }
-        $limit = 12;
+        $limit = 15;
         $offset = ($pages - 1) * $limit;
         if ($offset < 0) {
             $offset = 0;
