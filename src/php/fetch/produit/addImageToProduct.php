@@ -5,9 +5,10 @@ $productID = intval($_POST['product_id']);
 $errors = [];
 $fileUploaded = false;
 $img_product = new Product();
+
 if (isset($_POST['product_id'])) {
     $count_img = $img_product->verifyNumberImageProduct($productID);
-    if ($count_img) {
+    if ($count_img === true) {
         $errors['error'][] = "Le nombre d'images pour ce produit a atteint la limite autorisée (6).";
         exit();
     } else {
@@ -61,12 +62,9 @@ if (isset($_POST['product_id'])) {
         }
     }
 }
-
-
 if (!$fileUploaded) {
-    $errors['error'][] = "Aucun fichier n'a été envoyé.";
+$errors['error'][] = "Aucun fichier n'a été envoyé.";
 }
-
 header("Content-Type: application/json");
 echo json_encode($errors);
 

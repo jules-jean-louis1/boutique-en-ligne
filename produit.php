@@ -70,7 +70,7 @@ session_start();
             <h2 class="text-center text-2xl text-white">Ajouter un avis sur ce produit</h2>
             <div id="containerAddAvis"></div>
         </section>
-        <section class="my-6">
+        <section class="py-8">
             <div class="flex flex-col items-center">
                 <h2 class="text-2xl text-white">Avis clients</h2>
                 <div id="containerAvisClients" class="w-10/12"></div>

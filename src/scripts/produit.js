@@ -130,31 +130,95 @@ async function getProduct(URLid) {
                         <p class="text-center text-white rounded-lg p-1 bg-[#00000038] xl:block hidden">${product.name_subcategories}</p>
                         <h1 class="text-6xl text-white xl:mt-5 mt-1 uppercase font-bold">${product.name_product}</h1>
                         <p class="text-[#a8b3cf] mt-5">${afficherEtoiles(product.rating_product)}</p>
-                        <p class="mt-5 text-black font-xl">À propos du jeu</p>
-                        <p class="text-white xl:text-start text-center">${product.description_product}</p>
+                        <div id="description_game" class="text-white">
+                            <p id="descro">
+                            </p>
+                        </div>
                         <div>
                             <p class="text-white mt-2 font-bold text-6xl  xl:text-start text-center" id="price_product">${product.price_product} €</p>
                             <div id="containerFormAddProductToCart">
                                 <form action="" method="post" id="formAddToCart">
                                     <input type="hidden" name="id" value="${product.id_product}">
                                     <input type="hidden" name="name" value="${product.name_product}">
-                                    <select name="quantity" id="quantity" class="bg-[#2D323C] text-white px-5 py-2 rounded-lg mt-5">
-                                        ${options}
-                                    </select>
-                                    <button type="submit" class="text-[#A87EE6FF] bg-white px-5 py-2 rounded-lg mt-5" id="buttonAddToCart">Ajouter au panier</button>
+                                    <div class="flex justify-center items-center space-x-3 mt-2 bg-white/10 py-2 rounded-[14px]">
+                                        <label for="quantity" class="text-white">Quantité :</label>
+                                        <select name="quantity" id="quantity" class="bg-white/10 text-white bold px-5 py-2 rounded-lg">
+                                            ${options}
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="flex items-center space-x-3 bg-[#A87EE6FF] text-white px-5 py-2 rounded-[14px] mt-2" id="buttonAddToCart">
+                                        <span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                              <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/>
+                                              <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/>
+                                              <path d="M17 17h-11v-14h-2"/>
+                                              <path d="M6 5l6 .429m7.138 6.573l-.143 1h-13"/>
+                                              <path d="M15 6h6m-3 -3v6"/>
+                                            </svg>
+                                        </span>
+                                        <span class="text-xl font-semibold">
+                                            Ajouter au panier
+                                        </span>
+                                    </button>
                                 </form>
                             </div>
                         </div>
                     </div>
                     <div class="flex flex-col items-center justify-center">
-                        <div class="xl:block hidden">
-                            <p class="text-black">Sortie le :</p>
-                            <p class="text-black mt-2">${formatDateSansh(product.released_date_product)}</p>
+                        <div class="xl:block hidden xl:flex flex-col items-center text-white">
+                            <p class="flex items-center text-slate-100">
+                                <span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"/>
+                                      <path d="M16 3v4"/>
+                                      <path d="M8 3v4"/>
+                                      <path d="M4 11h16"/>
+                                      <path d="M11 15h1"/>
+                                      <path d="M12 15v3"/>
+                                    </svg>
+                                </span>
+                                <span class="ml-2">
+                                Date de sortie:
+                                </span>
+                            </p>
+                            <p class="mt-2 font-semibold">${formatDateSansh(product.released_date_product)}</p>
                         </div>
                     </div>
                 </div>
             </div>
             `;
+                const descriptionGame = document.getElementById("description_game");
+                const descro = document.getElementById("descro");
+                const description = product.description_product;
+
+                if (description.length > 246) {
+                    const truncatedDescription = description.substring(0, 246);
+                    const fullDescription = description;
+                    let isFullDescriptionShown = false;
+
+                    function toggleDescription() {
+                        if (isFullDescriptionShown) {
+                            descro.innerText = truncatedDescription;
+                            showMoreButton.innerText = "Voir plus";
+                        } else {
+                            descro.innerText = fullDescription;
+                            showMoreButton.innerText = "Voir moins";
+                        }
+
+                        isFullDescriptionShown = !isFullDescriptionShown;
+                    }
+
+                    const showMoreButton = document.createElement("button");
+                    showMoreButton.innerText = "Voir plus";
+                    showMoreButton.addEventListener("click", toggleDescription);
+
+                    descro.innerText = truncatedDescription + '...';
+                    descriptionGame.appendChild(showMoreButton);
+                }
+
+
                 const containerFormAddProductToCart = document.getElementById("containerFormAddProductToCart");
                 const priceProduct = document.getElementById("price_product");
                 if (product.dispo_product === '1') {

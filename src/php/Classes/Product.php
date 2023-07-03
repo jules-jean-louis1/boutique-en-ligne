@@ -250,7 +250,7 @@ class Product extends Database
             "productID" => $productID
         ]);
         $result = $req->fetch(PDO::FETCH_ASSOC);
-        if ($result['count'] <= 6) {
+        if ($result['count'] >= 6) {
             return true;
         } else {
             return false;
