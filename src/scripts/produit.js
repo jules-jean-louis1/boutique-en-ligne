@@ -126,7 +126,7 @@ async function getProduct(URLid) {
                     <div class="h-fit">
                         <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="xl:h-96 rounded-[14px] h-80">
                     </div>
-                    <div class="flex flex-col xl:items-start items-center lg:w-5/12 sm:w-[95%]">
+                    <div class="flex flex-col xl:items-start items-center lg:w-7/12 sm:w-[95%]">
                         <p class="text-center text-white rounded-lg p-1 bg-[#00000038] xl:block hidden">${product.name_subcategories}</p>
                         <h1 class="text-6xl text-white xl:mt-5 mt-1 uppercase font-bold">${product.name_product}</h1>
                         <p class="text-[#a8b3cf] mt-5">${afficherEtoiles(product.rating_product)}</p>
