@@ -400,6 +400,11 @@ async function productHandle(search, categories, limit) {
                                     <button type="button" class="bg-[#A9DC76]/20 border border-[#A9DC76] text-white p-2 rounded-lg" id="btnUpdateProduct_${product.id_product}" data-id-product="${product.id_product}">Modifier</button>
                                 </div>
                                 <div id="wapperFormImageProduct">
+                                    <button type="button" class="bg-[#AB9DF2]/20 border border-[#AB9DF2] text-white p-2 rounded-lg" id="btnProductDetail_${product.id_product}" data-id-product="${product.id_product}">
+                                        Détail du produit
+                                    </button>
+                                </div>
+                                <div id="wapperFormImageProduct">
                                     <button type="button" class="bg-[#78DCE8]/20 border border-[#78DCE8] text-white p-2 rounded-lg" id="btnUpdateImageProduct_${product.id_product}" data-id-product="${product.id_product}">
                                         Ajouter des images
                                     </button>
