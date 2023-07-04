@@ -36,7 +36,7 @@
             </ul>
         </div>
         <div class="w-[50%]">
-            <div id="background_color" class="bg-[#2D323C] border border-[#a8b3cf33] px-2 rounded-[14px]">
+            <div id="background_color" class="bg-[#2D323C] border border-[#a8b3cf33] px-2 rounded-lg">
                 <form action="./search.php" method="get" id="searchBarFormHeader" class="flex items-center space-x-2 w-full">
                     <input type="text" name="search_bar_form" id="search_bar_form" placeholder="Rechercher un produit" class="w-full bg-[#2D323C] text-[#a8b3cf]">
                     <div id="eraseSearches" class="hidden">

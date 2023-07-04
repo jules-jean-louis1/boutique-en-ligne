@@ -24,7 +24,7 @@ session_start();
     <div id="containerLoginRegisterForm"></div>
     <section id="containerMessageAddCart"></section>
     <section class="flex xl:flex-row xl:justify-between flex-col xl:pt-6 xl:mx-[4%]">
-        <div id="displayFilterCatalogue" class="bg-[#1e1e1f] p-2 lg:h-[35rem] h-[70vh] fixed"></div>
+        <div id="displayFilterCatalogue" class="bg-[#181920] border border-[#a8b3cf33] rounded-lg p-2 lg:h-[35rem] h-[70vh] fixed"></div>
         <div id="displayFiltreProduct" class="flex flex-col w-full justify-center ml-60 pb-2 min-h-[95vh]">
             <div id="displayProduct" class="flex flex-wrap justify-center w-full h-full"></div>
             <div id="displayPages" class="flex justify-center">

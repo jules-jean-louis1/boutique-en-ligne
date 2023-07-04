@@ -403,7 +403,7 @@ async function filterForm(Page, Date, order, categorie, subCategorie) {
                                     <div id="priceProduct" class="absolute mt-2 ml-2 rounded-full text-white bg-slate-900/90 w-fit p-1 hover:bg-[#a87ee6]">
                                         <p>${product.price_product}€</p>
                                     </div>
-                                    <img src="src/images/products/${product.img_product}" alt="${product.name_product}" class="rounded-lg h-fit lg:h-72">
+                                    <img src="src/images/products/${product.img_product}" alt="${product.name_product}" class="rounded-lg h-fit lg:h-72 object-cover">
                                 </div>
                                 <div id="TitleProduct" class="flex items-center w-full justify-between">
                                     <div id="containerTitleProduct" class="flex flex-col items-start">
