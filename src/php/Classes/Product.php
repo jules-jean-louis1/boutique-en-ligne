@@ -305,4 +305,15 @@ class Product extends Database
         $result = $req->fetch(PDO::FETCH_ASSOC);
         return $result['count'];
     }
+    public function addDetailProduct(int $productID, string $developpeur, string $editeur, string $genre)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("INSERT INTO detail_product (developpeur, editeur, genre, product_id) VALUES (:developpeur, :editeur, :genre, :productID)");
+        $req->execute([
+            "productID" => $productID,
+            "developpeur" => $developpeur,
+            "editeur" => $editeur,
+            "genre" => $genre
+        ]);
+    }
 }
