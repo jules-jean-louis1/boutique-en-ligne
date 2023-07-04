@@ -256,4 +256,53 @@ class Product extends Database
             return false;
         }
     }
+
+    public function getProductDashboard($search, $categorie, $limit) : array
+    {
+        $bdd = $this->getBdd();
+        $req = "SELECT p.*, s.name_subcategories, c.name_categories
+                FROM product p
+                JOIN subcategories s ON p.subcategories_id = s.id_subcategories 
+                JOIN categories c ON s.categories_id = c.id_categories";
+
+        if (!empty($search) || !empty($categorie)) {
+            $req .= " WHERE";
+        }
+
+        if (!empty($search)) {
+            $req .= " p.name_product LIKE :search";
+        }
+
+        if (!empty($categorie)) {
+            if (!empty($search)) {
+                $req .= " AND";
+            }
+            $req .= " s.categories_id = :categorie";
+        }
+
+        $req .= " ORDER BY p.id_product DESC LIMIT :limit";
+
+        $stmt = $bdd->prepare($req);
+
+        if (!empty($search)) {
+            $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+        }
+
+        if (!empty($categorie)) {
+            $stmt->bindParam(':categorie', $categorie, PDO::PARAM_INT);
+        }
+
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+    public function countTotalProduct()
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT COUNT(*) as count FROM product");
+        $req->execute();
+        $result = $req->fetch(PDO::FETCH_ASSOC);
+        return $result['count'];
+    }
 }

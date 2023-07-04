@@ -278,17 +278,9 @@ async function displayImagesProduct(id) {
             <div class="w-full absolute">
                 <div class="absolute inset-0 bg-gradient-to-b from-[#A87EE6FF]/20 to-[#181920]"></div>
                 <img src="public/images/produits/${images.name_img}" alt="${images.name_img}" class="w-full">
-            </div>
-            `;
-        } else {
-            /*containerImagesProduct.innerHTML += `
-            <div class="w-full">
-                <img src="public/images/produits/${images.name_img}" alt="${images.name_img}" class="w-full rounded-[14px]">
-            </div>
-            `;*/
+            </div>`;
         }
     }
-    console.log(data.images);
     // Création du div pour l'image principale avec une taille différente
     let mainImageContainer = document.createElement("div");
     mainImageContainer.classList.add("main-image-container", "w-1/2");

@@ -278,364 +278,367 @@ async function addProduct() {
 }
 
 // Fonction d'affichage et modifications des produits
-async function gestionProduct() {
+async function gestionProduits() {
 
     const containerFormProductSearch = document.createElement('div');
     containerFormProductSearch.className = 'flex justify-center text-white'
     const craftFormProductSearch = document.createElement('div');
-    craftFormProductSearch.className = 'flex justify-center w-10/12 pt-6 pb-4 overflow-y-auto border-b-2 border-[#a8b3cfa3]';
+    craftFormProductSearch.className = 'flex justify-center w-10/12 pt-6 pb-4 overflow-y-auto';
     craftFormProductSearch.innerHTML = `
         <form action="" method="post" id="formProductSearch" class="w-full">
-            <div class="flex justify-between w-full">
+            <div class="flex space-x-4 bg-black/30 w-fit p-2 rounded-[14px]">
                 <div id="modalAddProduct" class="flex flex-col">
-                    <label for="searchCategory">Sélectionner une catégorie</label>
-                    <select name="searchCategory" id="searchCategory" class="p-4 bg-[#1c1f26] rounded-[14px] border-[1px] border-[#a8b3cf33]">
-                        <option value="0" class="bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100">Selectionner</option>
+                    <input type="text" name="search" id="searchProduct" class="h-10 p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]" placeholder="Rechercher un produit">
+                </div>
+                <div id="modalAddProduct" class="flex flex-col">
+                    <select name="categories" id="searchCategory" class="h-10 p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
+                        <option value="0" class="p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">Sélectionner une catégorie</option>
                     </select>
                 </div>
                 <div id="modalAddProduct"  class="flex flex-col">
-                    <label for="searchSubCategory">Sélectionner une sous-catégorie</label>
-                    <select name="searchSubCategory" id="searchSubCategory" class="p-4 bg-[#1c1f26] rounded-[14px] border-[1px] border-[#a8b3cf33]">
-                        <option value="0" class="bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100">Selectionner</option>
+                    <select name="limit" id="seachLimit" class="h-10 p-2 rounded-lg bg-[#41474c] hover:bg-[#464c51] border-l-4 border-[#a8b3cfa3] hover:border-[#A87EE6FF]">
+                        <option value="5" class="bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100">Affichage</option>
+                        <option value="10" class="bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100">10</option>
+                        <option value="15" class="bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100">15</option>
+                        <option value="20" class="bg-opacity-50 backdrop-filter backdrop-blur-lg hover:bg-opacity-75 hover:saturate-100">20</option>
                     </select>
                 </div>
             </div>
-        </form>
-                `;
+        </form>`;
     containerFormProductSearch.appendChild(craftFormProductSearch);
     containerAllDiv.appendChild(containerFormProductSearch);
     const optionSearchCategory = document.querySelector('#searchCategory');
-    const optionSearchSubCategory = document.querySelector('#searchSubCategory');
     displayCategory(optionSearchCategory);
 
-    function updateSubCategories(categoryId) {
-        const subCategorySelect = document.querySelector('#searchSubCategory');
-        subCategorySelect.innerHTML = '<option value="0">Selectionner</option>';
+    // Récupération des données du formulaire
+    const searchPoroduct = document.querySelector('#searchProduct');
+    const searchCategory = document.querySelector('#searchCategory');
+    const seachLimit = document.querySelector('#seachLimit');
 
-        fetch(`src/php/fetch/category/displaySubCatFormCat.php?id=${categoryId}`)
-            .then(response => response.json())
-            .then(data => {
-                for (let subCategory of data.displaySubCategories) {
-                    const option = document.createElement('option');
-                    option.value = subCategory.id_subcategories;
-                    option.text = subCategory.name_subcategories;
-                    subCategorySelect.appendChild(option);
-                }
-            })
-            .catch(error => console.error(error));
-    }
-
-    optionSearchCategory.addEventListener('change', function(event) {
-        const categoryId = event.target.value;
-        updateSubCategories(categoryId);
+    productHandle('', '', 5);
+    searchPoroduct.addEventListener('keyup', () => {
+        const displayProduct = document.querySelector('#displayProduct');
+        displayProduct.innerHTML = '';
+        const search = searchPoroduct.value;
+        const categories = searchCategory.value;
+        const limit = seachLimit.value;
+        productHandle(search, categories, limit);
     });
 
-    function getProductsBySubCategoryId(subCategoryId) {
-        return fetch(`src/php/fetch/produit/displayProductFormSubCat.php?subcategories_id=${subCategoryId}`)
-            .then(response => response.json())
-            .then(data => {
-                return data.displayProducts;
-            })
-            .catch(error => console.error(error));
-    }
-    const subCategorySelect = document.querySelector('#searchSubCategory');
-    subCategorySelect.addEventListener('change', async function() {
-        const subCategoryId = subCategorySelect.value;
-        const ContainerDisplayProduct = document.createElement('div');
-        ContainerDisplayProduct.id = 'displayProduct';
-        ContainerDisplayProduct.className = 'flex flex-col items-center justify-center';
-        ContainerDisplayProduct.innerHTML = '';
+    searchCategory.addEventListener('change', () => {
+        const displayProduct = document.querySelector('#displayProduct');
+        displayProduct.innerHTML = '';
+        const search = searchPoroduct.value;
+        const categories = searchCategory.value;
+        const limit = seachLimit.value;
+        productHandle(search, categories, limit);
+    });
 
-        if (subCategoryId !== '0') {
-            const products = await getProductsBySubCategoryId(subCategoryId);
+    seachLimit.addEventListener('change', () => {
+        const displayProduct = document.querySelector('#displayProduct');
+        displayProduct.innerHTML = '';
+        const search = searchPoroduct.value;
+        const categories = searchCategory.value;
+        const limit = seachLimit.value;
+        productHandle(search, categories, limit);
+    });
+}
+async function productHandle(search, categories, limit) {
+    const response = await fetch(`src/php/fetch/dashboard/displayProductDashboard.php?search=${search}&categories=${categories}&limit=${limit}`);
+    const data = await response.json();
+    const products = data.displayProducts;
 
-                products.forEach(product => {
-                    ContainerDisplayProduct.innerHTML += `
+    const ContainerDisplayProduct = document.createElement('div');
+    ContainerDisplayProduct.id = 'displayProduct';
+    ContainerDisplayProduct.className = 'flex flex-col items-center justify-center';
+    ContainerDisplayProduct.innerHTML = '';
+    products.forEach(product => {
+        ContainerDisplayProduct.innerHTML += `
                 <div class="w-10/12">
-                    <div class="flex m-1 p-2 px-4 bg-[#43464c] rounded-[14px] border-[1px] border-[#a8b3cf33] text-white">
-                        <div id="displayProductContainer" class="w-[12rem] flex flex-col">
-                            <img src="src/images/products/${product.img_product}" alt="${product.name_product}" class="max-w-fit">
+                    <div class="flex m-1 p-2 px-4 bg-[#2d323c] rounded-[14px] border border-[#a8b3cf33] text-white">
+                        <div id="displayProductContainer" class="w-[9rem] flex flex-col">
+                            <img src="src/images/products/${product.img_product}" alt="${product.name_product}" class="max-w-fit rounded-[14px]">
                         </div>
-                        <div id="displayProductContainer">
+                        <div id="displayProductContainer" class="flex flex-col justify-between ml-4 w-full">
                             <div class="flex flex-col space-y-1">
                                 <div id="titre_produit" class="flex space-x-1">
-                                    <h2 class="font-normal">Titre :</h2>
-                                    <h2>${product.name_product}</h2>
+                                    <h2 class="font-semibold text-lg">${product.name_product}</h2>
                                 </div>
-                                <div id="description_produit" class="flex flex-col space-x-1 w-8/12">
-                                    <h2 class="font-normal">A propos du jeu</h2>
-                                    <h2>${product.description_product}</h2>
-                                </div>
-                            </div>
-                            <div id="containerProductInformation" class="flex justify-between px-16">
-                                <div id="prix_produit" class="flex space-x-0.5">
-                                    <h2 class="font-normal text-white">Prix :</h2>
-                                    <h2>${product.price_product} €</h2>
-                                </div>
-                                <div id="date_sortie_produit" class="flex space-x-0.5"> 
-                                    <h2 class="font-normal text-white">Date de sortie :</h2>
-                                    <h2>${formatDateSansh(product.released_date_product)}</h2>
-                                </div>
-                                <div id="categorie_produit" class="flex space-x-0.5">
-                                    <h2 class="font-normal text-white">Genre :</h2>
-                                    <h2>${product.name_subcategories}</h2>
+                                <div id="description_produit" class="flex flex-col space-x-1 w-full">
+                                    <h2 class="font-normal">Description</h2>
+                                    <p class="text-sm font-light text-[#A8B3CF]">${product.description_product.substring(0,200) + '...'}</p>
                                 </div>
                             </div>
-                            <div id="containerProductInformation" class="flex justify-between px-16">
-                                <div id="stock_produit" class="flex space-x-0.5">
-                                    <h2 class="font-normal text-white">Stock :</h2>
-                                    <h2>${product.quantite_product}</h2>
+                           <div class="bg-slate-500/20 rounded p-1 my-1">
+                               <div id="containerProductInformation" class="flex justify-between">
+                                    <div id="prix_produit" class="flex items-center space-x-0.5">
+                                        <h2 class="text-sm font-light text-[#A8B3CF]">Prix :</h2>
+                                        <h2>${product.price_product} €</h2>
+                                    </div>
+                                    <div id="date_sortie_produit" class="flex items-center space-x-0.5"> 
+                                        <h2 class="text-sm font-light text-[#A8B3CF]">Date de sortie :</h2>
+                                        <h2>${formatDateSansh(product.released_date_product)}</h2>
+                                    </div>
+                                    <div id="categorie_produit" class="flex items-center space-x-0.5">
+                                        <h2 class="text-sm font-light text-[#A8B3CF]">Genre :</h2>
+                                        <h2>${product.name_subcategories}</h2>
+                                    </div>
                                 </div>
-                                <div class="flex space-x-0.5">
-                                    <h2 class="font-normal text-white">Nombre de vente :</h2> 
-                                    <h2>${product.quantite_vendue}</h2>
+                                <div id="containerProductInformation" class="flex justify-between">
+                                    <div id="stock_produit" class="flex items-center space-x-0.5">
+                                        <h2 class="text-sm font-light text-[#A8B3CF]">Stock :</h2>
+                                        <h2>${product.quantite_product}</h2>
+                                    </div>
+                                    <div class="flex items-center space-x-0.5">
+                                        <h2 class="text-sm font-light text-[#A8B3CF]">Nombre de vente :</h2> 
+                                        <h2>${product.quantite_vendue}</h2>
+                                    </div>
                                 </div>
                             </div>
                             <div id="containerBtnUpdateProduct" class="flex justify-between px-16">
                                 <div id="wapperFormUpdateProduct">
-                                    <button type="button" class="bg-green-500 text-white p-2 rounded-lg" id="btnUpdateProduct_${product.id_product}" data-id-product="${product.id_product}">Modifier</button>
+                                    <button type="button" class="bg-[#A9DC76]/20 border border-[#A9DC76] text-white p-2 rounded-lg" id="btnUpdateProduct_${product.id_product}" data-id-product="${product.id_product}">Modifier</button>
                                 </div>
                                 <div id="wapperFormImageProduct">
-                                    <button type="button" class="bg-blue-500 text-white p-2 rounded-lg" id="btnUpdateImageProduct_${product.id_product}" data-id-product="${product.id_product}">
+                                    <button type="button" class="bg-[#78DCE8]/20 border border-[#78DCE8] text-white p-2 rounded-lg" id="btnUpdateImageProduct_${product.id_product}" data-id-product="${product.id_product}">
                                         Ajouter des images
                                     </button>
                                 </div>
                                 <div id="wapperFormDeleteProduct">
-                                    <button type="button" class="bg-orange-600 text-white p-2 rounded-lg" id="btnArchiverProduct_${product.id_product}" data-id-product="${product.id_product}">Archiver</button>
+                                    <button type="button" class="bg-[#FC9867]/20 border border-[#FC9867] text-white p-2 rounded-lg" id="btnArchiverProduct_${product.id_product}" data-id-product="${product.id_product}">Archiver</button>
                                 </div>
                                 <div id="wapperFormDeleteProduct">
                                     <form action="" method="post" id="formDeleteProduct" class="flex flex-col space-y-2" data-id-product="${product.id_product}">
-                                        <button type="button" class="bg-red-500 text-white p-2 rounded-lg" id="btnDeleteProduct">Supprimer</button>
+                                        <button type="button" class="bg-[#FF6188]/20 border border-[#FF6188] text-white p-2 rounded-lg" id="btnDeleteProduct">Supprimer</button>
                                     </form>
                                 </div> 
                             </div>
                         </div>
                     </div>
+                </div>
                     `;
-                    containerAllDiv.appendChild(ContainerDisplayProduct);
-                    // Modifier un produit
-                });
-                for (let product of products) {
-                    const btnUpdateProduct = document.querySelector(`#btnUpdateProduct_${product.id_product}`);
-                    btnUpdateProduct.addEventListener('click',  (ev) => {
-                        const dialogUpdateProduct = document.createElement('dialog');
-                        containerdialogUpdateProduct.classList.add('bg-overlay-quaternary-onion');
-                        dialogUpdateProduct.setAttribute('id', 'dialog');
-                        dialogUpdateProduct.className = 'bg-white p-2 rounded-lg lg:w-9/12 w-3/4';
-                        dialogUpdateProduct.innerHTML = `
-                                <div class="flex flex-col space-y-2">
-                                    <div id="dialogUpdateProductForm" class="flex justify-between">
-                                        <h2 class="font-bold text-slate-700">Modifier un produit</h2>
-                                        <button type="button" class="bg-red-500 text-white p-2 rounded-lg" id="btncloseDialogUpdate">&times;</button>
-                                    </div>
-                                    <form action="" method="post" id="formUpdateProduct" class="flex flex-col space-y-2" enctype="multipart/form-data" data-id-product="${product.id_product}">
-                                        <div id="dialogUpdateProductForm" class="flex flex-col">
-                                            <label for="updateNameProduct" class="font-normal text-slate-600">Titre du produit</label>
-                                            <input type="text" name="updateNameProduct" id="updateNameProduct" value="${product.name_product}" class="bg-slate-100 p-2 rounded-lg">
-                                            <small id="errorUpdateNameProduct" class="text-red-500 dummyClass"></small>
-                                        </div>
-                                        <div id="dialogUpdateProductForm" class="flex flex-col">
-                                            <label for="updateDescriptionProduct">Description du produit</label>
-                                            <textarea name="updateDescriptionProduct" id="updateDescriptionProduct" cols="30" rows="10"  class="bg-slate-100 p-2 rounded-lg">${product.description_product}</textarea>
-                                            <small id="errorUpdateDescriptionProduct" class="text-red-500 dummyClass"></small>
-                                        </div>
-                                        <div class="flex items-center justify-between">
-                                            <div id="dialogUpdateProductForm" class="flex flex-col">
-                                                <label for="updatePriceProduct">Prix du produit</label>
-                                                <input type="text" name="updatePriceProduct" id="updatePriceProduct" value="${product.price_product}" class="bg-slate-100 p-2 rounded-lg">
-                                                <small id="errorUpdatePriceProduct" class="text-red-500 dummyClass"></small>
-                                            </div>
-                                            <div id="dialogUpdateProductForm" class="flex flex-col">
-                                                <label for="updateQuantiteProduct">Quantité du produit</label>
-                                                <input type="number" name="updateQuantiteProduct" id="updateQuantiteProduct" value="${product.quantite_product}" class="bg-slate-100 p-2 rounded-lg">
-                                                <small id="errorUpdateStockProduct" class="text-red-500 dummyClass"></small>
-                                            </div>
-                                        </div>
-                                        <div id="dialogUpdateProductForm" class="flex flex-col">
-                                            <label for="updateImgProduct">Image du produit</label>
-                                            <div class="flex items-center justify-center">
-                                                <img src="src/images/products/${product.img_product}" alt="Image du produit" class="w-20 h-20">
-                                                <input type="hidden" name="updateImgProductName" id="updateImgProductName" value="${product.img_product}">
-                                                <input type="file" name="updateImgProduct" id="updateImgProduct" value="${product.img_product}" class="bg-slate-100 p-2 rounded-lg">
-                                            </div>
-                                            <small id="errorUpdateImageProduct" class="text-red-500 dummyClass"></small>
-                                        </div>
-                                        <div class="flex items-center justify-between">
-                                            <div id="dialogUpdateProductForm" class="flex flex-col">
-                                                <label for="updateReleasedDateProduct">Date de sortie du produit</label>
-                                                <input type="date" name="updateReleasedDateProduct" id="updateReleasedDateProduct" value="${product.released_date_product}" class="bg-slate-100 p-2 rounded-lg">
-                                                <small id="errorUpdateReleaseProduct" class="text-red-500 dummyClass"></small>
-                                            </div>
-                                            <div id="dialogUpdateProductForm" class="flex flex-col">
-                                                <label for="updateSubCategory">Sous-catégorie</label>
-                                                <input type="hidden" id="subCategoryId" name="subCategoryId" value="${product.subcategories_id}">
-                                                <input type="text" name="updateSubCategory" id="updateSubCategory" value="${product.name_subcategories}" class="bg-slate-100 p-2 rounded-lg">
-                                                <small id="errorUpdateCategoryProduct" class="text-red-500 dummyClass"></small>
-                                                <div id="displaySearchSubCategories"></div>
-                                            </div>
-                                        </div>
-                                        <div id="messageDialogUpdateProduct" class="h-12"></div>
-                                        <div id="dialogUpdateProductForm">
-                                            <button type="submit" class="bg-green-500 text-white p-2 rounded-lg" id="btnUpdateProduct">Modifier</button>
-                                        </div>
-                                        
-                                    </form>
-                                </div>
-                            `;
-                        containerdialogUpdateProduct.appendChild(dialogUpdateProduct);
+        containerAllDiv.appendChild(ContainerDisplayProduct);
+        // Modifier un produit
+    });
+    for (let product of products) {
+        const btnUpdateProduct = document.querySelector(`#btnUpdateProduct_${product.id_product}`);
+        btnUpdateProduct.addEventListener('click',  (ev) => {
+            const dialogUpdateProduct = document.createElement('dialog');
+            containerdialogUpdateProduct.classList.add('bg-overlay-quaternary-onion');
+            dialogUpdateProduct.setAttribute('id', 'dialog');
+            dialogUpdateProduct.className = 'bg-white p-2 rounded-lg lg:w-9/12 w-3/4';
+            dialogUpdateProduct.innerHTML = `
+                <div class="flex flex-col space-y-2">
+                    <div id="dialogUpdateProductForm" class="flex justify-between">
+                        <h2 class="font-bold text-slate-700">Modifier un produit</h2>
+                        <button type="button" class="bg-red-500 text-white p-2 rounded-lg" id="btncloseDialogUpdate">&times;</button>
+                    </div>
+                    <form action="" method="post" id="formUpdateProduct" class="flex flex-col space-y-2" enctype="multipart/form-data" data-id-product="${product.id_product}">
+                        <div id="dialogUpdateProductForm" class="flex flex-col">
+                            <label for="updateNameProduct" class="font-normal text-slate-600">Titre du produit</label>
+                            <input type="text" name="updateNameProduct" id="updateNameProduct" value="${product.name_product}" class="bg-slate-100 p-2 rounded-lg">
+                            <small id="errorUpdateNameProduct" class="text-red-500 dummyClass"></small>
+                        </div>
+                        <div id="dialogUpdateProductForm" class="flex flex-col">
+                            <label for="updateDescriptionProduct">Description du produit</label>
+                            <textarea name="updateDescriptionProduct" id="updateDescriptionProduct" cols="30" rows="10"  class="bg-slate-100 p-2 rounded-lg">${product.description_product}</textarea>
+                            <small id="errorUpdateDescriptionProduct" class="text-red-500 dummyClass"></small>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div id="dialogUpdateProductForm" class="flex flex-col">
+                                <label for="updatePriceProduct">Prix du produit</label>
+                                <input type="text" name="updatePriceProduct" id="updatePriceProduct" value="${product.price_product}" class="bg-slate-100 p-2 rounded-lg">
+                                <small id="errorUpdatePriceProduct" class="text-red-500 dummyClass"></small>
+                            </div>
+                            <div id="dialogUpdateProductForm" class="flex flex-col">
+                                <label for="updateQuantiteProduct">Quantité du produit</label>
+                                <input type="number" name="updateQuantiteProduct" id="updateQuantiteProduct" value="${product.quantite_product}" class="bg-slate-100 p-2 rounded-lg">
+                                <small id="errorUpdateStockProduct" class="text-red-500 dummyClass"></small>
+                            </div>
+                        </div>
+                        <div id="dialogUpdateProductForm" class="flex flex-col">
+                            <label for="updateImgProduct">Image du produit</label>
+                            <div class="flex items-center justify-center">
+                                <img src="src/images/products/${product.img_product}" alt="Image du produit" class="w-20 h-20">
+                                <input type="hidden" name="updateImgProductName" id="updateImgProductName" value="${product.img_product}">
+                                <input type="file" name="updateImgProduct" id="updateImgProduct" value="${product.img_product}" class="bg-slate-100 p-2 rounded-lg">
+                            </div>
+                            <small id="errorUpdateImageProduct" class="text-red-500 dummyClass"></small>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div id="dialogUpdateProductForm" class="flex flex-col">
+                                <label for="updateReleasedDateProduct">Date de sortie du produit</label>
+                                <input type="date" name="updateReleasedDateProduct" id="updateReleasedDateProduct" value="${product.released_date_product}" class="bg-slate-100 p-2 rounded-lg">
+                                <small id="errorUpdateReleaseProduct" class="text-red-500 dummyClass"></small>
+                            </div>
+                            <div id="dialogUpdateProductForm" class="flex flex-col">
+                                <label for="updateSubCategory">Sous-catégorie</label>
+                                <input type="hidden" id="subCategoryId" name="subCategoryId" value="${product.subcategories_id}">
+                                <input type="text" name="updateSubCategory" id="updateSubCategory" value="${product.name_subcategories}" class="bg-slate-100 p-2 rounded-lg">
+                                <small id="errorUpdateCategoryProduct" class="text-red-500 dummyClass"></small>
+                                <div id="displaySearchSubCategories"></div>
+                            </div>
+                        </div>
+                        <div id="messageDialogUpdateProduct" class="h-12"></div>
+                        <div id="dialogUpdateProductForm">
+                            <button type="submit" class="bg-green-500 text-white p-2 rounded-lg" id="btnUpdateProduct">Modifier</button>
+                        </div>
+                    </form>
+                </div>`;
+            containerdialogUpdateProduct.appendChild(dialogUpdateProduct);
+            dialogUpdateProduct.showModal();
 
-                        dialogUpdateProduct.showModal();
+            const BtnCloseDialogUpdateProduct = document.getElementById('btncloseDialogUpdate');
+            BtnCloseDialogUpdateProduct.addEventListener('click', () => {
+                dialogUpdateProduct.close();
+                containerdialogUpdateProduct.classList.remove('bg-overlay-quaternary-onion');
+                containerdialogUpdateProduct.innerHTML = '';
+            });
 
+            let selectedSubCategoryId = null;
 
-                        const BtnCloseDialogUpdateProduct = document.getElementById('btncloseDialogUpdate');
-                        BtnCloseDialogUpdateProduct.addEventListener('click', () => {
-                            dialogUpdateProduct.close();
-                            containerdialogUpdateProduct.classList.remove('bg-overlay-quaternary-onion');
-                            containerdialogUpdateProduct.innerHTML = '';
-                        });
-
-                        let selectedSubCategoryId = null;
-
-                        const searchSubCategories = document.querySelector('#updateSubCategory');
-                        const displaySearchSubCategories = document.querySelector('#displaySearchSubCategories');
-                        searchSubCategories.addEventListener('input', () => {
-                            let query = searchSubCategories.value;
-                            fetch(`src/php/fetch/category/searchSubCategories.php?query=${query}`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    console.log(data);
-                                    displaySearchSubCategories.innerHTML = '';
-                                    for (let content of data.displaySubCategories) {
-                                        displaySearchSubCategories.innerHTML += `
+            const searchSubCategories = document.querySelector('#updateSubCategory');
+            const displaySearchSubCategories = document.querySelector('#displaySearchSubCategories');
+            searchSubCategories.addEventListener('input', () => {
+                let query = searchSubCategories.value;
+                fetch(`src/php/fetch/category/searchSubCategories.php?query=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        displaySearchSubCategories.innerHTML = '';
+                        for (let content of data.displaySubCategories) {
+                            displaySearchSubCategories.innerHTML += `
                         <div class="search-result p-0.5 bg-slate-100" data-id="${content.id_subcategories}">
                             <p>${content.name_subcategories}</p>
                             <small>${content.name_categories}</small>
                         </div>
                     `;
-                                    }
-                                    // Ajouter un événement de clic sur chaque résultat de recherche
-                                    const searchResults = document.querySelectorAll('.search-result');
-                                    for (let result of searchResults) {
-                                        result.addEventListener('click', () => {
-                                            selectedSubCategoryId = result.getAttribute('data-id');
-                                            searchSubCategories.value = result.querySelector('p').textContent;
-                                            // Faites quelque chose avec l'ID de sous-catégorie sélectionné
-                                            document.querySelector('#subCategoryId').value = selectedSubCategoryId; // Mettre l'id sélectionné comme valeur de l'input caché
-                                            displaySearchSubCategories.innerHTML = ''; // Cacher les résultats de recherche
-                                        });
-                                    }
-                                });
-                        });
-                        const formUpdateProduct = document.getElementById('formUpdateProduct');
-                        formUpdateProduct.addEventListener('submit', async (e) => {
-                            e.preventDefault();
-                            await fetch(`src/php/fetch/produit/updateProduct.php?id_produits=${product.id_product}`, {
-                                method: 'POST',
-                                body: new FormData(formUpdateProduct)
-                            }) .then(response => response.json())
-                            .then(data => {
-                                console.log(data);
-                                const nameInput = document.getElementById('updateNameProduct');
-                                const descriptionInput = document.getElementById('updateDescriptionProduct');
-                                const priceInput = document.getElementById('updatePriceProduct');
-                                const quantiteInput = document.getElementById('updateQuantiteProduct');
-                                const releasedDateInput = document.getElementById('updateReleasedDateProduct');
-                                const imgInput = document.getElementById('updateImgProduct');
-                                const subCategoryInput = document.getElementById('updateSubCategory');
+                        }
+                        // Ajouter un événement de clic sur chaque résultat de recherche
+                        const searchResults = document.querySelectorAll('.search-result');
+                        for (let result of searchResults) {
+                            result.addEventListener('click', () => {
+                                selectedSubCategoryId = result.getAttribute('data-id');
+                                searchSubCategories.value = result.querySelector('p').textContent;
+                                // Faites quelque chose avec l'ID de sous-catégorie sélectionné
+                                document.querySelector('#subCategoryId').value = selectedSubCategoryId; // Mettre l'id sélectionné comme valeur de l'input caché
+                                displaySearchSubCategories.innerHTML = ''; // Cacher les résultats de recherche
+                            });
+                        }
+                    });
+            });
+            const formUpdateProduct = document.getElementById('formUpdateProduct');
+            formUpdateProduct.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await fetch(`src/php/fetch/produit/updateProduct.php?id_produits=${product.id_product}`, {
+                    method: 'POST',
+                    body: new FormData(formUpdateProduct)
+                }) .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        const nameInput = document.getElementById('updateNameProduct');
+                        const descriptionInput = document.getElementById('updateDescriptionProduct');
+                        const priceInput = document.getElementById('updatePriceProduct');
+                        const quantiteInput = document.getElementById('updateQuantiteProduct');
+                        const releasedDateInput = document.getElementById('updateReleasedDateProduct');
+                        const imgInput = document.getElementById('updateImgProduct');
+                        const subCategoryInput = document.getElementById('updateSubCategory');
 
-                                const messageDialogUpdateProduct = document.getElementById('messageDialogUpdateProduct');
-                                const smallMessageDummy = document.querySelectorAll('.dummyClass');
-                                if (data.status === 'EmptyFields') {
-                                    smallMessageDummy.forEach(message => {
-                                        const containerMessage = document.createElement('div');
-                                        containerMessage.className = 'flex items-center space-x-2';
-                                        containerMessage.innerHTML = `
+                        const messageDialogUpdateProduct = document.getElementById('messageDialogUpdateProduct');
+                        const smallMessageDummy = document.querySelectorAll('.dummyClass');
+                        if (data.status === 'EmptyFields') {
+                            smallMessageDummy.forEach(message => {
+                                const containerMessage = document.createElement('div');
+                                containerMessage.className = 'flex items-center space-x-2';
+                                containerMessage.innerHTML = `
                                         <img src="public/images/icones/danger-icones-red.svg" alt="" class="w-5 h-5">
                                         <small id="errorUpdateNameProduct" class="text-red-500">Champs Requis</small>`;
-                                        message.appendChild(containerMessage);
-                                    });
-                                    nameInput.classList.add('input_error');
-                                    descriptionInput.classList.add('input_error');
-                                    priceInput.classList.add('input_error');
-                                    quantiteInput.classList.add('input_error');
-                                    releasedDateInput.classList.add('input_error');
-                                    imgInput.classList.add('input_error');
-                                    subCategoryInput.classList.add('input_error');
-                                    displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir tous les champs');
-                                } if (data.status === 'EmptyName') {
-                                    nameInput.classList.add('input_error');
-                                    const smallName = document.getElementById('errorUpdateNameProduct');
-                                    displayErrorMessageInput(smallName, 'Champs Requis');
-                                    displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs titre du produit');
-                                } if (data.status === 'EmptyDescription') {
-                                    descriptionInput.classList.add('input_error');
-                                    const smallDescription = document.getElementById('errorUpdateDescriptionProduct');
-                                    displayErrorMessageInput(smallDescription, 'Champs Requis');
-                                    displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs description du produit');
-                                } if (data.status === 'EmptyPrice') {
-                                    priceInput.classList.add('input_error');
-                                    const smallPrice = document.getElementById('errorUpdatePriceProduct');
-                                    displayErrorMessageInput(smallPrice, 'Champs Requis');
-                                    displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs prix du produit');
-                                } if (data.status === 'EmptyQuantite') {
-                                    quantiteInput.classList.add('input_error');
-                                    const smallQuantite = document.getElementById('errorUpdateStockProduct');
-                                    displayErrorMessageInput(smallQuantite, 'Champs Requis');
-                                    displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs quantité du produit');
-                                } if (data.status === 'EmptyDateReleased') {
-                                    releasedDateInput.classList.add('input_error');
-                                    const smallReleasedDate = document.getElementById('errorUpdateReleasedDateProduct');
-                                    displayErrorMessageInput(smallReleasedDate, 'Champs Requis');
-                                    displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs date de sortie du produit');
-                                } if (data.status === 'EmptyImg') {
-                                    imgInput.classList.add('input_error');
-                                    const smallImg = document.getElementById('errorUpdateImgProduct');
-                                    displayErrorMessageInput(smallImg, 'Champs Requis');
-                                    displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs image du produit');
-                                } if (data.status === 'EmptySubCategoryId') {
-                                    subCategoryInput.classList.add('input_error');
-                                    const smallSubCategory = document.getElementById('errorUpdateSubCategory');
-                                    displayErrorMessageInput(smallSubCategory, 'Champs Requis');
-                                    displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs sous-catégorie du produit');
-                                } if (data.status === 'success') {
-                                    displaySuccessMessageFormUpdateProduct(messageDialogUpdateProduct, 'Produit modifié avec succès');
-                                    setTimeout(() => {
-                                        dialogUpdateProduct.close();
-                                        dialogUpdateProduct.remove();
-                                    }, 3000);
-                                }
+                                message.appendChild(containerMessage);
                             });
-                        });
+                            nameInput.classList.add('input_error');
+                            descriptionInput.classList.add('input_error');
+                            priceInput.classList.add('input_error');
+                            quantiteInput.classList.add('input_error');
+                            releasedDateInput.classList.add('input_error');
+                            imgInput.classList.add('input_error');
+                            subCategoryInput.classList.add('input_error');
+                            displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir tous les champs');
+                        } if (data.status === 'EmptyName') {
+                            nameInput.classList.add('input_error');
+                            const smallName = document.getElementById('errorUpdateNameProduct');
+                            displayErrorMessageInput(smallName, 'Champs Requis');
+                            displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs titre du produit');
+                        } if (data.status === 'EmptyDescription') {
+                            descriptionInput.classList.add('input_error');
+                            const smallDescription = document.getElementById('errorUpdateDescriptionProduct');
+                            displayErrorMessageInput(smallDescription, 'Champs Requis');
+                            displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs description du produit');
+                        } if (data.status === 'EmptyPrice') {
+                            priceInput.classList.add('input_error');
+                            const smallPrice = document.getElementById('errorUpdatePriceProduct');
+                            displayErrorMessageInput(smallPrice, 'Champs Requis');
+                            displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs prix du produit');
+                        } if (data.status === 'EmptyQuantite') {
+                            quantiteInput.classList.add('input_error');
+                            const smallQuantite = document.getElementById('errorUpdateStockProduct');
+                            displayErrorMessageInput(smallQuantite, 'Champs Requis');
+                            displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs quantité du produit');
+                        } if (data.status === 'EmptyDateReleased') {
+                            releasedDateInput.classList.add('input_error');
+                            const smallReleasedDate = document.getElementById('errorUpdateReleasedDateProduct');
+                            displayErrorMessageInput(smallReleasedDate, 'Champs Requis');
+                            displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs date de sortie du produit');
+                        } if (data.status === 'EmptyImg') {
+                            imgInput.classList.add('input_error');
+                            const smallImg = document.getElementById('errorUpdateImgProduct');
+                            displayErrorMessageInput(smallImg, 'Champs Requis');
+                            displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs image du produit');
+                        } if (data.status === 'EmptySubCategoryId') {
+                            subCategoryInput.classList.add('input_error');
+                            const smallSubCategory = document.getElementById('errorUpdateSubCategory');
+                            displayErrorMessageInput(smallSubCategory, 'Champs Requis');
+                            displayErrorMessageFormUpdateProduct(messageDialogUpdateProduct, 'Veuillez remplir le champs sous-catégorie du produit');
+                        } if (data.status === 'success') {
+                            displaySuccessMessageFormUpdateProduct(messageDialogUpdateProduct, 'Produit modifié avec succès');
+                            setTimeout(() => {
+                                dialogUpdateProduct.close();
+                                dialogUpdateProduct.remove();
+                            }, 3000);
+                        }
                     });
-                    const btnArchiverProduct = document.querySelector(`#btnArchiverProduct_${product.id_product}`);
-                    btnArchiverProduct.addEventListener('click', async () => {
-                        await fetch(`src/php/fetch/produit/archiveProduct.php?id_produits=${product.id_product}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === 'error') {
-                                displayErrorMessageFormUpdateProduct(containerdialogUpdateProduct, 'Une erreur est survenue');
-                            } if (data.status === 'success') {
-                                displaySuccessMessageFormUpdateProduct(containerdialogUpdateProduct, 'Produit archivé avec succès');
-                                setTimeout(() => {
-                                    containerdialogUpdateProduct.innerHTML = '';
-                                }, 3000);
-                            }
-                        });
-                    });
-                    const btnUpdateImageProduct = document.querySelector(`#btnUpdateImageProduct_${product.id_product}`);
-                    btnUpdateImageProduct.addEventListener('click', async () => {
-                        containerdialogUpdateProduct.innerHTML = '';
-                        const dialogUpdateImageProduct = document.createElement('dialog');
-                        dialogUpdateImageProduct.setAttribute('id', 'dialog');
-                        dialogUpdateImageProduct.setAttribute('open', '');
-                        dialogUpdateImageProduct.classList.add('bg-overlay-quaternary-onion')
-                        dialogUpdateImageProduct.className = 'w-10/12 bg-[#24272A] text-[#a8b3cf] rounded-lg shadow-lg';
-                        dialogUpdateImageProduct.innerHTML = `
+            });
+        });
+        const btnArchiverProduct = document.querySelector(`#btnArchiverProduct_${product.id_product}`);
+        btnArchiverProduct.addEventListener('click', async () => {
+            await fetch(`src/php/fetch/produit/archiveProduct.php?id_produits=${product.id_product}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'error') {
+                        displayErrorMessageFormUpdateProduct(containerdialogUpdateProduct, 'Une erreur est survenue');
+                    } if (data.status === 'success') {
+                        displaySuccessMessageFormUpdateProduct(containerdialogUpdateProduct, 'Produit archivé avec succès');
+                        setTimeout(() => {
+                            containerdialogUpdateProduct.innerHTML = '';
+                        }, 3000);
+                    }
+                });
+        });
+        const btnUpdateImageProduct = document.querySelector(`#btnUpdateImageProduct_${product.id_product}`);
+        btnUpdateImageProduct.addEventListener('click', async () => {
+            containerdialogUpdateProduct.innerHTML = '';
+            const dialogUpdateImageProduct = document.createElement('dialog');
+            containerdialogUpdateProduct.classList.add('bg-overlay-quaternary-onion');
+            dialogUpdateImageProduct.setAttribute('id', 'dialog');
+            dialogUpdateImageProduct.setAttribute('open', '');
+            dialogUpdateImageProduct.className = 'w-10/12 bg-[#0E1217] text-[#a8b3cf] border border-[#a8b3cf33] rounded-lg shadow-lg p-4';
+            dialogUpdateImageProduct.innerHTML = `
                             <div>
                                 <div class="flex justify-between items-center">
-                                    <h2 class="text-center text-2xl font-bold">Ajouter des images à : <b>${product.name_product}</b></h2>
-                                    <button id="btnCloseDialogUpdateImageProduct" class="p-2 bg-red-500">
-                                        x
+                                    <h2 class="text-center text-2xl font-bold text-white">Ajouter des images à : <b>${product.name_product}</b></h2>
+                                    <button id="btnCloseDialogUpdateImageProduct" class="p-2 rounded hover:text-white hover:bg-[#21262D]">
+                                        <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none">
+                                            <path d="M16.804 6.147a.75.75 0 011.049 1.05l-.073.083L13.061 12l4.72 4.72a.75.75 0 01-.977 1.133l-.084-.073L12 13.061l-4.72 4.72-.084.072a.75.75 0 01-1.049-1.05l.073-.083L10.939 12l-4.72-4.72a.75.75 0 01.977-1.133l.084.073L12 10.939l4.72-4.72.084-.072z" fill="currentcolor" fill-rule="evenodd"></path>
+                                        </svg>
                                     </button>
                                 </div>
                                 <div id="imageFormContainer">
@@ -643,60 +646,61 @@ async function gestionProduct() {
                                         <form action="" method="post" enctype="multipart/form-data" id="formUpdateImageProduct">
                                             <input type="hidden" name="product_id" value="${product.id_product}">
                                             <div id="divInputImageFiles"></div>
-                                            <div id="errorsHandle" class="h-20"></div>
+                                            <div id="errorsHandle" class="h-32"></div>
                                             <div>
-                                                <button type="submit" class="p-2 rounded-[14px] font-bold bg-purple-400 text-white">Ajouter les images</button>
+                                                <button type="submit" class="px-6 py-2 rounded-[14px] font-bold bg-purple-400 text-white">Ajouter les images</button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                             </div>`;
-                        const divInputImageFiles = dialogUpdateImageProduct.querySelector('#divInputImageFiles');
-                        const wapperImageFiles = document.createElement('div');
-                        wapperImageFiles.setAttribute('id', 'wapperImageFiles');
-                        wapperImageFiles.className = 'flex flex-wrap justify-between items-center gap-4 p-2';
-                        divInputImageFiles.appendChild(wapperImageFiles);
+            const divInputImageFiles = dialogUpdateImageProduct.querySelector('#divInputImageFiles');
+            const wapperImageFiles = document.createElement('div');
+            wapperImageFiles.setAttribute('id', 'wapperImageFiles');
+            wapperImageFiles.className = 'flex flex-wrap justify-between items-center gap-4 p-2';
+            divInputImageFiles.appendChild(wapperImageFiles);
 
-                        for (let i = 1; i < 7; i++) {
-                            wapperImageFiles.innerHTML += `
-                            <div class="flex flex-col p-2 rounded-[14px] bg-black/20 w-1/3">
-                                <label for="image${i}">Image ${i}:</label>
-                                <input type="file" name="image${i}" id="image${i}" accept="image/*">
-                                <input type="radio" name="banner" value="image${i}"> Banner
+            for (let i = 1; i < 7; i++) {
+                wapperImageFiles.innerHTML += `
+                            <div class="flex flex-col p-2 rounded-[14px] bg-black/20 w-[48%]">
+                                <div class="flex items-center space-x-2">
+                                    <label for="image${i}" class="text-white">Image ${i}:</label>
+                                    <input type="file" name="image${i}" id="image${i}" accept="image/*">
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    Image de couverture - <input type="radio" name="banner" value="image${i}">
+                                </div>
                             </div>
                                 `;
-                        }
-                        const formUpdateImageProduct = dialogUpdateImageProduct.querySelector('#formUpdateImageProduct');
-                        formUpdateImageProduct.addEventListener('submit', async (e) => {
-                            e.preventDefault();
-                            const response = await fetch('src/php/fetch/produit/addImageToProduct.php', {
-                                method: 'POST',
-                                body: new FormData(formUpdateImageProduct)
-                            });
-                            const data = await response.json();
-                            console.log(data);
-                            const errorsHandle = dialogUpdateImageProduct.querySelector('#errorsHandle');
-                            if (data.error) {
-                                errorsHandle.innerHTML = '';
-                                errorsHandle.innerHTML += `<div class="text-red-500 text-sm font-bold">${data.error}</div>`;
-                            }
-                            if (data.success) {
-                                displayMessage('success', errorsHandle, data.success);
-                            }
-                        });
-
-                        containerdialogUpdateProduct.appendChild(dialogUpdateImageProduct);
-                        const btnCloseDialogUpdateImageProduct = document.querySelector('#btnCloseDialogUpdateImageProduct');
-                        btnCloseDialogUpdateImageProduct.addEventListener('click', () => {
-                            dialogUpdateImageProduct.close();
-                            dialogUpdateImageProduct.classList.remove('bg-overlay-quaternary-onion');
-                            dialogUpdateImageProduct.remove();
-                        });
-                    });
-
-                }
             }
-    });
+            const formUpdateImageProduct = dialogUpdateImageProduct.querySelector('#formUpdateImageProduct');
+            formUpdateImageProduct.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const response = await fetch('src/php/fetch/produit/addImageToProduct.php', {
+                    method: 'POST',
+                    body: new FormData(formUpdateImageProduct)
+                });
+                const data = await response.json();
+                console.log(data);
+                const errorsHandle = dialogUpdateImageProduct.querySelector('#errorsHandle');
+                if (data.error) {
+                    errorsHandle.innerHTML = '';
+                    errorsHandle.innerHTML += `<div class="text-red-500 text-sm font-bold">${data.error}</div>`;
+                }
+                if (data.success) {
+                    displayMessage('success', errorsHandle, data.success);
+                }
+            });
+
+            containerdialogUpdateProduct.appendChild(dialogUpdateImageProduct);
+            const btnCloseDialogUpdateImageProduct = document.querySelector('#btnCloseDialogUpdateImageProduct');
+            btnCloseDialogUpdateImageProduct.addEventListener('click', () => {
+                dialogUpdateImageProduct.close();
+                containerdialogUpdateProduct.classList.remove('bg-overlay-quaternary-onion');
+                dialogUpdateImageProduct.remove();
+            });
+        });
+    }
 }
 
 // Fonction gestion de catégorie
@@ -1471,7 +1475,7 @@ buttonGestionProduct.addEventListener('click', () => {
     const containerAddProduct = document.querySelector('#containerModifyProduct');
     containerAddProduct.classList.remove('flex');
     addProduct();
-    gestionProduct();
+    gestionProduits();
 });
 buttionGestionCategores.addEventListener('click', () => {
     containerAllDiv.innerHTML = '';
@@ -1489,3 +1493,5 @@ buttonGestionCommande.addEventListener('click', () => {
     OrderUser(search, order);
 });
 gestionUser(page, search, order);
+
+
