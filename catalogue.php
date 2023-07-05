@@ -28,7 +28,7 @@ session_start();
         <div id="displayFiltreProduct" class="flex flex-col w-full justify-center ml-60 pb-2 min-h-[95vh]">
             <div id="displayProduct" class="flex flex-wrap justify-center w-full h-full"></div>
             <div id="displayPages" class="flex justify-center">
-                <ul id="displayPagesCatalogue" class="flex justify-center space-x-2"></ul>
+                <ul id="displayPagesCatalogue" class="flex justify-center space-x-2 my-4"></ul>
             </div>
         </div>
     </section>

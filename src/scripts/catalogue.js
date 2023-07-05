@@ -245,48 +245,6 @@ async function getCategorie() {
         }
     });
 }
-/*const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
-const currentPage = parseInt(urlParams.get('page')) || 1;*/
-
-/*async function getPages(Date, order, categorie, subCategorie, currentPage) {
-    const params = new URLSearchParams();
-    params.append('date', Date);
-    params.append('order', order);
-    params.append('categorie', categorie);
-    params.append('subCategorie', subCategorie);
-
-    const response = await fetch(`src/php/fetch/catalogue/getPages.php?${params.toString()}`);
-    const data = await response.json();
-    if (currentPage > 1) {
-        containerPage.innerHTML = `
-      <li class="page-item">
-        <button type="button" class="px-2 py-2 rounded-[14px] bg-[#a87ee6] text-white" id="pageButton${currentPage-1}" value="${currentPage-1}">
-            <a class="page-link" href="catalogue.php?page=${currentPage-1}">
-                <svg width="32" height="32" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-linejoin="round" stroke-width="1.125" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg" style="--darkreader-inline-stroke: #e8e6e3;" data-darkreader-inline-stroke=""><path d="M14 8L10 12L14 16"></path></svg>            
-            </a>
-        </button>
-      </li>
-    `;
-    }
-    containerPage.innerHTML += `
-    <li class="page-item">
-    <p class="px-4 py-2 rounded-[14px] border-2 border-[#a87ee6] text-white">${currentPage}</p>
-    </li>
-    `;
-    // Affichage du bouton "Page suivante" si la page actuelle n'est pas la dernière
-    if (currentPage < data.displayPages) {
-        containerPage.innerHTML = `
-      <li class="page-item">
-        <button type="button" class="px-2 py-2 rounded-[14px] bg-[#a87ee6] text-white" id="pageButton${currentPage+1}" value="${currentPage+1}">
-          <a class="page-link" href="catalogue.php?page=${currentPage+1}">
-            <svg width="32" height="32" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-linejoin="round" stroke-width="1.125" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg" style="--darkreader-inline-stroke: #e8e6e3;" data-darkreader-inline-stroke=""><path d="M10 8L14 12L10 16"></path></svg>
-          </a>
-        </button>
-      </li>
-    `;
-    }
-}*/
 async function getPages(Date, order, categorie, subCategorie) {
     const response = await fetch(`src/php/fetch/catalogue/getPages.php?date=${Date}&order=${order}&categorie=${categorie}&subCategorie=${subCategorie}`);
     const data = await response.json();
@@ -295,9 +253,11 @@ async function getPages(Date, order, categorie, subCategorie) {
         for (let i = 1; i <= data.displayPages; i++) {
             containerPage.innerHTML += `
         <li class="page-item">
-          <button type="button" class="px-4 py-2 rounded-[14px] bg-slate-100" id="pageButton${i}" value="${i}">
-            <a class="page-link" href="catalogue.php?page=${i}">${i}</a>
-          </button>
+            <a class="page-link" href="catalogue.php?page=${i}">
+                <button type="button" class="px-4 py-2 rounded-[14px] border border-[#a8b3cf] text-bold text-[#a8b3cf] hover:bg-[#a87ee6] hover:text-white" id="pageButton${i}" value="${i}">
+                    ${i}
+                </button>
+            </a>
         </li>
         `;
         }
