@@ -316,4 +316,43 @@ class Product extends Database
             "genre" => $genre
         ]);
     }
+
+    public function getBestSales() : array
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT
+                                      p.id_product,
+                                      p.name_product,
+                                      p.price_product,
+                                      p.rating_product,
+                                      p.img_product,
+                                      p.released_date_product,
+                                      p.subcategories_id,
+                                      s.name_subcategories,
+                                      c.name_categories,
+                                      SUM(p.quantite_vendue) AS total
+                                    FROM
+                                      product p
+                                    JOIN
+                                      subcategories s ON p.subcategories_id = s.id_subcategories
+                                    JOIN
+                                      categories c ON s.categories_id = c.id_categories
+                                    GROUP BY
+                                      p.id_product,
+                                      p.name_product,
+                                      p.price_product,
+                                      p.rating_product,
+                                      p.img_product,
+                                      p.released_date_product,
+                                      p.subcategories_id,
+                                      s.name_subcategories,
+                                      c.name_categories
+                                    ORDER BY
+                                      total DESC
+                                    LIMIT 8
+                                    ");
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }
