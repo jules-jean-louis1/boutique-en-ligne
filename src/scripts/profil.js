@@ -115,7 +115,7 @@ async function modifyProfil() {
             containerProfile.innerHTML = '';
             containerProfile.innerHTML = `
         <div class="flex flex-col pt-12">
-            <div class="flex flex-row justify-between items-center">
+            <div class="flex flex-row justify-between items-center space-x-8">
                 <div id="wapperFormProfilInfo" class="w-fit h-fit">
                     <form action="" method="post" id="formModifyProfilInfo" class="flex flex-col space-y-2">
                         <div class="flex items-center justify-between space-x-2">
@@ -291,7 +291,6 @@ async function commandeClient() {
     await fetch('src/php/fetch/profil/commandeClient.php')
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             sectionCommande.innerHTML = '';
             if (data.status === 'error') {
                 sectionCommande.innerHTML = `<div class="flex flex-col items-center justify-center w-full h-[300px]">
@@ -339,6 +338,7 @@ async function commandeClient() {
                         </div>`;
                     // Récupérer la balise <div> correspondant aux détails de commande
                     let containerItemCommandeElement = document.querySelector(`#containerItemCommande-${commande[0].id_commande}`);
+                    containerItemCommandeElement.classList.add('w-full', 'p-2');
                     containerItemCommandeElement.appendChild(containerItemCommande);
                 });
             }
