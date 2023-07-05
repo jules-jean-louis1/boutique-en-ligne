@@ -7,6 +7,7 @@ import {formatDateSansh} from "./function/function.js";
 import { displaySuccessMessageFormUpdateProduct } from './function/function.js';
 import { messagePopup } from "./function/function.js";
 import { searchHeader} from "./function/function.js";
+import {cartHeader} from "./function/function.js";
 
 const btnRegister = document.querySelector('#buttonRegisterHeader');
 const btnLogin = document.querySelector('#buttonLoginHeader');
@@ -66,134 +67,11 @@ if (btnRegister) {
 if (btnLogin) {
     loginFormHeader(btnLogin);
 }
-
+cartHeader()
 
 // Cart.js
 
 // Récupérer les données du produit
-async function cartHeader() {
-    const cartButtonHeader = document.getElementById("cartHeader");
-    const notifCartHeader = document.getElementById("notifCartHeader");
-    await fetch('src/php/fetch/cart/displayCartInfoHeader.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.status == 'success_not_connected') {
-                const total = data.total;
-                const nbProduits = data.countProducts;
-                notifCartHeader.innerHTML = `
-                    <p class="absolute rounded-full bg-[#A87EE6FF] px-1">
-                        <span class="text-white text-xs">${nbProduits}</span>
-                    </p>
-                `;
-                const cartDivHeader = document.createElement("dialog");
-                cartDivHeader.setAttribute('class', 'absolute top-[17%] left-[57%] transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white w-80 rounded-lg shadow-lg');
-
-                cartButtonHeader.addEventListener('mouseenter', () => {
-                    cartDivHeader.setAttribute('open', '');
-                    cartDivHeader.innerHTML = '';
-                    cartDivHeader.innerHTML = `
-                    <div class="flex flex-col items-around space-y-2">
-                        <div class="mt-2">
-                            <p class="text-[#a8b3cf]">Total : ${total} €</p>
-                        </div>
-                        <div id="containerCartHeader"></div>
-                        <div class="h-10 flex items-center justify-center pb-2">
-                            <a href="cart.php" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg">Voir le panier</a>
-                        </div>
-                    </div>
-                    `;
-                    const containerCartHeader = document.getElementById("containerCartHeader");
-                    for (const product of data.products) {
-                        containerCartHeader.innerHTML += `
-                        <div class="flex flex-row justify-between px-5 py-3 border-b-[1px] border-[#e5e7eb]">
-                            <div class="flex flex-row items-center">
-                                <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded-lg">
-                                <p class="text-[#a8b3cf] ml-5">${product.name_product}</p>
-                            </div>
-                            <div class="flex flex-col items-start">
-                                <p class="text-[#a8b3cf] text-2xl">${product.price_product} €</p>
-                                <p class="text-[#a8b3cf] text-sm">Quantité :${product.quantity_product}</p>
-                            </div>
-                        </div>
-                        `;
-                    }
-
-                });
-                cartButtonHeader.appendChild(cartDivHeader);
-                cartButtonHeader.addEventListener('mouseleave', () => {
-                    cartDivHeader.removeAttribute('open');
-                });
-
-            }
-            if (data.status == 'success_connected') {
-                const total = data.total;
-                const nbProduits = data.countProducts;
-                notifCartHeader.innerHTML = `
-                    <p class="absolute rounded-full bg-[#A87EE6FF] px-1">
-                        <span class="text-white text-xs">${nbProduits}</span>
-                    </p>
-                `;
-                const cartDivHeader = document.createElement("dialog");
-                cartDivHeader.setAttribute('class', 'absolute top-[17%] left-[57%] transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white w-80 rounded-lg shadow-lg');
-
-                cartButtonHeader.addEventListener('mouseenter', () => {
-                    cartDivHeader.setAttribute('open', '');
-                    cartDivHeader.innerHTML = '';
-                    cartDivHeader.innerHTML = `
-                    <div class="flex flex-col items-around space-y-2">
-                        <div class="mt-2">
-                            <p class="text-[#a8b3cf]">Total : ${total} €</p>
-                        </div>
-                        <div id="containerCartHeader"></div>
-                        <div class="h-10 flex items-center justify-center pb-2">
-                            <a href="cart.php" class="bg-[#A87EE6FF] text-white px-5 py-2 rounded-lg">Voir le panier</a>
-                        </div>
-                    </div>
-                    `;
-                    const containerCartHeader = document.getElementById("containerCartHeader");
-                    for (const product of data.products) {
-                        containerCartHeader.innerHTML += `
-                        <div class="flex flex-row justify-between px-5 py-3 border-b-[1px] border-[#e5e7eb]">
-                            <div class="flex flex-row items-center">
-                                <img src="src/images/products/${product.img_product}" alt="${product.img_product}" class="h-12 rounded-lg">
-                                <p class="text-[#a8b3cf] ml-5">${product.name_product}</p>
-                            </div>
-                            <div class="flex flex-col items-start">
-                                <p class="text-[#a8b3cf] text-2xl">${product.price_product} €</p>
-                                <p class="text-[#a8b3cf] text-sm">Quantité :${product.quantity_product}</p>
-                            </div>
-                        </div>
-                        `;
-                    }
-                });
-                cartButtonHeader.appendChild(cartDivHeader);
-                cartButtonHeader.addEventListener('mouseleave', () => {
-                    cartDivHeader.removeAttribute('open');
-                });
-            }
-            if (data.status == 'error') {
-                notifCartHeader.innerHTML = '';
-                const cartDivHeader = document.createElement("dialog");
-                cartDivHeader.setAttribute('class', 'absolute top-[17%] left-[57%] transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white w-80 rounded-lg shadow-lg');
-                cartDivHeader.addEventListener('mouseenter', () => {
-                    cartDivHeader.setAttribute('open', '');
-                    cartDivHeader.innerHTML = `
-                    <div class="flex flex-col items-center space-y-2">
-                        <div class="mt-2">
-                            <p class="text-[#a8b3cf]">Votre panier est vide</p>
-                        </div>
-                    </div>
-                    `;
-                });
-                cartButtonHeader.appendChild(cartDivHeader);
-                cartButtonHeader.addEventListener('mouseleave', () => {
-                    cartDivHeader.removeAttribute('open');
-                });
-            }
-        });
-}
-
-cartHeader();
 
 // Récupération des éléments du DOM
 const btnDisplayProfil = document.querySelector('#buttonFormProfilInfo');
@@ -413,47 +291,56 @@ async function commandeClient() {
     await fetch('src/php/fetch/profil/commandeClient.php')
         .then(response => response.json())
         .then(data => {
+            console.log(data);
             sectionCommande.innerHTML = '';
             if (data.status === 'error') {
-                sectionCommande.innerHTML = `
-                    <div class="flex flex-col items-center justify-center w-full h-[300px]">
+                sectionCommande.innerHTML = `<div class="flex flex-col items-center justify-center w-full h-[300px]">
                         <p class="text-white text-xl font-bold">${data.message}</p>
-                    </div>
-                    `;
+                        </div>`;
             }
             if (data.status === 'success') {
-                let TotalItem = data.totalItems;
-                for (let commande of data.Commande) {
-                    sectionCommande.innerHTML += `
-                        <div class="flex flex-col items-center rounded-[14px] border-[1px] border-[#a8b3cf33] bg-[#1c1f26] py-4">
-                            <div class="flex items-center justify-between text-white w-full bg-[#a87ee6] rounded-t-[14px] p-4">
-                                <p>Date de la commande: ${formatDateSansh(commande.date_commande)}</p>
-                                <p>Nombre d'article: ${TotalItem}</p>
-                                <p>Statut: ${commande.statue_commande}</p>
-                                <p>Montant: ${commande.motant_commande} €</p>
-                            </div>
-                            <div id="containerItemCommande" class="w-full p-2"></div>
-                        </div>
-                        `;
-                    const containerItemCommande = document.querySelector('#containerItemCommande');
-                    for (let item of data.DetailCommande) {
+                let orders = data.order
+                orders.forEach(item => {
+                    let commande = item.Commande;
+                    let detailCommande = item.DetailCommande;
+                    let total = item.totalItems;
+
+                    // Créer une balise <div> unique pour chaque commande
+                    let containerItemCommande = document.createElement('div');
+                    containerItemCommande.classList.add('w-full', 'p-2');
+
+                    for (let i = 0; i < detailCommande.length; i++) {
                         containerItemCommande.innerHTML += `
                         <div class="flex items-center justify-between text-white w-full rounded-[14px] bg-[#0e1217] my-2 px-4 py-2">
                             <div class="flex items-center space-x-4">
-                                <img src="src/images/products/${item.img_product}" alt="image produit" class="h-16">
+                                <img src="src/images/products/${detailCommande[i].img_product}" alt="image produit" class="h-16">
                                 <div class="flex flex-col items-start">
-                                    <p class="font-semibold text-xl">${item.name_product}</p>
-                                    <p class="text-[#a8b3cf] text-sm">${item.name_subcategories}</p>
+                                    <p class="font-semibold text-xl">${detailCommande[i].name_product}</p>
+                                    <p class="text-[#a8b3cf] text-sm">${detailCommande[i].name_subcategories}</p>
                                 </div>
                             </div>
                             <div class="flex flex-col items-center">
-                                <p class="font-semibold text-xl">${item.price_product} €</p>
-                                <p class="text-[#a8b3cf] text-sm">Quantité :${item.quantite_produit}</p>
+                                <p class="font-semibold text-xl">${detailCommande[i].price_product} €</p>
+                                <p class="text-[#a8b3cf] text-sm">Quantité :${detailCommande[i].quantite_produit}</p>
                             </div>
-                        </div>
-                        `;
+                        </div>`;
                     }
-                }
+
+                    // Ajouter la balise <div> à la section de commande correspondante
+                    sectionCommande.innerHTML += `
+                        <div class="flex flex-col items-center rounded-[14px] border-[1px] border-[#a8b3cf33] bg-[#1c1f26] my-4">
+                            <div class="flex items-center justify-between text-white w-full bg-[#a87ee6] rounded-t-[14px] p-4">
+                                <p>Date de la commande: ${formatDateSansh(commande[0].date_commande)}</p>
+                                <p>Nombre d'article: ${total}</p>
+                                <p>Statut: ${commande[0].statue_commande}</p>
+                                <p>Montant: ${commande[0].motant_commande} €</p>
+                            </div>
+                            <div id="containerItemCommande-${commande[0].id_commande}"></div>
+                        </div>`;
+                    // Récupérer la balise <div> correspondant aux détails de commande
+                    let containerItemCommandeElement = document.querySelector(`#containerItemCommande-${commande[0].id_commande}`);
+                    containerItemCommandeElement.appendChild(containerItemCommande);
+                });
             }
         });
 }
