@@ -305,7 +305,13 @@ async function cardDetail() {
                 if(data.status == 'success') {
                     containerDialog.innerHTML = `
                     <div class="flex flex-col space-y-2 items-center mb-4">
-                        <div id="animation-container" data-animation-path="public/images/iconAnim/icons8-ok.json" class="h-40"></div>
+                        <div id="animation-container" class="h-40 text-[#39e58c]">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+                                <path d="M9 12l2 2l4 -4"/>
+                            </svg>
+                        </div>
                         <h1 class="text-2xl font-bold">Commande effectuée avec succès</h1>
                         <p class="text-sm">Veuillez patienter pendant que nous traitons votre commande</p>
                         <p class="text-lg">Vous pouvez consulter votre commande depuis votre <a href="profil.php" class="underline decoration-1">page profil</a></p>
