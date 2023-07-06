@@ -1171,18 +1171,18 @@ async function fetchUser(page , search = '', order = 'DESC') {
                     <td class="text-center">
                         <div id="btnForDeleteUser">
                             <button class="text-[#A8B3CF] p-2 rounded-lg duration-100 ease-in hover:text-[#ff3b3b] hover:bg-[#ff606033]" id="btnDeleteUser_${user.id_users}">
-                                <svg width="32" height="32" viewBox="0 0 24 24" stroke="#a8b3cf" fill="none" stroke-linejoin="round" stroke-width="1.8" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none"><path d="M17.9997 18L19.7675 16.2322M17.9997 18L16.232 19.7678M17.9997 18L16.232 16.2322M17.9997 18L19.7675 19.7678M14.9997 14.1241C14.081 13.7227 13.0664 13.5 11.9997 13.5C8.5419 13.5 5.63061 15.84 4.76307 19.0229C4.4726 20.0886 5.39517 21 6.49974 21H12.9997M15.4997 7C15.4997 8.933 13.9327 10.5 11.9997 10.5C10.0667 10.5 8.49974 8.933 8.49974 7C8.49974 5.067 10.0667 3.5 11.9997 3.5C13.9327 3.5 15.4997 5.067 15.4997 7Z" fill="currentcolor" fill-rule="nonzero"></path></svg>
+                                <svg width="32" height="32" viewBox="0 0 24 24" stroke="#a8b3cf" fill="none" stroke-linejoin="round" stroke-width="1.8" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none">
+                                    <path d="M17.9997 18L19.7675 16.2322M17.9997 18L16.232 19.7678M17.9997 18L16.232 16.2322M17.9997 18L19.7675 19.7678M14.9997 14.1241C14.081 13.7227 13.0664 13.5 11.9997 13.5C8.5419 13.5 5.63061 15.84 4.76307 19.0229C4.4726 20.0886 5.39517 21 6.49974 21H12.9997M15.4997 7C15.4997 8.933 13.9327 10.5 11.9997 10.5C10.0667 10.5 8.49974 8.933 8.49974 7C8.49974 5.067 10.0667 3.5 11.9997 3.5C13.9327 3.5 15.4997 5.067 15.4997 7Z" fill="currentcolor" fill-rule="nonzero"></path>
+                                </svg>
                             </button>
                         </div>
                     </td> 
-                </tr>
-                        `;
+                </tr>`;
                         }
-                        tableHtml += `
-                  </tbody>
-                </table>
-                `;
+                        tableHtml += `</tbody>
+                                    </table>`;
                     containerUserInfo.innerHTML = tableHtml;
+
             for (let user of users) {
                 const btnDeleteUser = document.querySelector(`#btnDeleteUser_${user.id_users}`);
                 btnDeleteUser.addEventListener('click', async () => {

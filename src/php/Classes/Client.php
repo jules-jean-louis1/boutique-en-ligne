@@ -220,7 +220,7 @@ WHERE users.id_users = :id;");
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
-    public function deleteUser($id)
+    public function deleteUser(int $id)
     {
         $bdd = $this->getBdd();
         // Table users
