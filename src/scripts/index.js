@@ -82,18 +82,18 @@ async function displayBanner() {
                 sectionHeader.innerHTML = `
                 <div class="flex flex-col justify-center h-fit relative z-5">
                 <div class="flex flex-col justify-center h-fit relative z-5">
-                  <img src="public/images/banner/216.jpg" alt="${newestProduct.img_product}" class="max-h-[500px] object-cover relative">
-                  <div class="absolute lg:w-1/4 w-1/3 lg:h-1/3 h-1/2 p-2 right-1/2 flex flex-col justify-around items-center">
-                    <div class="bg-transparent rounded-lg backdrop-filter backdrop-blur-md backdrop-saturate-150 absolute top-0 left-0 right-0 bottom-0 border-[1px] border-[#a8b3cf33]"></div>
-                    <h1 class="text-4xl font-bold text-white relative z-10 uppercase">${newestProduct.name_product}</h1>
-                    <div class="flex justify-between">
-                        <p class="text-white relative z-10 bg-slate-600/40 h-fit p-0.5 rounded-lg">${newestProduct.name_subcategories}</p>
-                        <p class="text-white text-5xl w-fit font-bold relative z-10">${newestProduct.price_product} €</p>
-                        <a href="produit.php?id=${newestProduct.id_product}"></a>
+                    <img src="public/images/produits/${newestProduct.name_img}" alt="${newestProduct.name_product}" class="max-h-[500px] object-cover relative">
+                    <div class="absolute lg:w-1/4 w-1/3 lg:h-1/3 h-1/2 p-2 left-[21%] flex flex-col justify-around items-center">
+                    <div class="rounded-lg absolute top-0 left-0 right-0 bottom-0"></div>
+                    <a href="produit.php?id=${newestProduct.id_product}" class="flex flex-col justify-start items-end">
+                        <h1 class="text-4xl font-semibold text-white relative z-10 uppercase text-shadow-lg">${newestProduct.name_product}</h1>
+                        <div class="flex justify-end w-9/12">
+                            <p class="text-white text-5xl w-fit font-bold relative z-10 text-shadow-sm">${newestProduct.price_product} €</p>
+                        </div>
+                    </a>
                     </div>
-                  </div>
-                </div>
-                `;
+                    </div>
+                </div>`;
             }
             for (let product of data.lastProduct) {
                 sectionProduct.innerHTML += `
