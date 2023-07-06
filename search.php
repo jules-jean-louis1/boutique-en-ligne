@@ -27,6 +27,7 @@ if (isset($_GET['search_bar_form'])) {
     <?php require_once "src/import/header.php"; ?>
 </header>
 <main class="bg-[#242629] pb-12">
+    <div id="background_container_dialog"></div>
     <div id="containerLoginRegisterForm"></div>
     <section id="containerMessageCart"></section>
     <section class="pt-4">

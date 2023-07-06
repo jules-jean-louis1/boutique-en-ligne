@@ -21,6 +21,7 @@ require_once "src/php/fetch/produit/bestSales.php";
         <?php require_once "src/import/header.php"; ?>
     </header>
     <main class="bg-[#242629] pb-12">
+        <div id="background_container_dialog"></div>
         <div id="containerLoginRegisterForm"></div>
         <section id="containerMessageCart"></section>
         <section>

@@ -19,6 +19,7 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
     <?php require_once "src/import/header.php"; ?>
 </header>
 <main class="">
+    <div id="background_container_dialog"></div>
     <article>
         <section>
             <div id="containerDialogFormUpdateProduct"></div>
@@ -68,7 +69,9 @@ if ($_SESSION['type_compte'] === 'administrateur') {?>
             </div>
         </div>
     </div>
-    <div id="containerModifyProduct"></div>
+    <div id="containerModifyProduct">
+        <div id="displayProduct"></div>
+    </div>
 </main>
 </body>
 </html>

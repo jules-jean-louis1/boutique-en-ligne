@@ -22,6 +22,7 @@ require_once "src/php/fetch/produit/getImagesById.php";
         <?php require_once "src/import/header.php"; ?>
     </header>
     <main class="bg-[#181920]">
+        <div id="background_container_dialog"></div>
         <div id="containerImagesDisplayBox"></div>
         <div id="containerLoginRegisterForm"></div>
         <div id="containerDialogAvis"></div>

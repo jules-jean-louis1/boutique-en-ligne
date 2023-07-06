@@ -311,14 +311,19 @@ async function gestionProduits() {
     const optionSearchCategory = document.querySelector('#searchCategory');
     displayCategory(optionSearchCategory);
 
+    const ContainerDisplayProduct = document.createElement('div');
+    ContainerDisplayProduct.id = 'displayProduct';
+    ContainerDisplayProduct.className = 'flex flex-col items-center justify-center';
+    containerAllDiv.appendChild(ContainerDisplayProduct);
+
     // Récupération des données du formulaire
     const searchPoroduct = document.querySelector('#searchProduct');
     const searchCategory = document.querySelector('#searchCategory');
     const seachLimit = document.querySelector('#seachLimit');
+    const displayProduct = document.querySelector('#displayProduct');
 
     productHandle('', '', 5);
     searchPoroduct.addEventListener('keyup', () => {
-        const displayProduct = document.querySelector('#displayProduct');
         displayProduct.innerHTML = '';
         const search = searchPoroduct.value;
         const categories = searchCategory.value;
@@ -327,7 +332,6 @@ async function gestionProduits() {
     });
 
     searchCategory.addEventListener('change', () => {
-        const displayProduct = document.querySelector('#displayProduct');
         displayProduct.innerHTML = '';
         const search = searchPoroduct.value;
         const categories = searchCategory.value;
@@ -336,7 +340,6 @@ async function gestionProduits() {
     });
 
     seachLimit.addEventListener('change', () => {
-        const displayProduct = document.querySelector('#displayProduct');
         displayProduct.innerHTML = '';
         const search = searchPoroduct.value;
         const categories = searchCategory.value;
@@ -349,9 +352,7 @@ async function productHandle(search, categories, limit) {
     const data = await response.json();
     const products = data.displayProducts;
 
-    const ContainerDisplayProduct = document.createElement('div');
-    ContainerDisplayProduct.id = 'displayProduct';
-    ContainerDisplayProduct.className = 'flex flex-col items-center justify-center';
+    const ContainerDisplayProduct = document.getElementById('displayProduct');
     ContainerDisplayProduct.innerHTML = '';
     products.forEach(product => {
         ContainerDisplayProduct.innerHTML += `

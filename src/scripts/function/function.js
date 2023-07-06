@@ -252,7 +252,7 @@ async function Login(btnLogin) {
 
         const divBottom = document.createElement("div");
         divBottom.setAttribute("id", "divBottom");
-        divBottom.setAttribute("class", "w-full flex items-center justify-center bg-[#202225] border-t-[1px] border-t-[#a8b3cf33] text-white");
+        divBottom.setAttribute("class", "w-full flex items-center justify-center bg-[#202225] border-t-[1px] border-t-[#a8b3cf33] text-white rounded-b-[14px]");
         divBottom.innerHTML = `
             <div class="w-full flex items-center justify-center">
                 <p class="text-sm" id="TextchangeLogin">Vous n'avez pas de compte ?</p>
@@ -261,7 +261,7 @@ async function Login(btnLogin) {
         `;
         const Div = document.createElement("div");
         Div.setAttribute("id", "DivModifyText");
-        Div.setAttribute("class", "py-2 px-4 w-full flex items-center justify-between bg-[#202225] border-b-[1px] border-b-[#a8b3cf33] text-white font-semibold text-lg");
+        Div.setAttribute("class", "py-2 px-4 w-full flex items-center justify-between bg-[#202225] border-b-[1px] border-b-[#a8b3cf33] text-white font-semibold text-lg rounded-t-[14px]");
         const Para = document.createElement("p")
         Para.setAttribute("id", "ParaModifyText");
         Para.textContent = "Se connecter sur Game+";
@@ -296,6 +296,8 @@ async function Login(btnLogin) {
     const containerDiv = document.getElementById("containerDiv");
     btnLogin.addEventListener("click", () => {
         dialog.setAttribute("open", "");
+        const main = document.querySelector("#background_container_dialog");
+        main.classList.add("bg-overlay-quaternary-onion");
         const buttonLogin = document.getElementById("buttonLogin");
         const ParaModifyText = document.getElementById("ParaModifyText");
         fetch('src/php/fetch/registerLogin/login.php')
@@ -329,6 +331,7 @@ async function Login(btnLogin) {
                             }
                             if (data.success) {
                                 displayMessage("success", containerMessageProfil, data.success)
+                                main.classList.remove("bg-overlay-quaternary-onion");
                                 setTimeout(() => {
                                     window.location.reload();
                                 }, 1000);
@@ -438,6 +441,7 @@ async function Login(btnLogin) {
         const buttonClose = document.getElementById("buttonClose");
         buttonClose.addEventListener("click", () => {
             dialog.removeAttribute("open");
+            main.classList.remove("bg-overlay-quaternary-onion");
         });
     });
 }

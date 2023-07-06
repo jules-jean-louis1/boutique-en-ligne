@@ -20,6 +20,7 @@ session_start();
     <?php require_once "src/import/header.php"; ?>
 </header>
 <main>
+    <div id="background_container_dialog"></div>
     <div id="containerLoginRegisterForm"></div>
     <section>
         <div id="containerMessageCart"></div>
