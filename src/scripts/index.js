@@ -82,7 +82,7 @@ async function displayBanner() {
                 sectionHeader.innerHTML = `
                 <div class="flex flex-col justify-center h-fit relative z-5">
                 <div class="flex flex-col justify-center h-fit relative z-5">
-                    <img src="public/images/produits/${newestProduct.name_img}" alt="${newestProduct.name_product}" class="max-h-[500px] object-cover relative">
+                    <img src="public/images/produits/${newestProduct.name_img}" alt="${newestProduct.name_product}" class="max-h-[450px] object-cover relative">
                     <div class="absolute lg:w-1/4 w-1/3 lg:h-1/3 h-1/2 p-2 left-[21%] flex flex-col justify-around items-center">
                     <div class="rounded-lg absolute top-0 left-0 right-0 bottom-0"></div>
                     <a href="produit.php?id=${newestProduct.id_product}" class="flex flex-col justify-start items-end">

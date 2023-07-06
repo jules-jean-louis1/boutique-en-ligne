@@ -14,7 +14,7 @@ require_once "src/php/fetch/produit/bestSales.php";
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Script JS -->
     <script defer type="module" src="src/scripts/index.js"></script>
-    <title>Acceuil</title>
+    <title>WellGames - Accueil</title>
 </head>
 <body>
     <header class="w-full">
@@ -24,7 +24,7 @@ require_once "src/php/fetch/produit/bestSales.php";
         <div id="containerLoginRegisterForm"></div>
         <section id="containerMessageCart"></section>
         <section>
-            <div id="background_img_banner" class="max-h-[500px]"></div>
+            <div id="background_img_banner" class="max-h-[450px]"></div>
         </section>
         <section class="flex flex-col justify-center items-center">
             <div class="flex flex-col justify-center lg:w-7/12 w-11/12">
