@@ -264,51 +264,6 @@ async function getProduct(URLid) {
                     });
             }
         });
-    displayImagesProduct(URLid);
-}
-// afficher les images du produit
-async function displayImagesProduct(id) {
-    const response = await fetch(`src/php/fetch/produit/getImagesById.php?id=${id}`);
-    const data = await response.json();
-    const containerImagesProduct = document.getElementById("containerImagesProducts");
-    const banner_img_container = document.getElementById("banner_img_container");
-    for (let images of data.images) {
-        if (images.banner_img === 'true') {
-            banner_img_container.innerHTML += `
-            <div class="w-full absolute">
-                <div class="absolute inset-0 bg-gradient-to-b from-[#A87EE6FF]/20 to-[#181920]"></div>
-                <img src="public/images/produits/${images.name_img}" alt="${images.name_img}" class="w-full">
-            </div>`;
-        }
-    }
-    // Création du div pour l'image principale avec une taille différente
-    let mainImageContainer = document.createElement("div");
-    mainImageContainer.classList.add("main-image-container", "w-1/2");
-
-    let mainImage = document.createElement("img");
-    mainImage.src = `public/images/produits/${data.images[1].name_img}`;
-    mainImage.alt = data.images[1].name_img;
-    mainImage.classList.add("object-cover", "rounded-[14px]", "main-image");
-
-    mainImageContainer.appendChild(mainImage);
-    containerImagesProduct.appendChild(mainImageContainer);
-
-// Création du div pour les autres images avec une taille plus petite et flex wrap
-    let otherImagesContainer = document.createElement("div");
-    otherImagesContainer.classList.add("other-images-container", "flex", "flex-wrap" , "gap-2", "w-1/2", "items-center");
-
-// Ajout des autres images dans le div
-    for (let i = 2; i < data.images.length; i++) {
-        let image = document.createElement("img");
-        image.src = `public/images/produits/${data.images[i].name_img}`;
-        image.alt = data.images[i].name_img;
-        image.classList.add("w-[calc(50%-30px)]", "rounded-[14px]", "other-image", "h-fit");
-
-        otherImagesContainer.appendChild(image);
-    }
-
-    containerImagesProduct.appendChild(otherImagesContainer);
-
 }
 async function Avis(){
     await fetch('src/php/fetch/client/isConnected.php')

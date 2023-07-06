@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+require_once "src/php/fetch/produit/getImagesById.php";
 ?>
 
 <html lang="fr">
@@ -27,7 +27,16 @@ session_start();
         <div id="containerDialogAvis"></div>
         <section id="containerMessageAddCart"></section>
         <section>
-            <div id="banner_img_container" class="w-full"></div>
+            <div id="banner_img_container" class="w-full">
+                <?php foreach ($images as $index => $image) {
+                    if ($image['banner_img'] === 'true') {?>
+                        <div class="w-full absolute">
+                            <div class="absolute inset-0 bg-gradient-to-b from-[#A87EE6FF]/20 to-[#181920]"></div>
+                            <img src="public/images/produits/<?=$image['name_img']?>" alt="<?=$image['name_img']?>" class="w-full">
+                        </div>
+                    <?php } ?>
+                <?php } ?>
+            </div>
             <div id="containerInformationProduits" class="xl:pt-12 pt-2 relative z-[1]"></div>
         </section>
         <section id="wapperImagesProduct" class="flex justify-center py-6 relative z-[1]">
@@ -46,7 +55,16 @@ session_start();
                         Visuels
                     </span>
                 </h2>
-                <div id="containerImagesProducts" class="flex flex-row gap-4 w-full h-fit"></div>
+                <div id="containerImagesProducts" class="flex flex-row gap-4 w-full h-fit">
+                    <div class="main-image-container w-1/2">
+                        <img src="public/images/produits/<?=$images[1]['name_img']?>" alt="<?=$images[1]['name_img']?>" class="object-cover rounded-[14px] main-image">
+                    </div>
+                    <div class="other-images-container flex flex-wrap gap-2 w-1/2 items-center">
+                        <?php for ($i = 2; $i < count($images); $i++) { ?>
+                        <img src="public/images/produits/<?=$images[$i]['name_img']?>" alt="<?=$images[$i]['name_img']?>" class="w-[calc(50%-30px)] rounded-[14px] other-image h-fit">
+                        <?php } ?>
+                    </div>
+                </div>
             </div>
         </section>
         <section class="flex justify-center py-6 relative z-[1]">
