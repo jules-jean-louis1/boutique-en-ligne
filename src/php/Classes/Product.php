@@ -23,13 +23,11 @@ class Product extends Database
             "subcategories_id" => $subcategories_id
         ));
     }
-    public function verifieIfProductExist($name)
+    public function verifieIfProductExist(int $id_product) : bool
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("SELECT * FROM product WHERE name_product = :name");
-        $req->execute(array(
-            "name" => $name
-        ));
+        $req = $bdd->prepare("SELECT * FROM product WHERE id_product = :id_product");
+        $req->execute(["id_product" => $id_product]);
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         if (count($result) > 0) {
             return true;
@@ -79,13 +77,13 @@ class Product extends Database
             "id" => $id
         ));
     }
-    public function supprProduct($id)
+    public function supprProduct(int $id)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("DELETE product, avis_client, comment_avis 
+        $req = $bdd->prepare("DELETE product, avis_client, img_product
                                     FROM product 
-                                    LEFT JOIN avis_client ON product.id_product = avis_client.produit_id 
-                                    LEFT JOIN comment_avis ON avis_client.id_avis = comment_avis.avis_parent_id 
+                                    JOIN avis_client ON product.id_product = avis_client.produit_id 
+                                    JOIN img_product ON img_product.product_id = product.id_product 
                                     WHERE product.id_product = :id");
         $req->execute(array("id" => $id));
     }

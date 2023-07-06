@@ -367,7 +367,7 @@ async function filterForm(Page, Date, order, categorie, subCategorie) {
                                 </div>
                                 <div id="TitleProduct" class="flex items-center w-full justify-between">
                                     <div id="containerTitleProduct" class="flex flex-col items-start">
-                                        <p class="font-bold text-white">${product.name_product.substring(0,22)}</p>
+                                        <p class="font-bold text-white">${product.name_product}</p>
                                         <p class="font-light text-[#a8b3cf]">${product.name_subcategories}</p>
                                     </div>
                                     <div id="containerButtonAddToCart">

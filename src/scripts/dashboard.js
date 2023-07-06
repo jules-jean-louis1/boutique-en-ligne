@@ -415,9 +415,7 @@ async function productHandle(search, categories, limit) {
                                     <button type="button" class="bg-[#FC9867]/20 border border-[#FC9867] text-white p-2 rounded-lg" id="btnArchiverProduct_${product.id_product}" data-id-product="${product.id_product}">Archiver</button>
                                 </div>
                                 <div id="wapperFormDeleteProduct">
-                                    <form action="" method="post" id="formDeleteProduct" class="flex flex-col space-y-2" data-id-product="${product.id_product}">
-                                        <button type="button" class="bg-[#FF6188]/20 border border-[#FF6188] text-white p-2 rounded-lg" id="btnDeleteProduct">Supprimer</button>
-                                    </form>
+                                    <button type="button" class="bg-[#FF6188]/20 border border-[#FF6188] text-white p-2 rounded-lg" id="btnDeleteProduct_${product.id_product}">Supprimer</button>
                                 </div> 
                             </div>
                         </div>
@@ -706,6 +704,12 @@ async function productHandle(search, categories, limit) {
                 containerdialogUpdateProduct.classList.remove('bg-overlay-quaternary-onion');
                 dialogUpdateImageProduct.remove();
             });
+        });
+        const btnDeleteProduct = document.querySelector(`#btnDeleteProduct_${product.id_product}`);
+        btnDeleteProduct.addEventListener('click', async () => {
+                const response = await fetch(`src/php/fetch/dashboard/deleteProduct.php?id_product=${product.id_product}`);
+                const data = await response.json();
+                console.log(data);
         });
     }
 }
