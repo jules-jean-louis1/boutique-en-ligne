@@ -30,10 +30,12 @@ if (isset($_GET['search_bar_form'])) {
     <div id="containerLoginRegisterForm"></div>
     <section id="containerMessageCart"></section>
     <section class="pt-4">
-        <div>
-            <p class="text-white text-2xl font-bold">
-                Résultats pour <?php echo $_GET['search_bar_form'];?>
-            </p>
+        <div class="flex justify-center">
+            <div class="w-9/12 px-8">
+                <p class="text-white text-2xl">
+                    Résultats pour : <b class="font-bold"><?php echo $_GET['search_bar_form'];?></b>
+                </p>
+            </div>
         </div>
         <div class="flex xl:flex-row xl:justify-between flex-col xl:pt-6 xl:mx-[4%]">
             <div class="flex flex-wrap justify-center w-full h-full">
