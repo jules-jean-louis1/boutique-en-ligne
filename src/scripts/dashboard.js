@@ -1364,16 +1364,14 @@ async function fetchOrder(search, order) {
                        })
                             .then(response => response.json())
                             .then(data => {
-                               console.log(data);
-                               if (data.status === 'success') {
-                                      message.innerHTML = data.message;
-                                      displaySuccess(message);
-                                      fetchOrder(search, order);
-                               }
-                               if (data.status === 'error') {
-                                      message.innerHTML = data.message;
-                                      displayError(message);
-                               }
+                                const containerMessage = document.querySelector('#containerMessage');
+                                if (data.status === 'success') {
+                                    displayMessageToast(containerMessage, data.message, 'success');
+                                    fetchOrder(search, order);
+                                }
+                                if (data.status === 'error') {
+                                    displayMessageToast(containerMessage, data.message, 'error');
+                                }
                             });
                     });
                     const btnDetailOrder = document.querySelector(`#btnDetailOrder_${order.id_commande}`);
@@ -1446,11 +1444,13 @@ async function fetchOrder(search, order) {
                        await fetch(`src/php/fetch/dashboard/deleteOrder.php?id_commande=${order.id_commande}`)
                             .then(response => response.json())
                             .then(data => {
-                               if (data.status === 'success') {
-                                    message.innerHTML = data.message;
-                                    displaySuccess(message);
+                                const containerMessage = document.querySelector('#containerMessage');
+                                if (data.status === 'success') {
+                                    displayMessageToast(containerMessage, data.message, 'success');
                                     fetchOrder(search, order);
-                               }
+                                } else {
+                                    displayMessageToast(containerMessage, 'Une erreur est survenue.', 'error');
+                                }
                             });
                     });
                 }
