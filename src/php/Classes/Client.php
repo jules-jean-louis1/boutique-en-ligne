@@ -77,17 +77,54 @@ class Client extends Database
             return false;
         }
     }
+    public function generateAvatarImage($text, $backgroundColor, $login)
+    {
+        $canvasWidth = 200;
+        $canvasHeight = 200;
+
+        $canvas = imagecreatetruecolor($canvasWidth, $canvasHeight);
+
+        // Convertir la couleur d'arrière-plan en composantes RGB
+        $backgroundR = hexdec(substr($backgroundColor, 1, 2));
+        $backgroundG = hexdec(substr($backgroundColor, 3, 2));
+        $backgroundB = hexdec(substr($backgroundColor, 5, 2));
+
+        // Remplir le canvas avec la couleur d'arrière-plan
+        $backgroundColor = imagecolorallocate($canvas, $backgroundR, $backgroundG, $backgroundB);
+        imagefill($canvas, 0, 0, $backgroundColor);
+
+        // Définir la couleur du texte
+        $foregroundColor = imagecolorallocate($canvas, 255, 255, 255); // Blanc
+
+        // Centrer le texte dans le canvas
+        $fontSize = floor(100.00);
+        $fontPath = $_SERVER['DOCUMENT_ROOT'] . '/wellgames/public/font/font_avatars.ttf'; // Chemin vers le dossier des polices de caractères
+        $textBoundingBox = imageftbbox($fontSize, 0, $fontPath, $text);
+        $textWidth = $textBoundingBox[2] - $textBoundingBox[0];
+        $textHeight = $textBoundingBox[1] - $textBoundingBox[7];
+        $textX = round(($canvasWidth - $textWidth) / 2);
+        $textY = round(($canvasHeight - $textHeight) / 2 + $textHeight);
+
+        imagefttext($canvas, $fontSize, 0, $textX, $textY, $foregroundColor, $fontPath, $text);
+
+        // Enregistrer l'image dans un fichier PNG
+        $randomString = bin2hex(random_bytes(3)); // Génère une chaîne hexadécimale de 6 caractères
+        $avatarName = $randomString . '-' . $login.'.png';
+        $filename = $_SERVER['DOCUMENT_ROOT'] . '/wellgames/src/images/avatars/' . $avatarName; // Chemin vers le dossier et nom du fichier d'avatar
+        imagepng($canvas, $filename);
+        imagedestroy($canvas);
+        return $avatarName;
+    }
     public function register($login, $password, $email)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare("INSERT INTO users (login_users, password_users, email_users, type_compte_users, avatar_users, created_at_users) VALUES (:login, :password, :email, :type_compte, :avatar, NOW())");
+        $req = $bdd->prepare("INSERT INTO users (login_users, password_users, email_users, type_compte_users, created_at_users) VALUES (:login, :password, :email, :type_compte, NOW())");
         $password = password_hash($password, PASSWORD_DEFAULT);
         $req->execute(array(
             "login" => $login,
             "password" => $password,
             "email" => $email,
             "type_compte" => "client",
-            "avatar" => "default_avatar.png"
         ));
         // récupérer l'id_users généré
         $id_users = $bdd->lastInsertId();
@@ -415,5 +452,25 @@ WHERE users.id_users = :id;");
         } else {
             return true;
         }
+    }
+
+    public function getID(string $login) : int
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT id_users FROM users WHERE login_users = :login");
+        $req->execute(array(
+            "login" => $login
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result[0]['id_users'];
+    }
+    public function addAvatar(int $id, string $avatar)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare('UPDATE users SET avatar_users = :avatar WHERE id_users = :id');
+        $req->execute([
+            ':avatar' => $avatar,
+            ':id' => $id
+        ]);
     }
 }

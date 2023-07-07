@@ -37,6 +37,12 @@ if(isset($_POST['login'])) {
                     if ($client->validPassword($password) === true) {
                        if ($password === $password2) {
                            $client->register($login, $password, $email);
+                           $id_user = $client->getID($login);
+                           $id = $id_user;
+                           $firstLetter = strtoupper(substr($login, 0, 1));
+                           $backgroundColor = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
+                           $avatar = $client->generateAvatarImage($firstLetter, $backgroundColor, $login);
+                           $client->addAvatar($id, $avatar);
                            $error['success'] = "Votre compte a bien été créé";
                        } else {
                             $error['errorPasswordConfirm'] = "Les mots de passe ne correspondent pas";
