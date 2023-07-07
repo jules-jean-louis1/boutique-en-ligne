@@ -35,18 +35,18 @@ if(isset($_POST['login'])) {
             if ($client->validEmail($email)) {
                 if ($client->checkEmail($email) === false) {
                     if ($client->validPassword($password) === true) {
-                       if ($password === $password2) {
-                           $client->register($login, $password, $email);
-                           $id_user = $client->getID($login);
-                           $id = $id_user;
-                           $firstLetter = strtoupper(substr($login, 0, 1));
-                           $backgroundColor = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
-                           $avatar = $client->generateAvatarImage($firstLetter, $backgroundColor, $login);
-                           $client->addAvatar($id, $avatar);
-                           $error['success'] = "Votre compte a bien été créé";
-                       } else {
+                        if ($password === $password2) {
+                            $client->register($login, $password, $email);
+                            $id_user = $client->getID($login);
+                            $id = $id_user;
+                            $firstLetter = strtoupper(substr($login, 0, 1));
+                            $backgroundColor = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
+                            $avatar = $client->generateAvatarImage($firstLetter, $backgroundColor, $login);
+                            $client->addAvatar($id, $avatar);
+                            $error['success'] = "Votre compte a bien été créé";
+                        } else {
                             $error['errorPasswordConfirm'] = "Les mots de passe ne correspondent pas";
-                       }
+                        }
                     } else {
                         $error['errorPassword'] = "Votre mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre";
                     }
@@ -94,7 +94,7 @@ if(isset($_POST['login'])) {
         <small id="errorC_Password" class="flex items-center h-4 text-red-500 px-2 my-1"></small>
     </div>
     <div id="containerMessageProfil" class="h-[85px] w-full">
-        <div id="errorMsg"></div>
+        <div id="errorMsg" class="text-red-500"></div>
     </div>
     <div id="containerSubmit">
         <button type="submit" name="submit" id="submit" class="p-2 rounded-[14px] bg-[#a87ee6] font-semibold text-white w-full">Inscription</button>

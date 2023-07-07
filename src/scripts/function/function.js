@@ -400,6 +400,7 @@ async function Login(btnLogin) {
                                 .then(data => {
                                     console.log(data);
                                     let message = document.querySelector('#errorMsg');
+                                    const containerMessageProfil = document.getElementById("containerMessageProfil");
                                     const loginInput = document.getElementById("login");
                                     const emailInput = document.getElementById("E-mail");
                                     const passwordInput = document.getElementById("password");
@@ -419,17 +420,21 @@ async function Login(btnLogin) {
                                     if (data.login || data.email || data.password || data.passwordConfirm) {
                                         displayMessage("error", containerMessageProfil, "Veuillez remplir tous les champs");
                                     }
-                                    function displayMessage(data, field, message) {
-                                        if (data[field]) {
-                                            message.innerHTML = data[field];
-                                            displayMessage(message, 'errorLogin', message);
-                                        }
+                                    if (data.errorLogin) {
+                                        displayMessage("error", containerMessageProfil, data.errorLogin);
                                     }
-                                    displayMessage(data, 'errorLogin', message);
-                                    displayMessage(data, 'errorEmail', message);
-                                    displayMessage(data, 'errorPassword', message);
-                                    displayMessage(data, 'errorPasswordConfirm', message);
-                                    displayMessage(data, 'validEmail', message);
+                                    if (data.errorEmail) {
+                                        displayMessage("error", containerMessageProfil, data.errorEmail);
+                                    }
+                                    if (data.validEmail) {
+                                        displayMessage("error", containerMessageProfil, data.validEmail);
+                                    }
+                                    if (data.errorPasswordConfirm) {
+                                        displayMessage("error", containerMessageProfil, data.errorPasswordConfirm);
+                                    }
+                                    if (data.errorPassword) {
+                                        displayMessage("error", containerMessageProfil, data.errorPassword);
+                                    }
                                     if (data.success) {
                                         displayMessage("success", containerMessageProfil, data.success);
                                     }

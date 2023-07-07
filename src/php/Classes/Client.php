@@ -273,12 +273,12 @@ WHERE users.id_users = :id;");
         $req4 = $bdd->prepare("DELETE FROM commande WHERE users_id = :id");
         $req4->execute(["id" => $id]);
         // Table detail_commande
-        $req6 = $bdd->prepare("DELETE FROM detail_commande WHERE command_id  IN (SELECT id_commande FROM commande WHERE id_client = :id)");
+        $req6 = $bdd->prepare("DELETE FROM detail_commande WHERE command_id  IN (SELECT id_commande FROM commande WHERE 	users_id  = :id)");
         $req6->execute(["id" => $id]);
         // Table panier
         $req7 = $bdd->prepare("DELETE FROM cart WHERE users_id = :id");
         $req7->execute(["id" => $id]);
-        $req8 = $bdd->prepare("DELETE FROM cart_product WHERE cart_id IN (SELECT id_cart FROM cart WHERE users_id = :id");
+        $req8 = $bdd->prepare("DELETE FROM cart_product WHERE cart_id IN (SELECT id_cart FROM cart WHERE users_id = :id)");
         $req8->execute(["id" => $id]);
     }
     public function updateUserDroits($id, $droits)
