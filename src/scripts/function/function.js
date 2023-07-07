@@ -418,24 +418,31 @@ async function Login(btnLogin) {
                                     updateField(data, 'passwordConfirm', passwordConfirmInput, smallPasswordConfirm);
 
                                     if (data.login || data.email || data.password || data.passwordConfirm) {
+                                        containerMessageProfil.innerHTML = "";
                                         displayMessage("error", containerMessageProfil, "Veuillez remplir tous les champs");
                                     }
                                     if (data.errorLogin) {
+                                        containerMessageProfil.innerHTML = "";
                                         displayMessage("error", containerMessageProfil, data.errorLogin);
                                     }
                                     if (data.errorEmail) {
+                                        containerMessageProfil.innerHTML = "";
                                         displayMessage("error", containerMessageProfil, data.errorEmail);
                                     }
                                     if (data.validEmail) {
+                                        containerMessageProfil.innerHTML = "";
                                         displayMessage("error", containerMessageProfil, data.validEmail);
                                     }
                                     if (data.errorPasswordConfirm) {
+                                        containerMessageProfil.innerHTML = "";
                                         displayMessage("error", containerMessageProfil, data.errorPasswordConfirm);
                                     }
                                     if (data.errorPassword) {
+                                        containerMessageProfil.innerHTML = "";
                                         displayMessage("error", containerMessageProfil, data.errorPassword);
                                     }
                                     if (data.success) {
+                                        containerMessageProfil.innerHTML = "";
                                         displayMessage("success", containerMessageProfil, data.success);
                                     }
                                 });
