@@ -9,6 +9,15 @@ if (isset($_GET['id'])) {
     $droits = htmlspecialchars($_POST['droits']);
     $user = new Client();
     if ($_SESSION['type_compte'] === 'administrateur') {
+        if ($_SESSION['id'] === $id) {
+            header("Content-Type: application/json");
+            echo json_encode(['status' => 'error', 'message' => 'Vous ne pouvez pas modifier vos propres droits']);
+            exit();
+        } if ($id === 1) {
+            header("Content-Type: application/json");
+            echo json_encode(['status' => 'error', 'message' => 'Vous ne pouvez pas modifier les droits du compte super-administrateur']);
+            exit();
+        }
         $updateUser = $user->updateUserDroits($id, $droits);
         header("Content-Type: application/json");
         echo json_encode(['status' => 'success', 'message' => 'Droits modifiés avec succès']);

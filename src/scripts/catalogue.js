@@ -274,17 +274,17 @@ function createFormFilter() {
     filterFormC.innerHTML = `
     <form id="filtrageForm" method="POST" class="flex flex-col justify-between items-strech text-white h-full p-4">
         <div class="flex flex-col">
-            <select name="categorie" id="categorie" class="p-4 bg-[#1c1f26] rounded-[14px] border-[1px] border-[#a8b3cf33]">
+            <select name="categorie" id="categorie" class="p-4 bg-[#1c1f26] rounded-[12px] border border-[#a8b3cf33] hover:border-[#a87ee6] transition duration-75 ease-in-out">
                 <option value="">Categorie</option>
             </select>
         </div>
         <div class="flex flex-col ">
-            <select name="subCategories" id="subCategories" class="p-4 bg-[#1c1f26] rounded-[14px] border-[1px] border-[#a8b3cf33]">
+            <select name="subCategories" id="subCategories" class="p-4 bg-[#1c1f26] rounded-[12px] border border-[#a8b3cf33] hover:border-[#a87ee6] transition duration-75 ease-in-out">
                 <option value="">Genre...</option>
             </select>
         </div>
         <div id="filtreSelectC" class="flex flex-col ">
-            <select name="order" id="order" class="p-4 bg-[#1c1f26] rounded-[14px] border-[1px] border-[#a8b3cf33]">
+            <select name="order" id="order" class="p-4 bg-[#1c1f26] rounded-[12px] border border-[#a8b3cf33] hover:border-[#a87ee6] transition duration-75 ease-in-out">
                 <option value="">Tirer par...</option>
                 <option value="ASC_prix">Prix : les moins chers</option>
                 <option value="DESC_prix">Prix : les plus chers</option>
@@ -311,7 +311,7 @@ function createFormFilter() {
     const Order = document.getElementById("order");
     const selectedCategoryValue = categoriesSelect.value;
     const selectedSubCategoryValue = subCategoriesSelect.value;
-    categorie = selectedCategoryValue;
+    let categorie = selectedCategoryValue;
     subCategorie = selectedSubCategoryValue;
     getSubCategorie();
     getCategorie();

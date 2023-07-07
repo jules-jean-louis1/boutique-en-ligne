@@ -12,7 +12,7 @@ if (isset($_GET['id'])) {
         header("Content-Type: application/json");
         echo json_encode(['status' => 'error', 'message' => 'Vous ne pouvez pas supprimer votre propre compte']);
         exit();
-    } if ($id === '1') {
+    } if ($id === 1) {
         header("Content-Type: application/json");
         echo json_encode(['status' => 'error', 'message' => 'Vous ne pouvez pas supprimer le compte super-administrateur']);
         exit();
