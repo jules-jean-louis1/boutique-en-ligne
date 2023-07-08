@@ -98,4 +98,14 @@ class Avis extends Database
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+    public function countAvis(int $id_product) : int
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare("SELECT COUNT(id) FROM avis_client WHERE produit_id = :id_product");
+        $req->execute([
+            "id_product" => $id_product
+        ]);
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result[0]["COUNT(id)"];
+    }
 }

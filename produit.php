@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once "src/php/fetch/produit/getImagesById.php";
+require_once "src/php/fetch/avis/countAvis.php";
 ?>
 
 <html lang="fr">
@@ -89,11 +90,28 @@ require_once "src/php/fetch/produit/getImagesById.php";
             <h2 class="text-center text-2xl text-white">Ajouter un avis sur ce produit</h2>
             <div id="containerAddAvis"></div>
         </section>
-        <section class="py-8">
-            <div class="flex flex-col items-center">
-                <h2 class="text-2xl text-white">Avis clients</h2>
-                <div id="containerAvisClients" class="w-10/12"></div>
+        <section class="py-8 flex flex-col mx-auto w-9/12">
+            <div class="w-full">
+                <h2 class="flex items-center text-2xl text-white">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M8 9h8"/>
+                            <path d="M8 13h6"/>
+                            <path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z"/>
+                        </svg>
+                    </span>
+                    <span>
+                        Avis des clients
+                    </span>
+                </h2>
+                <div class="text-white">
+                    <p><?=$countAvis?> Commentaires</p>
+                </div>
+                <div id="containerAvisClients" class="w-full"></div>
             </div>
+        </section>
+
         </section>
     </main>
     <footer class="w-full">
