@@ -92,7 +92,7 @@ require_once "src/php/fetch/avis/countAvis.php";
         </section>
         <section class="py-8 flex flex-col mx-auto w-9/12">
             <div class="w-full">
-                <h2 class="flex items-center text-2xl text-white">
+                <h2 class="flex items-center space-x-2 text-2xl text-white">
                     <span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>

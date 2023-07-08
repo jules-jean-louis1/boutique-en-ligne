@@ -651,7 +651,113 @@ async function displayAvis() {
                         }
                     });
             } else {
-                console.log('Vous n\'êtes pas connecté');
+                fetch(`src/php/fetch/avis/getAvis.php?id_product=${URLid}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        let commentsContainer = document.getElementById('containerAvisClients');
+                        let UserId = 0;
+                        if (data.status === 'success') {
+                            commentsContainer.innerHTML = '';
+                            let commentsData = data.avis;
+                            console.log(commentsData);
+                            function generateCommentHTML(comment) {
+                                const commentId = `comment_${comment.id}`;
+                                let commentHTML = '';
+                                commentHTML = `
+                                    <div class="comment" id="${commentId}">
+                                        <div class="flex space-x-2">
+                                            <div class="flex justify-between items-center w-full"> 
+                                                <div class="flex items-center gap-2">   
+                                                    <img src="src/images/avatars/${comment.avatar}" alt="avatar" class="w-8 h-8 rounded-full">
+                                                    <p>${comment.login}</p>
+                                                </div>
+                                                <p>${formatDate(comment.created_at)}</p>
+                                            </div>
+                                        </div>
+                                        <h3>${comment.title_comment}</h3>
+                                        <p class="ml-3">${comment.content}</p>
+                                        <div class="flex space-x-2 py-2 text-[#dcdcdc]">
+                                            <button class="flex space-x-2 rounded hover:bg-[#A87EE627] hover:text-[#a87ee6] p-1" id="reply_${comment.id}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                  <path d="M8 9h8"/>
+                                                  <path d="M8 13h6"/>
+                                                  <path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z"/>
+                                                </svg>
+                                                Répondre
+                                            </button>
+                                        </div>
+                                    </div>
+                                `;
+                                return commentHTML;
+                            }
+                            // Fonction récursive pour générer le HTML des réponses imbriquées
+                            function generateNestedRepliesHTML(comments, parentId) {
+                                const replies = comments.filter(comment => comment.parent_id === parentId);
+
+                                if (replies.length === 0) {
+                                    return '';
+                                }
+                                let repliesHTML = '';
+                                replies.forEach(reply => {
+                                    const replyId = `${reply.id}`;
+                                    repliesHTML += `
+                                    <div class="reply" id="container_${replyId}">
+                                        <div class="flex space-x-2">
+                                            <div class="flex justify-between items-center w-full"> 
+                                                <div class="flex items-center gap-2">   
+                                                    <img src="src/images/avatars/${reply.avatar}" alt="avatar" class="w-8 h-8 rounded-full">
+                                                    <p>${reply.login}</p>
+                                                </div>
+                                                <p>${formatDate(reply.created_at)}</p>
+                                            </div>
+                                        </div>
+                                        <p class="ml-2">${reply.content}</p>
+                                        <div class="flex space-x-2 py-2 text-[#dcdcdc]">
+                                            <button class="flex space-x-2 rounded hover:bg-[#A87EE627] hover:text-[#a87ee6] p-1" id="reply_${replyId}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                  <path d="M8 9h8"/>
+                                                  <path d="M8 13h6"/>
+                                                  <path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z"/>
+                                                </svg>
+                                            Répondre
+                                            </button>
+                                        </div>
+                                        ${generateNestedRepliesHTML(comments, reply.id)}
+                                    </div>
+                                `;
+                                });
+                                return repliesHTML;
+                            }
+                            function displayComments(comments) {
+                                const commentsContainer = document.getElementById('containerAvisClients');
+                                comments.forEach(comment => {
+                                    if (comment.parent_id === null) {
+                                        const commentHTML = generateCommentHTML(comment);
+                                        const repliesHTML = generateNestedRepliesHTML(comments, comment.id);
+
+                                        commentsContainer.innerHTML += `
+                                        <div class="comment-container p-2 bg-[#2d323c] rounded-[14px] text-white m-2">
+                                            ${commentHTML}
+                                            <div id="replies-container" class="pl-2 mt-2">
+                                            ${repliesHTML}
+                                            </div>
+                                        </div>
+                                        `;
+                                    }
+                                });
+                            }
+                            // Appel de la fonction pour afficher les commentaires
+                            displayComments(commentsData);
+                        } else {
+                            commentsContainer.innerHTML = `
+                                <div class="w-full p-2 bg-[#2a1825] h-12 rounded my-6">
+                                    <p class="text-white">Aucun commentaire pour cette series</p>
+                                </div>`;
+                        }
+                    });
+
             }
         });
 }
