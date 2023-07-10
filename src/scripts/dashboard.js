@@ -140,28 +140,33 @@ function messagePopup(message, status) {
 }
 // fonction de gestion des produits
 async function addProduct() {
+    const craftFormProductSearch = document.getElementById('craftFormProductSearch');
     const buttonAddProductContainer = document.createElement('div');
     buttonAddProductContainer.className = 'flex justify-center pt-2';
     buttonAddProductContainer.innerHTML = `
-            <button type="button" class="bg-[#a87ee6] px-4 py-2 flex space-x-4 items-center text-white font-bold rounded-lg" id="buttonAddProduct">
-            <svg width="32" height="32" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M6.99999 12H12M12 12H17M12 12V6.99999M12 12V17M21.5 12C21.5 17.2467 17.2467 21.5 12 21.5C6.75329 21.5 2.5 17.2467 2.5 12C2.5 6.75329 6.75329 2.5 12 2.5C17.2467 2.5 21.5 6.75329 21.5 12Z"></path></svg>
-            Ajouter un produit
+            <button type="button" class="bg-[#a87ee6] px-4 py-2 flex space-x-4 items-center text-white font-bold rounded-lg w-52 h-fit" id="buttonAddProduct">
+                <svg width="32" height="32" viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-linejoin="round" stroke-width="1.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M6.99999 12H12M12 12H17M12 12V6.99999M12 12V17M21.5 12C21.5 17.2467 17.2467 21.5 12 21.5C6.75329 21.5 2.5 17.2467 2.5 12C2.5 6.75329 6.75329 2.5 12 2.5C17.2467 2.5 21.5 6.75329 21.5 12Z"></path></svg>
+                Ajouter un produit
             </button>
                 `;
-    containerAllDiv.appendChild(buttonAddProductContainer);
+    craftFormProductSearch.appendChild(buttonAddProductContainer);
 
     const buttonAddProduct = document.querySelector('#buttonAddProduct');
     buttonAddProduct.addEventListener('click', () => {
         const body = document.querySelector('body');
         const dialog = document.createElement('dialog');
         dialog.setAttribute('id', 'dialog');
-        dialog.className = 'dialog_modal w-10/12 bg-[#24272A] text-[#a8b3cf] rounded-lg shadow-lg';
+        dialog.className = 'dialog_modal w-10/12 bg-[#0E1217] text-[#a8b3cf] rounded-[14px] border border-[#a8b3cf33] shadow-lg';
         dialog.innerHTML = '';
         dialog.innerHTML = `
         <div class="w-full p-2 flex flex-col space-y-2">
             <div id="modal-header" class="flex justify-between items-center w-full px-3 py-1">
                 <h5 class="text-white font-semibold text-lg" id="exampleModalLabel">Ajouter un produit</h5>
-                <button type="button" id="btncloseDialog" data-bs-dismiss="modal" aria-label="Close" class="p-2 rounded-lg bg-[#41474c] text-[#A87EE6FF]">Fermer</button>
+                <button type="button" id="btncloseDialog" data-bs-dismiss="modal" aria-label="Close" class="p-2 rounded-lg bg-[#41474c] text-white">
+                    <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none">
+                        <path d="M16.804 6.147a.75.75 0 011.049 1.05l-.073.083L13.061 12l4.72 4.72a.75.75 0 01-.977 1.133l-.084-.073L12 13.061l-4.72 4.72-.084.072a.75.75 0 01-1.049-1.05l.073-.083L10.939 12l-4.72-4.72a.75.75 0 01.977-1.133l.084.073L12 10.939l4.72-4.72.084-.072z" fill="currentcolor" fill-rule="evenodd"></path>
+                    </svg>
+                </button>
             </div>
             <div>
                 <form action="" method="post" id="formAddProduct" enctype="multipart/form-data" class="flex flex-col space-y-2">
@@ -282,8 +287,10 @@ async function addProduct() {
 async function gestionProduits() {
 
     const containerFormProductSearch = document.createElement('div');
-    containerFormProductSearch.className = 'flex justify-center text-white'
+    containerFormProductSearch.className = 'flex justify-center text-white items-center'
+    containerFormProductSearch.setAttribute('id', 'containerFormProductSearch');
     const craftFormProductSearch = document.createElement('div');
+    craftFormProductSearch.setAttribute('id', 'craftFormProductSearch')
     craftFormProductSearch.className = 'flex justify-center w-10/12 pt-6 pb-4 overflow-y-auto';
     craftFormProductSearch.innerHTML = `
         <form action="" method="post" id="formProductSearch" class="w-full">
@@ -357,7 +364,7 @@ async function productHandle(search, categories, limit) {
     products.forEach(product => {
         ContainerDisplayProduct.innerHTML += `
                 <div class="w-10/12">
-                    <div class="flex m-1 p-2 px-4 bg-[#2d323c] rounded-[14px] border border-[#a8b3cf33] text-white">
+                    <div class="flex m-1 p-2 px-4 bg-[#1C1F26] hover:bg-[#232730] rounded-[14px] border border-[#a8b3cf33] hover:border-[#bac5e2] transition duration-75 ease-in-out text-white">
                         <div id="displayProductContainer" class="w-[9rem] flex flex-col">
                             <img src="src/images/products/${product.img_product}" alt="${product.name_product}" class="max-w-fit rounded-[14px]">
                         </div>
@@ -1425,9 +1432,6 @@ async function fetchOrder(search, order) {
                                         </div>
                                         `;
                                    }
-
-
-
                                    const BtnCloseDialogUpdateProduct = document.getElementById('btncloseDialogUpdate');
                                    BtnCloseDialogUpdateProduct.addEventListener('click', () => {
                                        dialogDetailOrder.close();
@@ -1498,8 +1502,8 @@ buttonGestionProduct.addEventListener('click', () => {
     containerAllDiv.innerHTML = '';
     const containerAddProduct = document.querySelector('#containerModifyProduct');
     containerAddProduct.classList.remove('flex');
-    addProduct();
     gestionProduits();
+    addProduct();
 });
 buttionGestionCategores.addEventListener('click', () => {
     containerAllDiv.innerHTML = '';
