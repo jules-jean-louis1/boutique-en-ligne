@@ -495,7 +495,7 @@ export async function searchHeader() {
     const btnClearInput = document.getElementById("eraseSearches");
     const SearchBarHeader = document.getElementById("search_bar_form");
     let query = SearchBarHeader.value;
-    if (query.length > 0) {
+    if (query.length >= 2) {
         await fetch (`src/php/fetch/produit/searchBarProduct.php?query=${query}`)
             .then(response => response.json())
             .then(data => {

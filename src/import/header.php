@@ -31,7 +31,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="catalogue.php" class="font-semibold">Catalogue</a>
+                    <a href="catalogue.php" class="font-semibold">Tous les jeux</a>
                 </li>
             </ul>
         </div>
